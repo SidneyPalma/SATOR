@@ -1,0 +1,143 @@
+<?php
+
+namespace iAdmin\Model;
+
+/**
+ * 
+ * @Entity {"name":"areas", "logbook":true, "cache":"\\iAdmin\\Cache\\areas", "event":"\\iAdmin\\Event\\areas"}
+ */
+class areas extends \Smart\Data\Model {
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "strategy":"AUTO", "type":"integer", "policy":false, "logallow":true, "default":""}
+     */
+    private $id;
+
+    /**
+     * @Policy {"nullable":false, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $name;
+
+    /**
+     * @Policy {"nullable":false, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $description;
+
+    /**
+     * @Policy {"nullable":false, "length":1}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"A"}
+     */
+    private $areastype;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     */
+    private $sterilizationflow;
+
+    /**
+     * @Policy {"nullable":true, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $sterilizationname;
+
+    /**
+     * @return type integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param type $id
+     * @return \iAdmin\Model\areas
+     */
+    public function setId($id) {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * @param type $name
+     * @return \iAdmin\Model\areas
+     */
+    public function setName($name) {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * @param type $description
+     * @return \iAdmin\Model\areas
+     */
+    public function setDescription($description) {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getAreastype() {
+        return $this->areastype;
+    }
+
+    /**
+     * @param type $areastype
+     * @return \iAdmin\Model\areas
+     */
+    public function setAreastype($areastype) {
+        $this->areastype = $areastype;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getSterilizationflow() {
+        return $this->sterilizationflow;
+    }
+
+    /**
+     * @param type $sterilizationflow
+     * @return \iAdmin\Model\areas
+     */
+    public function setSterilizationflow($sterilizationflow) {
+        $this->sterilizationflow = $sterilizationflow;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getSterilizationname() {
+        return $this->sterilizationname;
+    }
+
+    /**
+     * @param type $sterilizationname
+     * @return \iAdmin\Model\areas
+     */
+    public function setSterilizationname($sterilizationname) {
+        $this->sterilizationname = $sterilizationname;
+        return $this;
+    }
+
+}

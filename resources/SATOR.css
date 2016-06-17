@@ -1,0 +1,40 @@
+/*
+    Sator Theme
+*/
+.main-toolbar-color-blue {
+    background-color: rgb(33, 150, 243) !important;
+}
+
+.main-toolbar-color-gren {
+    background-color: rgb(0, 153, 0) !important;
+}
+
+.main-toolbar-height {
+    padding: 12px !important;
+}
+
+.main-treelist-height {
+    padding: 12px 4px 12px 0px !important;
+}
+
+.main-treelist-height .x-toolbar-text-default {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+}
+
+.toolbar-color-orange {
+    background-color: rgb(248, 202, 0) !important;
+}
+
+.toolbar-color-blue-dark {
+    background-color: rgb(0, 3, 31) !important;
+}
+
+.main-toolbar-height .x-btn-default-toolbar-large {
+    border-radius: 50%;
+}
+
+.main-toolbar-height .x-toolbar-text-default {
+    font-size: 16px !important;
+    color: white !important;
+}

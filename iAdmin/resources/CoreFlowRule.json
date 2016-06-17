@@ -1,0 +1,92 @@
+{
+  "basic.Area": {
+    "source": {
+      "multiLinks": 1,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "basic.Equipment": 1,
+      "uml.BreakFlow": 1
+    },
+    "target": {
+      "multiLinks": 0,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "uml.BreakFlow": 1,
+      "uml.StartState": 1
+    }
+  },
+  "basic.SubArea": {
+    "source": {
+      "multiLinks": 1,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "basic.Equipment": 1,
+      "uml.BreakFlow": 1,
+      "uml.EndState": 1
+    },
+    "target": {
+      "multiLinks": 1,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "basic.Equipment": 5,
+      "uml.BreakFlow": 1
+    }
+  },
+  "basic.Equipment": {
+    "source": {
+      "multiLinks": 0,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "uml.BreakFlow": 1
+    },
+    "target": {
+      "multiLinks": 1,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "uml.BreakFlow": 1
+    }
+  },
+  "uml.BreakFlow": {
+    "source": {
+      "multiLinks": 1,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "basic.Equipment": 5
+    },
+    "target": {
+      "multiLinks": 0,
+      "basic.Area": 1,
+      "basic.SubArea": 1,
+      "basic.Equipment": 1
+    }
+  },
+  "bpmn.Annotation": {
+    "source": {
+      "multiLinks": 1,
+      "basic.Area": 5,
+      "basic.SubArea": 5,
+      "basic.Equipment": 5,
+      "uml.BreakFlow": 5
+    },
+    "target": {
+      "multiLinks": 0
+    }
+  },
+  "uml.StartState": {
+    "source": {
+      "multiLinks": 0,
+      "basic.Area": 1
+    },
+    "target": {
+      "multiLinks": 0
+    }
+  },
+  "uml.EndState": {
+    "source": {
+      "multiLinks": 0
+    },
+    "target": {
+      "multiLinks": 0
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "holder": "_preserved",
+    "source": "production",
+    "target": "src_target",
+    "module": {
+        "iAdmin": false,
+        "iSterilization": false
+    }
+}
