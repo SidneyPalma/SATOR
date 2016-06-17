@@ -31,7 +31,7 @@ class materialboxitem extends \Smart\Data\Cache {
 			$recs = count($rows);
 			for ($x = 0; $x <= $recs; $x++) {
 				$rows[$x]['materialboxid'] = $query;
-				$rows[$x]['materialname'] = ($recs != $x) ? $rows[$x]['materialname'] : 'inserir registro!';
+				$rows[$x]['materialname'] = ($recs != $x) ? $rows[$x]['materialname'] : 'Inserir Novo Registro';
 			}
 
 			self::_setRows($rows);

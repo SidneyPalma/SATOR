@@ -22,4 +22,4 @@ cls
     sencha app build classic
 
 ::Iniciando versão build
-    ::start http://localhost/SATOR-pro/%appName%/
+    start http://localhost/SATOR-pro/%appName%/
