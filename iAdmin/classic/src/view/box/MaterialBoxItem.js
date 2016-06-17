@@ -23,7 +23,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
     },
 
     listeners: {
-        //edit: 'onEditTargeColor'
+        edit: 'onEditBoxItem'
     },
 
     store: 'materialboxitem',

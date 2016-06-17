@@ -59,20 +59,37 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
         });
     },
 
+    onEditBoxItem: function (editor, context, eOpts) {
+        var gd = context.grid,
+            store = gd.getStore(),
+            record = context.record;
+
+        record.set('materialid', context.value);
+
+        store.sync({
+            success: function () {
+                store.load({
+                    callback: function () {
+                        gd.getSelectionModel().select(context.rowIdx);
+                    }
+                });
+            }
+        });
+    },
+
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
-            grid = view.down('materialboxtarge'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
 
         view.loadRecord(xdata);
-        grid.setDisabled(false);
-        Ext.getStore('materialboxtarge').setParams({
-            query: xdata.get('id')
-        }).load();
-        // grid.setSource.apply(grid, [values,fields]);
+        view.down('materialboxitem').setDisabled(false);
+        view.down('materialboxtarge').setDisabled(false);
+
+        Ext.getStore('materialboxitem').setParams({ query: xdata.get('id') }).load();
+        Ext.getStore('materialboxtarge').setParams({ query: xdata.get('id') }).load();
     },
 
     onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
@@ -99,19 +116,18 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     updateView: function () {
         var me = this,
             view = me.getView();
-            // status = view.down('comboenum[name=statusboxdescription]');
-            // grid = view.down('itembaselayout');
-
-        // status.doQuery('%');
-        // status.selectText(0,0);
 
         me.setModuleForm(view);
         me.setModuleData('materialbox');
 
         me._success = function (form, action) {
-            // grid.setDisabled(false);
+            view.down('materialboxitem').setDisabled(false);
+            view.down('materialboxtarge').setDisabled(false);
+
             if(action.result.crud == 'insert') {
                 view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
+                Ext.getStore('materialboxitem').setParams({ query: action.result.rows.id }).load();
+                Ext.getStore('materialboxtarge').setParams({ query: action.result.rows.id }).load();
             }
         }
 
@@ -120,17 +136,15 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     insertView: function () {
         var me = this,
-            result = {},
             view = me.getView();
-            // portrait = view.down('portrait'),
-            // grid = view.down('itembaselayout');
 
         view.reset();
 
-        // grid.setDisabled(true);
-        // view.down('tabpanel').setActiveTab(0);
-        // view.down('textfield[name=name]').setReadColor(false);
-        // portrait.beFileData();
+        view.down('materialboxitem').setDisabled(true);
+        view.down('materialboxtarge').setDisabled(true);
+
+        Ext.getStore('materialboxitem').removeAll();
+        Ext.getStore('materialboxtarge').removeAll();
     }
 
     
