@@ -47,6 +47,10 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                     showClear: false,
                     allowBlank: false,
                     xtype: 'materialsearch'
+                },
+                renderer: function (value, metaData, record) {
+                    metaData.style = Ext.isNumeric(record.get('id')) != true ? 'text-align: center; font-weight: bold; color: red;' : '';
+                    return value;
                 }
             }
         ];

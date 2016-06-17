@@ -38,13 +38,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeFlow', {
                         html: [
                             '<div class="stencil-container"></div>'
                         ]
-                    // }, {
-                        // height: 150,
-                        // region: 'south',
-                        // xtype: 'container',
-                        // html: [
-                            // '<div class="navigator-container"></div>'
-                        // ]
                     }
                 ]
             }, {
