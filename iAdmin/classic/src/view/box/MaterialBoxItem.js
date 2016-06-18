@@ -36,8 +36,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
 
     buildItems: function () {
         var me = this;
+        //OlaMUndo
 
-        
         Ext.create('iAdmin.store.box.MaterialBoxItem');
 
         me.columns = [
