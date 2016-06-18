@@ -48,9 +48,28 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                     allowBlank: false,
                     xtype: 'materialsearch'
                 },
-                renderer: function (value, metaData, record) {
-                    metaData.style = Ext.isNumeric(record.get('id')) != true ? 'text-align: center; font-weight: bold; color: red;' : '';
-                    return value;
+                renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+                    var me = this,
+                        i = Ext.id(),
+                        s = '<div>' +
+                                '<div style="float: left;">{0}</div>' +
+                                '<div id="{1}" style="float: right; padding-left: 6px; font-size: 18px;"></div>' +
+                            '</div>',
+                        t = 'text-align: center; font-weight: bold; color: red; background: rgb(253, 255, 246); cursor: pointer;';
+
+                    metaData.style = Ext.isNumeric(record.get('id')) != true ? t : '';
+
+                    if(Ext.isNumeric(record.get('id')) == true) {
+                        Ext.defer(function () {
+                            Ext.widget('component', {
+                                renderTo: i,
+                                cls:"update-icon fa fa-cog action-insert-color-font"
+                            }).getEl().on('click', function () { me.grid.fireEvent('updaterecord', me.grid, store, record, {}); }, me.grid);
+                        }, 50);
+                    } else {
+                        return value;
+                    }
+
                 }
             }
         ];

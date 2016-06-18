@@ -208,6 +208,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                 deferredRender: false,
                 items: [
                     {
+                        iconCls: "fa fa-language",
                         title: 'Materiais do Kit',
                         xtype: 'materialboxitem'
                     }
