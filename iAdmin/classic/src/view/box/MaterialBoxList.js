@@ -70,6 +70,10 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         text: 'Nome do Kit',
                         dataIndex: 'name'
                     }, {
+                        width: 120,
+                        text: 'Itens',
+                        dataIndex: 'materialboxitems'
+                    }, {
                         width: 180,
                         text: 'Código de Barras',
                         dataIndex: 'barcode'

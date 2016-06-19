@@ -128,6 +128,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                             }, {
                                 flex: 1,
                                 margin: '0 0 0 5',
+                                useReadColor: true,
                                 fieldLabel: 'Embalagem',
                                 name: 'packingname',
                                 hiddenNameId: 'packingid',
@@ -140,6 +141,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                         text: 'Esquema de cores'
                     }, {
                         height: 128,
+                        disabled: true,
                         margin: '10 0 0 0',
                         xtype: 'materialboxtarge'
                     }, {
@@ -202,18 +204,9 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                 ]
             }, {
                 flex: 3,
-                plain: true,
+                disabled: true,
                 region: 'center',
-                xtype: 'tabpanel',
-                focusOnToFront: false,
-                deferredRender: false,
-                items: [
-                    {
-                        iconCls: "fa fa-language",
-                        title: 'Materiais do Kit',
-                        xtype: 'materialboxitem'
-                    }
-                ]
+                xtype: 'materialboxitem'
             }
         ];
     }

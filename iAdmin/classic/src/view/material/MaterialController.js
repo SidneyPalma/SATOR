@@ -66,7 +66,11 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         grid.setDisabled(false);
         portrait.setUrl(me.url);
         portrait.beFileData(xdata.get('filetype'));
-        grid.setSource.apply(grid, [values,fields]);
+        grid.setSource.apply(grid,[values,fields]);
+
+        var materialboxname = xdata.get('materialboxname') ? xdata.get('materialboxname') : '';
+
+        view.down('packingsearch').setReadColor(materialboxname.length != 0);
 
         Ext.getStore('materialtypeflow').setParams({
             query: xdata.get('id')

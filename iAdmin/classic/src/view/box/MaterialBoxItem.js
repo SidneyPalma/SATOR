@@ -62,7 +62,10 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                     showClear: false,
                     allowBlank: false,
                     xtype: 'materialboxitemsearch',
-                    fieldCls: 'smart-field-style-action'
+                    fieldCls: 'smart-field-style-action',
+                    listeners: {
+                        beforequery: 'onBeforeQuery'
+                    }
                 }
             }, {
                 width: 200,

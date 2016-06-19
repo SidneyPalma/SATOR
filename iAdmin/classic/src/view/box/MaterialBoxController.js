@@ -86,12 +86,25 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
             view = me.getView(),
             xdata = view.xdata;
 
-        return (['000','001'].indexOf(xdata.get('statusbox')) != -1);
+        return (['000'].indexOf(xdata.get('statusbox')) != -1);
+    },
+
+    onBeforeQuery: function (queryPlan, eOpts) {
+        var me = this,
+            view = me.getView(),
+            store = queryPlan.combo.store,
+            packingid = view.down('hiddenfield[name=packingid]');
+
+        store.setParams({
+            method: 'selectLike',
+            packingid: packingid.getValue()
+        });
     },
 
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
+            packingsearch = view.down('packingsearch'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
@@ -101,8 +114,12 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
         view.down('materialboxitem').setDisabled(false);
         view.down('materialboxtarge').setDisabled(false);
 
-        Ext.getStore('materialboxitem').setParams({ query: xdata.get('id') }).load();
         Ext.getStore('materialboxtarge').setParams({ query: xdata.get('id') }).load();
+        Ext.getStore('materialboxitem').setParams({ query: xdata.get('id') }).load({
+            callback: function(records, operation, success) {
+                packingsearch.setReadColor(records.length);
+            }
+        });
         view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(xdata.get('statusbox')) == -1);
 
         switch(xdata.get('statusbox')) {
@@ -186,7 +203,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     onStatusBox: function (view,statusbox) {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            packingsearch = view.down('packingsearch');
 
         Ext.Ajax.request({
             scope: me,
@@ -203,8 +221,12 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
                             var record = records[0];
                             view.xdata = record;
                             view.loadRecord(record);
-                            Ext.getStore('materialboxitem').load();
                             Ext.getStore('materialboxtarge').load();
+                            Ext.getStore('materialboxitem').setParams({ query: record.get('id') }).load({
+                                callback: function(records, operation, success) {
+                                    packingsearch.setReadColor(records.length);
+                                }
+                            });
                             view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(record.get('statusbox')) == -1 );
 
                             switch(record.get('statusbox')) {
@@ -250,9 +272,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
             view = me.getView();
 
         view.reset();
-
-        view.down('materialboxitem').setDisabled(true);
-        view.down('materialboxtarge').setDisabled(true);
 
         Ext.getStore('materialboxitem').removeAll();
         Ext.getStore('materialboxtarge').removeAll();

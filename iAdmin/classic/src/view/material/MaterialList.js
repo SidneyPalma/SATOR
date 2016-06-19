@@ -70,9 +70,21 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         text: 'Nome do Material',
                         dataIndex: 'name'
                     }, {
-                        flex: 2,
-                        text: 'Descrição',
-                        dataIndex: 'description'
+                        width: 180,
+                        text: 'Kit',
+                        dataIndex: 'materialboxname'
+                    }, {
+                        width: 120,
+                        text: 'Grupo',
+                        dataIndex: 'itemgroupdescription'
+                    }, {
+                        width: 120,
+                        text: 'Status',
+                        dataIndex: 'materialstatusname'
+                    }, {
+                        width: 120,
+                        text: 'Embalagem',
+                        dataIndex: 'packingname'
                     }, {
                         readOnly: true,
                         text: 'Ativo',

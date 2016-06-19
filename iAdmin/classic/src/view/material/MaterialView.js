@@ -101,7 +101,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         xtype: 'hiddenfield',
                         name: 'id'
                     }, {
-                        fieldLabel: 'Material',
+                        fieldLabel: 'Nome',
                         name: 'name',
                         fieldCls: 'smart-field-style-action'
                     }, {
@@ -109,11 +109,16 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         fieldLabel: 'Descrição',
                         name: 'description'
                     }, {
+                        allowBlank: true,
+                        useReadColor: true,
+                        fieldLabel: 'Kit ativo',
+                        name: 'materialboxname'
+                    }, {
                         xtype: 'label',
                         cls: 'sub-title-label',
                         text: 'Tipo de fluxo por prioridade'
                     }, {
-                        height: 100,
+                        height: 96,
                         margin: '10 0 0 0',
                         xtype: 'materialtypeflow'
                     }, {

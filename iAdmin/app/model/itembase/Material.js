@@ -57,6 +57,9 @@ Ext.define( 'iAdmin.model.itembase.Material', {
         }, {
             name: 'itemcubiclength',
             type: 'auto'
+        }, {
+            name: 'materialboxname',
+            type: 'auto'
         }
     ]
 

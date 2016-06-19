@@ -12,6 +12,8 @@ Ext.define( 'iAdmin.view.material.MaterialTypeFlow', {
 		'iAdmin.view.sterilizationtype.SterilizationTypeSearch'
     ],
 
+    rowLines: false,
+
     selType: 'cellmodel',
 
     plugins: {

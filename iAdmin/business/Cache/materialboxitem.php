@@ -40,7 +40,7 @@ class materialboxitem extends \Smart\Data\Cache {
 
 			$statusbox = ($recs != 0 ) ? $rows[0]['statusbox'] : '000';
 
-			if (in_array($statusbox, ['000','001'])) {
+			if (in_array($statusbox, ['000'])) {
 				for ($x = 0; $x <= $recs; $x++) {
 					$rows[$x]['materialboxid'] = $query;
 					$rows[$x]['materialname'] = ($recs != $x) ? $rows[$x]['materialname'] : 'Inserir Novo Registro';
@@ -61,26 +61,26 @@ class materialboxitem extends \Smart\Data\Cache {
 		$query = $data['query'];
 		$start = $data['start'];
 		$limit = $data['limit'];
+		$packingid = $data['packingid'];
 		$proxy = $this->getStore()->getProxy();
 
 		$sql = "
-			SELECT
+			select
 				ib.id,
 				ib.name
 			from
 				itembase ib
-				inner join material m on ( m.id = ib.id )
+				inner join material m on ( m.id = ib.id and m.packingid = :packingid )
 			where ib.id not in ( select materialid from materialboxitem )
 			  and ib.name like :name";
 
 		try {
-
 			$query = "%{$query}%";
 
 			$pdo = $proxy->prepare($sql);
 
-			// set params
 			$pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+			$pdo->bindValue(":packingid", $packingid, \PDO::PARAM_INT);
 
 			$pdo->execute();
 			$rows = $pdo->fetchAll();
