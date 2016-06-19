@@ -47,6 +47,7 @@ class materialboxitem extends \Smart\Data\Cache {
 				}
 			}
 
+			
 			self::_setRows($rows);
 
 		} catch ( \PDOException $e ) {
