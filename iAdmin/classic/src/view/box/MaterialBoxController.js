@@ -42,7 +42,31 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     //routes ========================>
 
     onUpdateMaterialBoxItem: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        console.info(record);
+        var me = this,
+            data = me.getView().xdata,
+            view = Ext.widget('materialboxItemstatus');
+
+        if(record.get('boxitemstatus') != 'A') {
+            return false;
+        }
+
+        if(['002'].indexOf(data.get('statusbox')) == -1) {
+
+            Ext.MessageBox.show({
+                scope: me,
+                icon: Ext.MessageBox.WARNING,
+                title: 'Kit Não Homologado!',
+                msg: 'O Material não pode ser excluido pois o Kit não está Homologado.',
+                buttons: Ext.MessageBox.CANCEL,
+                buttonText: { cancel: "Cancelar" }
+            });
+
+            return false;
+        }
+
+        view.show(null,function () {
+            view.down('form').loadRecord(record);
+        });
     },
 
     onEditTargeColor: function (editor, context, eOpts) {
@@ -94,6 +118,9 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
             view = me.getView(),
             store = queryPlan.combo.store,
             packingid = view.down('hiddenfield[name=packingid]');
+
+        queryPlan.combo.reset();
+        store.removeAll();
 
         store.setParams({
             method: 'selectLike',
@@ -199,6 +226,23 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
                 }
             }
         });
+    },
+
+    updateItem: function () {
+        var me = this,
+            view = me.getView();
+
+        view.down('hiddenfield[name=boxitemstatus]').setValue('E');
+
+        me.setModuleForm(view.down('form'));
+        me.setModuleData('materialboxitem');
+
+        me._success = function (form, action) {
+            view.close();
+            Ext.getStore('materialboxitem').load();
+        }
+
+        me.updateModule();
     },
 
     onStatusBox: function (view,statusbox) {

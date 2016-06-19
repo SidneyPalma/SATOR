@@ -22,6 +22,7 @@ class materialbox extends \Smart\Data\Cache {
 			    FROM
 			      materialboxitem mbi
 			    WHERE mbi.materialboxid = mb.id
+			      AND mbi.boxitemstatus = 'A'
 			  )
 			from
 				materialbox mb

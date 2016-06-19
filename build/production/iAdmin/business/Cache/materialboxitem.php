@@ -19,7 +19,8 @@ class materialboxitem extends \Smart\Data\Cache {
                 m.numberproceedings,
                 m.isconsigned,
                 p.name as proprietaryname,
-                mb.statusbox
+                mb.statusbox,
+                mbi.boxitemstatus
             from
                 materialboxitem mbi
                 inner join materialbox mb on ( mb.id = mbi.materialboxid )
@@ -71,7 +72,7 @@ class materialboxitem extends \Smart\Data\Cache {
 			from
 				itembase ib
 				inner join material m on ( m.id = ib.id and m.packingid = :packingid )
-			where ib.id not in ( select materialid from materialboxitem )
+			where ib.id not in ( select materialid from materialboxitem where boxitemstatus = 'A' )
 			  and ib.name like :name";
 
 		try {

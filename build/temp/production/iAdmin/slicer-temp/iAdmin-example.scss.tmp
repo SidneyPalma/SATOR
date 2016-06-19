@@ -1180,6 +1180,7 @@ $include-iadmin-store-users-usersmenutree: dynamic(true);;
 $include-iadmin-store-users-usersprofile: dynamic(true);;
 $include-iadmin-view-box-materialboxcontroller: dynamic(true);;
 $include-iadmin-view-box-materialboxitem: dynamic(true);;
+$include-iadmin-view-box-materialboxitemstatus: dynamic(true);;
 $include-iadmin-view-box-materialboxlist: dynamic(true);;
 $include-iadmin-view-box-materialboxtarge: dynamic(true);;
 $include-iadmin-view-box-materialboxtargecolorsearch: dynamic(true);;

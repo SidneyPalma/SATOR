@@ -33,7 +33,10 @@ class material extends \Smart\Data\Cache {
                     mb.name
                   FROM
                     materialbox mb
-                    inner join materialboxitem mbi on ( mbi.materialboxid = mb.id AND mbi.materialid = m.id )
+                    inner join materialboxitem mbi on ( 
+                                            mbi.materialboxid = mb.id
+                                        AND mbi.materialid = m.id
+                                        AND mbi.boxitemstatus = 'A' )
                     inner join itembase ib on ( ib.id = mbi.materialid )
                 ),
                 m.*,
@@ -99,7 +102,10 @@ class material extends \Smart\Data\Cache {
                     mb.name
                   FROM
                     materialbox mb
-                    inner join materialboxitem mbi on ( mbi.materialboxid = mb.id AND mbi.materialid = m.id )
+                    inner join materialboxitem mbi on ( 
+                                            mbi.materialboxid = mb.id
+                                        AND mbi.materialid = m.id
+                                        AND mbi.boxitemstatus = 'A' )
                     inner join itembase ib on ( ib.id = mbi.materialid )
                 ),
                 m.*,

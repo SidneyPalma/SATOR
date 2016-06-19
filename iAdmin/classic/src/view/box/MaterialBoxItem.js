@@ -40,15 +40,18 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
     },
 
     columnsRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
-        var showRecord = 'text-align: center; font-weight: bold; color: red; background: rgb(253, 255, 246); cursor: pointer; height: 39px;';
-        metaData.style = Ext.isNumeric(record.get('id')) != true ? showRecord : '';
+        var boxitemstatus = record.get('boxitemstatus'),
+            showRecord = 'text-align: center; font-weight: bold; color: red; background: rgb(253, 255, 246); cursor: pointer; height: 39px;';
+
+            metaData.style = Ext.isNumeric(record.get('id')) != true ? showRecord : (boxitemstatus == 'E' ? 'color: red;' : '');
+
         return value;
     },
 
     makeColumn: function () {
         var me = this,
-            isDisabled = function (view, rowIdx, colIdx, item, record) {
-                return !Ext.isNumeric(record.get('id'));
+            isDisabled = function (view, rowIdx, colIdx, item, rec) {
+                return !Ext.isNumeric(rec.get('id'));
             };
 
         Ext.create('iAdmin.store.box.MaterialBoxItem');
@@ -96,10 +99,12 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 handler: 'onUpdateMaterialBoxItem',
                 isDisabled: isDisabled,
                 getTip: function(v, meta, rec) {
-                    return Ext.isNumeric(rec.get('id')) ? 'Editar item do kit!' : '';
+                    var isactive = rec.get('boxitemstatus') == 'A';
+                    return (Ext.isNumeric(rec.get('id')) && isactive) ? 'Editar item do kit!' : '';
                 },
                 getClass: function(v, meta, rec) {
-                    return Ext.isNumeric(rec.get('id')) ? "fa fa-cog action-update-color" : '';
+                    var isactive = rec.get('boxitemstatus') == 'A';
+                    return (Ext.isNumeric(rec.get('id')) && isactive) ? "fa fa-cog action-delete-color" : '';
                 },
                 renderer: me.columnsRenderer
             }
