@@ -32,6 +32,23 @@ class materialboxitem extends \Smart\Data\Model {
      */
     private $materialname;
 
+    /**
+     * @Policy {"nullable":false, "length":1}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"A"}
+     */
+    private $boxitemstatus;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,boxitemstatus"}
+     */
+    private $boxitemstatusdescription;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $observation;
 
     /**
      * @return type integer
@@ -78,6 +95,38 @@ class materialboxitem extends \Smart\Data\Model {
      */
     public function setMaterialid($materialid) {
         $this->materialid = $materialid;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getBoxitemstatus() {
+        return $this->boxitemstatus;
+    }
+
+    /**
+     * @param type $boxitemstatus
+     * @return \iAdmin\Model\materialboxitem
+     */
+    public function setBoxitemstatus($boxitemstatus) {
+        $this->boxitemstatus = $boxitemstatus;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getObservation() {
+        return $this->observation;
+    }
+
+    /**
+     * @param type $observation
+     * @return \iAdmin\Model\materialboxitem
+     */
+    public function setObservation($observation) {
+        $this->observation = $observation;
         return $this;
     }
 

@@ -26,6 +26,15 @@ Ext.define( 'iAdmin.model.box.MaterialBoxItem', {
         }, {
             name: 'materialname',
             type: 'auto'
+        }, {
+            name: 'boxitemstatus',
+            type: 'auto'
+        }, {
+            name: 'boxitemstatusdescription',
+            type: 'auto'
+        }, {
+            name: 'observation',
+            type: 'auto'
         }
     ]
 
