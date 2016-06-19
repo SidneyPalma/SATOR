@@ -15,10 +15,17 @@ class materialboxitem extends \Smart\Data\Cache {
                 mbi.id,
                 mbi.materialboxid,
                 mbi.materialid,
-                ib.name as materialname
+                ib.name as materialname,
+                m.numberproceedings,
+                m.isconsigned,
+                p.name as proprietaryname,
+                mb.statusbox
             from
                 materialboxitem mbi
+                inner join materialbox mb on ( mb.id = mbi.materialboxid )
                 inner join itembase ib on ( ib.id = mbi.materialid )
+                inner join material m on ( m.id = ib.id )
+                inner join proprietary p on ( p.id = ib.proprietaryid )
             where mbi.materialboxid = :id";
 
 		try {
@@ -28,10 +35,16 @@ class materialboxitem extends \Smart\Data\Cache {
 
 			$pdo->execute();
 			$rows = $pdo->fetchAll();
+
 			$recs = count($rows);
-			for ($x = 0; $x <= $recs; $x++) {
-				$rows[$x]['materialboxid'] = $query;
-				$rows[$x]['materialname'] = ($recs != $x) ? $rows[$x]['materialname'] : 'Inserir Novo Registro';
+
+			$statusbox = ($recs != 0 ) ? $rows[0]['statusbox'] : '000';
+
+			if (in_array($statusbox, ['000','001'])) {
+				for ($x = 0; $x <= $recs; $x++) {
+					$rows[$x]['materialboxid'] = $query;
+					$rows[$x]['materialname'] = ($recs != $x) ? $rows[$x]['materialname'] : 'Inserir Novo Registro';
+				}
 			}
 
 			self::_setRows($rows);
@@ -41,6 +54,45 @@ class materialboxitem extends \Smart\Data\Cache {
 			self::_setText($e->getMessage());
 		}
 
+		return self::getResultToJson();
+	}
+
+	public function selectLike(array $data) {
+		$query = $data['query'];
+		$start = $data['start'];
+		$limit = $data['limit'];
+		$proxy = $this->getStore()->getProxy();
+
+		$sql = "
+			SELECT
+				ib.id,
+				ib.name
+			from
+				itembase ib
+				inner join material m on ( m.id = ib.id )
+			where ib.id not in ( select materialid from materialboxitem )
+			  and ib.name like :name";
+
+		try {
+
+			$query = "%{$query}%";
+
+			$pdo = $proxy->prepare($sql);
+
+			// set params
+			$pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+
+			$pdo->execute();
+			$rows = $pdo->fetchAll();
+
+			self::_setRows($rows);
+
+		} catch ( \PDOException $e ) {
+			self::_setSuccess(false);
+			self::_setText($e->getMessage());
+		}
+
+		self::_setPage($start, $limit);
 		return self::getResultToJson();
 	}
 

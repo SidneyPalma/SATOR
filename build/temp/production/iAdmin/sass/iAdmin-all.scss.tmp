@@ -1237,6 +1237,7 @@ $include-iadmin-view-login-logincontroller: dynamic(true);;
 $include-iadmin-view-main-main: dynamic(true);;
 $include-iadmin-view-main-maincontroller: dynamic(true);;
 $include-iadmin-view-main-maindock: dynamic(true);;
+$include-iadmin-view-material-materialboxitemsearch: dynamic(true);;
 $include-iadmin-view-material-materialcontroller: dynamic(true);;
 $include-iadmin-view-material-materiallist: dynamic(true);;
 $include-iadmin-view-material-materialsearch: dynamic(true);;

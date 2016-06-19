@@ -10,7 +10,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
         'iAdmin.store.box.*',
         'Ext.grid.plugin.CellEditing',
         'iAdmin.store.box.MaterialBoxItem',
-        'iAdmin.view.material.MaterialSearch'
+        'iAdmin.view.material.MaterialBoxItemSearch'
     ],
 
     rowLines: false,
@@ -29,7 +29,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
     },
 
     listeners: {
-        edit: 'onEditBoxItem'
+        edit: 'onEditBoxItem',
+        beforeedit: 'onBeforeEditBoxItem'
     },
 
     initComponent: function () {
@@ -60,7 +61,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 editor: {
                     showClear: false,
                     allowBlank: false,
-                    xtype: 'materialsearch',
+                    xtype: 'materialboxitemsearch',
                     fieldCls: 'smart-field-style-action'
                 }
             }, {

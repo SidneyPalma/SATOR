@@ -11,6 +11,8 @@ class materialbox extends \Smart\Data\Event {
      */
     public function preInsert( \iAdmin\Model\materialbox &$model ) {
         Session::hasProfile('','');
+
+        $model->set('statusbox','000');
     }
 
     /**

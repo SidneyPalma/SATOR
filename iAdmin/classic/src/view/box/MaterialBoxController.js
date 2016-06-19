@@ -42,7 +42,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     //routes ========================>
 
     onUpdateMaterialBoxItem: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this;
         console.info(record);
     },
 
@@ -82,10 +81,17 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
         });
     },
 
+    onBeforeEditBoxItem: function (editor, context, eOpts) {
+        var me = this,
+            view = me.getView(),
+            xdata = view.xdata;
+
+        return (['000','001'].indexOf(xdata.get('statusbox')) != -1);
+    },
+
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
-
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
@@ -97,7 +103,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
         Ext.getStore('materialboxitem').setParams({ query: xdata.get('id') }).load();
         Ext.getStore('materialboxtarge').setParams({ query: xdata.get('id') }).load();
-        view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(xdata.get('statusbox')) == -1 );
+        view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(xdata.get('statusbox')) == -1);
 
         switch(xdata.get('statusbox')) {
             case '000':

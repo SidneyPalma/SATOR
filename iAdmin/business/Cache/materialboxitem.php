@@ -57,4 +57,43 @@ class materialboxitem extends \Smart\Data\Cache {
 		return self::getResultToJson();
 	}
 
+	public function selectLike(array $data) {
+		$query = $data['query'];
+		$start = $data['start'];
+		$limit = $data['limit'];
+		$proxy = $this->getStore()->getProxy();
+
+		$sql = "
+			SELECT
+				ib.id,
+				ib.name
+			from
+				itembase ib
+				inner join material m on ( m.id = ib.id )
+			where ib.id not in ( select materialid from materialboxitem )
+			  and ib.name like :name";
+
+		try {
+
+			$query = "%{$query}%";
+
+			$pdo = $proxy->prepare($sql);
+
+			// set params
+			$pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+
+			$pdo->execute();
+			$rows = $pdo->fetchAll();
+
+			self::_setRows($rows);
+
+		} catch ( \PDOException $e ) {
+			self::_setSuccess(false);
+			self::_setText($e->getMessage());
+		}
+
+		self::_setPage($start, $limit);
+		return self::getResultToJson();
+	}
+
 }
