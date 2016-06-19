@@ -276,6 +276,5 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
         Ext.getStore('materialboxitem').removeAll();
         Ext.getStore('materialboxtarge').removeAll();
     }
-
     
 });
