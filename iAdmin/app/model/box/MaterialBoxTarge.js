@@ -35,6 +35,15 @@ Ext.define( 'iAdmin.model.box.MaterialBoxTarge', {
         }, {
             name: 'colorschema',
             type: 'auto'
+        }, {
+            name: 'numberproceedings',
+            type: 'int'
+        }, {
+            name: 'proprietaryname',
+            type: 'auto'
+        }, {
+            name: 'isconsigned',
+            type: 'int'
         }
     ]
 

@@ -41,6 +41,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     //routes ========================>
 
+    onUpdateMaterialBoxItem: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+        var me = this;
+        console.info(record);
+    },
+
     onEditTargeColor: function (editor, context, eOpts) {
         var gd = context.grid,
             store = gd.getStore(),
@@ -80,16 +85,30 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
+
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
 
         view.loadRecord(xdata);
+
         view.down('materialboxitem').setDisabled(false);
         view.down('materialboxtarge').setDisabled(false);
 
         Ext.getStore('materialboxitem').setParams({ query: xdata.get('id') }).load();
         Ext.getStore('materialboxtarge').setParams({ query: xdata.get('id') }).load();
+        view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(xdata.get('statusbox')) == -1 );
+
+        switch(xdata.get('statusbox')) {
+            case '000':
+                view.down('button[name=pendent]').setText('Finalizar');
+                break;
+            case '001':
+                view.down('button[name=pendent]').setText('Homologar');
+                break;
+            default:
+                view.down('button[name=pendent]').setText('Homologado');
+        }
     },
 
     onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
@@ -111,6 +130,92 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     insertViewNew: function () {
         var me = this;
         me.redirectTo('materialboxview');
+    },
+
+    updateBox: function () {
+        var me = this,
+            view = me.getView();
+
+        if(view.xdata.get('statusbox') == '000') {
+            Ext.MessageBox.show({
+                scope: me,
+                icon: Ext.MessageBox.QUESTION,
+                title: 'Finalizar Kit?',
+                msg: 'O que você deseja fazer agora?',
+                buttons: Ext.MessageBox.YESNO,
+                buttonText: {
+                    yes: "Finalizar para homologação",
+                    no: "Cancelar"
+                },
+                fn: function(btn, text) {
+                    if(btn == 'yes') {
+                        view.fireEvent('onstatusbox',view,'001');
+                    }
+                }
+            });
+
+            return false;
+        }
+
+        Ext.MessageBox.show({
+            scope: me,
+            icon: Ext.MessageBox.QUESTION,
+            title: 'Homologar Kit?',
+            msg: 'O que você deseja fazer agora?',
+            buttons: Ext.MessageBox.YESNOCANCEL,
+            buttonText: {
+                yes: "Homologar para uso",
+                no: "Retornar para montagem"
+            },
+            fn: function(btn, text) {
+                if(btn == 'yes') {
+                    view.fireEvent('onstatusbox',view,'002');
+                }
+                if(btn == 'no') {
+                    view.fireEvent('onstatusbox',view,'000');
+                }
+            }
+        });
+    },
+
+    onStatusBox: function (view,statusbox) {
+        var me = this,
+            view = me.getView();
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'update',
+                rows: Ext.encode({ id: view.xdata.get('id'), statusbox: statusbox })
+            },
+            callback: function (options, success, response) {
+                if(success) {
+                    Ext.getStore('materialbox').load({
+                        scope: me,
+                        callback: function(records, operation, success) {
+                            var record = records[0];
+                            view.xdata = record;
+                            view.loadRecord(record);
+                            Ext.getStore('materialboxitem').load();
+                            Ext.getStore('materialboxtarge').load();
+                            view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(record.get('statusbox')) == -1 );
+
+                            switch(record.get('statusbox')) {
+                                case '000':
+                                    view.down('button[name=pendent]').setText('Finalizar');
+                                    break;
+                                case '001':
+                                    view.down('button[name=pendent]').setText('Homologar');
+                                    break;
+                                default:
+                                    view.down('button[name=pendent]').setText('Homologado');
+                            }
+                        }
+                    });
+                }
+            }
+        });
     },
 
     updateView: function () {

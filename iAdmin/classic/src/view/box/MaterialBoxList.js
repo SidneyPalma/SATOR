@@ -70,16 +70,13 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         text: 'Nome do Kit',
                         dataIndex: 'name'
                     }, {
-                        flex: 2,
-                        text: 'Descrição',
-                        dataIndex: 'description'
+                        width: 180,
+                        text: 'Código de Barras',
+                        dataIndex: 'barcode'
                     }, {
-                        readOnly: true,
-                        text: 'Ativo',
-                        dataIndex: 'isactive',
-                        align: 'center',
-                        width: 100,
-                        xtype: 'checkcolumn'
+                        text: 'Status',
+                        dataIndex: 'statusboxdescription',
+                        width: 180
                     }, {
                         width: 90,
                         text: 'Ações',

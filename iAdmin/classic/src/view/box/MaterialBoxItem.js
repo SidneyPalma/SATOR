@@ -14,8 +14,14 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
     ],
 
     rowLines: false,
+    hideHeaders: false,
+    headerBorders: false,
+
+    cls: 'list-grid',
 
     selType: 'cellmodel',
+
+    store: 'materialboxitem',
 
     plugins: {
         clicksToEdit: 1,
@@ -26,52 +32,67 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
         edit: 'onEditBoxItem'
     },
 
-    store: 'materialboxitem',
-
     initComponent: function () {
         var me = this;
-        me.buildItems();
+        me.makeColumn();
         me.callParent();
     },
 
-    buildItems: function () {
-        var me = this;
-        //OlaMUndo
+    columnsRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
+        var showRecord = 'text-align: center; font-weight: bold; color: red; background: rgb(253, 255, 246); cursor: pointer; height: 39px;';
+        metaData.style = Ext.isNumeric(record.get('id')) != true ? showRecord : '';
+        return value;
+    },
+
+    makeColumn: function () {
+        var me = this,
+            isDisabled = function (view, rowIdx, colIdx, item, record) {
+                return !Ext.isNumeric(record.get('id'));
+            };
 
         Ext.create('iAdmin.store.box.MaterialBoxItem');
 
         me.columns = [
             {
                 flex: 1,
+                text: 'Material',
                 dataIndex: 'materialname',
                 editor: {
                     showClear: false,
                     allowBlank: false,
-                    xtype: 'materialsearch'
-                },
-                renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-                    var me = this,
-                        i = Ext.id(),
-                        s = '<div>' +
-                                '<div style="float: left;">{0}</div>' +
-                                '<div id="{1}" style="float: right; padding-left: 6px; font-size: 18px;"></div>' +
-                            '</div>',
-                        t = 'text-align: center; font-weight: bold; color: red; background: rgb(253, 255, 246); cursor: pointer;';
-
-                    metaData.style = Ext.isNumeric(record.get('id')) != true ? t : '';
-
-                    if(Ext.isNumeric(record.get('id')) == true) {
-                        Ext.defer(function () {
-                            Ext.widget('component', {
-                                renderTo: i,
-                                cls:"update-icon fa fa-cog action-insert-color-font"
-                            }).getEl().on('click', function () { me.grid.fireEvent('updaterecord', me.grid, store, record, {}); }, me.grid);
-                        }, 50);
-                    } else {
-                        return value;
-                    }
-
+                    xtype: 'materialsearch',
+                    fieldCls: 'smart-field-style-action'
                 }
+            }, {
+                width: 200,
+                text: 'Proprietário',
+                dataIndex: 'proprietaryname'
+            }, {
+                width: 100,
+                align: 'center',
+                text: 'Processos',
+                dataIndex: 'numberproceedings'
+            }, {
+                width: 100,
+                align: 'center',
+                text: 'Consignado',
+                xtype: 'checkcolumn',
+                dataIndex: 'isconsigned',
+                readOnly: true,
+                renderer: me.columnsRenderer
+            }, {
+                width: 40,
+                align: 'center',
+                xtype: 'actioncolumn',
+                handler: 'onUpdateMaterialBoxItem',
+                isDisabled: isDisabled,
+                getTip: function(v, meta, rec) {
+                    return Ext.isNumeric(rec.get('id')) ? 'Editar item do kit!' : '';
+                },
+                getClass: function(v, meta, rec) {
+                    return Ext.isNumeric(rec.get('id')) ? "fa fa-cog action-update-color" : '';
+                },
+                renderer: me.columnsRenderer
             }
         ];
     }

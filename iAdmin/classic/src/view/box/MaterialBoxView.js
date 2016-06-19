@@ -46,6 +46,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
     },
 
     listeners: {
+        onstatusbox: 'onStatusBox',
         afterrender: 'onAfterRenderView'
     },
 
@@ -152,7 +153,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                                 fieldLabel: 'Status',
                                 xtype: 'displayfield',
                                 name: 'statusboxdescription',
-                                value: 'Novo Cadastro'
+                                value: 'Montagem'
                             }, {
                                 xtype: 'splitter'
                             }, {
@@ -192,8 +193,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                                 disabled: true,
                                 name: 'pendent',
                                 iconCls: "fa fa-check",
-                                text: 'Concluir',
-                                handler: 'updateFlux',
+                                text: 'Finalizar',
+                                handler: 'updateBox',
                                 showSmartTheme: ''
                             }
                         ]
