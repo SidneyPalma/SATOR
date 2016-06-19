@@ -56,6 +56,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
         me.columns = [
             {
                 flex: 1,
+                sortable: false,
                 text: 'Material',
                 dataIndex: 'materialname',
                 editor: {
@@ -69,15 +70,18 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 }
             }, {
                 width: 200,
+                sortable: false,
                 text: 'Proprietário',
                 dataIndex: 'proprietaryname'
             }, {
                 width: 100,
+                sortable: false,
                 align: 'center',
                 text: 'Processos',
                 dataIndex: 'numberproceedings'
             }, {
                 width: 100,
+                sortable: false,
                 align: 'center',
                 text: 'Consignado',
                 xtype: 'checkcolumn',
@@ -86,6 +90,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 renderer: me.columnsRenderer
             }, {
                 width: 40,
+                sortable: false,
                 align: 'center',
                 xtype: 'actioncolumn',
                 handler: 'onUpdateMaterialBoxItem',
