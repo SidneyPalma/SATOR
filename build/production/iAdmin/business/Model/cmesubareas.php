@@ -27,18 +27,6 @@ class cmesubareas extends \Smart\Data\Model {
     private $cmeareasname;
 
     /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
-     */
-    private $isactive;
-
-    /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $orderby;
-
-    /**
      * @return type integer
      */
     public function getId() {
@@ -67,38 +55,6 @@ class cmesubareas extends \Smart\Data\Model {
      */
     public function setCmeareasid($cmeareasid) {
         $this->cmeareasid = $cmeareasid;
-        return $this;
-    }
-
-    /**
-     * @return type boolean
-     */
-    public function getIsactive() {
-        return $this->isactive;
-    }
-
-    /**
-     * @param type $isactive
-     * @return \iAdmin\Model\cmesubareas
-     */
-    public function setIsactive($isactive) {
-        $this->isactive = $isactive;
-        return $this;
-    }
-
-    /**
-     * @return type integer
-     */
-    public function getOrderby() {
-        return $this->orderby;
-    }
-
-    /**
-     * @param type $orderby
-     * @return \iAdmin\Model\cmesubareas
-     */
-    public function setOrderby($orderby) {
-        $this->orderby = $orderby;
         return $this;
     }
 

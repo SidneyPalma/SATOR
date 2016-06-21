@@ -60,10 +60,10 @@ class sterilizationtype extends \Smart\Data\Cache {
 
         switch($shapeType) {
             case 'area':
-                $sql = "SELECT a.id, a.sterilizationname as name, a.description, c.isactive FROM areas a inner join cmeareas c on ( c.id = a.id ) WHERE a.sterilizationflow = 1 order by c.orderby";
+                $sql = "SELECT a.id, a.sterilizationname as name, a.description, a.isactive, c.isstartstate FROM areas a inner join cmeareas c on ( c.id = a.id ) WHERE a.sterilizationflow = 1 order by a.orderby";
                 break;
             case 'subarea':
-                $sql = "SELECT a.id, a.sterilizationname as name, a.description, s.isactive FROM areas a inner join cmesubareas s on ( s.id = a.id ) WHERE a.sterilizationflow = 1 order by s.orderby";
+                $sql = "SELECT a.id, a.sterilizationname as name, a.description, a.isactive FROM areas a inner join cmesubareas s on ( s.id = a.id ) WHERE a.sterilizationflow = 1 order by a.orderby";
                 break;
             case 'equipment':
                 $sql = "SELECT e.id, e.sterilizationname as name, i.description, i.isactive FROM itembase i inner join equipment e on ( e.id = i.id ) WHERE i.itembasetype = 'E' and e.sterilizationflow = 1";

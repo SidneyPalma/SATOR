@@ -79,11 +79,12 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
             xdata = view.xdata,
             portrait = view.down('portrait'),
             grid = view.down('itembaselayout'),
-            id = view.down('hiddenfield[name=id]').getValue(),
-            values = Ext.decode(xdata.get('layoutvalues') || {}),
-            fields = Ext.decode(xdata.get('layoutfields') || {});
+            id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
+
+        var values = Ext.decode(xdata.get('layoutvalues') || {});
+        var fields = Ext.decode(xdata.get('layoutfields') || {});
 
         view.loadRecord(xdata);
         grid.setDisabled(false);

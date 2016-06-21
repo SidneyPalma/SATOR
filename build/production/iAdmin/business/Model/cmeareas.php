@@ -16,15 +16,9 @@ class cmeareas extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"0"}
      */
-    private $isactive;
-
-    /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $orderby;
+    private $isstartstate;
 
     /**
      * @return type integer
@@ -45,32 +39,16 @@ class cmeareas extends \Smart\Data\Model {
     /**
      * @return type boolean
      */
-    public function getIsactive() {
-        return $this->isactive;
+    public function getIsstartstate() {
+        return $this->isstartstate;
     }
 
     /**
-     * @param type $isactive
+     * @param type $isstartstate
      * @return \iAdmin\Model\cmeareas
      */
-    public function setIsactive($isactive) {
-        $this->isactive = $isactive;
-        return $this;
-    }
-
-    /**
-     * @return type integer
-     */
-    public function getOrderby() {
-        return $this->orderby;
-    }
-
-    /**
-     * @param type $orderby
-     * @return \iAdmin\Model\cmeareas
-     */
-    public function setOrderby($orderby) {
-        $this->orderby = $orderby;
+    public function setIsstartstate($isstartstate) {
+        $this->isstartstate = $isstartstate;
         return $this;
     }
 

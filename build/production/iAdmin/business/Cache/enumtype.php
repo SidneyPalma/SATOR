@@ -6,7 +6,7 @@ use iAdmin\Model\enumtype as Model;
 
 class enumtype extends \Smart\Data\Cache {
 
-    public function selectCode(array $data) {
+    public function selectCode_(array $data) {
         $type = $data['type'];
         $query = $data['query'];
         $description = $type . 'description';

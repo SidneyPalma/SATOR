@@ -301,8 +301,9 @@ trait TvalidField
      * @return mixed
      */
     public function nullablePolicy($policy,$value) {
+        $msgjson = '{"passed": true}';
         $message = "Não pode ser nulo ou string vazia!";
-        $checked = $policy === false && $this->tryNull($value) ? '{"passed": false, "message":"' ."{$message}". '"}' : '{"passed": true}';
+        $checked = $policy === false && $this->tryNull($value) ? '{"passed": false, "message":"' ."{$message}". '"}' : $msgjson;
         return json_decode($checked);
     }
 
@@ -313,8 +314,9 @@ trait TvalidField
      * @return mixed
      */
     public function lengthPolicy($policy,$value) {
+        $msgjson = '{"passed": true}';
         $message = "Não pode ser maior que {$policy} caracteres!";
-        $checked =  $policy < strlen($value) ? '{"passed": false, "message":"' ."{$message}". '"}' : '{"passed": true}';
+        $checked =  ( $policy == 0 ) ? $msgjson : ( $policy < strlen($value) ? '{"passed": false, "message":"' ."{$message}". '"}' : $msgjson );
         return json_decode($checked);
     }
 

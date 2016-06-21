@@ -44,7 +44,9 @@ class cmeareas extends \Smart\Data\Event {
      * @param \iAdmin\Model\cmeareas $model
      */
     public function posUpdate( \iAdmin\Model\cmeareas &$model ) {
-
+        Session::hasProfile('907BDF5C-F83C-47A5-84C1-5D7D2385D081','9583F8C2-9DAA-4687-A673-40053E322A64');
+//        select st.name, st.dataflowstep from sterilizationtype st where st.isactive = 1
+//        throw new \PDOException('Não foi possível inserir o registro!');
     }
 
     /**

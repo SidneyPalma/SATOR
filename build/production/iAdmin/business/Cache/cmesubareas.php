@@ -23,9 +23,7 @@ class cmesubareas extends \Smart\Data\Cache {
             SELECT
                 a.*,
                 cmeareasname = ( SELECT name FROM areas WHERE id = sa.cmeareasid ),
-                sa.cmeareasid,
-                sa.isactive,
-                sa.orderby
+                sa.cmeareasid
             FROM
                 areas a
                 inner join cmesubareas sa on ( sa.id = a.id )

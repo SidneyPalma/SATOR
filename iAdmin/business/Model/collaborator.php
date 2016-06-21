@@ -15,7 +15,7 @@ class collaborator extends \Smart\Data\Model {
     private $id;
 
     /**
-     * @Policy {"nullable":false, "length":20}
+     * @Policy {"nullable":false, "length":60}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $name;

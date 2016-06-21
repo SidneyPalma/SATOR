@@ -45,11 +45,6 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
                 sortable: false,
                 xtype: 'treecolumn',
                 text: 'Descrição do menu'
-                // renderer: function ( value, metaData, record ) {
-                //     var glyph = record.get('glyph');
-                //
-                //     return (!glyph) ? value : Ext.String.format('<i class="{0}"></i> {1}',glyph,value);
-                // }
             }, {
                 width: 540,
                 text: 'Diretivas',
@@ -57,6 +52,7 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
                 sortable: false,
                 editor: {
                     xtype: 'pickerfield',
+                    // enableKeyEvents: true,
                     fieldCls: 'smart-field-style-action',
                     createPicker: function () {
                         return Ext.widget('profilemenuaccess');
