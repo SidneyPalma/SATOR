@@ -39,15 +39,18 @@ As tabelas a seguir apresentam o modelo de dados para os Sistemas SATOR
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EtapaFlag`](tables/EtapaFlag.md) | EnumType(markflagstep) | Flags usadas nas  Etapas(Processos) de Esterilizar do Material |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EtapaEsterilização`](tables/EtapaEsterilizacao.md) | stepsterilization | Etapas de Esterilização são possiveis Etapas(Processos) para Esterilizar o Material |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Material`](tables/Material.md) | material | São os Materiasi, alvo das atividades do CME |
-| * | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`Kits`](tables/Kit.md) |  | Conjunto de Materiais |
+|   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Kits`](tables/Kit.md) |  | Conjunto de Materiais |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EquipamentoStatus`](tables/EquipamentoStatus.md) | equipmentstatus | Status do Equipamento |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Equipamento`](tables/Equipamento.md) | equipment | Equipamentos utilizados no processo de esterilização |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`TipoServico`](tables/TipoServico.md) | EnumType(servicetype) | Tipos de Serviços realizados |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EstruturaResultado`](tables/EstruturaResultado.md) | servicestructure->servicestructurefield | Estrutura dos Resultados dos Serviços Realizados |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`ServicoRegisto`](tables/ServicoRegistro.md) | serviceregistration | Registro dos Serviços Realizados |
-| - | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`Insumo`](tables/Insumo.md) |  | Insumos utilizados no processo de esterilização |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`ItemBase`](tables/ItemBase.md) | itembase | Dados base para Material e Equipamento |
-|New| ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`Tamanho`](tables/Tamanho.md) |  | Tamanhos para Materiais e Kits |
+|   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Tamanho`](tables/Tamanho.md) |  | Tamanhos para Materiais e Kits |
+|New| ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`Deposito`](tables/Deposito.md) |  | Depósitos para Insumos |
+|New| ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`UnidadeMedida`](tables/UnidadeMedida.md) |  | Unidade de Medida para Insumos |
+|New| ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`ResiduoDestino`](tables/ResiduoDestino.md) |  | Destino de Residuos dos Insumos |
+|New| ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`Insumo`](tables/Insumo.md) |  | Insumos utilizados no processo de esterilização |
 
 
 Here's our logo (hover to see the title text):
