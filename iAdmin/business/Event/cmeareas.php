@@ -43,8 +43,8 @@ class cmeareas extends \Smart\Data\Event {
     /**
      * @param \iAdmin\Model\cmeareas $model
      */
-    public function posUpdate( \iAdmin\Model\cmeareas &$model ) {
-
+    public function posUpdate( \iAdmin\Model\cmeareas &$model ) {		
+		
     }
 
     /**
