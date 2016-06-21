@@ -39,7 +39,7 @@ As tabelas a seguir apresentam o modelo de dados para os Sistemas SATOR
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EtapaFlag`](tables/EtapaFlag.md) | EnumType(markflagstep) | Flags usadas nas  Etapas(Processos) de Esterilizar do Material |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EtapaEsterilização`](tables/EtapaEsterilizacao.md) | stepsterilization | Etapas de Esterilização são possiveis Etapas(Processos) para Esterilizar o Material |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Material`](tables/Material.md) | material | São os Materiasi, alvo das atividades do CME |
-|   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Kits`](tables/Kit.md) |  | Conjunto de Materiais |
+|   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Kits`](tables/Kit.md) | materialbox | Conjunto de Materiais |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EquipamentoStatus`](tables/EquipamentoStatus.md) | equipmentstatus | Status do Equipamento |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Equipamento`](tables/Equipamento.md) | equipment | Equipamentos utilizados no processo de esterilização |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`TipoServico`](tables/TipoServico.md) | EnumType(servicetype) | Tipos de Serviços realizados |
