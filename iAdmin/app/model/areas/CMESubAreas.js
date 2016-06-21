@@ -19,16 +19,6 @@ Ext.define( 'iAdmin.model.areas.CMESubAreas', {
         }, {
             name: 'cmeareasname',
             type: 'auto'
-        }, {
-            name: 'orderby',
-            type: 'int',
-            persist: true,
-            critical: true
-        }, {
-            name: 'isactive',
-            type: 'int',
-            persist: true,
-            critical: true
         }
     ]
 

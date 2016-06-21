@@ -28,6 +28,16 @@ Ext.define( 'iAdmin.model.areas.Areas', {
         }, {
             name: 'sterilizationname',
             type: 'auto'
+        }, {
+            name: 'orderby',
+            type: 'int',
+            persist: true,
+            critical: true
+        }, {
+            name: 'isactive',
+            type: 'int',
+            persist: true,
+            critical: true
         }
     ]
 

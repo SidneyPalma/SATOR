@@ -22,8 +22,7 @@ class cmeareas extends \Smart\Data\Cache {
         $sql = "
             SELECT
                 a.*,
-                ca.isactive,
-                ca.orderby
+                ca.isstartstate
             FROM
                 areas a
                 inner join cmeareas ca on ( ca.id = a.id )

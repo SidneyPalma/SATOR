@@ -12,16 +12,11 @@ Ext.define( 'iAdmin.model.areas.CMEAreas', {
             type: 'int',
             serializeType: 'auto'
         }, {
-            name: 'orderby',
+			name: 'isstartstate',
             type: 'int',
             persist: true,
             critical: true
-        }, {
-            name: 'isactive',
-            type: 'int',
-            persist: true,
-            critical: true
-        }
+		}
     ]
 
 });

@@ -86,20 +86,25 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasEdit', {
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
+						defaultType: 'checkboxfield',
+						defaults: {
+							flex: 1,
+							allowBlank: false
+						},
                         items: [
                             {
-                                flex: 1,
                                 name: 'isactive',
-                                xtype: 'checkboxfield',
                                 fieldLabel: 'Status',
                                 boxLabel: 'Ativo'
                             }, {
-                                flex: 1,
                                 name: 'sterilizationflow',
-                                xtype: 'checkboxfield',
                                 fieldLabel: 'Fluxo',
                                 boxLabel: 'Ativo'
-                            }
+                            }, {
+								name: 'isstartstate',
+								fieldLabel: 'Estado inicial',
+                                boxLabel: 'Ativo'
+							}
                         ]
                     }
                 ]
