@@ -505,7 +505,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                         "stepflaglist": stepflaglist,
                         "areasiddo": item.get('areasiddo'),
                         "areasidto": item.get('areasidto'),
-                        "steppriority": item.get('steppriority') || 0
+                        "steppriority": item.get('steppriority') || 0,
+                        'isstartstate': item.get('isstartstate') || 0
                     }
                 });
             }

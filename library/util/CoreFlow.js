@@ -200,6 +200,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             item.set('typeid',data.id);
             item.set('isactive',data.isactive);
             item.set('description',data.description);
+            item.set('isstartstate',data.isstartstate);
             list.push(item);
         });
         me.stencil.shapes.area = list;
@@ -411,8 +412,9 @@ Ext.define( 'Smart.util.CoreFlow', {
             }, this);
 
             this.paper.on('cell:pointerclick', function(cellView, evt, x, y) {
-                // var cell = cellView.model;
+                var cell = cellView.model;
                 // cell.setAreasId(this.graph);
+                console.info(cell.get('isstartstate'), cell.get('typeid'));
                 // console.info('[',cell.get('steppriority'),'] ',cell.get('typeid'),'->> ',cell.get('steplevel'),' - ',cell.get('areasiddo'),cell.get('areasidto'));
             }, this);
 
