@@ -128,7 +128,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                             }, {
                                 flex: 1,
                                 margin: '0 0 0 5',
-                                useReadColor: true,
+                                useReadColor: false,
                                 fieldLabel: 'Embalagem',
                                 name: 'packingname',
                                 hiddenNameId: 'packingid',

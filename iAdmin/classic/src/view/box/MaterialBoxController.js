@@ -36,7 +36,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
         app.onMainPageView({xtype: 'materialboxview', xdata: null});
 
-        me.insertView();
+        //me.insertView();
     },
 
     //routes ========================>
