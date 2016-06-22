@@ -197,6 +197,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                         name: 'patrimonialcode'
                                     }, {
                                         flex: 1,
+                                        allowBlank: true,
                                         margin: '0 5 0 5',
                                         xtype: 'datefield',
                                         plugins: 'textmask',
@@ -236,6 +237,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                         xtype: 'splitter'
                                     }, {
                                         width: 150,
+                                        allowBlank: true,
                                         name: 'serialnumber',
                                         fieldLabel: 'Número Série'
                                     }, {
@@ -264,6 +266,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                     }, {
                                         xtype: 'splitter'
                                     }, {
+                                        allowBlank: true,
                                         width: 150,
                                         name: 'design',
                                         fieldLabel: 'Modelo'
