@@ -206,6 +206,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                         xtype: 'splitter'
                                     }, {
                                         flex: 1,
+                                        allowBlank: true,
                                         fieldLabel: 'Registro ANVISA',
                                         name: 'registrationanvisa'
                                     }, {
