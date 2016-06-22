@@ -10,6 +10,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
         'Ext.panel.Panel',
         'Smart.plugins.*',
         'Ext.button.Segmented',
+        'Smart.ux.TextMaskCore',
         'Smart.form.field.ComboEnum',
         'iAdmin.model.sterilizationtype.SterilizationType',
         'iAdmin.view.sterilizationtype.SterilizationTypeFlow',
