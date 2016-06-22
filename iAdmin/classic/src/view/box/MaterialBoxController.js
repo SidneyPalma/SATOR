@@ -90,14 +90,16 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     onEditBoxItem: function (editor, context, eOpts) {
         var gd = context.grid,
             store = gd.getStore(),
-            record = context.record;
+            record = context.record,
+            packingsearch = view.down('packingsearch');
 
         record.set('materialid', context.value);
 
         store.sync({
             success: function () {
                 store.load({
-                    callback: function () {
+                    callback: function(records, operation, success) {
+                        packingsearch.setReadColor(records.length > 1);
                         gd.getSelectionModel().select(context.rowIdx);
                     }
                 });
@@ -129,8 +131,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     },
 
     onAfterRenderView: function (view) {
-        var me = this,
-            xdata = view.xdata,
+        var xdata = view.xdata,
             packingsearch = view.down('packingsearch'),
             id = view.down('hiddenfield[name=id]').getValue();
 
