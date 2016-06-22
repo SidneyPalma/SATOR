@@ -210,11 +210,15 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                 text: 'Grupo',
                                 dataIndex: 'itemgroupdescription'
                             }, {
-                                width: 80,
-                                dataIndex: 'itemlength'
+                                width: 120,
+                                text: 'Largura (cm)',
+                                dataIndex: 'itemlength',
+                                renderer: Smart.maskRenderer('0,00',true)
                             }, {
-                                width: 80,
-                                dataIndex: 'itemcubiclength'
+                                width: 120,
+                                text: 'Largura (cm3)',
+                                dataIndex: 'itemcubiclength',
+                                renderer: Smart.maskRenderer('0,00',true)
                             }, {
                                 width: 80,
                                 readOnly: true,
