@@ -89,6 +89,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     onEditBoxItem: function (editor, context, eOpts) {
         var gd = context.grid,
+            view = me.getView(),
             store = gd.getStore(),
             record = context.record,
             packingsearch = view.down('packingsearch');
