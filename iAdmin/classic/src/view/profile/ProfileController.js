@@ -154,33 +154,6 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         );
     },
 
-    onActionDelete_: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this,
-            view = me.getView(),
-            store = grid.getStore();
-
-        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
-            function (choice) {
-                if (choice === 'yes') {
-                    store.remove(record);
-                    store.sync({
-                        callback: function (batch, options) {
-                            var list = [];
-                            store.each( function (rd) {
-                                if(rd.get('expireto')) {
-                                    list.push(rd.get('directive'));
-                                }
-                            });
-                            view.recordSelected.xdata.set('description',list.join(", "));
-                            view.recordSelected.xdata.commit();
-                        }
-                    });
-                }
-            }
-        );
-
-    },
-
     onProfileUpdate: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
         var profileedit = Ext.widget('profileedit', { xdata: record });
 
