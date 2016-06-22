@@ -124,8 +124,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         me.router.graph.rules = me.getCoreFlowRule();
 
         if(view.xdata) {
+            var rule = Ext.decode(view.xdata.get('dataflowrule'));
+            me.router.graph.rules = rule || me.router.graph.rules;
             me.router.graph.fromJSON(Ext.decode(view.xdata.get('graphpaper')));
-            me.router.graph.rules = Ext.decode(view.xdata.get('dataflowrule'));
         }
 
         me.router.paper.isValid();
