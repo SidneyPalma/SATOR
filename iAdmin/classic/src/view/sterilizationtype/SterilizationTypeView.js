@@ -212,11 +212,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                 dataIndex: 'itemgroupdescription'
                             }, {
                                 width: 120,
+                                align: 'right',
                                 text: 'Largura (cm)',
                                 dataIndex: 'itemlength',
                                 renderer: Smart.maskRenderer('0,00',true)
                             }, {
                                 width: 120,
+                                align: 'right',
                                 text: 'Largura (cm3)',
                                 dataIndex: 'itemcubiclength',
                                 renderer: Smart.maskRenderer('0,00',true)
