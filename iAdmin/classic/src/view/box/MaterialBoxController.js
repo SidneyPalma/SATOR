@@ -316,9 +316,12 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     insertView: function () {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            packingsearch = view.down('packingsearch');
 
         view.reset();
+
+        packingsearch.setReadColor(false);
 
         Ext.getStore('materialboxitem').removeAll();
         Ext.getStore('materialboxtarge').removeAll();
