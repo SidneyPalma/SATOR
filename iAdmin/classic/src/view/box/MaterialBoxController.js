@@ -134,10 +134,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
             packingsearch = view.down('packingsearch'),
             id = view.down('hiddenfield[name=id]').getValue();
 
-        if(!xdata) {
-            me.insertView();
-            return false;
-        }
+        if(!xdata) return false;
 
         view.loadRecord(xdata);
 
