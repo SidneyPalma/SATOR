@@ -11,16 +11,14 @@ Ext.define( 'iAdmin.view.users.UsersMenuAccess', {
         'Ext.grid.plugin.CellEditing'
     ],
 
-    width: 600,
+    width: 650,
     modal: true,
+    header: false,
     resizable: false,
     showAnimate: true,
+
     layout: 'anchor',
     controller: 'users',
-    cls: 'panel-frame',
-    iconCls: "fa fa-pencil",
-
-    title: 'Editar permissões de menu',
 
     listeners: {
         destroy: 'onDestroy'
@@ -33,7 +31,10 @@ Ext.define( 'iAdmin.view.users.UsersMenuAccess', {
     },
 
     buildItems: function () {
-        var me = this;
+        var me = this,
+            isDisabled = function (view, rowIdx, colIdx, item, rec) {
+                return isNaN(rec.data.id);
+            };
 
         me.items = [
             {
@@ -54,18 +55,10 @@ Ext.define( 'iAdmin.view.users.UsersMenuAccess', {
                         xtype: 'hiddenfield',
                         name: 'menuid'
                     }, {
-                        xtype: 'label',
-                        cls: 'sub-title-label',
-                        text: 'Menu'
-                    }, {
                         name: 'name',
-                        xtype: 'textfield',
-                        useReadColor: true,
-                        fieldLabel: 'Descrição'
-                    }, {
-                        xtype: 'label',
-                        cls: 'sub-title-label',
-                        text: 'Ações'
+                        xtype: 'displayfield',
+                        fieldLabel: 'Menu',
+                        fieldCls: 'smart-field-style-action'
                     }
                 ]
             }, {
@@ -99,7 +92,8 @@ Ext.define( 'iAdmin.view.users.UsersMenuAccess', {
                             xtype: 'datefield',
                             plugins: 'textmask',
                             returnWithMask: true,
-							setTextAlign: 'center'
+							setTextAlign: 'center',
+                            fieldCls: 'smart-field-style-action'
                         }
                     }, {
                         width: 50,
@@ -121,9 +115,7 @@ Ext.define( 'iAdmin.view.users.UsersMenuAccess', {
 								return "";
 							}
 						},
-						isDisabled: function (view, rowIdx, colIdx, item, rec) {
-							return isNaN(rec.data.id);
-						}
+						isDisabled: isDisabled
                     }
                 ],
                 selType: 'cellmodel',
@@ -143,7 +135,7 @@ Ext.define( 'iAdmin.view.users.UsersMenuAccess', {
 
     buttons: [
         {
-            scale: 'large',
+            scale: 'medium',
             text: 'Fechar',
             showSmartTheme: 'red',
             handler: function (btn) {

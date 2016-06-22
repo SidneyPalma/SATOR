@@ -53,19 +53,6 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
                 sortable: false,
                 text: 'Diretivas',
                 dataIndex: 'description',
-                // editor: {
-                //     xtype: 'pickerfield',
-                //     enableKeyEvents: true,
-                //     fieldCls: 'smart-field-style-action',
-                //     createPicker: function () {
-                //         return Ext.widget('profilemenuaccess');
-                //     },
-                //     listeners: {
-                //         expand: 'onPickerExpand',
-                //         collapse: 'onPickerCollapse',
-					// 	focusenter: 'onPickerFocusEnter'
-                //     }
-                // },
                 renderer: function (v, meta, rec) {
                     meta.style = 'color: blue; font-style: italic;';
                     return v;
@@ -90,9 +77,7 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
                         return "";
                     }
                 },
-                isDisabled: function (view, rowIdx, colIdx, item, rec) {
-                    return ((!rec.data.description) || (!rec.data.leaf));
-                }
+                isDisabled: isDisabled
             }
         ];
     },

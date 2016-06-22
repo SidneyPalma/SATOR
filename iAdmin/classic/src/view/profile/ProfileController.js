@@ -28,88 +28,18 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         }
     },
 
-    onPickerFocusEnter: function (picker, event, eOpts) {
-        var me = this,
-            gd = me.getView(),
-            form = picker.getPicker(),
-            sm = gd.getSelectionModel(),
-            record = sm.getSelection()[0],
-            hasPosition = sm.getPosition(),
-            cellIndex = gd.view.getCellByPosition(sm.getCurrentPosition()).dom.cellIndex;
-
-        me.recordSelected = {
-            xdata: record,
-            cellIndex: cellIndex,
-            hasPosition: hasPosition,
-            xview: gd.up('profilemenuedit')
-        };
-
-        form.recordSelected = me.recordSelected;
-
-        picker.expand();
-
-    },
-
-    onPickerExpand: function ( picker, eOpts ) {
-		var me = this,
-            form = picker.getPicker(),
-            recordSelected = me.recordSelected,
-			store = Ext.getStore('profilemenuaction');
-
-        recordSelected.xview.fieldValue = picker.getRawValue();
-        form.recordSelected = recordSelected;
-
-        store.setParams({
-            method: 'selectCode',
-            menuid: recordSelected.xdata.get('menuid'),
-            profileid: recordSelected.xdata.get('profileid')
-        }).load({
-            scope: me,
-            callback: function () {
-                var gd = form.down('gridpanel'),
-                    sm = gd.getSelectionModel();
-
-                sm.setPosition({ row: 0, column: 1 },true);
-                gd.getView().focusCell( sm.getPosition() );
-            }
-        });
-    },
-
-    onPickerCollapse: function ( picker, eOpts ) {
-        var form = picker.getPicker(),
-            gd = form.recordSelected.xview.down('treepanel');
-
-        gd.getView().focusCell( form.recordSelected.hasPosition );
+    onDestroy: function (panel, eOpts) {
+        Ext.getStore('profilemenutree').load();
     },
 
     onEditMenuAction: function (editor, context, eOpts) {
         var me = this,
             gd = context.grid,
-            store = gd.getStore(),
-            form = gd.up('profilemenuaccess');
+            store = gd.getStore();
 
         store.sync({
             scope: me,
             success: function (batch, options) {
-                var list = [],
-                    opr = batch.getOperations()[0],
-                    rec = opr.getRecords()[0];
-
-                if(options.operations.update.length != 0) {
-                    store.each( function (rd) {
-                        rd.set('profilemenuid',rec.get('profilemenuid'));
-                        rd.commit();
-                    });
-                }
-
-                store.each( function (rd) {
-                    if(rd.get('expireto')) {
-                        list.push(rd.get('directive'));
-                    }
-                });
-
-                form.recordSelected.xdata.set('description',list.join(", "));
-                form.recordSelected.xdata.commit();
             },
             failure: function (batch, options) {
                 var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
@@ -142,8 +72,30 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
     },
 
     onCellKeyDown: function (viewTable, td,cellIndex,record,tr,rowIndex,e,eOpts) {
+        var me = this,
+            profilemenu = Ext.getStore('profilemenu'),
+            menuaction = Ext.getStore('profilemenuaction');
+
         if ((e.getKey() === e.ENTER) && (cellIndex == 1)) {
-            console.info('cellkeydown');
+            var menuaccess = Ext.widget('profilemenuaccess', { xdata: record });
+
+            profilemenu.setParams({
+                menuid: record.get('menuid'),
+                profileid: record.get('profileid')
+            }).load({
+                scope: me,
+                callback: function(records, operation, success) {
+                    var rec = records[0];
+
+                    menuaccess.show(null,function(){
+                        this.down('form').loadRecord(rec);
+                        menuaction.setParams({
+                            menuid: rec.get('menuid'),
+                            profileid: rec.get('profileid')
+                        }).load();
+                    });
+                }
+            });
         }
     },
     
@@ -183,6 +135,36 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
     },
 
     onActionDelete: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+        var me = this,
+            store = grid.getStore();
+
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    store.remove(record);
+                    store.sync({
+                        success: function (batch, options) {
+                            store.load();
+                        },
+                        failure: function (batch, options) {
+                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+                            store.rejectChanges();
+                            if(resultSet) {
+                                Ext.Msg.show({
+                                    title: 'Operação falhou!',
+                                    msg: resultSet.getMessage(),
+                                    buttons: Ext.Msg.CANCEL,
+                                    icon: Ext.Msg.WARNING
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        );
+    },
+
+    onActionDelete_: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
         var me = this,
             view = me.getView(),
             store = grid.getStore();

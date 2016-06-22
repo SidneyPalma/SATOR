@@ -1,24 +1,28 @@
 //@charset UTF-8
 Ext.define( 'iAdmin.view.profile.ProfileMenuAccess', {
-    extend: 'Ext.form.Panel',
+    extend: 'Ext.window.Window',
 
     xtype: 'profilemenuaccess',
-
-    controller: 'profile',
 
     requires: [
         'Ext.form.Panel',
         'Ext.grid.Panel',
-        'Ext.grid.plugin.CellEditing',
-        'iAdmin.view.profile.ProfileController'
+        'Ext.window.Window',
+        'Ext.grid.plugin.CellEditing'
     ],
 
-    cls: 'panel-frame',
+    width: 650,
+    modal: true,
+    header: false,
+    resizable: false,
+    showAnimate: true,
 
-    hidden: true,
-    floating: true,
-    bodyPadding: 10,
     layout: 'anchor',
+    controller: 'profile',
+
+    listeners: {
+        destroy: 'onDestroy'
+    },
 
     initComponent: function () {
         var me = this;
@@ -31,9 +35,29 @@ Ext.define( 'iAdmin.view.profile.ProfileMenuAccess', {
 
         me.items = [
             {
-                xtype: 'label',
-                cls: 'sub-title-label',
-                text: 'Ações'
+                xtype: 'form',
+                bodyPadding: 10,
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%'
+                },
+                items: [
+                    {
+                        xtype: 'hiddenfield',
+                        name: 'id'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'profilesid'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'menuid'
+                    }, {
+                        name: 'name',
+                        xtype: 'displayfield',
+                        fieldLabel: 'Menu',
+                        fieldCls: 'smart-field-style-action'
+                    }
+                ]
             }, {
                 height: 300,
                 xtype: 'gridpanel',
@@ -44,7 +68,7 @@ Ext.define( 'iAdmin.view.profile.ProfileMenuAccess', {
                 columns: [
                     {
                         flex: 1,
-                        text: 'Diretivas',
+                        text: 'Descrição',
                         sortable: false,
                         dataIndex: 'description',
                         renderer: function(val, meta, rec) {
@@ -65,7 +89,8 @@ Ext.define( 'iAdmin.view.profile.ProfileMenuAccess', {
                             xtype: 'datefield',
                             plugins: 'textmask',
                             returnWithMask: true,
-                            setTextAlign: 'center'
+                            setTextAlign: 'center',
+                            fieldCls: 'smart-field-style-action'
                         }
                     }, {
                         width: 50,
@@ -98,12 +123,24 @@ Ext.define( 'iAdmin.view.profile.ProfileMenuAccess', {
                     ptype: 'cellediting'
                 },
                 listeners: {
-                    edit: 'onEditMenuAction',
-                    cellkeydown: 'onCellKeyDown'
+                    edit: 'onEditMenuAction'
                 }
             }
         ];
 
-    }
+    },
+
+    buttonAlign: 'center',
+
+    buttons: [
+        {
+            scale: 'medium',
+            text: 'Fechar',
+            showSmartTheme: 'red',
+            handler: function (btn) {
+                btn.up('window').close();
+            }
+        }
+    ]
 
 });

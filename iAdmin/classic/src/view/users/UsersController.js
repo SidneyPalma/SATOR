@@ -122,9 +122,7 @@ Ext.define( 'iAdmin.view.users.UsersController', {
         var me = this,
             usersmenu = Ext.getStore('usersmenu'),
             menuaction = Ext.getStore('usersmenuaction'),
-            menuaccess = Ext.widget('usersmenuaccess', {
-                xdata: record
-            });
+            menuaccess = Ext.widget('usersmenuaccess', { xdata: record });
 
         usersmenu.setParams({
             menuid: record.get('menuid'),
@@ -143,7 +141,6 @@ Ext.define( 'iAdmin.view.users.UsersController', {
                 });
             }
         });
-
     },
 
     onActionDeleteProfile: function(grid, rowIndex, colIndex, actionItem, event, record, row) {

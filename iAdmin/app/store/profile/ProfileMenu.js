@@ -12,6 +12,13 @@ Ext.define( 'iAdmin.store.profile.ProfileMenu', {
 
     url: '../iAdmin/business/Calls/profilemenu.php',
 
-    model: 'iAdmin.model.profile.ProfileMenu'
+    model: 'iAdmin.model.profile.ProfileMenu',
+
+    config: {
+        extraParams: {
+            action: 'select',
+            method: 'selectCode'
+        }
+    }
 
 });

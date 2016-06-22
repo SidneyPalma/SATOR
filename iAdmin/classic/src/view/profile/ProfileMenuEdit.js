@@ -36,6 +36,8 @@ Ext.define( 'iAdmin.view.profile.ProfileMenuEdit', {
     buildItems: function () {
         var me = this;
 
+        Ext.create('iAdmin.store.profile.ProfileMenu');
+
         me.items = [
             {
                 xtype: 'form',
