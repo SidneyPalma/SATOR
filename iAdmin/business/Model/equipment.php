@@ -63,19 +63,19 @@ class equipment extends \Smart\Data\Model {
     private $capacity;
 
     /**
-     * @Policy {"nullable":false, "length":10}
+     * @Policy {"nullable":true, "length":10}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $design;
 
     /**
-     * @Policy {"nullable":false, "length":60}
+     * @Policy {"nullable":true, "length":60}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $serialnumber;
 
     /**
-     * @Policy {"nullable":false}
+     * @Policy {"nullable":true}
      * @Column {"description":"", "type":"date", "policy":true, "logallow":true, "default":""}
      */
     private $registrationanvisavalid;
