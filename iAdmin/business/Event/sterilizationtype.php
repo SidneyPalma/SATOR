@@ -11,6 +11,11 @@ class sterilizationtype extends \Smart\Data\Event {
      */
     public function preInsert( \iAdmin\Model\sterilizationtype &$model ) {
 		Session::hasProfile('6C3C7DCD-D33A-4434-81D9-767287F88344','589F0BF9-0EFA-42B0-8C42-24C4B1BF41E4');
+        
+        $data = array();
+        $sterilizationtype = new \iAdmin\Coach\sterilizationtype();
+        $coreflow = $sterilizationtype->getStore()->getCache()->selectRules($data);
+        $model->set('dataflowrule',$coreflow);
     }
 
     /**
