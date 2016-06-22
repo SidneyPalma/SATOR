@@ -18,16 +18,6 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         me.onProfileUpdate(null, null, null, null, null, record);
     },
 
-    onCellKeyDown: function ( viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
-        var me = this,
-            view = me.getView();
-
-        if (e.getKey() === e.ESC) {
-            view.recordSelected.xview.down('treepanel').getView().focusCell( view.recordSelected.hasPosition );
-            view.hide();
-        }
-    },
-
     onDestroy: function (panel, eOpts) {
         Ext.getStore('profilemenutree').load();
     },
