@@ -41,11 +41,6 @@ Ext.define( 'iAdmin.view.users.UsersMenu', {
                 sortable: false,
                 xtype: 'treecolumn',
                 text: 'Descrição do menu'
-                // renderer: function ( value, metaData, record ) {
-                //     var glyph = record.get('glyph');
-                //
-                //     return (!glyph) ? value : Ext.String.format('<i class="{0}"></i> {1}',glyph,value);
-                // }
             }, {
                 width: 70,
                 sortable: false,

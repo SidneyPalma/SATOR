@@ -22,11 +22,6 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         var me = this,
             view = me.getView();
 
-        // if (e.getKey() === e.ENTER) {
-        console.info(e);
-        // }
-
-
         if (e.getKey() === e.ESC) {
             view.recordSelected.xview.down('treepanel').getView().focusCell( view.recordSelected.hasPosition );
             view.hide();
@@ -146,6 +141,12 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         form.loadRecord(panel.xdata);
     },
 
+    onCellKeyDown: function (viewTable, td,cellIndex,record,tr,rowIndex,e,eOpts) {
+        if ((e.getKey() === e.ENTER) && (cellIndex == 1)) {
+            console.info('cellkeydown');
+        }
+    },
+    
     onBeforeUpdateTree: function (editor, context, eOpts) {
         return context.record.data.leaf;
     },

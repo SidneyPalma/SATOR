@@ -13,7 +13,7 @@ class cmesubareas extends \Smart\Data\Event {
         Session::hasProfile('AEDD46A9-6F1D-41C5-9BD9-566561E3B07B','589F0BF9-0EFA-42B0-8C42-24C4B1BF41E4');
 
         $areas = new \iAdmin\Coach\areas();
-        $areas->getStore()->getModel()->set('areastype','C');
+        $areas->getStore()->getModel()->set('areastype','S');
         $areas->update();
 
         $id = $areas->getStore()->getModel()->getId();

@@ -34,7 +34,10 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
     },
 
     makeColumn: function () {
-        var me = this;
+        var me = this,
+            isDisabled = function (view, rowIdx, colIdx, item, rec) {
+                return ((!rec.data.description) || (!rec.data.leaf));
+            };
 
         Ext.create('iAdmin.store.profile.ProfileMenuAction');
 
@@ -47,25 +50,24 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
                 text: 'Descrição do menu'
             }, {
                 width: 540,
+                sortable: false,
                 text: 'Diretivas',
                 dataIndex: 'description',
-                sortable: false,
-                editor: {
-                    xtype: 'pickerfield',
-                    // enableKeyEvents: true,
-                    fieldCls: 'smart-field-style-action',
-                    createPicker: function () {
-                        return Ext.widget('profilemenuaccess');
-                    },
-                    listeners: {
-                        expand: 'onPickerExpand',
-                        collapse: 'onPickerCollapse',
-						focusenter: 'onPickerFocusEnter'
-                    }
-                },
+                // editor: {
+                //     xtype: 'pickerfield',
+                //     enableKeyEvents: true,
+                //     fieldCls: 'smart-field-style-action',
+                //     createPicker: function () {
+                //         return Ext.widget('profilemenuaccess');
+                //     },
+                //     listeners: {
+                //         expand: 'onPickerExpand',
+                //         collapse: 'onPickerCollapse',
+					// 	focusenter: 'onPickerFocusEnter'
+                //     }
+                // },
                 renderer: function (v, meta, rec) {
                     meta.style = 'color: blue; font-style: italic;';
-
                     return v;
                 }
             }, {
@@ -101,6 +103,7 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
         pluginId: 'pluginprofile'
     },
     listeners: {
+        cellkeydown: 'onCellKeyDown',
         beforeedit: 'onBeforeUpdateTree'
     }
 
