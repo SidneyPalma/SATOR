@@ -176,18 +176,19 @@ class Session {
 			union all
 
 			select
-			   1 as priority,
-			   u.isactive,
-			   a.negation,
-			   uma.expireto
-			from
-			   users u
-			   inner join profilemenu um on ( um.profileid = u.id )
-			   inner join profile p on ( p.id = um.profileid )
-			   inner join menuaction ma on ( ma.menuid = um.menuid )
-			   inner join action a on ( a.id = ma.actionid )
-			   inner join menu m on ( m.id = ma.menuid )
-			   inner join profilemenuaction uma on ( uma.profilemenuid = um.id and uma.menuactionid = ma.id )			 
+                1 as priority,
+                u.isactive,
+                a.negation,
+                pma.expireto
+            from
+                users u
+                inner join usersprofile up on ( up.usersid = u.id )
+                inner join profile p on ( p.id = up.profileid )
+                inner join profilemenu pm on ( pm.profileid = p.id )
+                inner join menu m on ( m.id = pm.menuid )
+                inner join profilemenuaction pma on ( pma.profilemenuid = pm.id )
+                inner join menuaction ma on ( ma.menuid = m.id and ma.id = pma.menuactionid )
+                inner join action a on ( a.id = ma.actionid )			 
 			where m.guid = @mguid
 			  and a.guid = @aguid
               and u.username = @uname
