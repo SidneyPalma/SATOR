@@ -20,7 +20,7 @@ class material extends \Smart\Data\Event {
         $model->setId($id);
 
         if(strlen($id) == 0) {
-            throw new \PDOException('N�o foi poss�vel inserir o registro!');
+			throw new \PDOException('Nâo foi possível inserir o registro!');
         }
     }
 

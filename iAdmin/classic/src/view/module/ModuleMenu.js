@@ -41,12 +41,7 @@ Ext.define( 'iAdmin.view.module.ModuleMenu', {
                 dataIndex: 'text',
                 sortable: false,
                 xtype: 'treecolumn',
-                text: 'Descrição do menu',
-                renderer: function ( value, metaData, record ) {
-                    var glyph = record.get('glyph');
-
-                    return (!glyph) ? value : Ext.String.format('<i class="{0}"></i> {1}',glyph,value);
-                }
+                text: 'Descrição do menu'
             }, {
                 width: 70,
                 sortable: false,

@@ -24,7 +24,13 @@ class unitmeasurement extends \Smart\Data\Model {
      * @Policy {"nullable":false, "length":20}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $acronyme;
+    private $acronym;
+
+    /**
+     * @Policy {"nullable":false, "length":60}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $packing;
 
     /**
      * @Policy {"nullable":false, "length":60}
@@ -37,12 +43,6 @@ class unitmeasurement extends \Smart\Data\Model {
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $measurebase;
-
-    /**
-     * @Policy {"nullable":false, "length":60}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
-     */
-    private $packing;
 
     /**
      * @Policy {"nullable":false}
@@ -85,16 +85,32 @@ class unitmeasurement extends \Smart\Data\Model {
     /**
      * @return type string
      */
-    public function getAcronyme() {
-        return $this->acronyme;
+    public function getAcronym() {
+        return $this->acronym;
     }
 
     /**
-     * @param type $acronyme
+     * @param type $acronym
      * @return \iAdmin\Model\unitmeasurement
      */
-    public function setAcronyme($acronyme) {
-        $this->acronyme = $acronyme;
+    public function setAcronym($acronym) {
+        $this->acronym = $acronym;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getPacking() {
+        return $this->packing;
+    }
+
+    /**
+     * @param type $packing
+     * @return \iAdmin\Model\unitmeasurement
+     */
+    public function setPacking($packing) {
+        $this->packing = $packing;
         return $this;
     }
 
@@ -127,22 +143,6 @@ class unitmeasurement extends \Smart\Data\Model {
      */
     public function setMeasurebase($measurebase) {
         $this->measurebase = $measurebase;
-        return $this;
-    }
-
-    /**
-     * @return type string
-     */
-    public function getPacking() {
-        return $this->packing;
-    }
-
-    /**
-     * @param type $packing
-     * @return \iAdmin\Model\unitmeasurement
-     */
-    public function setPacking($packing) {
-        $this->packing = $packing;
         return $this;
     }
 

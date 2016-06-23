@@ -13,7 +13,7 @@ class materialbox extends \Smart\Setup\Setup {
 
     public function select() {
         try {
-            Session::hasProfile('','');
+			Session::hasProfile('6DFB6B9C-7013-4F18-A905-FBB6A5AE25D7','15A56879-D893-4255-AE55-22F22C514060');
             $result = parent::select();
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);

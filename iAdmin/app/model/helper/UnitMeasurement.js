@@ -17,7 +17,10 @@ Ext.define( 'iAdmin.model.helper.UnitMeasurement', {
             name: 'name',
             type: 'auto'
         }, {
-            name: 'acronyme',
+            name: 'acronym',
+            type: 'auto'
+        }, {
+            name: 'packing',
             type: 'auto'
         }, {
             name: 'baseunit',
@@ -26,11 +29,8 @@ Ext.define( 'iAdmin.model.helper.UnitMeasurement', {
             name: 'measurebase',
             type: 'auto'
         }, {
-            name: 'packing',
-            type: 'auto'
-        }, {
             name: 'isactive',
-            type: 'boolean'
+            type: 'int'
         }
     ]
 

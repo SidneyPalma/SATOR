@@ -35,9 +35,9 @@ Exemplo:
     CREATE TABLE [dbo].[unitmeasurement](
     	[id] [int] IDENTITY(1,1) NOT NULL,
     	[name] [varchar](80) NOT NULL,
-    	[acronyme] [varchar](20) NOT NULL,
     	[baseunit] [varchar](60) NOT NULL,
     	[measurebase] [decimal](12, 4) NOT NULL,
+    	[acronym] [varchar](20) NOT NULL,
     	[packing] [varchar](60) NOT NULL,
     	[isactive] [bit] NOT NULL,
      CONSTRAINT [PK_unitmeasurement] PRIMARY KEY CLUSTERED 

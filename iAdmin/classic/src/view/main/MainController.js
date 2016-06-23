@@ -22,7 +22,8 @@ Ext.define( 'iAdmin.view.main.MainController', {
         'iAdmin.view.helper.manufacturer.ManufacturerEdit',
         'iAdmin.view.helper.instrumentator.InstrumentatorEdit',
         'iAdmin.view.helper.materialstatus.MaterialStatusEdit',
-        'iAdmin.view.helper.equipmentstatus.EquipmentStatusEdit'
+        'iAdmin.view.helper.equipmentstatus.EquipmentStatusEdit',
+        'iAdmin.view.helper.unitmeasurement.UnitMeasurementEdit'
     ],
 
     url: '../iAdmin/business/Calls/users.php'

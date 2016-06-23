@@ -12,6 +12,12 @@ Ext.define( 'iAdmin.store.helper.UnitMeasurement', {
 
     url: '../iAdmin/business/Calls/unitmeasurement.php',
 
-    model: 'iAdmin.model.helper.UnitMeasurement'
+    model: 'iAdmin.model.helper.UnitMeasurement',
+
+    config: {
+        extraParams: {
+            params: Ext.encode(['name','baseunit','acronym'])
+        }
+    }
 
 });

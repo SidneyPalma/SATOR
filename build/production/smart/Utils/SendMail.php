@@ -26,12 +26,12 @@ class SendMail extends PHPMailer {
 
         $this->Host = 'mail.palindrome.com.br';                 // Specify main and backup SMTP servers
         $this->SMTPAuth = true;                                 // Enable SMTP authentication
-        $this->Username = 'noreplay@palindrome.com.br';         // SMTP username
+        $this->Username = 'noreply@palindrome.com.br';          // SMTP username
         $this->Password = 'c6c36KYye3';                         // SMTP password
         $this->SMTPSecure = 'tls';                              // Enable TLS encryption, `ssl` also accepted
         $this->Port = 26;                                       // TCP port to connect to
 
-        $this->setFrom('noreplay@palindrome.com.br', 'Palindrome Projetos (No Replay)');
+        $this->setFrom('noreply@palindrome.com.br', 'Palindrome Projetos (No Reply)');
 
         $this->IsHTML(true);
     }

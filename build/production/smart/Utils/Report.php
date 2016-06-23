@@ -13,7 +13,7 @@ class Report extends FPDF {
         'monthly'=>array(
             'jan'=>'Janeiro',
             'feb'=>'Fevereiro',
-            'mar'=>'Março',
+            'mar'=>'MarÃ§o',
             'apr'=>'Abril',
             'may'=>'Maio',
             'jun'=>'Junho',
@@ -27,11 +27,11 @@ class Report extends FPDF {
         'dayweek'=>array(
             'sun'=>'Domingo',
             'mon'=>'Segunda-Feira',
-            'tue'=>'Terça-Feira',
+            'tue'=>'TerÃ§a-Feira',
             'wed'=>'Quarta-Feira',
             'thu'=>'Quinta-Feira',
             'fri'=>'Sexta-Feira',
-            'sat'=>'Sábado'
+            'sat'=>'SÃ¡bado'
         )
     );
 
