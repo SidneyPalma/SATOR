@@ -23,12 +23,8 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
     },
 
     onEditMenuAction: function (editor, context, eOpts) {
-        var me = this,
-            gd = context.grid,
-            store = gd.getStore();
-
+        var store = context.grid.getStore();
         store.sync({
-            scope: me,
             success: function (batch, options) {
                 var opr = batch.getOperations()[0],
                     rec = opr.getRecords()[0];
@@ -74,7 +70,7 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
             profilemenu = Ext.getStore('profilemenu'),
             menuaction = Ext.getStore('profilemenuaction');
 
-        if ((e.getKey() === e.ENTER) && (cellIndex == 1)) {
+        if ((e.getKey() === e.ENTER) && (cellIndex == 1) && (record.get('leaf'))) {
             var menuaccess = Ext.widget('profilemenuaccess', { xdata: record });
 
             profilemenu.setParams({
@@ -133,8 +129,7 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
     },
 
     onActionDelete: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this,
-            store = grid.getStore();
+        var store = grid.getStore();
 
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
