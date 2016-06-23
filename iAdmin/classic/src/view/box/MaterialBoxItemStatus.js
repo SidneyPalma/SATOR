@@ -11,7 +11,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItemStatus', {
         'iAdmin.view.box.MaterialBoxController'
     ],
 
-    width: 450,
+    width: 550,
     modal: true,
     resizable: false,
     showAnimate: true,

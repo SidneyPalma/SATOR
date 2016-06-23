@@ -72,25 +72,30 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                     }
                 }
             }, {
-                width: 200,
-                sortable: false,
-                text: 'Proprietário',
-                dataIndex: 'proprietaryname'
-            }, {
-                width: 100,
-                sortable: false,
-                align: 'center',
-                text: 'Processos',
-                dataIndex: 'numberproceedings'
-            }, {
-                width: 100,
-                sortable: false,
-                align: 'center',
-                text: 'Consignado',
-                xtype: 'checkcolumn',
-                dataIndex: 'isconsigned',
-                readOnly: true,
-                renderer: me.columnsRenderer
+                text: 'Complemento',
+                columns: [
+                    {
+                        width: 200,
+                        sortable: false,
+                        text: 'Proprietário',
+                        dataIndex: 'proprietaryname'
+                    }, {
+                        width: 100,
+                        sortable: false,
+                        align: 'center',
+                        text: 'Processos',
+                        dataIndex: 'numberproceedings'
+                    }, {
+                        width: 100,
+                        sortable: false,
+                        align: 'center',
+                        text: 'Consignado',
+                        xtype: 'checkcolumn',
+                        dataIndex: 'isconsigned',
+                        readOnly: true,
+                        renderer: me.columnsRenderer
+                    }
+                ]
             }, {
                 width: 40,
                 sortable: false,
