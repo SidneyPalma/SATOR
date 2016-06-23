@@ -36,7 +36,6 @@ class cmesubareas extends \Smart\Data\Event {
      */
     public function preUpdate( \iAdmin\Model\cmesubareas &$model ) {
         Session::hasProfile('AEDD46A9-6F1D-41C5-9BD9-566561E3B07B','4BF2F3C8-BFC0-4DD8-A491-B2C4C3673C69');
-
         $areas = new \iAdmin\Coach\areas();
         $areas->update();
     }
@@ -45,6 +44,7 @@ class cmesubareas extends \Smart\Data\Event {
      * @param \iAdmin\Model\cmesubareas $model
      */
     public function posUpdate( \iAdmin\Model\cmesubareas &$model ) {
+
     }
 
     /**

@@ -30,6 +30,14 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         store.sync({
             scope: me,
             success: function (batch, options) {
+                var opr = batch.getOperations()[0],
+                    rec = opr.getRecords()[0];
+                if(options.operations.update.length != 0) {
+                    store.each( function (rd) {
+                        rd.set('profilemenuid',rec.get('profilemenuid'));
+                        rd.commit();
+                    });
+                }
             },
             failure: function (batch, options) {
                 var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
