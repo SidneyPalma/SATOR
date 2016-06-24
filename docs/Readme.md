@@ -34,7 +34,7 @@ As tabelas a seguir apresentam o modelo de dados para os Sistemas SATOR
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Colaborador`](tables/Colaborador.md) | collaborator | Necessita fazer link com o cadastro de Usuários |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Proprietario`](tables/Proprietario.md) | proprietary | Poderão confundir-se com "Cliente", mas realizam papéis diferentes |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Local`](tables/Local.md) | place | Locais de origem e destino dos Materiais |
-|   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`FluxoEsterilização`](tables/FluxoEsterilizacao.md) |  | Fluxo de Esterilização é a rota utlizada para Esterilizar o Material |
+|   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`FluxoEsterilização`](tables/FluxoEsterilizacao.md) |  | Fluxo de Esterilização é a rota utlizada para Esterilizar o Material |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`NivelPrioridade`](tables/NivelPrioridade.md) | EnumType(prioritylevel) | Nivel de Prioridade de Esterilização |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EtapaFlag`](tables/EtapaFlag.md) | EnumType(markflagstep) | Flags usadas nas  Etapas(Processos) de Esterilizar do Material |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`EtapaEsterilização`](tables/EtapaEsterilizacao.md) | stepsterilization | Etapas de Esterilização são possiveis Etapas(Processos) para Esterilizar o Material |
