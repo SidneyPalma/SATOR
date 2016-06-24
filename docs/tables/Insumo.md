@@ -1,4 +1,4 @@
-## Insumos utilizados no processo de esterilizaÁ„o
+## Insumos utilizados no processo de esteriliza√ß√£o
  - Insumo
     - Id:integer;
     - Nome: string(60);
@@ -40,7 +40,7 @@
           - DataFabricacao: date;
           - DataValidade: date;
           - NumNotaFiscal: string(20);
-          - PreÁoNotaFiscal: decimal(18,2);
+          - Pre√ßoNotaFiscal: decimal(18,2);
           - PrecoCusto: decimal(18,2);
           - PrecoVenda: decimal(18,2);
           - ResiduoDestino_id: integer;
@@ -49,8 +49,8 @@
 Exemplo:
 
     Id: 1;
-    Nome: ¡cido PeracÈtico - Anioxyde 1000
-    Descricao: ¡cido PeracÈtico - Anioxide 1000 Desinfetante de alto nÌvel.
+    Nome: √Åcido Perac√≠tico - Anioxyde 1000
+    Descricao: √Åcido Perac√≠tico - Anioxide 1000 Desinfetante de alto n√≠vel.
     CodigoBarra: 1
     CodigoERP:
     UnidadeMedida_id: 1
