@@ -10,3 +10,7 @@ Exemplo:
     Sigla: Unico
     Descricao: Sem diferencial entre tamanhos
     Ativo: 1
+
+## DML
+    EnumType
+        itemsize
