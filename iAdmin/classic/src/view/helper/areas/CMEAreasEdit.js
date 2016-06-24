@@ -62,7 +62,7 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasEdit', {
                         fieldLabel: 'Nome'
                     }, {
                         fieldLabel: 'Descrição',
-                        xtype: 'textareafield',
+                        xtype: 'textfield',
                         name: 'description'
                     }, {
                         xtype: 'container',

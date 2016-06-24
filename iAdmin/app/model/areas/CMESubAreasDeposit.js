@@ -15,19 +15,21 @@ Ext.define( 'iAdmin.model.areas.CMESubAreasDeposit', {
             serializeType: 'auto'
         }, {
             name: 'cmesubareasid',
-            type: 'int'
-        }, {
-            name: 'cmesubareasname',
-            type: 'auto'
+            type: 'int',
+            persist: true,
+            critical: true
         }, {
             name: 'name',
             type: 'auto'
         }, {
             name: 'barcode',
             type: 'auto'
-        }, {
-            name: 'isactive',
-            type: 'int'
+        // }, {
+        //     name: 'isactive',
+        //     type: 'int',
+        //     persist: true,
+        //     critical: true,
+        //     defaultValue: 1
         }
     ]
 

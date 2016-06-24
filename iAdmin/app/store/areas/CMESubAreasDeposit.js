@@ -12,6 +12,13 @@ Ext.define( 'iAdmin.store.areas.CMESubAreasDeposit', {
 
     url: '../iAdmin/business/Calls/cmesubareasdeposit.php',
 
-    model: 'iAdmin.model.areas.CMESubAreasDeposit'
+    model: 'iAdmin.model.areas.CMESubAreasDeposit',
+
+    config: {
+        extraParams: {
+            action: 'select',
+            method: 'selectCode'
+        }
+    }
 
 });
