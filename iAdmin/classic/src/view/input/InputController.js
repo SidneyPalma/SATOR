@@ -1,0 +1,159 @@
+//@charset UTF-8
+Ext.define( 'iAdmin.view.input.InputController', {
+    extend: 'Smart.app.ViewControllerBase',
+
+    alias: 'controller.input',
+
+    url: '../iAdmin/business/Calls/input.php',
+
+    config: {
+        control: {
+            'materialview portrait filefield': {
+                loadend: 'onLoadEnd'
+            }
+        }
+    },
+
+    routes: {
+        'materialview/:id': {
+            action: 'getMaterialId'
+        },
+        'materialnew': {
+            action: 'getMaterialNew'
+        }
+    },
+
+    fetchField: function (search, button) {
+        Ext.getStore('input').setParams({
+            query: search.getValue()
+        }).load();
+    },
+
+    //routes ========================>
+
+    getMaterialId: function (id) {
+        var app = Smart.app.getController('App'),
+            record = Ext.getStore('input').findRecord('id',id);
+
+        app.onMainPageView({xtype: 'materialview', xdata: record});
+    },
+
+    getMaterialNew: function() {
+        var app = Smart.app.getController('App');
+
+        app.onMainPageView({xtype: 'materialview', xdata: null});
+    },
+
+    //routes ========================>
+
+    onAfterRenderView: function (view) {
+        var me = this,
+            xdata = view.xdata,
+            portrait = view.down('portrait'),
+            grid = view.down('itembaselayout'),
+            id = view.down('hiddenfield[name=id]').getValue();
+
+        if(!xdata) return false;
+
+        var values = Ext.decode(xdata.get('layoutvalues') || {});
+        var fields = Ext.decode(xdata.get('layoutfields') || {});
+
+        view.loadRecord(xdata);
+        grid.setDisabled(false);
+        portrait.setUrl(me.url);
+        portrait.beFileData(xdata.get('filetype'));
+        grid.setSource.apply(grid,[values,fields]);
+
+        var materialboxname = xdata.get('materialboxname') ? xdata.get('materialboxname') : '';
+
+        view.down('packingsearch').setReadColor(materialboxname.length != 0);
+
+        Ext.getStore('materialtypeflow').setParams({
+            query: xdata.get('id')
+        }).load();
+    },
+
+    onEditTypeFlow: function (editor, context, eOpts) {
+        var gd = context.grid,
+            store = gd.getStore(),
+            record = context.record;
+
+        record.set('sterilizationtypeid',context.value);
+
+        store.sync({
+            success: function () {
+                store.load({
+                    callback: function () {
+                        gd.getSelectionModel().select(context.rowIdx);
+                    }
+                });
+            }
+        });
+    },
+
+    onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+        var me = this;
+
+        Ext.getStore('material').setParams({
+            method: 'selectCode',
+            query: record.get('id'),
+            rows: Ext.encode({ id: record.get('id') })
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                var record = records[0];
+                me.redirectTo( 'materialview/' + record.get('id'));
+            }
+        });
+    },
+
+    insertViewNew: function (btn) {
+        var me = this;
+        me.redirectTo('materialnew');
+    },
+
+    onLoadEnd: function (field,file) {
+        var me = this,
+            view = me.getView(),
+            portrait = view.down('portrait');
+        field.doFileData(portrait);
+    },
+
+    updateView: function () {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('itembaselayout');
+
+        me.setModuleForm(view);
+        me.setModuleData('material');
+
+        me._success = function (form, action) {
+            grid.setDisabled(false);
+            if(action.result.crud == 'insert') {
+                view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
+                Ext.getStore('materialtypeflow').setParams({
+                    query: action.result.rows.id
+                }).load();
+            }
+        }
+
+        me.updateModule();
+    },
+
+    insertView: function () {
+        var me = this,
+            view = me.getView(),
+            portrait = view.down('portrait'),
+            grid = view.down('itembaselayout');
+
+        view.reset();
+
+        grid.setDisabled(true);
+        view.down('tabpanel').setActiveTab(0);
+        view.down('textfield[name=name]').setReadColor(false);
+        portrait.beFileData();
+
+        Ext.getStore('materialtypeflow').removeAll();
+    }
+
+});

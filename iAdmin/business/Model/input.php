@@ -111,6 +111,18 @@ class input extends \Smart\Data\Model {
     private $validityactivation;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $filedata;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $fileinfo;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -379,6 +391,38 @@ class input extends \Smart\Data\Model {
      */
     public function setValidityactivation($validityactivation) {
         $this->validityactivation = $validityactivation;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getFiledata() {
+        return $this->filedata;
+    }
+
+    /**
+     * @param type $filedata
+     * @return \iAdmin\Model\input
+     */
+    public function setFiledata($filedata) {
+        $this->filedata = $filedata;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getFileinfo() {
+        return $this->fileinfo;
+    }
+
+    /**
+     * @param type $fileinfo
+     * @return \iAdmin\Model\input
+     */
+    public function setFileinfo($fileinfo) {
+        $this->fileinfo = $fileinfo;
         return $this;
     }
 

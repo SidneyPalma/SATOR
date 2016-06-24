@@ -43,7 +43,7 @@ Ext.define( 'iAdmin.view.module.ModuleMenu', {
                 xtype: 'treecolumn',
                 text: 'Descrição do menu'
             }, {
-                width: 70,
+                width: 90,
                 sortable: false,
                 dataIndex: 'menutype'
             }, {

@@ -161,25 +161,17 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
                 }, {
                     xtype: 'segmentedbutton',
                     allowMultiple: true,
-                    items: [
-                        {
-                            disabled: true,
-                            iconCls: "fa fa-upload",
-                            handler: 'updateView'
-                        }
-                    ]
-                }, {
-                    width: 5,
-                    xtype: 'splitter'
-                }, {
-                    xtype: 'segmentedbutton',
-                    allowMultiple: true,
                     defaults: {
                         disabled: true,
                         showSmartTheme: 'red'
                     },
                     items: [
                         {
+                            disabled: true,
+                            iconCls: "fa fa-upload",
+                            handler: 'updateView',
+                            showSmartTheme: ''
+                        }, {
                             iconCls: "fa fa-plus-circle",
                             text: 'Menu',
                             actionType: 'atMn',

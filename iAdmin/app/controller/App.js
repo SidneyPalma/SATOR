@@ -30,6 +30,9 @@ Ext.define( 'iAdmin.controller.App', {
         },
         'materialboxlist': {
             action: 'setMaterialBoxList'
+        },
+        'inputlist': {
+            action: 'setInputList'
         }
     },
 
@@ -89,6 +92,13 @@ Ext.define( 'iAdmin.controller.App', {
             rc = me.getMainTree().getSelection();
 
         me.onMainPageView({ xtype: 'materialboxlist', iconCls: rc.get("iconCls") });
+    },
+
+    setInputList: function () {
+        var me = this,
+            rc = me.getMainTree().getSelection();
+
+        me.onMainPageView({ xtype: 'inputlist', iconCls: rc.get("iconCls") });
     }
 
     //routes ========================>
