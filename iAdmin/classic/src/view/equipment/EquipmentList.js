@@ -74,24 +74,19 @@ Ext.define( 'iAdmin.view.equipment.EquipmentList', {
                         text: 'Descrição',
                         dataIndex: 'description'
                     }, {
-                        readOnly: true,
+                        width: 100,
                         text: 'Ativo',
+                        readOnly: true,
                         dataIndex: 'isactive',
                         align: 'center',
-                        width: 100,
                         xtype: 'checkcolumn'
                     }, {
-                        width: 90,
-                        text: 'Ações',
+                        width: 40,
                         align: 'center',
                         xtype: 'actioncolumn',
-                        items: [
-                            {
-                                handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
-                                tooltip: 'Editar cadastro!'
-                            }
-                        ]
+                        handler: 'onViewEdit',
+                        iconCls: "fa fa-pencil action-update-color",
+                        tooltip: 'Editar cadastro!'
                     }
                 ],
                 dockedItems: [

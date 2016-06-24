@@ -12,6 +12,13 @@ Ext.define( 'iAdmin.store.input.Input', {
 
     url: '../iAdmin/business/Calls/input.php',
 
-    model: 'iAdmin.model.input.Input'
+    model: 'iAdmin.model.input.Input',
+
+    config: {
+        extraParams: {
+            fields: Ext.encode(['id', 'name', 'unitmeasurementname', 'manufacturername', 'providername', 'isactive']),
+            params: Ext.encode(['name', 'description'])
+        }
+    }
 
 });

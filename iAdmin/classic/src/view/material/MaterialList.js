@@ -86,24 +86,19 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         text: 'Embalagem',
                         dataIndex: 'packingname'
                     }, {
-                        readOnly: true,
+                        width: 100,
                         text: 'Ativo',
+                        readOnly: true,
                         dataIndex: 'isactive',
                         align: 'center',
-                        width: 100,
                         xtype: 'checkcolumn'
                     }, {
-                        width: 90,
-                        text: 'Ações',
+                        width: 40,
                         align: 'center',
                         xtype: 'actioncolumn',
-                        items: [
-                            {
-                                handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
-                                tooltip: 'Editar cadastro!'
-                            }
-                        ]
+                        handler: 'onViewEdit',
+                        iconCls: "fa fa-pencil action-update-color",
+                        tooltip: 'Editar cadastro!'
                     }
                 ],
                 dockedItems: [

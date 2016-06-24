@@ -8,18 +8,18 @@ Ext.define( 'iAdmin.view.input.InputController', {
 
     config: {
         control: {
-            'materialview portrait filefield': {
+            'inputview portrait filefield': {
                 loadend: 'onLoadEnd'
             }
         }
     },
 
     routes: {
-        'materialview/:id': {
-            action: 'getMaterialId'
+        'inputview/:id': {
+            action: 'getInputId'
         },
-        'materialnew': {
-            action: 'getMaterialNew'
+        'inputnew': {
+            action: 'getInputNew'
         }
     },
 
@@ -31,17 +31,17 @@ Ext.define( 'iAdmin.view.input.InputController', {
 
     //routes ========================>
 
-    getMaterialId: function (id) {
+    getInputId: function (id) {
         var app = Smart.app.getController('App'),
             record = Ext.getStore('input').findRecord('id',id);
 
-        app.onMainPageView({xtype: 'materialview', xdata: record});
+        app.onMainPageView({xtype: 'inputview', xdata: record});
     },
 
-    getMaterialNew: function() {
+    getInputNew: function() {
         var app = Smart.app.getController('App');
 
-        app.onMainPageView({xtype: 'materialview', xdata: null});
+        app.onMainPageView({xtype: 'inputview', xdata: null});
     },
 
     //routes ========================>
@@ -50,27 +50,13 @@ Ext.define( 'iAdmin.view.input.InputController', {
         var me = this,
             xdata = view.xdata,
             portrait = view.down('portrait'),
-            grid = view.down('itembaselayout'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
 
-        var values = Ext.decode(xdata.get('layoutvalues') || {});
-        var fields = Ext.decode(xdata.get('layoutfields') || {});
-
         view.loadRecord(xdata);
-        grid.setDisabled(false);
         portrait.setUrl(me.url);
         portrait.beFileData(xdata.get('filetype'));
-        grid.setSource.apply(grid,[values,fields]);
-
-        var materialboxname = xdata.get('materialboxname') ? xdata.get('materialboxname') : '';
-
-        view.down('packingsearch').setReadColor(materialboxname.length != 0);
-
-        Ext.getStore('materialtypeflow').setParams({
-            query: xdata.get('id')
-        }).load();
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {
@@ -94,7 +80,7 @@ Ext.define( 'iAdmin.view.input.InputController', {
     onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
         var me = this;
 
-        Ext.getStore('material').setParams({
+        Ext.getStore('input').setParams({
             method: 'selectCode',
             query: record.get('id'),
             rows: Ext.encode({ id: record.get('id') })
@@ -102,14 +88,14 @@ Ext.define( 'iAdmin.view.input.InputController', {
             scope: me,
             callback: function(records, operation, success) {
                 var record = records[0];
-                me.redirectTo( 'materialview/' + record.get('id'));
+                me.redirectTo( 'inputview/' + record.get('id'));
             }
         });
     },
 
     insertViewNew: function (btn) {
         var me = this;
-        me.redirectTo('materialnew');
+        me.redirectTo('inputnew');
     },
 
     onLoadEnd: function (field,file) {
@@ -121,19 +107,14 @@ Ext.define( 'iAdmin.view.input.InputController', {
 
     updateView: function () {
         var me = this,
-            view = me.getView(),
-            grid = view.down('itembaselayout');
+            view = me.getView();
 
         me.setModuleForm(view);
-        me.setModuleData('material');
+        me.setModuleData('input');
 
         me._success = function (form, action) {
-            grid.setDisabled(false);
             if(action.result.crud == 'insert') {
                 view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
-                Ext.getStore('materialtypeflow').setParams({
-                    query: action.result.rows.id
-                }).load();
             }
         }
 
@@ -143,17 +124,14 @@ Ext.define( 'iAdmin.view.input.InputController', {
     insertView: function () {
         var me = this,
             view = me.getView(),
-            portrait = view.down('portrait'),
-            grid = view.down('itembaselayout');
+            portrait = view.down('portrait');
 
         view.reset();
 
-        grid.setDisabled(true);
         view.down('tabpanel').setActiveTab(0);
         view.down('textfield[name=name]').setReadColor(false);
         portrait.beFileData();
 
-        Ext.getStore('materialtypeflow').removeAll();
     }
 
 });

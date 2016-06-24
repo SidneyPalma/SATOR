@@ -10,7 +10,6 @@ Ext.define( 'iAdmin.view.module.ModuleMenu', {
         'Ext.tree.*',
         'Ext.grid.column.*',
         'Smart.TextMaskCore',
-        'Ext.grid.plugin.CellEditing',
         'iAdmin.view.module.ModuleController'
     ],
 
@@ -74,12 +73,6 @@ Ext.define( 'iAdmin.view.module.ModuleMenu', {
                 ]
             }
         ];
-    },
-    selType: 'cellmodel',
-    plugins: {
-        clicksToEdit: 1,
-        ptype: 'cellediting',
-        pluginId: 'pluginmodule'
     }
 
 });

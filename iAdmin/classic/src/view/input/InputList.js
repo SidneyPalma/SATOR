@@ -71,39 +71,30 @@ Ext.define( 'iAdmin.view.input.InputList', {
                         dataIndex: 'name'
                     }, {
                         width: 180,
-                        text: 'Kit',
-                        dataIndex: 'materialboxname'
+                        text: 'Fabricante',
+                        dataIndex: 'manufacturername'
+                    }, {
+                        width: 140,
+                        text: 'Fornecedor',
+                        dataIndex: 'providername'
                     }, {
                         width: 120,
-                        text: 'Grupo',
-                        dataIndex: 'itemgroupdescription'
+                        text: 'Unidade',
+                        dataIndex: 'unitmeasurementname'
                     }, {
-                        width: 120,
-                        text: 'Status',
-                        dataIndex: 'materialstatusname'
-                    }, {
-                        width: 120,
-                        text: 'Embalagem',
-                        dataIndex: 'packingname'
-                    }, {
-                        readOnly: true,
+                        width: 100,
                         text: 'Ativo',
+                        readOnly: true,
                         dataIndex: 'isactive',
                         align: 'center',
-                        width: 100,
                         xtype: 'checkcolumn'
                     }, {
-                        width: 90,
-                        text: 'Ações',
+                        width: 40,
                         align: 'center',
                         xtype: 'actioncolumn',
-                        items: [
-                            {
-                                handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
-                                tooltip: 'Editar cadastro!'
-                            }
-                        ]
+                        handler: 'onViewEdit',
+                        iconCls: "fa fa-pencil action-update-color",
+                        tooltip: 'Editar cadastro!'
                     }
                 ],
                 dockedItems: [

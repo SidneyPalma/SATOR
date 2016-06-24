@@ -11,14 +11,13 @@ Ext.define( 'iAdmin.view.input.InputView', {
         'Smart.form.Portrait',
         'iAdmin.store.input.*',
         'iAdmin.view.input.InputController',
-        'iAdmin.view.helper.packing.PackingSearch',
         'iAdmin.view.person.proprietary.ProprietarySearch',
         'iAdmin.view.helper.manufacturer.ManufacturerSearch'
     ],
 
     layout: 'border',
 
-    controller: 'material',
+    controller: 'input',
     cls: 'panel-frame panel-frame-tpTree',
     iconCls: "fa fa-stack-overflow",
     showSmartAnimate: true,
@@ -56,7 +55,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.itembase.Material');
+        Ext.create('iAdmin.store.input.Input');
 
         me.items = [
             {
@@ -113,10 +112,6 @@ Ext.define( 'iAdmin.view.input.InputView', {
                         xtype: 'label',
                         cls: 'sub-title-label',
                         text: 'Tipo de fluxo por prioridade'
-                    }, {
-                        height: 96,
-                        margin: '10 0 0 0',
-                        xtype: 'materialtypeflow'
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
@@ -385,15 +380,9 @@ Ext.define( 'iAdmin.view.input.InputView', {
                         items: [
                             {
                                 xtype: 'portrait',
-                                tableName: 'itembase'
+                                tableName: 'input'
                             }
                         ]
-                    }, {
-                        tabIndex: 2,
-                        disabled: true,
-                        title: 'Layout',
-                        iconCls: "fa fa-language",
-                        xtype: 'itembaselayout'
                     }
                 ]
             }

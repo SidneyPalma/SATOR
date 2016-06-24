@@ -23,29 +23,38 @@ Ext.define( 'iAdmin.model.input.Input', {
             name: 'barcode',
             type: 'auto'
         }, {
-            name: 'unitmeasurementid',
-            type: 'int'
-        }, {
             name: 'erpcode',
             type: 'auto'
         }, {
+            name: 'unitmeasurementid',
+            type: 'int'
+        }, {
+            name: 'unitmeasurementname',
+            type: 'auto'
+        }, {
             name: 'manufacturerid',
+            type: 'auto'
+        }, {
+            name: 'manufacturername',
             type: 'int'
         }, {
             name: 'providerid',
             type: 'int'
         }, {
+            name: 'providername',
+            type: 'auto'
+        }, {
             name: 'codeanvisa',
             type: 'auto'
         }, {
             name: 'controlstock',
-            type: 'boolean'
+            type: 'int'
         }, {
             name: 'isactive',
-            type: 'boolean'
+            type: 'int'
         }, {
             name: 'mandatorytesting',
-            type: 'boolean'
+            type: 'int'
         }, {
             name: 'minstock',
             type: 'auto'
@@ -53,11 +62,11 @@ Ext.define( 'iAdmin.model.input.Input', {
             name: 'maxstock',
             type: 'auto'
         }, {
-            name: 'resetpoint',
-            type: 'auto'
-        }, {
             name: 'deadline',
             type: 'int'
+        }, {
+            name: 'resetpoint',
+            type: 'auto'
         }, {
             name: 'validityactivation',
             type: 'int'

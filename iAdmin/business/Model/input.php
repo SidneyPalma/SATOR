@@ -32,29 +32,47 @@ class input extends \Smart\Data\Model {
      */
     private $barcode;
 
+	/**
+	 * @Policy {"nullable":true, "length":20}
+	 * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+	 */
+	private $erpcode;
+
     /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $unitmeasurementid;
 
-    /**
-     * @Policy {"nullable":true, "length":20}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
-     */
-    private $erpcode;
-
+	/**
+	 * @Policy {"nullable":true}
+	 * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,unitmeasurementid"}
+	 */
+	private $unitmeasurementname;
+	
     /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $manufacturerid;
 
+	/**
+	 * @Policy {"nullable":true}
+	 * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,manufacturerid"}
+	 */
+	private $manufacturername;
+
     /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $providerid;
+	
+	/**
+	 * @Policy {"nullable":true}
+	 * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,providerid"}
+	 */
+	private $providername;	
 
     /**
      * @Policy {"nullable":true, "length":50}
