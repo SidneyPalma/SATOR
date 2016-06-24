@@ -49,7 +49,7 @@ As tabelas a seguir apresentam o modelo de dados para os Sistemas SATOR
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Tamanho`](tables/Tamanho.md) |  | Tamanhos para Materiais e Kits |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`Deposito`](tables/Deposito.md) | cmesubareasdeposit | Depósitos para Insumos |
 |   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`UnidadeMedida`](tables/UnidadeMedida.md) | unitmeasurement | Unidade de Medida para Insumos |
-|New| ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`ResiduoDestino`](tables/ResiduoDestino.md) |  | Destino de Residuos dos Insumos |
+|   | ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_checked_icon.png)[`ResiduoDestino`](tables/ResiduoDestino.md) | EnumType(targetsediment) | Destino de Residuos dos Insumos |
 |New| ![](http://findicons.com/files/icons/2652/gentleface/16/checkbox_unchecked_icon.png)[`Insumo`](tables/Insumo.md) |  | Insumos utilizados no processo de esterilização |
 
 

@@ -11,8 +11,11 @@ Exemplo:
     Ativo: 1
     
     Id: 2;
-    Nome: Resíduo Sólido de Saúde
+    Nome: ResÃ­duo SÃ³lido de SaÃºde
     Ativo: 1
-        
+
+## DML
+    EnumType
+        targetsediment
     
     
