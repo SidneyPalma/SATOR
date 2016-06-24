@@ -2,9 +2,9 @@
 
 namespace iAdmin\Cache;
 
-use iAdmin\Model\cmesubareasdeposit as Model;
+use iAdmin\Model\cmeareasdeposit as Model;
 
-class cmesubareasdeposit extends \Smart\Data\Cache {
+class cmeareasdeposit extends \Smart\Data\Cache {
 
     public function selectCode(array $data) {
         $query = $data['query'];
@@ -13,25 +13,25 @@ class cmesubareasdeposit extends \Smart\Data\Cache {
         $sql = "
             SELECT
                 sad.id,
-                :cmesubareasid as cmesubareasid,
+                :cmeareasid as cmeareasid,
                 sad.name,
                 sad.barcode,
                 sad.isactive
             FROM
-                cmesubareasdeposit sad
-            WHERE sad.cmesubareasid = :id";
+                cmeareasdeposit sad
+            WHERE sad.cmeareasid = :id";
 
         try {
             $pdo = $proxy->prepare($sql);
 
             $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
-            $pdo->bindValue(":cmesubareasid", $query, \PDO::PARAM_INT);
+            $pdo->bindValue(":cmeareasid", $query, \PDO::PARAM_INT);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
             for ($x = 0; $x <= 2; $x++) {
-                $rows[$x]['cmesubareasid'] = $query;
+                $rows[$x]['cmeareasid'] = $query;
             }
 
             self::_setRows($rows);

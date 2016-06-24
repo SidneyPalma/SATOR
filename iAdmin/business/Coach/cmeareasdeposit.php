@@ -4,12 +4,12 @@ namespace iAdmin\Coach;
 
 use Smart\Utils\Session;
 
-class cmesubareasdeposit extends \Smart\Setup\Setup {
+class cmeareasdeposit extends \Smart\Setup\Setup {
 
     /**
-     * @var \iAdmin\Model\cmesubareasdeposit $model
+     * @var \iAdmin\Model\cmeareasdeposit $model
      */
-    public $model = '\iAdmin\Model\cmesubareasdeposit';
+    public $model = '\iAdmin\Model\cmeareasdeposit';
 
     public function select() {
         try {

@@ -10,7 +10,6 @@ Ext.define( 'iAdmin.view.helper.areas.CMESubAreasEdit', {
         'Ext.button.Segmented',
         'Smart.form.field.ComboEnum',
         'iAdmin.model.areas.CMESubAreas',
-        'iAdmin.view.areas.CMESubAreasDeposit',
         'iAdmin.view.helper.areas.CMEAreasSearch',
         'iAdmin.view.helper.areas.CMESubAreasSearch',
         'iAdmin.view.helper.areas.CMESubAreasController'
@@ -90,14 +89,6 @@ Ext.define( 'iAdmin.view.helper.areas.CMESubAreasEdit', {
                                 name: 'orderby'
                             }
                         ]
-                    }, {
-                        xtype: 'label',
-                        cls: 'sub-title-label',
-                        text: 'Depósitos'
-                    }, {
-                        height: 96,
-                        margin: '10 0 0 0',
-                        xtype: 'cmesubareasdeposit'
                     }, {
                         xtype: 'container',
                         layout: 'hbox',

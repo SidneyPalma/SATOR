@@ -4,9 +4,9 @@ namespace iAdmin\Model;
 
 /**
  * 
- * @Entity {"name":"cmesubareasdeposit", "logbook":true, "cache":"\\iAdmin\\Cache\\cmesubareasdeposit", "event":"\\iAdmin\\Event\\cmesubareasdeposit"}
+ * @Entity {"name":"cmeareasdeposit", "logbook":true, "cache":"\\iAdmin\\Cache\\cmeareasdeposit", "event":"\\iAdmin\\Event\\cmeareasdeposit"}
  */
-class cmesubareasdeposit extends \Smart\Data\Model {
+class cmeareasdeposit extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
@@ -18,13 +18,13 @@ class cmesubareasdeposit extends \Smart\Data\Model {
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
-    private $cmesubareasid;
+    private $cmeareasid;
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,cmesubareasid"}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,cmeareasid"}
      */
-    private $cmesubareasname;
+    private $cmeareasname;
 
     /**
      * @Policy {"nullable":false, "length":80}
@@ -53,7 +53,7 @@ class cmesubareasdeposit extends \Smart\Data\Model {
 
     /**
      * @param type $id
-     * @return \iAdmin\Model\cmesubareasdeposit
+     * @return \iAdmin\Model\cmeareasdeposit
      */
     public function setId($id) {
         $this->id = $id;
@@ -63,16 +63,16 @@ class cmesubareasdeposit extends \Smart\Data\Model {
     /**
      * @return type integer
      */
-    public function getCmesubareasid() {
-        return $this->cmesubareasid;
+    public function getCmeareasid() {
+        return $this->cmeareasid;
     }
 
     /**
-     * @param type $cmesubareasid
-     * @return \iAdmin\Model\cmesubareasdeposit
+     * @param type $cmeareasid
+     * @return \iAdmin\Model\cmeareasdeposit
      */
-    public function setCmesubareasid($cmesubareasid) {
-        $this->cmesubareasid = $cmesubareasid;
+    public function setCmeareasid($cmeareasid) {
+        $this->cmeareasid = $cmeareasid;
         return $this;
     }
 
@@ -85,7 +85,7 @@ class cmesubareasdeposit extends \Smart\Data\Model {
 
     /**
      * @param type $name
-     * @return \iAdmin\Model\cmesubareasdeposit
+     * @return \iAdmin\Model\cmeareasdeposit
      */
     public function setName($name) {
         $this->name = $name;
@@ -101,7 +101,7 @@ class cmesubareasdeposit extends \Smart\Data\Model {
 
     /**
      * @param type $barcode
-     * @return \iAdmin\Model\cmesubareasdeposit
+     * @return \iAdmin\Model\cmeareasdeposit
      */
     public function setBarcode($barcode) {
         $this->barcode = $barcode;
@@ -117,7 +117,7 @@ class cmesubareasdeposit extends \Smart\Data\Model {
 
     /**
      * @param type $isactive
-     * @return \iAdmin\Model\cmesubareasdeposit
+     * @return \iAdmin\Model\cmeareasdeposit
      */
     public function setIsactive($isactive) {
         $this->isactive = $isactive;

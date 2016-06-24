@@ -17,6 +17,9 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
             view = me.getView();
 
         view.down('form').loadRecord(record);
+        Ext.getStore('cmeareasdeposit').setParams({
+            query: record.get('id')
+        }).load();
     },
 
     updateView: function () {
@@ -26,6 +29,16 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
         me.setModuleData('cmeareas');
         me.setModuleForm(view.down('form'));
 
+        me._success = function (batch, options) {
+            if(options.operations.create) {
+                var opr = batch.getOperations()[0],
+                    rec = opr.getRecords()[0];
+                Ext.getStore('cmeareasdeposit').setParams({
+                    query: rec.get('id')
+                }).load();
+            }
+        }
+
         me.updateRecord();
     },
 
@@ -34,6 +47,28 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
             view = me.getView();
 
         view.down('form').reset();
+    },
+
+    onEditTypeFlow: function (editor, context, eOpts) {
+        var gd = context.grid,
+            store = gd.getStore(),
+            record = context.record,
+            name = record.get('name'),
+            barcode = record.get('barcode');
+
+        if(!name || !barcode) {
+            return false;
+        }
+
+        store.sync({
+            success: function (batch, options) {
+                var opr = batch.getOperations()[0],
+                    rec = opr.getRecords()[0];
+                if(options.operations.create) {
+                    record.set('id',rec.get('id'));
+                }
+            }
+        });
     }
 
 });

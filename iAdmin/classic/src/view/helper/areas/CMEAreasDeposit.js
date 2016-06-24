@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.view.areas.CMESubAreasDeposit', {
+Ext.define( 'iAdmin.view.areas.CMEAreasDeposit', {
     extend: 'Ext.grid.Panel',
 
-    xtype: 'cmesubareasdeposit',
+    xtype: 'cmeareasdeposit',
 
     requires: [
         'Ext.grid.Panel',
@@ -10,8 +10,6 @@ Ext.define( 'iAdmin.view.areas.CMESubAreasDeposit', {
         'iAdmin.store.areas.*',
         'Ext.grid.plugin.CellEditing'
     ],
-
-    // cls: 'update-grid',
 
     rowLines: false,
     columnLines: false,
@@ -28,7 +26,7 @@ Ext.define( 'iAdmin.view.areas.CMESubAreasDeposit', {
         edit: 'onEditTypeFlow'
     },
 
-    store: 'cmesubareasdeposit',
+    store: 'cmeareasdeposit',
 
     initComponent: function () {
         var me = this;
@@ -39,15 +37,10 @@ Ext.define( 'iAdmin.view.areas.CMESubAreasDeposit', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.areas.CMESubAreasDeposit');
+        Ext.create('iAdmin.store.areas.CMEAreasDeposit');
 
         me.columns = [
             {
-            //     width: 40,
-            //     align: 'center',
-            //     dataIndex: 'isactive',
-            //     xtype: 'checkcolumn'
-            // }, {
                 flex: 1,
                 text: 'Nome',
                 dataIndex: 'name',
