@@ -117,27 +117,6 @@ Ext.define( 'iAdmin.view.input.InputView', {
                             { boxLabel: 'Controla estoque', name: 'controlstock'},
                             { boxLabel: 'Ativo', name: 'isactive' }
                         ]
-                        // xtype: 'container',
-                        // layout: 'hbox',
-                        // defaultType: 'checkboxfield',
-                        // defaults: {
-                        //     flex: 1
-                        // },
-                        // items: [
-                        //     {
-                        //         fieldLabel: 'Status',
-                        //         name: 'isactive',
-                        //         boxLabel: 'Ativo'
-                        //     }, {
-                        //         fieldLabel: 'Controla estoque',
-                        //         name: 'controlstock',
-                        //         boxLabel: 'Sim'
-                        //     }, {
-                        //         fieldLabel: 'Teste obrigatório',
-                        //         name: 'mandatorytesting',
-                        //         boxLabel: 'Sim'
-                        //     }
-                        // ]
                     }, {
                         margin: '20 0 0 0',
                         xtype: 'container',
@@ -200,16 +179,27 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                 },
                                 items: [
                                     {
-                                        flex: 2,
-                                        fieldLabel: 'Código de Barra',
-                                        name: 'barcode'
-                                    }, {
-                                        xtype: 'splitter'
-                                    }, {
-                                        flex: 1,
-                                        allowBlank: true,
-                                        fieldLabel: 'Registro ANVISA',
-                                        name: 'codeanvisa'
+                                        flex: 3,
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaultType: 'textfield',
+                                        defaults: {
+                                            allowBlank: false
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                fieldLabel: 'Código de Barra',
+                                                name: 'barcode'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                allowBlank: true,
+                                                fieldLabel: 'Registro ANVISA',
+                                                name: 'codeANVISA'
+                                            }
+                                        ]
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
@@ -223,55 +213,38 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                 },
                                 items: [
                                     {
-                                        flex: 2,
-                                        margin: '0 5 0 0',
-                                        fieldLabel: 'Fornecedor',
-                                        xtype: 'providersearch',
-                                        hiddenNameId: 'providerid',
-                                        name: 'providername'
-                                    }, {
                                         flex: 3,
-                                        margin: '0 0 0 5',
-                                        xtype: 'container'
-                                    }
-                                ]
-                            }, {
-                                xtype: 'fieldcontainer',
-                                layout: 'hbox',
-                                defaults: {
-                                    allowBlank: false
-                                },
-                                items: [
-                                    {
-                                        flex: 2,
-                                        margin: '0 5 0 0',
-                                        fieldLabel: 'Fabricante',
-                                        xtype: 'manufacturersearch',
-                                        hiddenNameId: 'manufacturerid',
-                                        name: 'manufacturername'
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            allowBlank: false
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                margin: '0 5 0 0',
+                                                fieldLabel: 'Fornecedor',
+                                                xtype: 'providersearch',
+                                                hiddenNameId: 'providerid',
+                                                name: 'providername'
+                                            }, {
+                                                flex: 1,
+                                                margin: '0 5 0 5',
+                                                fieldLabel: 'Uinidade base',
+                                                xtype: 'unitmeasurementsearch',
+                                                hiddenNameId: 'unitmeasurementid',
+                                                name: 'unitmeasurementname'
+                                            }, {
+                                                flex: 1,
+                                                margin: '0 0 0 5',
+                                                fieldLabel: 'Fabricante',
+                                                xtype: 'manufacturersearch',
+                                                hiddenNameId: 'manufacturerid',
+                                                name: 'manufacturername'
+                                            }
+                                        ]
                                     }, {
-                                        flex: 3,
-                                        margin: '0 0 0 5',
-                                        xtype: 'container'
-                                    }
-                                ]
-                            }, {
-                                xtype: 'fieldcontainer',
-                                layout: 'hbox',
-                                defaults: {
-                                    allowBlank: false
-                                },
-                                items: [
-                                    {
                                         flex: 2,
-                                        margin: '0 5 0 0',
-                                        fieldLabel: 'Uinidade base',
-                                        xtype: 'unitmeasurementsearch',
-                                        hiddenNameId: 'unitmeasurementid',
-                                        name: 'unitmeasurementname'
-                                    }, {
-                                        flex: 3,
-                                        margin: '0 0 0 5',
                                         xtype: 'container'
                                     }
                                 ]
@@ -280,22 +253,41 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                 layout: 'hbox',
                                 fieldLabel: 'Estoque',
                                 labelCls: 'sub-title-label',
-                                defaultType: 'numberfield',
-                                defaults: {
-                                    allowBlank: false,
-                                    hideTrigger: true
-                                },
                                 items: [
                                     {
-                                        flex: 1,
-                                        fieldLabel: 'Mínimo',
-                                        name: 'minstock'
-                                    }, {
-                                        xtype: 'splitter'
-                                    }, {
-                                        flex: 1,
-                                        fieldLabel: 'Máximo',
-                                        name: 'maxstock'
+                                        flex: 3,
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            allowBlank: false,
+                                            hideTrigger: true
+                                        },
+                                        defaultType: 'numberfield',
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                fieldLabel: 'Mínimo',
+                                                name: 'minstock'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                fieldLabel: 'Máximo',
+                                                name: 'maxstock'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                fieldLabel: 'Entrega',
+                                                name: 'deadline'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                fieldLabel: 'Reposição',
+                                                name: 'resetpoint'
+                                            }
+                                        ]
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
@@ -304,33 +296,43 @@ Ext.define( 'iAdmin.view.input.InputView', {
                             }, {
                                 xtype: 'fieldcontainer',
                                 layout: 'hbox',
-                                fieldLabel: 'Logística',
-                                labelCls: 'sub-title-label',
-                                defaultType: 'textfield',
-                                defaults: {
-                                    allowBlank: false,
-                                    hideTrigger: true
-                                },
                                 items: [
                                     {
-                                        flex: 1,
-                                        fieldLabel: 'Prazo de entrega',
-                                        name: 'deadline'
-                                    }, {
-                                        xtype: 'splitter'
-                                    }, {
-                                        flex: 1,
-                                        fieldLabel: 'Ponto de reposição',
-                                        name: 'resetpoint'
+                                        flex: 3,
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            allowBlank: false,
+                                            hideTrigger: true
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                xtype: 'textfield',
+                                                fieldLabel: 'Validade',
+                                                name: 'validityactivation'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                xtype: 'container'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                xtype: 'container'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                xtype: 'container'
+                                            }
+                                        ]
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
                                     }
                                 ]
-                            }, {
-                                xtype: 'textfield',
-                                fieldLabel: 'Validade após ativação',
-                                name: 'validityactivation'
                             }
                         ]
                     }, {

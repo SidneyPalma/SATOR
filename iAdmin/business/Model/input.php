@@ -130,7 +130,7 @@ class input extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"binary2base64,filedata"}
      */
     private $filedata;
 

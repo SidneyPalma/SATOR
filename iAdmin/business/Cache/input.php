@@ -53,7 +53,25 @@ class input extends \Smart\Data\Cache {
 
         $sql = "
             SELECT
-                i.*,
+                i.id, 
+                i.name, 
+                i.description, 
+                i.barcode, 
+                i.erpcode, 
+                i.unitmeasurementid, 
+                i.manufacturerid, 
+                i.providerid, 
+                i.codeANVISA, 
+                i.controlstock, 
+                i.isactive, 
+                i.mandatorytesting, 
+                i.minstock, 
+                i.maxstock, 
+                i.resetpoint, 
+                i.deadline, 
+                i.validityactivation, 
+                i.fileinfo,
+                dbo.binary2base64(i.filedata) as filedata,
                 um.name as unitmeasurementname,
                 m.name as manufacturername,
                 p.name as providername
