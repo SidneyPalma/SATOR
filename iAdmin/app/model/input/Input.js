@@ -23,9 +23,6 @@ Ext.define( 'iAdmin.model.input.Input', {
             name: 'barcode',
             type: 'auto'
         }, {
-            name: 'erpcode',
-            type: 'auto'
-        }, {
             name: 'unitmeasurementid',
             type: 'int'
         }, {

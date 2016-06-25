@@ -11,8 +11,9 @@ Ext.define( 'iAdmin.view.input.InputView', {
         'Smart.form.Portrait',
         'iAdmin.store.input.*',
         'iAdmin.view.input.InputController',
-        'iAdmin.view.person.proprietary.ProprietarySearch',
-        'iAdmin.view.helper.manufacturer.ManufacturerSearch'
+        'iAdmin.view.helper.provider.ProviderSearch',
+        'iAdmin.view.helper.manufacturer.ManufacturerSearch',
+        'iAdmin.view.helper.unitmeasurement.UnitMeasurementSearch'
     ],
 
     layout: 'border',
@@ -104,30 +105,39 @@ Ext.define( 'iAdmin.view.input.InputView', {
                         fieldLabel: 'Descrição',
                         name: 'description'
                     }, {
-                        allowBlank: true,
-                        useReadColor: true,
-                        fieldLabel: 'Kit ativo',
-                        name: 'materialboxname'
-                    }, {
                         xtype: 'label',
                         cls: 'sub-title-label',
-                        text: 'Tipo de fluxo por prioridade'
+                        text: 'Seleções'
                     }, {
-                        xtype: 'container',
-                        layout: 'hbox',
-                        defaultType: 'checkboxfield',
-                        defaults: {
-                            flex: 1
-                        },
+                        columns: 1,
+                        vertical: true,
+                        xtype: 'checkboxgroup',
                         items: [
-                            {
-                                name: 'isactive',
-                                boxLabel: 'Ativo'
-                            }, {
-                                name: 'isconsigned',
-                                boxLabel: 'Material consignado'
-                            }
+                            { boxLabel: 'Teste obrigatório', name: 'mandatorytesting' },
+                            { boxLabel: 'Controla estoque', name: 'controlstock'},
+                            { boxLabel: 'Ativo', name: 'isactive' }
                         ]
+                        // xtype: 'container',
+                        // layout: 'hbox',
+                        // defaultType: 'checkboxfield',
+                        // defaults: {
+                        //     flex: 1
+                        // },
+                        // items: [
+                        //     {
+                        //         fieldLabel: 'Status',
+                        //         name: 'isactive',
+                        //         boxLabel: 'Ativo'
+                        //     }, {
+                        //         fieldLabel: 'Controla estoque',
+                        //         name: 'controlstock',
+                        //         boxLabel: 'Sim'
+                        //     }, {
+                        //         fieldLabel: 'Teste obrigatório',
+                        //         name: 'mandatorytesting',
+                        //         boxLabel: 'Sim'
+                        //     }
+                        // ]
                     }, {
                         margin: '20 0 0 0',
                         xtype: 'container',
@@ -199,33 +209,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                         flex: 1,
                                         allowBlank: true,
                                         fieldLabel: 'Registro ANVISA',
-                                        name: 'registrationanvisa'
-                                    }, {
-                                        flex: 2,
-                                        xtype: 'container'
-                                    }
-                                ]
-                            }, {
-                                xtype: 'fieldcontainer',
-                                layout: 'hbox',
-                                defaultType: 'textfield',
-                                defaults: {
-                                    allowBlank: false
-                                },
-                                items: [
-                                    {
-                                        flex: 2,
-                                        allowBlank: true,
-                                        fieldLabel: 'Número do Patrimonio',
-                                        name: 'patrimonialcode'
-                                    }, {
-                                        xtype: 'splitter'
-                                    }, {
-                                        flex: 1,
-                                        minValue: 1,
-                                        xtype: 'numberfield',
-                                        fieldLabel: 'Qtde Processos',
-                                        name: 'numberproceedings'
+                                        name: 'codeanvisa'
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
@@ -241,26 +225,16 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                     {
                                         flex: 2,
                                         margin: '0 5 0 0',
-                                        fieldLabel: 'Proprietário',
-                                        xtype: 'proprietarysearch',
-                                        hiddenNameId: 'proprietaryid',
-                                        name: 'proprietaryname'
+                                        fieldLabel: 'Fornecedor',
+                                        xtype: 'providersearch',
+                                        hiddenNameId: 'providerid',
+                                        name: 'providername'
                                     }, {
-                                        flex: 1,
+                                        flex: 3,
                                         margin: '0 0 0 5',
-                                        fieldLabel: 'Status',
-                                        xtype: 'materialstatussearch',
-                                        hiddenNameId: 'materialstatusid',
-                                        name: 'materialstatusname'
-                                    }, {
-                                        flex: 2,
                                         xtype: 'container'
                                     }
                                 ]
-                            }, {
-                                xtype: 'label',
-                                text: 'Características',
-                                cls: 'sub-title-label'
                             }, {
                                 xtype: 'fieldcontainer',
                                 layout: 'hbox',
@@ -276,14 +250,8 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                         hiddenNameId: 'manufacturerid',
                                         name: 'manufacturername'
                                     }, {
-                                        flex: 1,
+                                        flex: 3,
                                         margin: '0 0 0 5',
-                                        xtype: 'datefield',
-                                        fieldLabel: 'Data Aquisição',
-                                        name: 'dateacquisition',
-                                        plugins: 'textmask'
-                                    }, {
-                                        flex: 2,
                                         xtype: 'container'
                                     }
                                 ]
@@ -297,18 +265,37 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                     {
                                         flex: 2,
                                         margin: '0 5 0 0',
-                                        fieldLabel: 'Embalagem',
-                                        xtype: 'packingsearch',
-                                        hiddenNameId: 'packingid',
-                                        name: 'packingname'
+                                        fieldLabel: 'Uinidade base',
+                                        xtype: 'unitmeasurementsearch',
+                                        hiddenNameId: 'unitmeasurementid',
+                                        name: 'unitmeasurementname'
+                                    }, {
+                                        flex: 3,
+                                        margin: '0 0 0 5',
+                                        xtype: 'container'
+                                    }
+                                ]
+                            }, {
+                                xtype: 'fieldcontainer',
+                                layout: 'hbox',
+                                fieldLabel: 'Estoque',
+                                labelCls: 'sub-title-label',
+                                defaultType: 'numberfield',
+                                defaults: {
+                                    allowBlank: false,
+                                    hideTrigger: true
+                                },
+                                items: [
+                                    {
+                                        flex: 1,
+                                        fieldLabel: 'Mínimo',
+                                        name: 'minstock'
+                                    }, {
+                                        xtype: 'splitter'
                                     }, {
                                         flex: 1,
-                                        margin: '0 0 0 5',
-                                        allowBlank: true,
-                                        xtype: 'datefield',
-                                        fieldLabel: 'Data Descarte',
-                                        name: 'datedisposal',
-                                        plugins: 'textmask'
+                                        fieldLabel: 'Máximo',
+                                        name: 'maxstock'
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
@@ -317,57 +304,33 @@ Ext.define( 'iAdmin.view.input.InputView', {
                             }, {
                                 xtype: 'fieldcontainer',
                                 layout: 'hbox',
+                                fieldLabel: 'Logística',
+                                labelCls: 'sub-title-label',
+                                defaultType: 'textfield',
                                 defaults: {
-                                    allowBlank: false
+                                    allowBlank: false,
+                                    hideTrigger: true
                                 },
                                 items: [
                                     {
-                                        flex: 2,
-                                        margin: '0 5 0 0',
-                                        xtype: 'comboenum',
-                                        fieldLabel: 'Grupo do Item',
-                                        name: 'itemgroupdescription'
+                                        flex: 1,
+                                        fieldLabel: 'Prazo de entrega',
+                                        name: 'deadline'
+                                    }, {
+                                        xtype: 'splitter'
                                     }, {
                                         flex: 1,
-                                        margin: '0 0 0 5',
-                                        xtype: 'textfield',
-                                        fieldLabel: 'Largura (cm)',
-                                        name: 'itemlength',
-                                        plugins: 'textmask',
-                                        mask: '0,00',
-                                        money: true
+                                        fieldLabel: 'Ponto de reposição',
+                                        name: 'resetpoint'
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
                                     }
                                 ]
                             }, {
-                                xtype: 'fieldcontainer',
-                                layout: 'hbox',
-                                defaults: {
-                                    allowBlank: false
-                                },
-                                items: [
-                                    {
-                                        flex: 2,
-                                        margin: '0 5 0 0',
-                                        xtype: 'comboenum',
-                                        fieldLabel: 'Tamanho do Item',
-                                        name: 'itemsizedescription'
-                                    }, {
-                                        flex: 1,
-                                        margin: '0 0 0 5',
-                                        xtype: 'textfield',
-                                        fieldLabel: 'Largura (cm3)',
-                                        name: 'itemcubiclength',
-                                        plugins: 'textmask',
-                                        mask: '0,00',
-                                        money: true
-                                    }, {
-                                        flex: 2,
-                                        xtype: 'container'
-                                    }
-                                ]
+                                xtype: 'textfield',
+                                fieldLabel: 'Validade após ativação',
+                                name: 'validityactivation'
                             }
                         ]
                     }, {
