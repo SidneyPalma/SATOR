@@ -17,6 +17,15 @@ class input extends \Smart\Data\Event {
      * @param \iAdmin\Model\input $model
      */
     public function posInsert( \iAdmin\Model\input &$model ) {
+        $id = $model->getId();
+        $presentation = $model->getPresentation();
+
+        $inputpresentation = new \iAdmin\Coach\inputpresentation();
+        $inputpresentation->getStore()->getModel()->set('id','');
+        $inputpresentation->getStore()->getModel()->set('inputid',$id);
+        $inputpresentation->getStore()->getModel()->set('presentation',$presentation);
+        $inputpresentation->update();
+
         $this->getProxy()->setUpload($model);
     }
 

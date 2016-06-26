@@ -11,6 +11,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
         'Smart.form.Portrait',
         'iAdmin.store.input.*',
         'iAdmin.view.input.InputController',
+        'iAdmin.view.input.InputPresentation',
         'iAdmin.view.helper.provider.ProviderSearch',
         'iAdmin.view.helper.manufacturer.ManufacturerSearch',
         'iAdmin.view.helper.unitmeasurement.UnitMeasurementSearch'
@@ -157,6 +158,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
                         bodyPadding: 10,
                         title: 'Complemento',
                         layout: 'anchor',
+                        scrollable: 'y',
                         items: [
                             {
                                 xtype: 'fieldcontainer',
@@ -306,10 +308,9 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                             }, {
                                                 flex: 1,
                                                 margin: '0 0 0 5',
-                                                fieldLabel: 'Unidade base',
-                                                xtype: 'unitmeasurementsearch',
-                                                hiddenNameId: 'unitmeasurementid',
-                                                name: 'unitmeasurementname'
+                                                xtype: 'comboenum',
+                                                fieldLabel: 'Apresentação',
+                                                name: 'presentationdescription'
                                             }
                                         ]
                                     }, {
@@ -334,15 +335,38 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                                 xtype: 'checkboxfield',
                                                 fieldLabel: 'Apresentações',
                                                 boxLabel  : 'Somente em uso',
-                                                name: 'usefilter',
-                                                checked: true
+                                                name: 'onlyusefilter',
+                                                checked: true,
+                                                listeners: {
+                                                    change: 'onlyUseFilter'
+                                                }
                                             }, {
                                                 flex: 1,
                                                 margin: '0 0 0 5',
                                                 fieldLabel: 'Unidades',
-                                                xtype: 'textfield'
+                                                xtype: 'textfield',
+                                                listeners: {
+                                                    change: 'storeField'
+                                                }
                                             }
                                         ]
+                                    }, {
+                                        flex: 2,
+                                        xtype: 'container'
+                                    }
+                                ]
+                            }, {
+                                xtype: 'fieldcontainer',
+                                layout: 'hbox',
+                                fieldLabel: 'Apresentações',
+                                labelCls: 'sub-title-label',
+                                items: [
+                                    {
+                                        flex: 3,
+                                        height: 200,
+                                        margin: '10 0 0 0',
+                                        // style: 'border: solid 1px #d0d0d0;',
+                                        xtype: 'inputpresentation'
                                     }, {
                                         flex: 2,
                                         xtype: 'container'

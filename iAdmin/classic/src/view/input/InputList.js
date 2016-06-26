@@ -79,8 +79,8 @@ Ext.define( 'iAdmin.view.input.InputList', {
                         dataIndex: 'providername'
                     }, {
                         width: 120,
-                        text: 'Unidade',
-                        dataIndex: 'unitmeasurementname'
+                        text: 'Apresentação',
+                        dataIndex: 'presentationdescription'
                     }, {
                         width: 100,
                         text: 'Ativo',

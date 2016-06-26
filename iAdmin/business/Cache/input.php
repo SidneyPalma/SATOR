@@ -18,8 +18,8 @@ class input extends \Smart\Data\Cache {
                 i.name, 
                 i.description, 
                 i.barcode, 
-                i.erpcode, 
-                i.unitmeasurementid, 
+                i.presentation, 
+                dbo.getEnum('presentation',i.presentation) as presentationdescription,
                 i.manufacturerid, 
                 i.providerid, 
                 i.codeanvisa, 
@@ -33,14 +33,12 @@ class input extends \Smart\Data\Cache {
                 i.validityactivation, 
                 dbo.binary2base64(i.filedata) as filedata,
                 i.fileinfo,
-                um.name as unitmeasurementname,
                 m.name as manufacturername,
                 p.name as providername
             FROM
                 input i
                 inner join provider p on ( p.id = i.providerid )
                 inner join manufacturer m on ( m.id = i.manufacturerid )
-                inner join unitmeasurement um on ( um.id = i.unitmeasurementid )
             WHERE i.name LIKE :name OR i.description LIKE :description";
 
         try {
@@ -75,8 +73,8 @@ class input extends \Smart\Data\Cache {
                 i.name, 
                 i.description, 
                 i.barcode, 
-                i.erpcode, 
-                i.unitmeasurementid, 
+                i.presentation, 
+                dbo.getEnum('presentation',i.presentation) as presentationdescription,
                 i.manufacturerid, 
                 i.providerid, 
                 i.codeanvisa, 
@@ -90,14 +88,12 @@ class input extends \Smart\Data\Cache {
                 i.validityactivation, 
                 dbo.binary2base64(i.filedata) as filedata,
                 i.fileinfo,
-                um.name as unitmeasurementname,
                 m.name as manufacturername,
                 p.name as providername
             FROM
                 input i
                 inner join provider p on ( p.id = i.providerid )
                 inner join manufacturer m on ( m.id = i.manufacturerid )
-                inner join unitmeasurement um on ( um.id = i.unitmeasurementid )
             WHERE i.id = :id";
 
         try {

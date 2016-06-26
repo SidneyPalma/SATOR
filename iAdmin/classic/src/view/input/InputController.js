@@ -56,22 +56,30 @@ Ext.define( 'iAdmin.view.input.InputController', {
         view.loadRecord(xdata);
         view.down('portrait').setUrl(me.url);
         view.down('portrait').beFileData(xdata.get('filetype'));
+
+        Ext.getStore('inputpresentation').setParams({
+            query: xdata.get('id')
+        }).load();
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {
         var gd = context.grid,
             store = gd.getStore(),
-            record = context.record;
+            record = context.record,
+            acronym = record.get('acronym'),
+            measurebase = record.get('measurebase');
 
-        record.set('sterilizationtypeid',context.value);
+        if(!acronym || !measurebase) {
+            return false;
+        }
 
         store.sync({
-            success: function () {
-                store.load({
-                    callback: function () {
-                        gd.getSelectionModel().select(context.rowIdx);
-                    }
-                });
+            success: function (batch, options) {
+                var opr = batch.getOperations()[0],
+                    rec = opr.getRecords()[0];
+                if(options.operations.create) {
+                    record.set('id',rec.get('id'));
+                }
             }
         });
     },
@@ -114,6 +122,9 @@ Ext.define( 'iAdmin.view.input.InputController', {
         me._success = function (form, action) {
             if(action.result.crud == 'insert') {
                 view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
+                Ext.getStore('inputpresentation').setParams({
+                    query: action.result.rows.id
+                }).load();
             }
         }
 
@@ -123,13 +134,39 @@ Ext.define( 'iAdmin.view.input.InputController', {
     insertView: function () {
         var me = this,
             view = me.getView(),
-            portrait = view.down('portrait');
+            portrait = view.down('portrait'),
+            grid = view.down('inputpresentation');
 
         view.reset();
 
         view.down('tabpanel').setActiveTab(0);
         portrait.beFileData();
+        grid.getStore().removeAll();
+    },
 
+    storeField: function ( field, newValue, oldValue, eOpts ) {
+       var store = Ext.getStore("inputpresentation");
+
+       store.clearFilter();
+       store.filter('filtertype',newValue);
+    },
+
+    onlyUseFilter: function ( field, newValue, oldValue, eOpts ) {
+        var me = this;
+
+        me.filterStore(newValue);
+    },
+
+    filterStore: function (filter) {
+        var store = Ext.getStore("inputpresentation");
+
+        store.clearFilter();
+
+        // if(filter) {
+            store.filterBy(function (model) {
+                return Ext.isNumber(parseInt(model.data.id));
+            });
+        // }
     }
 
 });

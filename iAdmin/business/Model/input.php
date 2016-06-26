@@ -32,17 +32,17 @@ class input extends \Smart\Data\Model {
      */
     private $barcode;
 
-	/**
-	 * @Policy {"nullable":true, "length":20}
-	 * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
-	 */
-	private $erpcode;
-
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $unitmeasurementid;
+    private $presentation;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,presentation"}
+     */
+    private $presentationdescription;
 
 	/**
 	 * @Policy {"nullable":true}
@@ -205,34 +205,18 @@ class input extends \Smart\Data\Model {
     }
 
     /**
-     * @return type integer
-     */
-    public function getUnitmeasurementid() {
-        return $this->unitmeasurementid;
-    }
-
-    /**
-     * @param type $unitmeasurementid
-     * @return \iAdmin\Model\input
-     */
-    public function setUnitmeasurementid($unitmeasurementid) {
-        $this->unitmeasurementid = $unitmeasurementid;
-        return $this;
-    }
-
-    /**
      * @return type string
      */
-    public function getErpcode() {
-        return $this->erpcode;
+    public function getPresentation() {
+        return $this->presentation;
     }
 
     /**
-     * @param type $erpcode
+     * @param type $presentation
      * @return \iAdmin\Model\input
      */
-    public function setErpcode($erpcode) {
-        $this->erpcode = $erpcode;
+    public function setPresentation($presentation) {
+        $this->presentation = $presentation;
         return $this;
     }
 
