@@ -139,16 +139,6 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                 iconCls: "fa fa-file-o",
                                 text: 'Novo',
                                 handler: 'insertView'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
-                                disabled: true,
-                                name: 'pendent',
-                                iconCls: "fa fa-check",
-                                text: 'Concluir',
-                                handler: 'updateFlux',
-                                showSmartTheme: ''
                             }
                         ]
                     }
@@ -197,7 +187,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                                 flex: 1,
                                                 allowBlank: true,
                                                 fieldLabel: 'Registro ANVISA',
-                                                name: 'codeANVISA'
+                                                name: 'codeanvisa'
                                             }
                                         ]
                                     }, {
@@ -229,13 +219,6 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                                 name: 'providername'
                                             }, {
                                                 flex: 1,
-                                                margin: '0 5 0 5',
-                                                fieldLabel: 'Uinidade base',
-                                                xtype: 'unitmeasurementsearch',
-                                                hiddenNameId: 'unitmeasurementid',
-                                                name: 'unitmeasurementname'
-                                            }, {
-                                                flex: 1,
                                                 margin: '0 0 0 5',
                                                 fieldLabel: 'Fabricante',
                                                 xtype: 'manufacturersearch',
@@ -259,33 +242,35 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                         xtype: 'container',
                                         layout: 'hbox',
                                         defaults: {
-                                            allowBlank: false,
-                                            hideTrigger: true
+                                            allowBlank: false
                                         },
-                                        defaultType: 'numberfield',
+                                        defaultType: 'textfield',
                                         items: [
                                             {
                                                 flex: 1,
                                                 fieldLabel: 'Mínimo',
-                                                name: 'minstock'
+                                                name: 'minstock',
+                                                plugins: 'textmask',
+                                                mask: '0,000',
+                                                money: true
                                             }, {
                                                 xtype: 'splitter'
                                             }, {
                                                 flex: 1,
                                                 fieldLabel: 'Máximo',
-                                                name: 'maxstock'
-                                            }, {
-                                                xtype: 'splitter'
-                                            }, {
-                                                flex: 1,
-                                                fieldLabel: 'Entrega',
-                                                name: 'deadline'
+                                                name: 'maxstock',
+                                                plugins: 'textmask',
+                                                mask: '0,000',
+                                                money: true
                                             }, {
                                                 xtype: 'splitter'
                                             }, {
                                                 flex: 1,
                                                 fieldLabel: 'Reposição',
-                                                name: 'resetpoint'
+                                                name: 'resetpoint',
+                                                plugins: 'textmask',
+                                                mask: '0,000',
+                                                money: true
                                             }
                                         ]
                                     }, {
@@ -301,31 +286,61 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                         flex: 3,
                                         xtype: 'container',
                                         layout: 'hbox',
+                                        defaultType: 'numberfield',
                                         defaults: {
+                                            minValue: 1,
                                             allowBlank: false,
                                             hideTrigger: true
                                         },
                                         items: [
                                             {
                                                 flex: 1,
-                                                xtype: 'textfield',
+                                                margin: '0 5 0 0',
                                                 fieldLabel: 'Validade',
                                                 name: 'validityactivation'
                                             }, {
-                                                xtype: 'splitter'
+                                                flex: 1,
+                                                margin: '0 5 0 5',
+                                                fieldLabel: 'Entrega',
+                                                name: 'deadline'
                                             }, {
                                                 flex: 1,
-                                                xtype: 'container'
-                                            }, {
-                                                xtype: 'splitter'
+                                                margin: '0 0 0 5',
+                                                fieldLabel: 'Unidade base',
+                                                xtype: 'unitmeasurementsearch',
+                                                hiddenNameId: 'unitmeasurementid',
+                                                name: 'unitmeasurementname'
+                                            }
+                                        ]
+                                    }, {
+                                        flex: 2,
+                                        xtype: 'container'
+                                    }
+                                ]
+                            }, {
+                                xtype: 'fieldcontainer',
+                                layout: 'hbox',
+                                fieldLabel: 'Filtros',
+                                labelCls: 'sub-title-label',
+                                items: [
+                                    {
+                                        flex: 3,
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        items: [
+                                            {
+                                                flex: 2,
+                                                margin: '0 5 0 0',
+                                                xtype: 'checkboxfield',
+                                                fieldLabel: 'Apresentações',
+                                                boxLabel  : 'Somente em uso',
+                                                name: 'usefilter',
+                                                checked: true
                                             }, {
                                                 flex: 1,
-                                                xtype: 'container'
-                                            }, {
-                                                xtype: 'splitter'
-                                            }, {
-                                                flex: 1,
-                                                xtype: 'container'
+                                                margin: '0 0 0 5',
+                                                fieldLabel: 'Unidades',
+                                                xtype: 'textfield'
                                             }
                                         ]
                                     }, {

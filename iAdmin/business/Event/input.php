@@ -31,6 +31,7 @@ class input extends \Smart\Data\Event {
      * @param \iAdmin\Model\input $model
      */
     public function posUpdate( \iAdmin\Model\input &$model ) {
+        $this->getProxy()->setUpload($model);
     }
 
     /**

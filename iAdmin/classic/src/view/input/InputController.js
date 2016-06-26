@@ -49,14 +49,13 @@ Ext.define( 'iAdmin.view.input.InputController', {
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
-            portrait = view.down('portrait'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
 
         view.loadRecord(xdata);
-        portrait.setUrl(me.url);
-        portrait.beFileData(xdata.get('filetype'));
+        view.down('portrait').setUrl(me.url);
+        view.down('portrait').beFileData(xdata.get('filetype'));
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {
@@ -129,7 +128,6 @@ Ext.define( 'iAdmin.view.input.InputController', {
         view.reset();
 
         view.down('tabpanel').setActiveTab(0);
-        view.down('textfield[name=name]').setReadColor(false);
         portrait.beFileData();
 
     }
