@@ -63,6 +63,9 @@ Ext.define( 'iAdmin.view.enums.EnumTypeListEdit', {
                                 fieldLabel: 'Descrição',
                                 name: 'description'
                             }, {
+                                fieldLabel: 'Tipo de filtro',
+                                name: 'filtertype'
+                            }, {
                                 height: 130,
                                 xtype: 'textareafield',
                                 fieldLabel: 'Observação',

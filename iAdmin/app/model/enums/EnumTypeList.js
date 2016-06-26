@@ -20,6 +20,9 @@ Ext.define( 'iAdmin.model.enums.EnumTypeList', {
             name: 'code',
             type: 'auto'
         }, {
+            name: 'filtertype',
+            type: 'auto'
+        }, {
             name: 'description',
             type: 'auto'
         }, {

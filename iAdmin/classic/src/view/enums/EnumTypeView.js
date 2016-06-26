@@ -150,6 +150,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                 region: 'center',
                 cls: 'list-grid',
                 hideHeaders: false,
+                headerBorders: false,
                 xtype: 'gridpanel',
                 store: 'enumtypelist',
                 columns: [
@@ -159,10 +160,17 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                         dataIndex: 'code',
                         align: 'center'
                     }, {
+                        sortable: false,
                         flex: 1,
                         text: 'Descrição',
                         dataIndex: 'description'
                     }, {
+                        sortable: false,
+                        width: 200,
+                        text: 'Tipo de filtro',
+                        dataIndex: 'filtertype'
+                    }, {
+                        sortable: false,
                         text: 'Ações',
                         width: 90,
                         xtype: 'actioncolumn',

@@ -43,6 +43,7 @@ Ext.define( 'iAdmin.view.input.InputPresentation', {
         me.columns = [
             {
                 flex: 1,
+                sortable: false,
                 text: 'Apresentação',
                 dataIndex: 'presentationdescription',
                 renderer: function (value,metaData,record) {
@@ -52,15 +53,18 @@ Ext.define( 'iAdmin.view.input.InputPresentation', {
             }, {
                 width: 100,
                 text: 'Sigla',
+                sortable: false,
                 dataIndex: 'acronym',
                 editor: {
                     allowBlank: false,
                     xtype: 'textfield',
+                    maxLength: 3,
                     fieldCls: 'smart-field-style-action'
                 }
             }, {
                 width: 100,
                 align: 'right',
+                sortable: false,
                 text: 'ValorBase',
                 dataIndex: 'measurebase',
                 renderer: Smart.maskRenderer('0,000',true),

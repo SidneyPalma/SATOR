@@ -27,6 +27,12 @@ class enumtypelist extends \Smart\Data\Model {
     private $code;
 
     /**
+     * @Policy {"nullable":false, "length":50}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $filtertype;
+
+    /**
      * @Policy {"nullable":false, "length":80}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -95,6 +101,22 @@ class enumtypelist extends \Smart\Data\Model {
      */
     public function setCode($code) {
         $this->code = $code;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getFiltertype() {
+        return $this->filtertype;
+    }
+
+    /**
+     * @param type $filtertype
+     * @return \iAdmin\Model\enumtypelist
+     */
+    public function setFiltertype($filtertype) {
+        $this->filtertype = $filtertype;
         return $this;
     }
 

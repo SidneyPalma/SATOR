@@ -59,7 +59,11 @@ Ext.define( 'iAdmin.view.input.InputController', {
 
         Ext.getStore('inputpresentation').setParams({
             query: xdata.get('id')
-        }).load();
+        }).load({
+            callback: function () {
+                me.filterStore(true);
+            }
+        });
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {
