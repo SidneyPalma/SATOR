@@ -366,7 +366,6 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                         flex: 3,
                                         height: 200,
                                         margin: '10 0 0 0',
-                                        // style: 'border: solid 1px #d0d0d0;',
                                         xtype: 'inputpresentation'
                                     }, {
                                         flex: 2,
@@ -377,6 +376,10 @@ Ext.define( 'iAdmin.view.input.InputView', {
                         ]
                     }, {
                         tabIndex: 1,
+                        iconCls: "fa fa-picture-o",
+                        title: 'Movimentação'
+                    }, {
+                        tabIndex: 2,
                         iconCls: "fa fa-picture-o",
                         title: 'Imagem',
                         xtype: 'panel',
