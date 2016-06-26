@@ -345,6 +345,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                                 margin: '0 0 0 5',
                                                 fieldLabel: 'Unidades',
                                                 xtype: 'textfield',
+                                                name: 'onlyusefilter',
                                                 listeners: {
                                                     change: 'storeField'
                                                 }

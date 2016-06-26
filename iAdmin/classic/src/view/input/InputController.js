@@ -121,6 +121,7 @@ Ext.define( 'iAdmin.view.input.InputController', {
 
         me._success = function (form, action) {
             if(action.result.crud == 'insert') {
+                view.down('textfield[name=onlyusefilter]').setValue('');
                 view.down('checkboxfield[name=onlyusefilter]').setValue(0);
                 view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
                 Ext.getStore('inputpresentation').setParams({
@@ -143,6 +144,7 @@ Ext.define( 'iAdmin.view.input.InputController', {
         view.down('tabpanel').setActiveTab(0);
         portrait.beFileData();
         grid.getStore().removeAll();
+        view.down('textfield[name=onlyusefilter]').setValue('');
         view.down('checkboxfield[name=onlyusefilter]').setValue(0);
     },
 
