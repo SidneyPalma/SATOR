@@ -64,6 +64,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                 scrollable: 'y',
                 cls: "smart-background-transparent",
                 plugins: [
+                    'formenter',
                     'smartregion'
                 ],
                 responsiveConfig: {
@@ -127,6 +128,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                             }
                         ]
                     }, {
+                        allowBlank: false,
                         xtype: 'inputsearch',
                         fieldLabel: 'Insumo',
                         hiddenNameId: 'inputid',
@@ -136,7 +138,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            allowBlank: true,
+                            allowBlank: false,
                             fieldCls: 'sub-title-label'
                         },
                         items: [
