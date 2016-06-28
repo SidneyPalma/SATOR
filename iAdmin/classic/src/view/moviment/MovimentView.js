@@ -9,6 +9,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
         'Smart.plugins.*',
         'Ext.panel.Panel',
         'iAdmin.store.moviment.*',
+        'iAdmin.view.input.InputSearch',
         'iAdmin.view.moviment.MovimentController'
     ],
 
@@ -126,23 +127,33 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                             }
                         ]
                     }, {
-                        fieldLabel: 'Insumo'
+                        xtype: 'inputsearch',
+                        fieldLabel: 'Insumo',
+                        hiddenNameId: 'inputid',
+                        name: 'inputname'
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
+                            allowBlank: true,
                             fieldCls: 'sub-title-label'
                         },
                         items: [
                             {
                                 flex: 3,
-                                fieldLabel: 'Apresentação'
-                            }, {
-                                xtype: 'splitter'
+                                margin: '0 5 0 0',
+                                xtype: 'comboenum',
+                                fieldLabel: 'Apresentação',
+                                name: 'presentationdescription'
                             }, {
                                 flex: 2,
-                                fieldLabel: 'Quantidade'
+                                margin: '0 0 0 5',
+                                name: 'quantity',
+                                fieldLabel: 'Quantidade',
+                                plugins: 'textmask',
+                                mask: '0,000',
+                                money: true
                             }
                         ]
                     }, {
@@ -155,12 +166,17 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                         items: [
                             {
                                 flex: 3,
+                                margin: '0 5 0 0',
+                                name: 'lotpart',
                                 fieldLabel: 'Lote'
                             }, {
-                                xtype: 'splitter'
-                            }, {
                                 flex: 2,
-                                fieldLabel: 'Validade'
+                                fieldLabel: 'Validade',
+                                margin: '0 0 0 5',
+                                name: 'datevalidity',
+                                allowBlank: true,
+                                xtype: 'datefield',
+                                plugins: 'textmask'
                             }
                         ]
                     }, {
