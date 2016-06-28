@@ -5,7 +5,6 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
     xtype: 'movimentview',
 
     requires: [
-        'Ext.tab.*',
         'Smart.plugins.*',
         'Ext.panel.Panel',
         'iAdmin.store.moviment.*',
@@ -82,7 +81,8 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                 layout: 'anchor',
                 defaultType: 'textfield',
                 defaults: {
-                    anchor: '100%'
+                    anchor: '100%',
+                    fieldCls: 'smart-field-style-action'
                 },
                 items: [
                     {
@@ -139,7 +139,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                         defaultType: 'textfield',
                         defaults: {
                             allowBlank: false,
-                            fieldCls: 'sub-title-label'
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
@@ -163,7 +163,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            fieldCls: 'sub-title-label'
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
