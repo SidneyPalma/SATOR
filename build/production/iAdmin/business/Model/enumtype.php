@@ -19,7 +19,7 @@ class enumtype extends \Smart\Data\Model {
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $name;
-
+    
     /**
      * @Policy {"nullable":false, "length":80}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}

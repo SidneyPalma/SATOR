@@ -151,7 +151,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                         defaultType: 'button',
                         defaults: {
                             scale: 'large',
-                            showSmartTheme: 'red'
+                            showSmartTheme: 'red',
+                            style: 'font-size: 20px;'
                         },
                         items: [
                             {

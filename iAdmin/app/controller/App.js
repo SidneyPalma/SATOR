@@ -33,6 +33,9 @@ Ext.define( 'iAdmin.controller.App', {
         },
         'inputlist': {
             action: 'setInputList'
+        },
+        'movimentlist': {
+            action: 'setMovimentList'
         }
     },
 
@@ -99,6 +102,13 @@ Ext.define( 'iAdmin.controller.App', {
             rc = me.getMainTree().getSelection();
 
         me.onMainPageView({ xtype: 'inputlist', iconCls: rc.get("iconCls") });
+    },
+
+    setMovimentList: function () {
+        var me = this,
+            rc = me.getMainTree().getSelection();
+
+        me.onMainPageView({ xtype: 'movimentlist', iconCls: rc.get("iconCls") });
     }
 
     //routes ========================>

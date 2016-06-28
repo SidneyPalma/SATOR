@@ -56,7 +56,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeFlow', {
                         allowToggle: false,
                         defaults: {
                             scale: 'large',
-                            showSmartTheme: 'blue'
+                            showSmartTheme: 'blue',
+                            style: 'font-size: 24px;'
                         },
                         items: [
                             {
