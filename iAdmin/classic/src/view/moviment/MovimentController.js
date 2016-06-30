@@ -139,6 +139,61 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         me.updateRecord();
     },
 
+    changeView: function (btn) {
+        var me = this,
+            view = me.getView();
+
+        if(view.xdata.get('movimentstatus') == 'E') {
+            return false;
+        }
+
+        Ext.MessageBox.show({
+            scope: me,
+            icon: Ext.MessageBox.QUESTION,
+            title: 'Mudar Estatus',
+            msg: 'Confirma a operação de mudança de estatus?',
+            buttons: Ext.MessageBox.YESCANCEL,
+            buttonText: {
+                yes: view.xdata.get('movimentstatus') ? "Fechar movimento" : "Abrir movimento",
+                cancel: "Cancelar"
+            },
+            fn: function(button, text) {
+                if(button == 'yes') {
+                    me.statusView(btn,(view.xdata.get('movimentstatus') == 'A' ? 'F' : 'A'));
+                }
+            }
+        });
+    },
+
+    statusView: function (btn,movimentstatus) {
+        var me = this,
+            view = me.getView();
+
+        Ext.Ajax.request({
+            url: me.url,
+            params: {
+                action: 'update',
+                rows: Ext.encode({ id: view.xdata.get('id'), movimentstatus: movimentstatus })
+            },
+            success: function(response){
+                view.xdata.set('movimentstatus',movimentstatus);
+                view.xdata.commit();
+                btn.setIconCls(movimentstatus == 'F' ? "fa fa-times-circle" : "fa fa-check-circle");
+                view.down('form[name=moviment]').setDisabled(true);
+                // var result = Ext.decode(response.responseText);
+                // if(!record) return false;
+                // if(result.success == true) {
+                //     record.commit();
+                // } else {
+                //     record.reject();
+                // }
+            },
+            failure: function(response){
+                // if(record) record.reject();
+            }
+        });
+    },
+
     insertView: function () {
         var me = this,
             view = me.getView().down('form');

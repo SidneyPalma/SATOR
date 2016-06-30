@@ -100,12 +100,38 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                         text: 'Usuário',
                         dataIndex: 'username'
                     }, {
-                        width: 40,
+                        width: 90,
                         align: 'center',
                         xtype: 'actioncolumn',
-                        handler: 'onViewEdit',
-                        iconCls: "fa fa-pencil action-update-color",
-                        tooltip: 'Editar cadastro!'
+                        items: [
+                            {
+                                handler: '',
+                                getTip: function(v, meta, rec) {
+                                    if (rec.data.movimentstatus == 'F') {
+                                        return 'Encerrar lançamentos!';
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                getClass: function(v, meta, rec) {
+                                    if (rec.data.movimentstatus == 'F') {
+                                        return "fa fa-bars action-select-color";
+                                    } else {
+                                        return "";
+                                    }
+                                },
+                                isDisabled: function (view, rowIdx, colIdx, item, rec) {
+                                    return rec.data.movimentstatus != 'E';
+                                }
+                            }, {
+                                disabled: true,
+                                xtype: 'splitter'
+                            }, {
+                                handler: 'onViewEdit',
+                                iconCls: "fa fa-pencil action-update-color",
+                                tooltip: 'Editar cadastro!'
+                            }
+                        ]
                     }
                 ],
                 dockedItems: [

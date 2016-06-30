@@ -203,8 +203,31 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         }
                                     }
                                 ]
+                            }
+                        ]
+                    }, {
+                        margin: '20 0 0 0',
+                        xtype: 'container',
+                        layout: 'hbox',
+                        defaultType: 'button',
+                        defaults: {
+                            scale: 'large',
+                            showSmartTheme: 'red',
+                            style: 'font-size: 20px;'
+                        },
+                        items: [
+                            {
+                                flex: 1,
+                                iconCls: "fa fa-upload",
+                                text: 'Salvar',
+                                name: 'update',
+                                listeners: {
+                                    click: 'updateView'
+                                }
                             }, {
-                                margin: '20 0 0 0',
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
                                 xtype: 'container',
                                 layout: 'hbox',
                                 defaultType: 'button',
@@ -216,19 +239,15 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                 items: [
                                     {
                                         flex: 1,
-                                        iconCls: "fa fa-upload",
-                                        text: 'Salvar',
-                                        name: 'update',
-                                        listeners: {
-                                            click: 'updateView'
-                                        }
+                                        iconCls: "fa fa-print",
+                                        handler: 'printerView'
                                     }, {
                                         xtype: 'splitter'
                                     }, {
                                         flex: 1,
-                                        iconCls: "fa fa-print",
-                                        text: 'Imprimir',
-                                        handler: 'printerView'
+                                        iconCls: "fa fa-times-circle",
+                                        handler: 'changeView',
+                                        showSmartTheme: ''
                                     }
                                 ]
                             }
