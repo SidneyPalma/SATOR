@@ -48,19 +48,7 @@ class enumtype extends \Smart\Data\Cache {
         $description = $type . 'description';
         $proxy = $this->getStore()->getProxy();
 
-        switch ($filter) {
-            case 'stAll':
-                $filter = 2;
-                break;
-            case 'stIsActive':
-                $filter = 0;
-                break;
-            case 'stNoActive':
-                $filter = 1;
-                break;
-            default:
-                $filter = 2;
-        }
+        $filter = strlen($filter) != 0 ? "and etl.filtertype = '$filter'" : "";
 
         $sql = "
             select
@@ -70,8 +58,9 @@ class enumtype extends \Smart\Data\Cache {
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
             where et.name = :name
-              and etl.isactive != :filter
-              and etl.description LIKE :description
+              $filter
+              and etl.isactive = 1
+              and etl.description like :description
             order by etl.orderby, etl.description";
 
         try {
@@ -80,7 +69,6 @@ class enumtype extends \Smart\Data\Cache {
             $query = "%$query%";
 
             $pdo->bindValue(":name", $type, \PDO::PARAM_STR);
-            $pdo->bindValue(":filter", $filter, \PDO::PARAM_INT);
             $pdo->bindValue(":description", $query, \PDO::PARAM_STR);
 
             $pdo->execute();

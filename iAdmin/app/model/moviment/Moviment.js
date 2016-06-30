@@ -14,9 +14,21 @@ Ext.define( 'iAdmin.model.moviment.Moviment', {
             type: 'int',
             serializeType: 'auto'
         }, {
+            name: 'idformat',
+            type: 'auto',
+            convert: function (value, record) {
+                return Ext.String.leftPad(record.get('id'), 6, '0');
+            }
+        }, {
             name: 'movimentdate',
             type: 'auto',
             serializeType: 'date'
+        }, {
+            name: 'movimentdateformat',
+            type: 'auto',
+            convert: function (value, record) {
+                return Ext.util.Format.date(Ext.Date.parse(record.get('movimentdate'),'Y-m-d'),'d/m/Y');
+            }
         }, {
             name: 'username',
             type: 'auto'

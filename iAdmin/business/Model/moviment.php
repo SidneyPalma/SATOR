@@ -33,6 +33,12 @@ class moviment extends \Smart\Data\Model {
     private $movimenttype;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,movimenttype"}
+     */
+    private $movimenttypedescription;
+
+    /**
      * @Policy {"nullable":false, "length":20}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -45,10 +51,22 @@ class moviment extends \Smart\Data\Model {
     private $documenttype;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,documenttype"}
+     */
+    private $documenttypedescription;
+
+    /**
      * @Policy {"nullable":false, "length":1}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"L"}
      */
     private $movimentstatus;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,movimentstatus"}
+     */
+    private $movimentstatusdescription;
 
     /**
      * @return type integer

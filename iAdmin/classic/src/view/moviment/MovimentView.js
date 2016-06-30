@@ -9,6 +9,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
         'Ext.panel.Panel',
         'iAdmin.store.moviment.*',
         'iAdmin.view.input.InputSearch',
+        'iAdmin.view.moviment.MovimentItem',
         'iAdmin.view.moviment.MovimentController'
     ],
 
@@ -40,7 +41,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
     },
 
     listeners: {
-        // afterrender: 'onAfterRenderView'
+        afterrender: 'onAfterRenderView'
     },
 
     initComponent: function () {
@@ -88,7 +89,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                     {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Movimento: Entrada'
+                        text: 'Movimento'
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
@@ -100,16 +101,14 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                         items: [
                             {
                                 fieldLabel: 'Código',
-                                name: 'id',
-                                value: '0000'
+                                name: 'idformat'
                             }, {
                                 fieldLabel: 'Data',
-                                name: 'movimentdate',
-                                value: '27/06/2016'
+                                name: 'movimentdateformat'
                             }
                         ]
                     }, {
-                        xtype: 'container',
+                        xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'displayfield',
                         defaults: {
@@ -119,99 +118,127 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                         items: [
                             {
                                 fieldLabel: 'Tipo Movimento',
-                                name: 'movimenttype',
-                                value: 'Entrada'
+                                name: 'movimenttypedescription'
                             }, {
                                 fieldLabel: 'Tipo Documento',
-                                name: 'documenttype',
-                                value: '1906549 - NF'
+                                name: 'documenttypedescription'
                             }
                         ]
                     }, {
-                        allowBlank: false,
-                        xtype: 'inputsearch',
-                        fieldLabel: 'Insumo',
-                        hiddenNameId: 'inputid',
-                        name: 'inputname'
-                    }, {
-                        xtype: 'container',
-                        layout: 'hbox',
+                        xtype: 'form',
+                        name: 'moviment',
+                        layout: 'anchor',
                         defaultType: 'textfield',
+                        cls: "smart-background-transparent",
                         defaults: {
-                            allowBlank: false,
-                            fieldCls: 'smart-field-style-action'
+                            anchor: '100%'
                         },
                         items: [
                             {
-                                flex: 3,
-                                margin: '0 5 0 0',
-                                xtype: 'comboenum',
-                                fieldLabel: 'Apresentação',
-                                name: 'presentationdescription'
-                            }, {
-                                flex: 2,
-                                margin: '0 0 0 5',
-                                name: 'quantity',
-                                fieldLabel: 'Quantidade',
-                                plugins: 'textmask',
-                                mask: '0,000',
-                                money: true
-                            }
-                        ]
-                    }, {
-                        xtype: 'container',
-                        layout: 'hbox',
-                        defaultType: 'textfield',
-                        defaults: {
-                            fieldCls: 'smart-field-style-action'
-                        },
-                        items: [
-                            {
-                                flex: 3,
-                                margin: '0 5 0 0',
-                                name: 'lotpart',
-                                fieldLabel: 'Lote'
-                            }, {
-                                flex: 2,
-                                fieldLabel: 'Validade',
-                                margin: '0 0 0 5',
-                                name: 'datevalidity',
                                 allowBlank: true,
-                                xtype: 'datefield',
-                                plugins: 'textmask'
-                            }
-                        ]
-                    }, {
-                        margin: '20 0 0 0',
-                        xtype: 'container',
-                        layout: 'hbox',
-                        defaultType: 'button',
-                        defaults: {
-                            scale: 'large',
-                            showSmartTheme: 'red',
-                            style: 'font-size: 20px;'
-                        },
-                        items: [
-                            {
-                                flex: 1,
-                                iconCls: "fa fa-upload",
-                                text: 'Salvar'
-                                //handler: 'updateView'
+                                xtype: 'hiddenfield',
+                                name: 'id'
                             }, {
-                                xtype: 'splitter'
+                                xtype: 'hiddenfield',
+                                name: 'movimentid'
                             }, {
-                                flex: 1,
-                                iconCls: "fa fa-upload",
-                                text: 'Imprimir'
-                                //handler: 'updateView'
+                                allowBlank: false,
+                                xtype: 'inputsearch',
+                                fieldLabel: 'Insumo',
+                                hiddenNameId: 'inputid',
+                                name: 'inputname'
+                            }, {
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaults: {
+                                    allowBlank: false
+                                },
+                                items: [
+                                    {
+                                        flex: 3,
+                                        margin: '0 5 0 0',
+                                        xtype: 'comboenum',
+                                        fieldLabel: 'Apresentação',
+                                        name: 'presentationdescription'
+                                    }, {
+                                        flex: 2,
+                                        margin: '0 0 0 5',
+                                        xtype: 'textfield',
+                                        name: 'quantity',
+                                        fieldLabel: 'Quantidade',
+                                        plugins: 'textmask',
+                                        mask: '0,000',
+                                        money: true
+                                    }
+                                ]
+                            }, {
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaults: {
+                                    allowBlank: false
+                                },
+                                items: [
+                                    {
+                                        flex: 3,
+                                        xtype: 'textfield',
+                                        margin: '0 5 0 0',
+                                        name: 'lotpart',
+                                        fieldLabel: 'Lote'
+                                    }, {
+                                        flex: 2,
+                                        fieldLabel: 'Validade',
+                                        margin: '0 0 0 5',
+                                        name: 'datevalidity',
+                                        allowBlank: true,
+                                        xtype: 'datefield',
+                                        plugins: 'textmask',
+                                        listeners: {
+                                            specialkey: function (field, e, eOpts) {
+                                                if (e.getKey() === e.ENTER) {
+                                                    var button = field.up('form[name=moviment]').down('button[name=update]');
+                                                    field.blur();
+                                                    button.fireEvent('click', button);
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }, {
+                                margin: '20 0 0 0',
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaultType: 'button',
+                                defaults: {
+                                    scale: 'large',
+                                    showSmartTheme: 'red',
+                                    style: 'font-size: 20px;'
+                                },
+                                items: [
+                                    {
+                                        flex: 1,
+                                        iconCls: "fa fa-upload",
+                                        text: 'Salvar',
+                                        name: 'update',
+                                        listeners: {
+                                            click: 'updateView'
+                                        }
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 1,
+                                        iconCls: "fa fa-print",
+                                        text: 'Imprimir',
+                                        handler: 'printerView'
+                                    }
+                                ]
                             }
                         ]
                     }
                 ]
             }, {
                 flex: 3,
-                xtype: 'panel',
                 region: 'center',
+                xtype: 'movimentitem',
                 focusOnToFront: false,
                 deferredRender: false
             }

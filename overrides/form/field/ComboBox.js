@@ -42,7 +42,6 @@ Ext.define( 'Ext.overrides.form.field.ComboBox', {
 
         if (name) {
             comp.down('hiddenfield[name=' + name + ']').setValue(combo.getValue());
-            //combo.setValue(combo.getRawValue());
         }
     },
 

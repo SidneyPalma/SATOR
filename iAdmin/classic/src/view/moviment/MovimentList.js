@@ -66,28 +66,39 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                 },
                 columns: [
                     {
+                        width: 120,
+                        text: 'Código',
+                        align: 'center',
+                        dataIndex: 'id',
+                        renderer: function (value, metaData, record) {
+                            return Ext.String.leftPad(value, 6, '0');
+                        }
+                    }, {
+                        text: 'Data',
+                        dataIndex: 'movimentdate',
+                        align: 'center',
+                        width: 100,
+                        xtype: 'datecolumn'
+                    }, {
                         flex: 1,
-                        text: 'Nome do Insumo',
-                        dataIndex: 'name'
+                        text: 'Tipo de Movimento',
+                        dataIndex: 'movimenttypedescription'
                     }, {
-                        width: 180,
-                        text: 'Fabricante',
-                        dataIndex: 'manufacturername'
-                    }, {
-                        width: 140,
-                        text: 'Fornecedor',
-                        dataIndex: 'providername'
+                        flex: 1,
+                        text: 'Tipo de Documento',
+                        dataIndex: 'documenttypedescription'
                     }, {
                         width: 120,
-                        text: 'Apresentação',
-                        dataIndex: 'presentationdescription'
+                        text: 'Documento',
+                        dataIndex: 'documentnumber'
                     }, {
-                        width: 100,
-                        text: 'Ativo',
-                        readOnly: true,
-                        dataIndex: 'isactive',
-                        align: 'center',
-                        xtype: 'checkcolumn'
+                        width: 120,
+                        text: 'Status',
+                        dataIndex: 'movimentstatusdescription'
+                    }, {
+                        width: 120,
+                        text: 'Usuário',
+                        dataIndex: 'username'
                     }, {
                         width: 40,
                         align: 'center',
@@ -110,7 +121,15 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                                 reference: 'search',
                                 showFetch: true
                             }, {
-                                xtype: 'splitter'
+                                width: 120,
+                                showClear: true,
+                                margin: '0 10 0 10',
+                                xtype: 'comboenum',
+                                name: 'movimentstatusdescription',
+                                listeners: {
+                                    showclear: 'showClear',
+                                    select: 'selectResultState'
+                                }
                             }, {
                                 xtype: 'button',
                                 iconCls: "fa fa-file-o",

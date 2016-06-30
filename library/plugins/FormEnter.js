@@ -13,34 +13,29 @@ Ext.define( 'Smart.plugins.FormEnter', {
 
     alias : 'plugin.formenter',
 
-    init: function (form)
-    {
+    init: function (form) {
         this.form = form;
         this.form.on('render', this.onFormRender, this);
     },
 
-    onFormRender: function()
-    {
+    onFormRender: function()  {
         this.form.getEl().on('keyup', this.onFormElKeyUp, this)
     },
 
-    onFormElKeyUp: function(e, el)
-    {
+    onFormElKeyUp: function(e, el) {
         if (e.getKey() === e.ENTER) {
-            var fields = this.form.getForm().getFields(),
-                index  = fields.findIndex('name', el.getAttribute('name')),
-                nField = null;
+            var nField = null,
+                fields = this.form.getForm().getFields(),
+                index  = fields.findIndex('id', el.getAttribute('data-componentid'));
 
-            do
-            {
+            do {
                 nField = fields.getAt(e.hasModifier() ? --index : ++index);
-            }
-            while (!this.focusIf(nField, true, true) && index < fields.length && index >= 0)
+            } while (!this.focusIf(nField, true, true) && index < fields.length && index >= 0)
         }
     },
 
-    focusIf: function(field, select, delay)
-    {
+    focusIf: function(field, select, delay) {
+
         if(!(Ext.isEmpty(field) || field.isHidden() || field.isDisabled() || field.isXType('hiddenfield'))) {
             return field.focus(select, delay);
         }

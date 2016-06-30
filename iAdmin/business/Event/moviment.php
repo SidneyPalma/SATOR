@@ -11,6 +11,9 @@ class moviment extends \Smart\Data\Event {
      */
     public function preInsert( \iAdmin\Model\moviment &$model ) {
         Session::hasProfile('','');
+        $username = $this->session->username;
+        $model->set('username',$username);
+        $model->set('movimentstatus','A');
     }
 
     /**

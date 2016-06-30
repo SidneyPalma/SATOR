@@ -12,6 +12,12 @@ Ext.define( 'iAdmin.store.moviment.Moviment', {
 
     url: '../iAdmin/business/Calls/moviment.php',
 
-    model: 'iAdmin.model.moviment.Moviment'
+    model: 'iAdmin.model.moviment.Moviment',
+
+    config: {
+        extraParams: {
+            params: Ext.encode(['id','username','movimentdate'])
+        }
+    }
 
 });

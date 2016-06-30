@@ -14,20 +14,13 @@ Ext.define( 'Smart.form.field.ComboEnum', {
     editable: false,
     fieldLabel: null,
     submitValue: true,
-    queryFilter: 'stAll',
-
-    setQueryFilter: function (filter) {
-        var me = this,
-            params = me.getStore().getParams();
-
-        me.queryFilter = filter;
-        me.getStore().setParams(Ext.merge(params, { filter: filter }));
-    },
+    selectRecord: true,
 
     config: {
+        queryFilter: '',
         url: '../iAdmin/business/Calls/enumtype.php',
         params: {
-            filter: 'stAll',
+            filter: '',
             action: 'select',
             method: 'selectEnum'
         }
@@ -42,12 +35,11 @@ Ext.define( 'Smart.form.field.ComboEnum', {
             name = me.getName(),
             hiddenName = name.replace('description','');
 
-        me.displayField = name;
         me.valueField   = hiddenName;
         me.params.type  = hiddenName;
         me.hiddenNameId = hiddenName;
+        me.displayField = me.getName();
         me.fields.push(name,hiddenName);
-        me.params.filter = me.queryFilter;
     },
 
     initComponent: function () {
@@ -62,14 +54,20 @@ Ext.define( 'Smart.form.field.ComboEnum', {
             me.store.filter(me.filterField.field,me.filterField.regex);
         }
 
-        me.on({
-            beforeselect: { fn: 'fnBeforeSelect', scope: me }
-        });
-
+        me.onAfter( 'select', me.fnEnumTypeSelect, me);
+        me.onBefore( 'beforequery', me.fnEnumTypeBeforeQuery, me);
     },
 
-    fnBeforeSelect: function ( combo, record, index, eOpts ) {
-        combo.setDisplayTpl(record.get(combo.displayField));
+    fnEnumTypeSelect: function ( combo, record, index, eOpts ) {
+        combo.setRawValue(record.get(combo.displayField));
+    },
+
+    fnEnumTypeBeforeQuery: function ( queryPlan , eOpts ) {
+         var me = this;
+
+        delete queryPlan.combo.lastQuery;
+        queryPlan.combo.store.removeAll();
+        queryPlan.combo.store.setParams({ filter: me.getQueryFilter() });
     }
 
 });

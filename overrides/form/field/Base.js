@@ -6,6 +6,7 @@ Ext.define( 'Ext.overrides.form.field.Base', {
     labelAlign: 'top',
     labelSeparator: '',
 
+    enabledENTER: true,
     useLabelBold: true,
     useMondaFont: false,
     useReadColor: false,

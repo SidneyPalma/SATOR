@@ -31,29 +31,47 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
     },
 
     getMovimentNew: function() {
-        var app = Smart.app.getController('App');
+        var movimentnew = Ext.widget('movimentnew');
 
-        app.onMainPageView({xtype: 'movimentview', xdata: null});
+        movimentnew.show();
     },
 
     //routes ========================>
 
-    onAfterRenderView: function (view) {
-        var me = this,
-            xdata = view.xdata,
-            id = view.down('hiddenfield[name=id]').getValue();
+    selectResultState: function (combo,record,eOpts) {
+        var store = Ext.getStore('moviment');
 
+        store.clearFilter(true);
+        store.filter('movimentstatus', combo.getValue());
+    },
+
+    showClear: function (field, eOpts) {
+        var store = Ext.getStore('moviment');
+
+        store.removeFilter('movimentstatus');
+        store.clearFilter(true);
+    },
+
+    onAfterRenderView: function (view) {
+        var xdata = view.xdata,
+            first = view.down('inputsearch');
+
+        first.focus(false,200);
         if(!xdata) return false;
 
         view.loadRecord(xdata);
 
         Ext.getStore('movimentitem').setParams({
             query: xdata.get('id')
-        }).load({
-            callback: function () {
-                me.filterStore(true);
-            }
-        });
+        }).load();
+    },
+
+    onMovimentTypeChange: function (field, newValue , oldValue , eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('comboenum').reset();
+        view.down('comboenum').setQueryFilter(newValue.movimenttype);
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {
@@ -99,35 +117,51 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         me.redirectTo('movimentnew');
     },
 
-    updateView: function () {
+    updateView: function (btn) {
         var me = this,
-            view = me.getView();
+            view = btn.up('form'),
+            first = view.down('inputsearch');
+
+        view.down('hiddenfield[name=id]').reset();
+        view.down('hiddenfield[name=movimentid]').setValue(me.getView().xdata.get('id'));
+
+        me.setModuleForm(view);
+        me.setModuleData('movimentitem');
+
+        me._success = function (form, action) {
+            view.reset();
+            first.focus(false, 200);
+            Ext.getStore('movimentitem').setParams({
+                query: me.getView().xdata.get('id')
+            }).load();
+        }
+
+        me.updateRecord();
+    },
+
+    insertView: function () {
+        var me = this,
+            view = me.getView().down('form');
 
         me.setModuleForm(view);
         me.setModuleData('moviment');
 
         me._success = function (form, action) {
-            // if(action.result.crud == 'insert') {
-            //     view.down('textfield[name=onlyusefilter]').setValue('');
-            //     view.down('checkboxfield[name=onlyusefilter]').setValue(0);
-            //     view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
-            //     Ext.getStore('inputpresentation').setParams({
-            //         query: action.result.rows.id
-            //     }).load();
-            // }
+            me.getView().close();
+            if(action.result.crud == 'insert') {
+                Ext.getStore('moviment').setParams({
+                    method: 'selectCode',
+                    query: action.result.rows.id
+                }).load({
+                    scope: me,
+                    callback: function(records, operation, success) {
+                        me.redirectTo( 'movimentview/' + action.result.rows.id);
+                    }
+                });
+            }
         }
 
         me.updateModule();
-    },
-
-    insertView: function () {
-        var me = this,
-            view = me.getView(),
-            grid = view.down('movimentitem');
-
-        view.reset();
-
-        grid.getStore().removeAll();
     }
 
 });

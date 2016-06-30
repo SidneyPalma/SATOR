@@ -34,17 +34,17 @@
 *			money: true
  *		}]
  *	})
- * 
+ *
  * Temos a função setMask(mascara) que serve para mudar a mascara
  * depois que o objeto já estiver criado.
  **/
 Ext.define( 'Smart.plugins.TextMask', {
     extend: 'Ext.AbstractPlugin',
-        
+
     requires: [
         'Smart.ux.TextMaskCore'
     ],
-        
+
     alias	: "plugin.textmask",
     useMask	: true,
     date	: false,
@@ -142,7 +142,7 @@ Ext.define( 'Smart.plugins.TextMask', {
 
         this.inputEl.dom.value = this.textMask.mask(this.hiddenField.dom.value);
         this.setValue(this.value);
-        
+
         delete this.emptyText;
     },
     getKeyCode : function(onKeyDownEvent, type) {

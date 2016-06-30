@@ -35,14 +35,6 @@ Ext.define( 'Ext.overrides.app.BaseController', {
             return false;
         }
 
-        //if (o.clientValidation === false || fm.isValid()) {
-        //    fm.items.each(function (f) {
-        //        if (f.el.getValue() == f.emptyText) {
-        //            f.el.dom.value = '';
-        //        }
-        //    });
-        //}
-
         fm.setLoading('Salvando alterações...');
 
         if(idValue && record) {
@@ -102,7 +94,6 @@ Ext.define( 'Ext.overrides.app.BaseController', {
             fm = me.getModuleForm(),
             md = me.getModuleData(),
             values = fm.getValues(),
-            //values = fm.getValues(false,true,true),
             record = fm.getForm().getRecord(),
             idName = md.getProxy().getIdParam(),
             idValue = fm.getForm().findField(idName).getValue();
@@ -124,6 +115,9 @@ Ext.define( 'Ext.overrides.app.BaseController', {
         fm.setLoading('Salvando alterações...');
 
         if(idValue) {
+            if(!record) {
+                record = Ext.create(md.getProxy().getModel().getName());
+            }
             record.set(values);
             if( !record.modified || record.modified == {} ) {
                 fm.setLoading(false);
