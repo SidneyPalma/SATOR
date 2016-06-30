@@ -64,7 +64,6 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                 scrollable: 'y',
                 cls: "smart-background-transparent",
                 plugins: [
-                    'formenter',
                     'smartregion'
                 ],
                 responsiveConfig: {
@@ -125,89 +124,177 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                             }
                         ]
                     }, {
-                        xtype: 'form',
+                        xtype: 'container',
+                        layout: 'card',
                         name: 'moviment',
-                        layout: 'anchor',
-                        defaultType: 'textfield',
-                        cls: "smart-background-transparent",
                         defaults: {
-                            anchor: '100%'
+                            layout: 'anchor',
+                            defaultType: 'textfield',
+                            cls: "smart-background-transparent"
                         },
                         items: [
                             {
-                                allowBlank: true,
-                                xtype: 'hiddenfield',
-                                name: 'id'
-                            }, {
-                                xtype: 'hiddenfield',
-                                name: 'movimentid'
-                            }, {
-                                disabled: true,
-                                allowBlank: false,
-                                name: 'cmeareasname',
-                                hiddenNameId: 'cmeareasid',
-                                fieldLabel: 'Área CME',
-                                xtype: 'cmeareassearch'
-                            }, {
-                                allowBlank: false,
-                                xtype: 'inputsearch',
-                                fieldLabel: 'Insumo',
-                                hiddenNameId: 'inputid',
-                                name: 'inputname'
-                            }, {
-                                xtype: 'container',
-                                layout: 'hbox',
+                                xtype: 'form',
+                                plugins: [
+                                    'formenter'
+                                ],
+                                name: 'movimententer',
                                 defaults: {
-                                    allowBlank: false
+                                    anchor: '100%'
                                 },
                                 items: [
                                     {
-                                        flex: 3,
-                                        margin: '0 5 0 0',
-                                        xtype: 'comboenum',
-                                        fieldLabel: 'Apresentação',
-                                        name: 'presentationdescription'
+                                        allowBlank: true,
+                                        xtype: 'hiddenfield',
+                                        name: 'id'
                                     }, {
-                                        flex: 2,
-                                        margin: '0 0 0 5',
-                                        xtype: 'textfield',
-                                        name: 'quantity',
-                                        fieldLabel: 'Quantidade',
-                                        plugins: 'textmask',
-                                        mask: '0,000',
-                                        money: true
+                                        xtype: 'hiddenfield',
+                                        name: 'movimentid'
+                                    }, {
+                                        allowBlank: false,
+                                        xtype: 'inputsearch',
+                                        fieldLabel: 'Insumo',
+                                        hiddenNameId: 'inputid',
+                                        name: 'inputname'
+                                    }, {
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            allowBlank: false
+                                        },
+                                        items: [
+                                            {
+                                                flex: 3,
+                                                margin: '0 5 0 0',
+                                                xtype: 'comboenum',
+                                                fieldLabel: 'Apresentação',
+                                                name: 'presentationdescription'
+                                            }, {
+                                                flex: 2,
+                                                margin: '0 0 0 5',
+                                                xtype: 'textfield',
+                                                name: 'quantity',
+                                                fieldLabel: 'Quantidade',
+                                                plugins: 'textmask',
+                                                mask: '0,000',
+                                                money: true
+                                            }
+                                        ]
+                                    }, {
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            allowBlank: false
+                                        },
+                                        items: [
+                                            {
+                                                flex: 3,
+                                                xtype: 'textfield',
+                                                margin: '0 5 0 0',
+                                                name: 'lotpart',
+                                                fieldLabel: 'Lote'
+                                            }, {
+                                                flex: 2,
+                                                fieldLabel: 'Validade',
+                                                margin: '0 0 0 5',
+                                                name: 'datevalidity',
+                                                allowBlank: false,
+                                                xtype: 'datefield',
+                                                plugins: 'textmask',
+                                                listeners: {
+                                                    specialkey: function (field, e, eOpts) {
+                                                        if (e.getKey() === e.ENTER) {
+                                                            var view = field.up('movimentview'),
+                                                                button = view.down('button[name=update]');
+
+                                                            field.blur();
+                                                            button.fireEvent('click', button);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
                                     }
                                 ]
                             }, {
-                                xtype: 'container',
-                                layout: 'hbox',
+                                xtype: 'form',
+                                plugins: [
+                                    'formenter'
+                                ],
+                                name: 'movimentleave',
                                 defaults: {
-                                    allowBlank: false
+                                    anchor: '100%'
                                 },
                                 items: [
                                     {
-                                        flex: 3,
-                                        xtype: 'textfield',
-                                        margin: '0 5 0 0',
-                                        name: 'lotpart',
-                                        fieldLabel: 'Lote'
-                                    }, {
-                                        flex: 2,
-                                        fieldLabel: 'Validade',
-                                        margin: '0 0 0 5',
-                                        name: 'datevalidity',
                                         allowBlank: true,
-                                        xtype: 'datefield',
-                                        plugins: 'textmask',
-                                        listeners: {
-                                            specialkey: function (field, e, eOpts) {
-                                                if (e.getKey() === e.ENTER) {
-                                                    var button = field.up('form[name=moviment]').down('button[name=update]');
-                                                    field.blur();
-                                                    button.fireEvent('click', button);
-                                                }
+                                        xtype: 'hiddenfield',
+                                        name: 'id'
+                                    }, {
+                                        xtype: 'hiddenfield',
+                                        name: 'movimentid'
+                                    }, {
+                                        xtype: 'hiddenfield',
+                                        name: 'cmeareasid'
+                                    }, {
+                                        useReadColor: true,
+                                        name: 'cmeareasname',
+                                        fieldLabel: 'Área CME',
+                                        fieldCls: 'smart-field-style-action'
+                                    }, {
+                                        allowBlank: false,
+                                        xtype: 'inputsearch',
+                                        fieldLabel: 'Insumo',
+                                        hiddenNameId: 'inputid',
+                                        name: 'inputname'
+                                    }, {
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            allowBlank: false
+                                        },
+                                        items: [
+                                            {
+                                                flex: 2,
+                                                margin: '0 5 0 0',
+                                                xtype: 'textfield',
+                                                name: 'quantity',
+                                                fieldLabel: 'Quantidade',
+                                                plugins: 'textmask',
+                                                mask: '0,000',
+                                                money: true
+                                            }, {
+                                                flex: 3,
+                                                margin: '0 0 0 5',
+                                                fieldCls: 'sub-title-label',
+                                                xtype: 'displayfield',
+                                                fieldLabel: 'Apresentação',
+                                                name: 'presentationdescription',
+                                                value: '...'
                                             }
-                                        }
+                                        ]
+                                    }, {
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaultType: 'displayfield',
+                                        defaults: {
+                                            fieldCls: 'sub-title-label'
+                                        },
+                                        items: [
+                                            {
+                                                flex: 2,
+                                                margin: '0 5 0 0',
+                                                fieldLabel: 'Validade',
+                                                name: 'datevalidity',
+                                                value: '...'
+                                            }, {
+                                                flex: 3,
+                                                margin: '0 0 0 5',
+                                                name: 'lotpart',
+                                                fieldLabel: 'Lote',
+                                                value: '...'
+                                            }
+                                        ]
                                     }
                                 ]
                             }

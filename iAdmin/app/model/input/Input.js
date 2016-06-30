@@ -44,14 +44,17 @@ Ext.define( 'iAdmin.model.input.Input', {
             name: 'codeanvisa',
             type: 'auto'
         }, {
-            name: 'controlstock',
-            type: 'int'
+            name: 'hasbatch',
+            type: 'boolean'
+        }, {
+            name: 'hasstock',
+            type: 'boolean'
         }, {
             name: 'isactive',
-            type: 'int'
+            type: 'boolean'
         }, {
-            name: 'mandatorytesting',
-            type: 'int'
+            name: 'reactive',
+            type: 'boolean'
         }, {
             name: 'minstock',
             type: 'auto'
@@ -64,9 +67,6 @@ Ext.define( 'iAdmin.model.input.Input', {
         }, {
             name: 'resetpoint',
             type: 'auto'
-        }, {
-            name: 'validityactivation',
-            type: 'int'
         }, {
             name: 'filedata',
             type: 'auto',

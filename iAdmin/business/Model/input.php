@@ -82,9 +82,15 @@ class input extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     */
+    private $hasbatch;
+
+    /**
+     * @Policy {"nullable":false}
      * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
      */
-    private $controlstock;
+    private $hasstock;
 
     /**
      * @Policy {"nullable":false}
@@ -96,7 +102,7 @@ class input extends \Smart\Data\Model {
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
      */
-    private $mandatorytesting;
+    private $reactive;
 
     /**
      * @Policy {"nullable":false}
@@ -271,16 +277,32 @@ class input extends \Smart\Data\Model {
     /**
      * @return type boolean
      */
-    public function getControlstock() {
-        return $this->controlstock;
+    public function getHasbatch() {
+        return $this->hasbatch;
     }
 
     /**
-     * @param type $controlstock
+     * @param type $hasbatch
      * @return \iAdmin\Model\input
      */
-    public function setControlstock($controlstock) {
-        $this->controlstock = $controlstock;
+    public function setHasbatch($hasbatch) {
+        $this->hasbatch = $hasbatch;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getHasstock() {
+        return $this->hasstock;
+    }
+
+    /**
+     * @param type $hasstock
+     * @return \iAdmin\Model\input
+     */
+    public function setHasstock($hasstock) {
+        $this->hasstock = $hasstock;
         return $this;
     }
 
@@ -303,16 +325,16 @@ class input extends \Smart\Data\Model {
     /**
      * @return type boolean
      */
-    public function getMandatorytesting() {
-        return $this->mandatorytesting;
+    public function getReactive() {
+        return $this->reactive;
     }
 
     /**
-     * @param type $mandatorytesting
+     * @param type $reactive
      * @return \iAdmin\Model\input
      */
-    public function setMandatorytesting($mandatorytesting) {
-        $this->mandatorytesting = $mandatorytesting;
+    public function setReactive($reactive) {
+        $this->reactive = $reactive;
         return $this;
     }
 

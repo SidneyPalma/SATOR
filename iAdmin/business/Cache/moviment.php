@@ -52,36 +52,4 @@ class moviment extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
-    public function selectCode(array $data) {
-        $query = $data['query'];
-        $proxy = $this->getStore()->getProxy();
-
-        $sql = "
-            SELECT
-                m.*,
-                a.name as cmeareasname
-            FROM
-                moviment m
-                left join cmeareas ca on ( ca.id = m.cmeareasid )
-                left join areas a on ( a.id = ca.id )
-            WHERE m.id = :id";
-
-        try {
-            $pdo = $proxy->prepare($sql);
-
-            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
-
-            $pdo->execute();
-            $rows = $pdo->fetchAll();
-
-            self::_setRows($rows);
-
-        } catch ( \PDOException $e ) {
-            self::_setSuccess(false);
-            self::_setText($e->getMessage());
-        }
-
-        return self::getResultToJson();
-    }
-
 }

@@ -114,8 +114,9 @@ Ext.define( 'iAdmin.view.input.InputView', {
                         vertical: true,
                         xtype: 'checkboxgroup',
                         items: [
-                            { boxLabel: 'Teste obrigatório', name: 'mandatorytesting' },
-                            { boxLabel: 'Controla estoque', name: 'controlstock'},
+                            { boxLabel: 'Teste obrigatório', name: 'reactive' },
+                            { boxLabel: 'Possui estoque', name: 'hasstock'},
+                            { boxLabel: 'Possui lote', name: 'hasbatch'},
                             { boxLabel: 'Ativo', name: 'isactive' }
                         ]
                     }, {

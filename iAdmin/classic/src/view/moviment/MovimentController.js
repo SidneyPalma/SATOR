@@ -9,9 +9,6 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
     routes: {
         'movimentview/:id': {
             action: 'getMovimentId'
-        },
-        'movimentnew': {
-            action: 'getMovimentNew'
         }
     },
 
@@ -28,12 +25,6 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
             record = Ext.getStore('moviment').findRecord('id',id);
 
         app.onMainPageView({xtype: 'movimentview', xdata: record});
-    },
-
-    getMovimentNew: function() {
-        var movimentnew = Ext.widget('movimentnew');
-
-        movimentnew.show();
     },
 
     //routes ========================>
@@ -54,10 +45,13 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
     onAfterRenderView: function (view) {
         var xdata = view.xdata,
-            first = view.down('inputsearch');
+            first = view.down('inputsearch'),
+            layout = view.down('container[name=moviment]').getLayout();
 
         first.focus(false,200);
         if(!xdata) return false;
+
+        layout.setActiveItem(xdata.get('movimenttype') == 'E' ? 0 : 1);
 
         view.loadRecord(xdata);
 
@@ -113,25 +107,60 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         });
     },
 
-    insertViewNew: function (btn) {
-        var me = this;
-        me.redirectTo('movimentnew');
+    insertViewNew: function () {
+        Ext.widget('movimentnew').show();
     },
 
-    updateView: function (btn) {
+    updateView: function () {
+        var me = this;
+
+        switch(me.getView().xdata.get('movimenttype')) {
+            case 'E':
+                me.updateEnter();
+                break;
+            case 'S':
+                me.updateLeave();
+                break;
+        }
+
+    },
+
+    updateEnter: function () {
         var me = this,
-            view = btn.up('form'),
-            first = view.down('inputsearch');
+            view = me.getView(),
+            form = view.down('form[name=movimententer]');
 
-        view.down('hiddenfield[name=id]').reset();
-        view.down('hiddenfield[name=movimentid]').setValue(me.getView().xdata.get('id'));
+        form.down('hiddenfield[name=id]').reset();
+        form.down('hiddenfield[name=movimentid]').setValue(view.xdata.get('id'));
 
-        me.setModuleForm(view);
+        me.setModuleForm(form);
         me.setModuleData('movimentitem');
 
-        me._success = function (form, action) {
-            view.reset();
-            first.focus(false, 200);
+        me._success = function (frm, action) {
+            form.reset();
+            form.down('inputsearch').focus(false, 200);
+            Ext.getStore('movimentitem').setParams({
+                query: me.getView().xdata.get('id')
+            }).load();
+        }
+
+        me.updateRecord();
+    },
+
+    updateLeave: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form[name=movimentleave]');
+
+        form.down('hiddenfield[name=id]').reset();
+        form.down('hiddenfield[name=movimentid]').setValue(view.xdata.get('id'));
+
+        me.setModuleForm(form);
+        me.setModuleData('movimentitem');
+
+        me._success = function (frm, action) {
+            form.reset();
+            //form.down('inputsearch').focus(false, 200);
             Ext.getStore('movimentitem').setParams({
                 query: me.getView().xdata.get('id')
             }).load();
@@ -180,7 +209,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
                 view.xdata.set('movimentstatus',movimentstatus);
                 view.xdata.commit();
                 btn.setIconCls(movimentstatus == 'F' ? "fa fa-times-circle" : "fa fa-check-circle");
-                view.down('form[name=moviment]').setDisabled(true);
+                view.down('form[name=movimententer]').setDisabled(true);
                 // var result = Ext.decode(response.responseText);
                 // if(!record) return false;
                 // if(result.success == true) {
@@ -203,15 +232,16 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         me.setModuleData('moviment');
 
         me._success = function (form, action) {
-            me.getView().close();
             if(action.result.crud == 'insert') {
                 Ext.getStore('moviment').setParams({
                     method: 'selectCode',
-                    query: action.result.rows.id
+                    rows: Ext.encode({ id: action.result.rows.id })
                 }).load({
                     scope: me,
                     callback: function(records, operation, success) {
-                        me.redirectTo( 'movimentview/' + action.result.rows.id);
+                        me.getView().close();
+                        var record = records[0];
+                        me.redirectTo( 'movimentview/' + record.get('id'));
                     }
                 });
             }
