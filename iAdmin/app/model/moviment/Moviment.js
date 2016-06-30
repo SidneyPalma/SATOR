@@ -14,6 +14,12 @@ Ext.define( 'iAdmin.model.moviment.Moviment', {
             type: 'int',
             serializeType: 'auto'
         }, {
+            name: 'cmeareasid',
+            type: 'int'
+        }, {
+            name: 'cmeareasname',
+            type: 'auto'
+        }, {
             name: 'idformat',
             type: 'auto',
             convert: function (value, record) {

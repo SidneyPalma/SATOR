@@ -16,7 +16,7 @@ Ext.define( 'iAdmin.store.moviment.Moviment', {
 
     config: {
         extraParams: {
-            params: Ext.encode(['id','username','movimentdate'])
+            params: Ext.encode(['username','movimentdate'])
         }
     }
 

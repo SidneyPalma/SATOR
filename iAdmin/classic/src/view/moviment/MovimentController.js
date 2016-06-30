@@ -72,6 +72,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
         view.down('comboenum').reset();
         view.down('comboenum').setQueryFilter(newValue.movimenttype);
+        view.down('cmeareassearch').setDisabled(newValue.movimenttype == 'E');
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {

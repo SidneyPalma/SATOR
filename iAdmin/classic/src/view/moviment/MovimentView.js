@@ -142,6 +142,13 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                 xtype: 'hiddenfield',
                                 name: 'movimentid'
                             }, {
+                                disabled: true,
+                                allowBlank: false,
+                                name: 'cmeareasname',
+                                hiddenNameId: 'cmeareasid',
+                                fieldLabel: 'Área CME',
+                                xtype: 'cmeareassearch'
+                            }, {
                                 allowBlank: false,
                                 xtype: 'inputsearch',
                                 fieldLabel: 'Insumo',

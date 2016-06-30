@@ -9,6 +9,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentNew', {
         'Smart.plugins.*',
         'Ext.window.Window',
         'Smart.form.field.ComboEnum',
+        'iAdmin.view.helper.areas.CMEAreasSearch',
         'iAdmin.view.moviment.MovimentController'
     ],
 
@@ -58,6 +59,13 @@ Ext.define( 'iAdmin.view.moviment.MovimentNew', {
                         listeners: {
                             change: 'onMovimentTypeChange'
                         }
+                    }, {
+                        disabled: true,
+                        allowBlank: false,
+                        name: 'cmeareasname',
+                        hiddenNameId: 'cmeareasid',
+                        fieldLabel: 'Área CME',
+                        xtype: 'cmeareassearch'
                     }, {
                         xtype: 'container',
                         layout: 'hbox',

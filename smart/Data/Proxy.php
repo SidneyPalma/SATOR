@@ -250,9 +250,10 @@ class Proxy extends \PDO {
 
     private function getNameSearch(array $params) {
         $field = $params[1];
-        $table = substr_replace($field, '', -2);
+        $fieldname = substr_replace($field, '', -2);
+        $table = isset($params[2]) ? $params[2] : substr_replace($field, '', -2);
 
-        $result = "{$table}name = ( SELECT name FROM {$table} WHERE id = {$field} )";
+        $result = "{$fieldname}name = ( SELECT name FROM {$table} WHERE id = {$field} )";
 
         return $result;
     }
