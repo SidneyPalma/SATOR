@@ -10,7 +10,9 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
         'iAdmin.store.moviment.*',
         'iAdmin.view.input.InputSearch',
         'iAdmin.view.moviment.MovimentItem',
-        'iAdmin.view.moviment.MovimentController'
+        'iAdmin.view.moviment.InputEnterSearch',
+        'iAdmin.view.moviment.MovimentController',
+        'iAdmin.view.moviment.InputPresentationSearch'
     ],
 
     layout: 'border',
@@ -152,26 +154,31 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         name: 'movimentid'
                                     }, {
                                         allowBlank: false,
-                                        xtype: 'inputsearch',
+                                        xtype: 'inputentersearch',
                                         fieldLabel: 'Insumo',
                                         hiddenNameId: 'inputid',
-                                        name: 'inputname'
+                                        name: 'inputname',
+                                        listeners: {
+                                            showclear: 'onShowClear',
+                                            select: 'onInputEnterSearch'
+                                        }
                                     }, {
                                         xtype: 'container',
-                                        layout: 'hbox',
+                                        layout: 'anchor',
                                         defaults: {
+                                            anchor: '100%',
                                             allowBlank: false
                                         },
                                         items: [
                                             {
-                                                flex: 3,
-                                                margin: '0 5 0 0',
-                                                xtype: 'comboenum',
+                                                xtype: 'inputpresentationsearch',
                                                 fieldLabel: 'Apresentação',
-                                                name: 'presentationdescription'
+                                                hiddenNameId: 'presentation',
+                                                name: 'presentationdescription',
+                                                listeners: {
+                                                    beforequery: 'onBeforeQueryInputPresentation'
+                                                }
                                             }, {
-                                                flex: 2,
-                                                margin: '0 0 0 5',
                                                 xtype: 'textfield',
                                                 name: 'quantity',
                                                 fieldLabel: 'Quantidade',
@@ -249,14 +256,13 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         name: 'inputname'
                                     }, {
                                         xtype: 'container',
-                                        layout: 'hbox',
+                                        layout: 'anchor',
                                         defaults: {
+                                            anchor: '100%',
                                             allowBlank: false
                                         },
                                         items: [
                                             {
-                                                flex: 2,
-                                                margin: '0 5 0 0',
                                                 xtype: 'textfield',
                                                 name: 'quantity',
                                                 fieldLabel: 'Quantidade',
@@ -264,8 +270,6 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                                 mask: '0,000',
                                                 money: true
                                             }, {
-                                                flex: 3,
-                                                margin: '0 0 0 5',
                                                 fieldCls: 'sub-title-label',
                                                 xtype: 'displayfield',
                                                 fieldLabel: 'Apresentação',
@@ -302,6 +306,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                     }, {
                         margin: '20 0 0 0',
                         xtype: 'container',
+                        name: 'tools',
                         layout: 'hbox',
                         defaultType: 'button',
                         defaults: {
@@ -311,7 +316,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                         },
                         items: [
                             {
-                                flex: 1,
+                                flex: 2,
                                 iconCls: "fa fa-upload",
                                 text: 'Salvar',
                                 name: 'update',
@@ -322,28 +327,14 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                xtype: 'container',
-                                layout: 'hbox',
-                                defaultType: 'button',
-                                defaults: {
-                                    scale: 'large',
-                                    showSmartTheme: 'red',
-                                    style: 'font-size: 20px;'
-                                },
-                                items: [
-                                    {
-                                        flex: 1,
-                                        iconCls: "fa fa-print",
-                                        handler: 'printerView'
-                                    }, {
-                                        xtype: 'splitter'
-                                    }, {
-                                        flex: 1,
-                                        iconCls: "fa fa-times-circle",
-                                        handler: 'changeView',
-                                        showSmartTheme: ''
-                                    }
-                                ]
+                                iconCls: "fa fa-print",
+                                handler: 'printerView'
+                            }, {
+                                flex: 1,
+                                name: 'change',
+                                iconCls: "fa fa-times-circle",
+                                handler: 'changeView',
+                                showSmartTheme: ''
                             }
                         ]
                     }

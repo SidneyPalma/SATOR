@@ -6,7 +6,7 @@ use iAdmin\Model\moviment as Model;
 
 class moviment extends \Smart\Data\Cache {
 
-    public function selectLike(array $data) {
+    public function selectLike_(array $data) {
         $p = $f = array();
         $query = $data['query'];
         $start = $data['start'];
@@ -37,6 +37,89 @@ class moviment extends \Smart\Data\Cache {
             foreach ($params as $key => $value) {
                 $pdo->bindValue(":$value", $query, \PDO::PARAM_STR);
             }
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectInputEnter(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                i.id,
+                i.name,
+                i.hasstock,
+                i.hasbatch,
+                m.name as manufacturername
+            from
+                input i
+                inner join manufacturer m on ( m.id = i.manufacturerid )
+            where i.name like :name
+              and i.isactive = 1";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $query = "%{$query}%";
+
+            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectInputPresentation(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $inputid = $data['inputid'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                ip.acronym,
+                ip.measurebase,
+                etl.code as presentation,
+                etl.description + ' (' + etl.filtertype + ')' as presentationdescription
+            from
+                enumtype et
+                inner join enumtypelist etl on ( etl.enumtypeid = et.id )
+                inner join inputpresentation ip on ( ip.presentation = etl.code and ip.inputid = :inputid)
+            where et.name = 'presentation'
+              and etl.description like :name 
+            order by etl.orderby";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $query = "%{$query}%";
+
+            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":inputid", $inputid, \PDO::PARAM_STR);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();

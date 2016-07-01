@@ -29,6 +29,25 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
     //routes ========================>
 
+    prepareView: function (movimentstatus,movimenttype) {
+        var me = this,
+            view = me.getView(),
+            layout = view.down('container[name=moviment]').getLayout();
+
+        layout.setActiveItem(movimenttype == 'E' ? 0 : 1);
+
+        me.setDisabledForm(movimentstatus,movimenttype);
+
+        view.down('button[name=change]').setVisible(movimentstatus != 'E');
+        view.down('button[name=update]').setDisabled(movimentstatus != 'A');
+        view.down('button[name=change]').setIconCls(movimentstatus == 'F' ? "fa fa-check-circle" : "fa fa-times-circle");
+
+        view.down('movimentitem').processing = true;
+        var header = view.down('movimentitem').headerCt.child('[name=action-record]');
+        header.setVisible(movimentstatus == 'A');
+        view.down('movimentitem').processing = false;
+    },
+
     selectResultState: function (combo,record,eOpts) {
         var store = Ext.getStore('moviment');
 
@@ -44,14 +63,12 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
     },
 
     onAfterRenderView: function (view) {
-        var xdata = view.xdata,
-            first = view.down('inputsearch'),
-            layout = view.down('container[name=moviment]').getLayout();
+        var me = this,
+            xdata = view.xdata,
+            movimenttype = xdata.get('movimenttype'),
+            movimentstatus = xdata.get('movimentstatus');
 
-        first.focus(false,200);
-        if(!xdata) return false;
-
-        layout.setActiveItem(xdata.get('movimenttype') == 'E' ? 0 : 1);
+        me.prepareView(movimentstatus,movimenttype);
 
         view.loadRecord(xdata);
 
@@ -107,6 +124,36 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         });
     },
 
+    onShowClear: function () {
+        var me = this,
+            view = me.getView(),
+            inputpresentationsearch = view.down('inputpresentationsearch');
+
+        inputpresentationsearch.reset();
+        delete inputpresentationsearch.lastQuery;
+        view.down('textfield[name=lotpart]').setDisabled(false);
+        view.down('datefield[name=datevalidity]').setDisabled(false);
+    },
+
+    onInputEnterSearch: function ( combo, record, eOpts ) {
+        var me = this,
+            view = me.getView();
+
+        me.onShowClear();
+        view.down('textfield[name=lotpart]').setDisabled(record.get('hasbatch') == '0');
+        view.down('datefield[name=datevalidity]').setDisabled(record.get('hasbatch') == '0');
+    },
+
+    onBeforeQueryInputPresentation: function ( queryPlan, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            combo = queryPlan.combo,
+            inputid = view.down('inputentersearch').getValue();
+
+        combo.store.removeAll();
+        combo.store.setParams({ inputid: inputid });
+    },
+
     insertViewNew: function () {
         Ext.widget('movimentnew').show();
     },
@@ -122,7 +169,6 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
                 me.updateLeave();
                 break;
         }
-
     },
 
     updateEnter: function () {
@@ -138,7 +184,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
         me._success = function (frm, action) {
             form.reset();
-            form.down('inputsearch').focus(false, 200);
+            form.down('inputentersearch').focus(false, 200);
             Ext.getStore('movimentitem').setParams({
                 query: me.getView().xdata.get('id')
             }).load();
@@ -160,7 +206,6 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
         me._success = function (frm, action) {
             form.reset();
-            //form.down('inputsearch').focus(false, 200);
             Ext.getStore('movimentitem').setParams({
                 query: me.getView().xdata.get('id')
             }).load();
@@ -184,7 +229,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
             msg: 'Confirma a operação de mudança de estatus?',
             buttons: Ext.MessageBox.YESCANCEL,
             buttonText: {
-                yes: view.xdata.get('movimentstatus') ? "Fechar movimento" : "Abrir movimento",
+                yes: view.xdata.get('movimentstatus') == 'A' ? "Fechar movimento" : "Abrir movimento",
                 cancel: "Cancelar"
             },
             fn: function(button, text) {
@@ -197,7 +242,8 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
     statusView: function (btn,movimentstatus) {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            movimenttype = view.xdata.get('movimenttype');
 
         Ext.Ajax.request({
             url: me.url,
@@ -208,18 +254,27 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
             success: function(response){
                 view.xdata.set('movimentstatus',movimentstatus);
                 view.xdata.commit();
-                btn.setIconCls(movimentstatus == 'F' ? "fa fa-times-circle" : "fa fa-check-circle");
-                view.down('form[name=movimententer]').setDisabled(true);
-                // var result = Ext.decode(response.responseText);
-                // if(!record) return false;
-                // if(result.success == true) {
-                //     record.commit();
-                // } else {
-                //     record.reject();
-                // }
-            },
-            failure: function(response){
-                // if(record) record.reject();
+                view.down('button[name=update]').setDisabled(movimentstatus != 'A');
+                btn.setIconCls(movimentstatus == 'F' ? "fa fa-check-circle" : "fa fa-times-circle" );
+                me.setDisabledForm(movimentstatus,movimenttype);
+
+                view.down('movimentitem').processing = true;
+                var header = view.down('movimentitem').headerCt.child('[name=action-record]');
+                header.setVisible(movimentstatus == 'A');
+                view.down('movimentitem').processing = false;
+            }
+        });
+    },
+
+    setDisabledForm: function (movimentstatus,movimenttype) {
+        var me = this,
+            type = movimenttype == 'E' ? 'form[name=movimententer]' : 'form[name=movimentleave]',
+            form = me.getView().down(type),
+            fields = form.getForm().getFields();
+
+        Ext.each(fields.items, function(field) {
+            if(!(Ext.isEmpty(field) || field.isHidden() || field.isXType('hiddenfield'))) {
+                field.setDisabled(movimentstatus == 'F');
             }
         });
     },
@@ -248,6 +303,94 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         }
 
         me.updateModule();
+    },
+
+    onDeleteItem: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+        var store = grid.getStore();
+
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    store.remove(record);
+                    store.sync({
+                        success: function (batch, options) {
+                            store.load();
+                        },
+                        failure: function (batch, options) {
+                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+                            store.rejectChanges();
+                            if(resultSet) {
+                                Ext.Msg.show({
+                                    title: 'Operação falhou!',
+                                    msg: resultSet.getMessage(),
+                                    buttons: Ext.Msg.CANCEL,
+                                    icon: Ext.Msg.WARNING
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        );
+    },
+
+    onUpdateItem: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+        var store = grid.getStore();
+
+        // Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+        //     function (choice) {
+        //         if (choice === 'yes') {
+        //             store.remove(record);
+        //             store.sync({
+        //                 success: function (batch, options) {
+        //                     store.load();
+        //                 },
+        //                 failure: function (batch, options) {
+        //                     var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+        //                     store.rejectChanges();
+        //                     if(resultSet) {
+        //                         Ext.Msg.show({
+        //                             title: 'Operação falhou!',
+        //                             msg: resultSet.getMessage(),
+        //                             buttons: Ext.Msg.CANCEL,
+        //                             icon: Ext.Msg.WARNING
+        //                         });
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     }
+        // );
+    },
+
+    windupView: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+        var store = grid.getStore();
+
+        Ext.Msg.confirm('Encerrar lançamentos', 'Confirma o encerramento do movimento selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    record.set('movimentstatus','E');
+                    store.sync({
+                        success: function (batch, options) {
+                            record.commit();
+                            //store.load();
+                        },
+                        failure: function (batch, options) {
+                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+                            store.rejectChanges();
+                            if(resultSet) {
+                                Ext.Msg.show({
+                                    title: 'Operação falhou!',
+                                    msg: resultSet.getMessage(),
+                                    buttons: Ext.Msg.CANCEL,
+                                    icon: Ext.Msg.WARNING
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        );
     }
 
 });

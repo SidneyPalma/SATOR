@@ -37,6 +37,9 @@ Ext.define( 'iAdmin.model.moviment.MovimentItem', {
             type: 'auto',
             serializeType: 'date'
         }, {
+            name: 'isactive',
+            type: 'int'
+        }, {
             name: 'lotpart',
             type: 'auto'
         }

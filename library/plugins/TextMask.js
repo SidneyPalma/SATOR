@@ -112,7 +112,7 @@ Ext.define( 'Smart.plugins.TextMask', {
         }, 'after');
 
         this.hiddenName = this.name;
-        this.inputEl.dom.removeAttribute('name');
+        //this.inputEl.dom.removeAttribute('name');
         this.enableKeyEvents = true;
 
         this.inputEl.on({

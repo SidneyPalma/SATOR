@@ -65,6 +65,36 @@ Ext.define( 'iAdmin.view.moviment.MovimentItem', {
                 sortable: false,
                 text: 'Lote N#',
                 dataIndex: 'lotpart'
+            }, {
+                width: 80,
+                align: 'center',
+                name: 'action-record',
+                xtype: 'actioncolumn',
+                items: [
+                    {
+                        handler: 'onUpdateItem',
+                        getTip: function(v, meta, rec) {
+                            var isactive = parseInt(rec.data.isactive);
+                            return (isactive == 0) ? "Confirmar lançamento!" : "";
+                        },
+                        getClass: function(v, meta, rec) {
+                            var isactive = parseInt(rec.data.isactive);
+                            return (isactive == 0) ? "fa fa-check-circle action-select-color" : "";
+                        },
+                        isDisabled: function (view, rowIdx, colIdx, item, rec) {
+                            var isactive = parseInt(rec.data.isactive);
+                            return (isactive == 1);
+                        }
+                    }, {
+                        width: 5,
+                        disabled: true,
+                        xtype: 'splitter'
+                    }, {
+                        handler: 'onDeleteItem',
+                        iconCls: "fa fa-times-circle action-delete-color",
+                        tooltip: 'Excluir lançamento!'
+                    }
+                ]
             }
         ];
     },

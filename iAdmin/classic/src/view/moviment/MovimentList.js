@@ -100,30 +100,25 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                         text: 'Usuário',
                         dataIndex: 'username'
                     }, {
-                        width: 90,
+                        width: 80,
                         align: 'center',
                         xtype: 'actioncolumn',
                         items: [
                             {
-                                handler: '',
+                                handler: 'windupView',
                                 getTip: function(v, meta, rec) {
-                                    if (rec.data.movimentstatus == 'F') {
-                                        return 'Encerrar lançamentos!';
-                                    } else {
-                                        return '';
-                                    }
+                                    var movimentstatus = rec.data.movimentstatus;
+                                    return movimentstatus == 'F' ? 'Encerrar lançamentos!' : "";
                                 },
                                 getClass: function(v, meta, rec) {
-                                    if (rec.data.movimentstatus == 'F') {
-                                        return "fa fa-bars action-select-color";
-                                    } else {
-                                        return "";
-                                    }
+                                    var movimentstatus = rec.data.movimentstatus;
+                                    return movimentstatus == 'F' ? "fa fa-check-circle-o action-select-color" : "";
                                 },
                                 isDisabled: function (view, rowIdx, colIdx, item, rec) {
-                                    return rec.data.movimentstatus != 'E';
+                                    return rec.data.movimentstatus != 'F';
                                 }
                             }, {
+                                width: 5,
                                 disabled: true,
                                 xtype: 'splitter'
                             }, {
