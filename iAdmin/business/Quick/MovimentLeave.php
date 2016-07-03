@@ -25,6 +25,8 @@ class MovimentLeave extends Report {
         $sql = "
             select
                 m.id,
+                m.cmeareasid,
+                a.name as cmeareasname,
                 m.movimentdate, 
                 m.username, 
                 dbo.getEnum('movimenttype',m.movimenttype) as movimenttypedescription,
@@ -40,6 +42,7 @@ class MovimentLeave extends Report {
                 mi.updated
             from
                 moviment m
+                inner join areas a on ( a.id = m.cmeareasid )
                 inner join movimentitem mi on ( mi.movimentid = m.id )
                 inner join input i on ( i.id = mi.inputid )
             where m.id = :id
@@ -70,6 +73,7 @@ class MovimentLeave extends Report {
         $this->squareWidth = intval($this->getInternalW() / 6);
 
         $id = $this->rows[0]['id'];
+        $cmeareasname = $this->rows[0]['cmeareasname'];
         $movimentdate = $this->rows[0]['movimentdate'];
         $movimenttypedescription = $this->rows[0]['movimenttypedescription'];
         $documenttypedescription = $this->rows[0]['documenttypedescription'];
@@ -87,6 +91,10 @@ class MovimentLeave extends Report {
         $this->Cell($this->squareWidth,7,'Documento:',0,0,'L',0);
         $this->configStyleHeader(10);
         $this->Cell($this->squareWidth*4,7,"$documenttypedescription - $movimentstatusdescription",0,1,'L',0);
+        $this->SetFont('Arial', '', 10);
+        $this->Cell($this->squareWidth,7,'CEMArea:',0,0,'L',0);
+        $this->configStyleHeader(10);
+        $this->Cell($this->squareWidth*4,7,$cmeareasname,0,1,'L',0);
         $this->Ln(1);
     }
 
