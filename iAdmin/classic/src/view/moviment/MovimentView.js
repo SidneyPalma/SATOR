@@ -159,8 +159,8 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         hiddenNameId: 'inputid',
                                         name: 'inputname',
                                         listeners: {
-                                            showclear: 'onShowClear',
-                                            select: 'onInputEnterSearch'
+                                            showclear: 'onShowClearEnter',
+                                            select: 'onInputEnterSelect'
                                         }
                                     }, {
                                         xtype: 'container',
@@ -244,16 +244,29 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         xtype: 'hiddenfield',
                                         name: 'cmeareasid'
                                     }, {
+                                        xtype: 'hiddenfield',
+                                        name: 'presentation'
+                                    }, {
+                                        xtype: 'hiddenfield',
+                                        name: 'datevalidity'
+                                    }, {
+                                        xtype: 'hiddenfield',
+                                        name: 'lotpart'
+                                    }, {
                                         useReadColor: true,
                                         name: 'cmeareasname',
                                         fieldLabel: 'Área CME',
                                         fieldCls: 'smart-field-style-action'
                                     }, {
                                         allowBlank: false,
-                                        xtype: 'inputsearch',
+                                        xtype: 'inputleavesearch',
                                         fieldLabel: 'Insumo',
                                         hiddenNameId: 'inputid',
-                                        name: 'inputname'
+                                        name: 'inputname',
+                                        listeners: {
+                                            showclear: 'onShowClearLeave',
+                                            select: 'onInputLeaveSelect'
+                                        }
                                     }, {
                                         xtype: 'container',
                                         layout: 'anchor',
@@ -263,7 +276,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         },
                                         items: [
                                             {
-                                                xtype: 'textfield',
+                                                xtype: 'numberfield',
                                                 name: 'quantity',
                                                 fieldLabel: 'Quantidade',
                                                 plugins: 'textmask',
@@ -289,12 +302,12 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                                 flex: 2,
                                                 margin: '0 5 0 0',
                                                 fieldLabel: 'Validade',
-                                                name: 'datevalidity',
+                                                name: 'clonedatevalidity',
                                                 value: '...'
                                             }, {
                                                 flex: 3,
                                                 margin: '0 0 0 5',
-                                                name: 'lotpart',
+                                                name: 'clonelotpart',
                                                 fieldLabel: 'Lote',
                                                 value: '...'
                                             }

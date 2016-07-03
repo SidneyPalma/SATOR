@@ -124,24 +124,44 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         });
     },
 
-    onShowClear: function () {
+    onShowClearEnter: function () {
         var me = this,
-            view = me.getView(),
-            inputpresentationsearch = view.down('inputpresentationsearch');
+            form = me.getView().down('form[name=movimententer]'),
+            inputpresentationsearch = form.down('inputpresentationsearch');
 
         inputpresentationsearch.reset();
         delete inputpresentationsearch.lastQuery;
-        view.down('textfield[name=lotpart]').setDisabled(false);
-        view.down('datefield[name=datevalidity]').setDisabled(false);
+        form.down('textfield[name=lotpart]').setDisabled(false);
+        form.down('datefield[name=datevalidity]').setDisabled(false);
     },
 
-    onInputEnterSearch: function ( combo, record, eOpts ) {
+    onInputEnterSelect: function ( combo, record, eOpts ) {
         var me = this,
-            view = me.getView();
+            form = me.getView().down('form[name=movimententer]');
 
-        me.onShowClear();
-        view.down('textfield[name=lotpart]').setDisabled(record.get('hasbatch') == '0');
-        view.down('datefield[name=datevalidity]').setDisabled(record.get('hasbatch') == '0');
+        me.onShowClearEnter();
+        form.down('textfield[name=lotpart]').setDisabled(record.get('hasbatch') == '0');
+        form.down('datefield[name=datevalidity]').setDisabled(record.get('hasbatch') == '0');
+    },
+
+    onShowClearLeave: function () {
+        var me = this,
+            form = me.getView().down('form[name=movimentleave]');
+
+        form.down('numberfield[name=quantity]').reset();
+        form.down('hiddenfield[name=lotpart]').reset();
+        form.down('hiddenfield[name=datevalidity]').reset();
+        form.down('displayfield[name=clonelotpart]').reset();
+        form.down('displayfield[name=clonedatevalidity]').reset();
+    },
+
+    onInputLeaveSelect: function ( combo, record, eOpts ) {
+        var me = this,
+            form = me.getView().down('form[name=movimentleave]');
+
+        me.onShowClearLeave();
+        form.loadRecord(record);
+        form.down('numberfield[name=quantity]').setMaxValue(record.get('lotamount'));
     },
 
     onBeforeQueryInputPresentation: function ( queryPlan, eOpts ) {
@@ -183,7 +203,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         me.setModuleData('movimentitem');
 
         me._success = function (frm, action) {
-            form.reset();
+            me.onShowClearEnter();
             form.down('inputentersearch').focus(false, 200);
             Ext.getStore('movimentitem').setParams({
                 query: me.getView().xdata.get('id')
@@ -205,7 +225,8 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         me.setModuleData('movimentitem');
 
         me._success = function (frm, action) {
-            form.reset();
+            me.onShowClearLeave();
+            form.down('inputleavesearch').focus(false, 200);
             Ext.getStore('movimentitem').setParams({
                 query: me.getView().xdata.get('id')
             }).load();
@@ -219,6 +240,10 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
             view = me.getView();
 
         if(view.xdata.get('movimentstatus') == 'E') {
+            return false;
+        }
+
+        if(Ext.getStore('movimentitem').getCount() == 0) {
             return false;
         }
 
@@ -238,6 +263,20 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
                 }
             }
         });
+    },
+
+    printerView: function (btn) {
+        var me = this,
+            view = me.getView(),
+            id = view.xdata.get('id'),
+            movimenttype = view.xdata.get('movimenttype'),
+            url = 'business/Calls/Quick/Moviment{0}.php?id={1}';
+
+        if(Ext.getStore('movimentitem').getCount() == 0) {
+            return false;
+        }
+
+        window.open(Ext.String.format(url,(movimenttype == 'E' ? 'Enter':'Leave'),id));
     },
 
     statusView: function (btn,movimentstatus) {
@@ -274,7 +313,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
         Ext.each(fields.items, function(field) {
             if(!(Ext.isEmpty(field) || field.isHidden() || field.isXType('hiddenfield'))) {
-                field.setDisabled(movimentstatus == 'F');
+                field.setDisabled(movimentstatus != 'A');
             }
         });
     },

@@ -17,7 +17,7 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
             view = me.getView();
 
         view.down('form').loadRecord(record);
-        Ext.getStore('cmeareasdeposit').setParams({
+        Ext.getStore('cmeareasstock').setParams({
             query: record.get('id')
         }).load();
     },
@@ -33,7 +33,7 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
             if(options.operations.create) {
                 var opr = batch.getOperations()[0],
                     rec = opr.getRecords()[0];
-                Ext.getStore('cmeareasdeposit').setParams({
+                Ext.getStore('cmeareasstock').setParams({
                     query: rec.get('id')
                 }).load();
             }

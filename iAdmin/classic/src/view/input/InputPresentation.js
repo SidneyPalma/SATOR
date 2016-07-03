@@ -51,7 +51,7 @@ Ext.define( 'iAdmin.view.input.InputPresentation', {
                     return value;
                 }
             }, {
-                width: 100,
+                width: 50,
                 text: 'Sigla',
                 sortable: false,
                 dataIndex: 'acronym',
@@ -65,7 +65,7 @@ Ext.define( 'iAdmin.view.input.InputPresentation', {
                 width: 100,
                 align: 'right',
                 sortable: false,
-                text: 'ValorBase',
+                text: 'Base',
                 dataIndex: 'measurebase',
                 renderer: Smart.maskRenderer('0,000',true),
                 editor: {

@@ -63,7 +63,7 @@ class equipment extends \Smart\Data\Model {
     private $capacity;
 
     /**
-     * @Policy {"nullable":true, "length":10}
+     * @Policy {"nullable":true, "length":30}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $design;

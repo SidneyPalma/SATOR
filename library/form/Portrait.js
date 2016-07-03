@@ -26,6 +26,7 @@ Ext.define( 'Smart.form.Portrait', {
             fileData = image || Smart.Rss.getFileImage(me.fileImage);
 
         if (image) {
+            me.update('<div></div>');
             me.down('image').setSrc(fileData);
         } else {
             me.update('<div class="fa fa-file-image-o" style="font-size: 10vw;"></div>');

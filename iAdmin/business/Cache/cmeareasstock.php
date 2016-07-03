@@ -2,9 +2,9 @@
 
 namespace iAdmin\Cache;
 
-use iAdmin\Model\inputstock as Model;
+use iAdmin\Model\cmeareasstock as Model;
 
-class inputstock extends \Smart\Data\Cache {
+class cmeareasstock extends \Smart\Data\Cache {
 
     public function selectCode(array $data) {
         $query = $data['query'];
@@ -14,14 +14,15 @@ class inputstock extends \Smart\Data\Cache {
             SELECT
                 it.id,
                 it.inputid,
+                it.cmeareasid,
                 it.datevalidity,
                 it.presentation,
                 dbo.getEnum('presentation',it.presentation) as presentationdescription,
                 it.lotpart,
                 it.lotamount
             FROM
-                inputstock it
-            WHERE it.inputid = :id";
+                cmeareasstock it
+            WHERE it.cmeareasid = :id";
 
         try {
             $pdo = $proxy->prepare($sql);

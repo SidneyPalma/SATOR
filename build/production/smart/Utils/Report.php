@@ -201,20 +201,20 @@ class Report extends FPDF {
         $this->ln(5);		
     }
 
-    public function loadFooter($buttonLineSize = 1000){
+    public function loadFooter($internalW = 1000, $bottonLine = true) {
+        $session = Session::getInstance();
 
-        date_default_timezone_set("America/Manaus");
-
-        $passport   = Session::read("username");
-        $issuedOn   = "impresso em ";
+        $passport   = $session->username;
         $date       = date("d/m/Y H:i");
-        $by         = ", por ";
-        $page       = "pagina ";
-        $of         = " de ";
+        $pageNo     = $this->PageNo();
 
-        $this->Cell($buttonLineSize,3, '','B',1,'C');
-        $this->Cell(0,4, $issuedOn . $date . $by . $passport,0,0,'L');
-        $this->Cell(0,4, $page . $this->PageNo() . $of . '{nb}',0,0,'R');		
+        if($bottonLine) $this->SetY(-15);
+        $this->SetTextColor(7,23,35);
+        $this->SetFont('Arial','',6);
+
+        $this->Cell($internalW,3, '','B',1,'C');
+        $this->Cell(0,4, "impresso em $date, $passport",0,0,'L');
+        $this->Cell(0,4, utf8_decode("página $pageNo de {nb}"),0,0,'R');
     }
 
     public static function scaleCalc($w1, $w2, $arrValues){

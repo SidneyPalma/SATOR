@@ -64,6 +64,10 @@ Ext.define( 'iAdmin.view.input.InputController', {
                 me.filterStore(true);
             }
         });
+
+        Ext.getStore('inputstock').setParams({
+            query: xdata.get('id')
+        }).load();
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {

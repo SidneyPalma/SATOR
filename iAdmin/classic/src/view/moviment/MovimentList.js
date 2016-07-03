@@ -64,6 +64,14 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                 listeners: {
                     itemdblclick: 'onViewEdit'
                 },
+
+                columnsRenderer: function (value, metaData, record) {
+
+                    metaData.style = record.get('movimentstatus') == 'E' ? '' : 'color: red;'
+
+                    return value;
+                },
+
                 columns: [
                     {
                         width: 120,
@@ -71,6 +79,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                         align: 'center',
                         dataIndex: 'id',
                         renderer: function (value, metaData, record) {
+                            metaData.style = record.get('movimentstatus') == 'E' ? '' : 'color: red;';
                             return Ext.String.leftPad(value, 6, '0');
                         }
                     }, {

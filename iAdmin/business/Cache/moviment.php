@@ -92,6 +92,65 @@ class moviment extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectInputLeave(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                it.id,
+                i.name,
+                it.inputid,
+                lotamount = (
+                    select
+                        coalesce(it.lotamount - mi.quantity,0)
+                    from
+                        movimentitem mi
+                        inner join moviment m on ( 
+                                m.movimenttype = 'S' and 
+                                m.movimentstatus != 'E' )
+                    where mi.inputid = it.inputid
+                      and mi.lotpart = it.lotpart
+                      and mi.datevalidity = it.datevalidity
+                      and mi.presentation = it.presentation
+                      and mi.updated = 0
+                ),
+                it.lotpart,
+                it.datevalidity,
+                it.lotpart as clonelotpart,
+                it.datevalidity as clonedatevalidity,
+                it.presentation,
+                dbo.getEnum('presentation',it.presentation) as presentationdescription
+            from
+                inputstock it
+                inner join input i on ( i.id = it.inputid )
+            where i.name like :name
+              and it.lotamount > 0
+              and it.datevalidity >= getdate()";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $query = "%{$query}%";
+
+            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectInputPresentation(array $data) {
         $query = $data['query'];
         $start = $data['start'];

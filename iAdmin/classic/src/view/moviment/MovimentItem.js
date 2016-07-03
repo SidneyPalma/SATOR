@@ -61,7 +61,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentItem', {
                 text: 'Validade',
                 dataIndex: 'datevalidity'
             }, {
-                width: 100,
+                width: 150,
                 sortable: false,
                 text: 'Lote N#',
                 dataIndex: 'lotpart'

@@ -10,6 +10,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
         'Ext.panel.Panel',
         'Smart.form.Portrait',
         'iAdmin.store.input.*',
+        'iAdmin.view.input.InputStock',
         'iAdmin.view.input.InputController',
         'iAdmin.view.input.InputPresentation',
         'iAdmin.view.helper.provider.ProviderSearch',
@@ -378,7 +379,8 @@ Ext.define( 'iAdmin.view.input.InputView', {
                     }, {
                         tabIndex: 1,
                         iconCls: "fa fa-picture-o",
-                        title: 'Movimentação'
+                        title: 'Estoque',
+                        xtype: 'inputstock'
                     }, {
                         tabIndex: 2,
                         iconCls: "fa fa-picture-o",

@@ -12,6 +12,13 @@ Ext.define( 'iAdmin.store.input.InputStock', {
 
     url: '../iAdmin/business/Calls/inputstock.php',
 
-    model: 'iAdmin.model.input.InputStock'
+    model: 'iAdmin.model.input.InputStock',
+
+    config: {
+        extraParams: {
+            action: 'select',
+            method: 'selectCode'
+        }
+    }
 
 });
