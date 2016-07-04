@@ -12,6 +12,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeInput', {
         'Ext.grid.plugin.BufferedRenderer'
     ],
 
+    // AlmostDone!
+
     cls: 'update-grid',
 
     rowLines: false,
