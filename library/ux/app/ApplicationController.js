@@ -51,7 +51,7 @@ Ext.define( 'Smart.ux.app.ApplicationController', {
             mainPage = me.getMainPage(),
             cmp = mainPage ? mainPage.down(config.xtype) : null,
             updateRegion = function () {
-                mainPage.removeAll();
+                if(mainPage.items) mainPage.removeAll();
                 cmp = mainPage.add( config );
 
                 if (Ext.isFunction( fn ) == true) {
