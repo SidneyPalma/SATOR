@@ -41,8 +41,20 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeInput', {
             {
                 flex: 1,
                 text: 'Nome',
-                dataIndex: 'inputnamepresentation',
-                renderer: me.rendererField
+                dataIndex: 'inputnamepresentation'
+            }, {
+                width: 50,
+                align: 'center',
+                xtype: 'actioncolumn',
+                items: [
+                    {
+                        handler: 'insertLayout',
+                        iconCls: "insert-icon fa fa-plus-circle action-insert-color-font"
+                    }, {
+                        handler: 'deleteLayout',
+                        iconCls: "delete-icon fa fa-minus-circle action-delete-color-font"
+                    }
+                ]
             }
         ];
     },
