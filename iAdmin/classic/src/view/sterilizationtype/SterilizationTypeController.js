@@ -36,24 +36,23 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     //routes ========================>
 
-    insertLayout: function (grid, store, eOpts) {
+    insertLayout: function (view, rowIndex, colIndex, item, e, record, row) {
         var me = this,
             view = me.getView();
 
         Ext.widget('sterilizationtypeinputsearch').show(null,function() {
-            this.grid = grid;
             this.data = view.xdata;
         });
     },
 
-    deleteLayout: function (grid, store, record, eOpts) {
+    deleteLayout: function (view, rowIndex, colIndex, item, e, record, row) {
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
                 if (choice === 'yes') {
-                    store.remove(record);
-                    store.sync({
+                    view.store.remove(record);
+                    view.store.sync({
                         callback: function () {
-                            store.load();
+                            view.store.load();
                         }
                     });
                 }
