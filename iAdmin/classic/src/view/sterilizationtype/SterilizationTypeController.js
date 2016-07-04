@@ -36,6 +36,55 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     //routes ========================>
 
+    insertLayout: function (grid, store, eOpts) {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('sterilizationtypeinputsearch').show(null,function() {
+            this.grid = grid;
+            this.data = view.xdata;
+        });
+    },
+
+    deleteLayout: function (grid, store, record, eOpts) {
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    store.remove(record);
+                    store.sync({
+                        callback: function () {
+                            store.load();
+                        }
+                    });
+                }
+            }
+        );
+    },
+
+    updateInput: function () {
+        var me = this,
+            view = me.getView();
+
+        view.down('hiddenfield[name=id]').setValue('');
+        view.down('hiddenfield[name=sterilizationtypeid]').setValue(view.data.get('id'));
+
+        me.setModuleForm(view.down('form'));
+        me.setModuleData('sterilizationtypeinput');
+
+        me._success = function (form, action) {
+            Ext.getStore('sterilizationtypeinput').setParams({
+                method: 'selectCode',
+                query: view.data.get('id')
+            }).load({
+                callback: function () {
+                    view.close();
+                }
+            });
+        }
+
+        me.updateModule();
+    },
+
     onAfterRenderView: function (view) {
         var xdata = view.xdata;
 
@@ -45,6 +94,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         Ext.getStore('sterilizationtypematerial').setParams({
             method: 'selectItems',
+            query: xdata.get('id')
+        }).load();
+
+        Ext.getStore('sterilizationtypeinput').setParams({
+            method: 'selectCode',
             query: xdata.get('id')
         }).load();
     },

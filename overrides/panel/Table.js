@@ -24,6 +24,19 @@ Ext.define( 'Ext.overrides.panel.Table', {
         me.callParent();
 
         me.onBefore( 'beforerender', me.fnBeforeRender, me);
+        // me.onAfter( 'afterrender', me.fnAfterRenderTable, me);
+    },
+
+    fnAfterRenderTable: function () {
+        var me = this;
+
+        me.update(Ext.String.format('<div id="{0}">OlaMundo</div>',me.insertRecordId));
+
+        Ext.widget('label', {
+            text: 'Inserir Novo Registro',
+            renderTo: me.insertRecordId,
+            style: { cursor: 'pointer', color: 'red' }
+        });
     },
 
     fnBeforeRender: function (view, eOpts) {

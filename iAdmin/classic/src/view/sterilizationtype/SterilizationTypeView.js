@@ -14,6 +14,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
         'Smart.form.field.ComboEnum',
         'iAdmin.model.sterilizationtype.SterilizationType',
         'iAdmin.view.sterilizationtype.SterilizationTypeFlow',
+        'iAdmin.view.sterilizationtype.SterilizationTypeInput',
         'iAdmin.view.sterilizationtype.SterilizationTypeSearch',
         'iAdmin.store.sterilizationtype.SterilizationTypeMaterial',
         'iAdmin.view.sterilizationtype.SterilizationTypeController'
@@ -140,6 +141,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                 fieldLabel: 'Expira em'
                             }
                         ]
+                    }, {
+                        xtype: 'label',
+                        cls: 'sub-title-label',
+                        text: 'Insumos'
+                    }, {
+                        height: 170,
+                        margin: '10 0 0 0',
+                        xtype: 'sterilizationtypeinput'
                     }, {
                         name: 'isactive',
                         xtype: 'checkboxfield',
