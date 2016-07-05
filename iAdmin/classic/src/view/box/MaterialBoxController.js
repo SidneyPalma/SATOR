@@ -41,6 +41,64 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     //routes ========================>
 
+    insertLayout: function (view, rowIndex, colIndex, item, e, record, row) {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('materialboxiteminsert').show(null,function() {
+            this.data = view.xdata;
+        });
+    },
+
+    onBeforeQuery: function (queryPlan, eOpts) {
+        var me = this,
+            view = me.getView(),
+            store = queryPlan.combo.store;
+
+        queryPlan.combo.reset();
+        store.removeAll();
+
+        store.setParams({ packingid: view.data.get('packingid') });
+    },
+
+    deleteLayout: function (view, rowIndex, colIndex, item, e, record, row) {
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    view.store.remove(record);
+                    view.store.sync({
+                        callback: function () {
+                            view.store.load();
+                        }
+                    });
+                }
+            }
+        );
+    },
+
+    updateInput: function () {
+        var me = this,
+            view = me.getView();
+
+        view.down('hiddenfield[name=id]').setValue('');
+        view.down('hiddenfield[name=materialboxid]').setValue(view.data.get('id'));
+
+        me.setModuleForm(view.down('form'));
+        me.setModuleData('materialboxitem');
+
+        me._success = function (form, action) {
+            Ext.getStore('materialboxitem').setParams({
+                query: view.data.get('id')
+            }).load({
+                callback: function (records) {
+                    view.close();
+                }
+            });
+        }
+
+        me.updateModule();
+    },
+
     onUpdateMaterialBoxItem: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
         var me = this,
             data = me.getView().xdata,
@@ -106,29 +164,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
                     }
                 });
             }
-        });
-    },
-
-    onBeforeEditBoxItem: function (editor, context, eOpts) {
-        var me = this,
-            view = me.getView(),
-            xdata = view.xdata;
-
-        return (['000'].indexOf(xdata.get('statusbox')) != -1);
-    },
-
-    onBeforeQuery: function (queryPlan, eOpts) {
-        var me = this,
-            view = me.getView(),
-            store = queryPlan.combo.store,
-            packingid = view.down('hiddenfield[name=packingid]');
-
-        queryPlan.combo.reset();
-        store.removeAll();
-
-        store.setParams({
-            method: 'selectLike',
-            packingid: packingid.getValue()
         });
     },
 

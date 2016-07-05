@@ -6,7 +6,7 @@ Ext.define( 'iAdmin.view.material.MaterialBoxItemSearch', {
 
     requires: [
         'Smart.form.field.ComboSearch',
-        'iAdmin.store.box.MaterialBoxItem'
+        'iAdmin.store.box.MaterialBoxItemSearch'
     ],
 
     displayField: 'name',
@@ -14,6 +14,6 @@ Ext.define( 'iAdmin.view.material.MaterialBoxItemSearch', {
     pageSize: 0,
     showClear: true,
 
-    store: 'iAdmin.store.box.MaterialBoxItem'
+    store: 'iAdmin.store.box.MaterialBoxItemSearch'
 
 });

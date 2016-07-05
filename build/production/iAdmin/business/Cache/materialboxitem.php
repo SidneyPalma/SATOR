@@ -37,17 +37,6 @@ class materialboxitem extends \Smart\Data\Cache {
 			$pdo->execute();
 			$rows = $pdo->fetchAll();
 
-			$recs = count($rows);
-
-			$statusbox = ($recs != 0 ) ? $rows[0]['statusbox'] : '000';
-
-			if (in_array($statusbox, ['000'])) {
-				for ($x = 0; $x <= $recs; $x++) {
-					$rows[$x]['materialboxid'] = $query;
-					$rows[$x]['materialname'] = ($recs != $x) ? $rows[$x]['materialname'] : 'Inserir Novo Registro';
-				}
-			}
-
 			self::_setRows($rows);
 
 		} catch ( \PDOException $e ) {

@@ -29,7 +29,7 @@ Ext.define( 'Smart.plugins.InsertRecordGrid', {
             Ext.widget('label', {
                 text: 'Inserir Novo Registro',
                 renderTo: me.grid.insertRecordId,
-                style: { cursor: 'pointer', color: 'red' }
+                style: { cursor: 'pointer', color: 'red', fontSize: '14px' }
             }).getEl().on('click', function () { me.grid.fireEvent('insertrecord', me.grid, me.grid.store, {}); }, me.grid);
         }
     }

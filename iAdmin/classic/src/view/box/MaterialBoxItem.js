@@ -5,33 +5,26 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
     xtype: 'materialboxitem',
 
     requires: [
+        'Smart.plugins.*',
         'Ext.grid.Panel',
         'Ext.grid.column.*',
-        'iAdmin.store.box.*',
-        'Ext.grid.plugin.CellEditing',
-        'iAdmin.store.box.MaterialBoxItem',
-        'iAdmin.view.material.MaterialBoxItemSearch'
+        'iAdmin.store.box.*'
     ],
+
+    cls: 'update-grid',
 
     rowLines: false,
     hideHeaders: false,
     headerBorders: false,
 
-    cls: 'list-grid',
-
-    selType: 'cellmodel',
-
-    store: 'materialboxitem',
-
-    plugins: {
-        clicksToEdit: 1,
-        ptype: 'cellediting'
-    },
+    plugins: ['insertrecordgrid'],
 
     listeners: {
-        edit: 'onEditBoxItem',
-        beforeedit: 'onBeforeEditBoxItem'
+        insertrecord: 'insertLayout',
+        deleterecord: 'deleteLayout'
     },
+
+    store: 'materialboxitem',
 
     initComponent: function () {
         var me = this;
@@ -39,20 +32,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
         me.callParent();
     },
 
-    columnsRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
-        var boxitemstatus = record.get('boxitemstatus'),
-            showRecord = 'text-align: center; font-weight: bold; color: red; background: rgb(253, 255, 246); cursor: pointer; height: 39px;';
-
-            metaData.style = Ext.isNumeric(record.get('id')) != true ? showRecord : (boxitemstatus == 'E' ? 'color: red;' : '');
-
-        return value;
-    },
-
     makeColumn: function () {
-        var me = this,
-            isDisabled = function (view, rowIdx, colIdx, item, rec) {
-                return !Ext.isNumeric(rec.get('id'));
-            };
+        var me = this;
 
         Ext.create('iAdmin.store.box.MaterialBoxItem');
 
@@ -61,59 +42,52 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 flex: 1,
                 sortable: false,
                 text: 'Material',
-                dataIndex: 'materialname',
-                editor: {
-                    showClear: false,
-                    allowBlank: false,
-                    xtype: 'materialboxitemsearch',
-                    fieldCls: 'smart-field-style-action',
-                    listeners: {
-                        beforequery: 'onBeforeQuery'
-                    }
-                }
+                dataIndex: 'materialname'
             }, {
-                text: 'Complemento',
-                columns: [
-                    {
-                        width: 200,
-                        sortable: false,
-                        text: 'Proprietário',
-                        dataIndex: 'proprietaryname'
-                    }, {
-                        width: 100,
-                        sortable: false,
-                        align: 'center',
-                        text: 'Processos',
-                        dataIndex: 'numberproceedings'
-                    }, {
-                        width: 100,
-                        sortable: false,
-                        align: 'center',
-                        text: 'Consignado',
-                        xtype: 'checkcolumn',
-                        dataIndex: 'isconsigned',
-                        readOnly: true,
-                        renderer: me.columnsRenderer
-                    }
-                ]
+                width: 200,
+                sortable: false,
+                text: 'Proprietário',
+                dataIndex: 'proprietaryname'
             }, {
-                width: 40,
+                width: 100,
                 sortable: false,
                 align: 'center',
+                text: 'Processos',
+                dataIndex: 'numberproceedings'
+            }, {
+                width: 100,
+                sortable: false,
+                align: 'center',
+                text: 'Consignado',
+                xtype: 'checkcolumn',
+                dataIndex: 'isconsigned',
+                readOnly: true
+            }, {
+                width: 80,
+                align: 'center',
                 xtype: 'actioncolumn',
-                handler: 'onUpdateMaterialBoxItem',
-                isDisabled: isDisabled,
-                getTip: function(v, meta, rec) {
-                    var isactive = rec.get('boxitemstatus') == 'A';
-                    return (Ext.isNumeric(rec.get('id')) && isactive) ? 'Editar item do kit!' : '';
-                },
-                getClass: function(v, meta, rec) {
-                    var isactive = rec.get('boxitemstatus') == 'A';
-                    return (Ext.isNumeric(rec.get('id')) && isactive) ? "fa fa-cog action-delete-color" : '';
-                },
-                renderer: me.columnsRenderer
+                items: [
+                    {
+                        handler: 'insertLayout',
+                        getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                            var c = store.getCount();
+                            return ( rowIndex == c-1 && c != 0 ) ? "insert-icon fa fa-plus-circle action-insert-color-font" : "";
+                        },
+                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                            var c = view.store.getCount();
+                            return !( rowIndex == c-1 && c != 0 );
+                        }
+                    }, {
+                        disabled: true,
+                        xtype: 'splitter'
+                    }, {
+
+                        handler: 'deleteLayout',
+                        iconCls: "delete-icon fa fa-minus-circle action-delete-color-font"
+                    }
+                ]
             }
-        ];
+        ]
     }
 
 });
