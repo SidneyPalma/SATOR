@@ -52,21 +52,29 @@ Ext.define( 'Smart.ux.main.MainModuleSearch', {
         select: 'onRedirectModule'
     },
 
+    listWidth: 300,
+    listConfig:{
+        minWidth:300,
+        maxHeight:400
+    },
+    matchFieldWidth: false,
+
     // template for the content List
     tpl: [
-        '<tpl style:"font-size: 14px;" for=".">',
-            '<div class="x-boundlist-item" style="font-family: Monda;">' +
-                '<span style="font-size: 17px; color:#3333FF; display: block; font-family: Monda;">{name}</span>' +
-                '<span style="font-size: 14px; color:#990000; display: block; font-family: Monda;">{observation}</span>' +
+        '<tpl for=".">',
+            '<div class="x-boundlist-item">',
+                '<img src="{filetype}" style="width: 42px; float: left; margin-right: 10px;">',
+                '<div style="font-size: 22px;">{legalname}</div>',
+                '<div style="font-size: 14px;">{observation}</div>',
             '</div>',
         '</tpl>'
-    ],
-
-    // template for the content displayField
-    displayTpl: [
-        '<tpl for=".">',
-            '{legalname}',
-        '</tpl>'
     ]
+
+    // // template for the content displayField
+    // displayTpl: [
+    //     '<tpl for=".">',
+    //         '{legalname}',
+    //     '</tpl>'
+    // ]
 
 });

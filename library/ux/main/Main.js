@@ -50,7 +50,10 @@ Ext.define( 'Smart.ux.main.Main', {
                         xtype: 'tbfill'
                     }, {
                         xtype: 'tbtext',
-                        name: 'username'
+                        name: 'username',
+                        style: {
+                            fontSize: '14px'
+                        }
                     }, {
                         xtype: 'splitter'
                     }, {
