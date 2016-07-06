@@ -79,7 +79,7 @@ class MovimentEnter extends Report {
         $id = str_pad($id, 6, '0', STR_PAD_LEFT);
 
         $this->configStyleHeader(14);
-        $this->Cell($this->getInternalW(),6, utf8_decode("Movimento de $movimenttypedescription Nº $id"),0,1,'C',false);
+        $this->Cell($this->getInternalW(),6, utf8_decode("Movimento de $movimenttypedescription N# $id"),0,1,'C',false);
         $this->configStyleHeader(10);
         $this->Cell($this->getInternalW(),6, 'Data: '. $date->format('d/m/Y'),0,1,'C',false);
 
