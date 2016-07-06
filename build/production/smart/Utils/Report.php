@@ -212,6 +212,7 @@ class Report extends FPDF {
         $this->SetTextColor(7,23,35);
         $this->SetFont('Arial','',6);
 
+        $this->SetLineWidth(3);
         $this->Cell($internalW,3, '','B',1,'C');
         $this->Cell(0,4, "impresso em $date, $passport",0,0,'L');
         $this->Cell(0,4, utf8_decode("página $pageNo de {nb}"),0,0,'R');
