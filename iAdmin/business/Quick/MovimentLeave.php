@@ -92,7 +92,7 @@ class MovimentLeave extends Report {
         $this->configStyleHeader(10);
         $this->Cell($this->squareWidth*4,5,"$documenttypedescription - $movimentstatusdescription",0,1,'L',0);
         $this->SetFont('Arial', '', 10);
-        $this->Cell($this->squareWidth,5,'CEMArea:',0,0,'L',0);
+        $this->Cell($this->squareWidth,5,'CMEArea:',0,0,'L',0);
         $this->configStyleHeader(10);
         $this->Cell($this->squareWidth*4,5,$cmeareasname,0,1,'L',0);
         $this->Ln(1);
