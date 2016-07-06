@@ -1,6 +1,6 @@
 {
     "name": "iSterilization",
-    "version": "1.0.0.134",
+    "version": "1.0.0.138",
     "indexHtmlPath": "index.html",
     "classpath": [
         "app",
@@ -8,18 +8,21 @@
         "${app.dir}/../library",
         "${app.dir}/../iAdmin/app/store",
         "${app.dir}/../iAdmin/app/model",
+        "${app.dir}/../iAdmin/classic/src/view/input",
         "${app.dir}/../iAdmin/classic/src/view/users",
         "${app.dir}/../iAdmin/classic/src/view/enums",
         "${app.dir}/../iAdmin/classic/src/view/profile",
         "${app.dir}/../iAdmin/classic/src/view/itembase",
         "${app.dir}/../iAdmin/classic/src/view/material",
-        "${app.dir}/../iAdmin/classic/src/view/sterilizationtype",
         "${app.dir}/../iAdmin/classic/src/view/helper/areas",
         "${app.dir}/../iAdmin/classic/src/view/person/client",
         "${app.dir}/../iAdmin/classic/src/view/helper/packing",
+        "${app.dir}/../iAdmin/classic/src/view/helper/provider",
+        "${app.dir}/../iAdmin/classic/src/view/sterilizationtype",
         "${app.dir}/../iAdmin/classic/src/view/person/proprietary",
         "${app.dir}/../iAdmin/classic/src/view/helper/manufacturer",
-        "${app.dir}/../iAdmin/classic/src/view/helper/materialstatus"
+        "${app.dir}/../iAdmin/classic/src/view/helper/materialstatus",
+        "${app.dir}/../iAdmin/classic/src/view/helper/unitmeasurement"
     ],
     "overrides": [
         "overrides",
@@ -205,6 +208,6 @@
     "id": "3bab7068-1bf6-40c7-b473-b9f76862105a",
     "buildby": {
         "logusername": "DSADES21",
-        "lastdateapp": "2016-06-19 15:31"
+        "lastdateapp": "2016-07-06 10:43"
     }
 }
