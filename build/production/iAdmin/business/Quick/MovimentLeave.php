@@ -86,13 +86,17 @@ class MovimentLeave extends Report {
         $this->Cell($this->getInternalW(),6, "Movimento de $movimenttypedescription N# $id",0,1,'C',false);
         $this->configStyleHeader(10);
         $this->Cell($this->getInternalW(),6, 'Data: '. $date->format('d/m/Y'),0,1,'C',false);
-        $this->Ln(8);
+
+        $this->SetLineWidth(.2);
+        $this->Cell($this->getInternalW(),3, '','B',1,'C');
+        $this->Ln(4);
+
         $this->SetFont('Arial', '', 10);
         $this->Cell($this->squareWidth,5,'Documento:',0,0,'L',0);
         $this->configStyleHeader(10);
         $this->Cell($this->squareWidth*4,5,"$documenttypedescription - $movimentstatusdescription",0,1,'L',0);
         $this->SetFont('Arial', '', 10);
-        $this->Cell($this->squareWidth,5,'CEMArea:',0,0,'L',0);
+        $this->Cell($this->squareWidth,5,'CMEArea:',0,0,'L',0);
         $this->configStyleHeader(10);
         $this->Cell($this->squareWidth*4,5,$cmeareasname,0,1,'L',0);
         $this->Ln(1);
@@ -140,6 +144,7 @@ class MovimentLeave extends Report {
             $this->Cell($sw * 0.5,5,$isactive,0,1,'C',$lineColor);
         }
 
+        $this->SetLineWidth(.2);
         $this->Cell($this->getInternalW(),3, '','T',1,'C');
 
         $this->Ln(20);

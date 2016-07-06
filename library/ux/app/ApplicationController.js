@@ -59,17 +59,22 @@ Ext.define( 'Smart.ux.app.ApplicationController', {
                 }
             };
 
-        if(mainPage) {
-            if(mainPage.items.getCount()) {
-                var panelCenter = mainPage.down(mainPage.items.getAt(0));
-                mainPage.down(panelCenter.xtype).removeCls(panelCenter.animateClsIn);
-                mainPage.down(panelCenter.xtype).addCls(panelCenter.animateClsOut);
-                Ext.defer(function () { updateRegion(); }, 300);
+        try {
+            if(mainPage) {
+                if(mainPage.items.getCount()) {
+                    var panelCenter = mainPage.down(mainPage.items.getAt(0));
+                    mainPage.down(panelCenter.xtype).removeCls(panelCenter.animateClsIn);
+                    mainPage.down(panelCenter.xtype).addCls(panelCenter.animateClsOut);
+                    Ext.defer(function () { updateRegion(); }, 300);
+                }
+                else updateRegion();
             }
-            else updateRegion();
-        }
 
-        return cmp;
+            return cmp;
+        }
+        catch(err) {
+            return cmp;
+        }
     }
 
     //routes ========================>

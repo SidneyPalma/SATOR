@@ -1266,6 +1266,7 @@ $include-iadmin-view-input-inputview: dynamic(true);;
 $include-iadmin-view-itembase-itembasecontroller: dynamic(true);;
 $include-iadmin-view-itembase-itembasefield: dynamic(true);;
 $include-iadmin-view-itembase-itembaselayout: dynamic(true);;
+$include-iadmin-view-itembase-itembaseresult: dynamic(false);;
 $include-iadmin-view-itembase-itembasesearch: dynamic(false);;
 $include-iadmin-view-login-login: dynamic(true);;
 $include-iadmin-view-login-logincontroller: dynamic(true);;

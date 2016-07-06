@@ -79,7 +79,6 @@ Ext.define( 'Smart.ux.app.Application', {
                     Ext.create({xtype:'login'});
                 }
             }
-
         });
 
         Ext.getBody().getById('preloader').hide();

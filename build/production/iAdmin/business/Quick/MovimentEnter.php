@@ -79,10 +79,14 @@ class MovimentEnter extends Report {
         $id = str_pad($id, 6, '0', STR_PAD_LEFT);
 
         $this->configStyleHeader(14);
-        $this->Cell($this->getInternalW(),6, utf8_decode("Movimento de $movimenttypedescription Nº $id"),0,1,'C',false);
+        $this->Cell($this->getInternalW(),6, utf8_decode("Movimento de $movimenttypedescription N# $id"),0,1,'C',false);
         $this->configStyleHeader(10);
         $this->Cell($this->getInternalW(),6, 'Data: '. $date->format('d/m/Y'),0,1,'C',false);
-        $this->Ln(8);
+
+        $this->SetLineWidth(.2);
+        $this->Cell($this->getInternalW(),3, '','B',1,'C');
+        $this->Ln(4);
+
         $this->SetFont('Arial', '', 10);
         $this->Cell($this->squareWidth,7,'Documento:',0,0,'L',0);
         $this->configStyleHeader(10);
@@ -132,6 +136,7 @@ class MovimentEnter extends Report {
             $this->Cell($sw * 0.5,5,$isactive,0,1,'C',$lineColor);
         }
 
+        $this->SetLineWidth(.2);
         $this->Cell($this->getInternalW(),3, '','T',1,'C');
 
         $this->Ln(20);

@@ -355,7 +355,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                     }, {
                         tabIndex: 2,
                         disabled: true,
-                        title: 'Layout',
+                        title: 'Resultado Layout',
                         iconCls: "fa fa-language",
                         xtype: 'itembaselayout'
                     }
