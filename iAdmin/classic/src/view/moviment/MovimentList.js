@@ -151,7 +151,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                                 reference: 'search',
                                 showFetch: true
                             }, {
-                                width: 120,
+                                width: 180,
                                 showClear: true,
                                 margin: '0 10 0 10',
                                 xtype: 'comboenum',

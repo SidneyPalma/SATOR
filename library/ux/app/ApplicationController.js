@@ -69,10 +69,10 @@ Ext.define( 'Smart.ux.app.ApplicationController', {
                 }
                 else updateRegion();
             }
-
             return cmp;
         }
         catch(err) {
+            console.info(err);
             return cmp;
         }
     }
