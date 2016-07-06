@@ -23,6 +23,16 @@ Ext.define( 'Smart.ux.main.MainController', {
         }).load();
     },
 
+    onRedirectModule: function (combo, record, eOpts) {
+        var name = record.get('name'),
+            origin = window.location.origin,
+            pathname = window.location.pathname,
+            pattern = new RegExp(Ext.manifest.name, 'gi'),
+            href = origin + pathname.replace(pattern, name);
+
+        window.location.replace(href);
+    },
+
     onMainRender: function () {
         var me = this,
             button = me.lookupReference('navBtn');

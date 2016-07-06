@@ -52,17 +52,16 @@ Ext.define( 'Smart.ux.app.Application', {
 
                 if(loggedIn && success && result.success && (result.modulebuild == Ext.manifest.version)) {
                     var link = document.createElement('link'),
-                        view = Ext.create({xtype:'app-main'}),
+                        main = Ext.create({xtype:'app-main'}),
 						imageInfo = Ext.decode(rows.logoinfo),
 						photoInfo = Ext.decode(rows.fileinfo),
                         imageLogo = Ext.String.format("data:{0};base64,{1}",imageInfo.fileType,rows.logodata),
 						photoData = Ext.String.format("data:{0};base64,{1}",photoInfo.fileType,rows.filedata);
 
-                    view.down('image[name=filedata]').setSrc(photoData);
-					view.down('image[name=filelogo]').setSrc(imageLogo);
-					
-                    view.down('tbtext[name=username]').update(Ext.String.format('<a>{0}</a>',rows.fullname));
-					view.down('tbtext[name=filelogo]').update(Ext.String.format('<a>{0}</a>',rows.legalname));
+                    main.down('image[name=filedata]').setSrc(photoData);
+                    main.down('image[name=filelogo]').setSrc(imageLogo);
+                    main.down('mainmodulesearch').setRawValue(rows.legalname);
+                    main.down('tbtext[name=username]').update(Ext.String.format('<a>{0}</a>',rows.fullname));
 
                     link.href = imageLogo;
                     link.type = 'image/x-icon';

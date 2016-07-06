@@ -7,10 +7,15 @@ Ext.define( 'iAdmin.view.main.Main', {
     requires: [
         'Smart.ux.main.Main',
         'iAdmin.view.main.MainController',
-        'iAdmin.store.module.ModuleMenuTree'
+        'iAdmin.store.module.ModuleMenuTree',
+        'iAdmin.view.module.ModuleSearch'
     ],
 
     controller: 'main',
+
+    module: {
+        xtype: 'modulesearch'
+    },
 
     initComponent: function () {
         var me = this;

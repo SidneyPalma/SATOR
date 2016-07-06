@@ -142,13 +142,23 @@ Ext.define( 'Smart.ux.login.LoginController', {
         view.destroy();
 
         if(result.success) {
-            var type = Ext.decode(rows.fileinfo),
-                main = Ext.create({ xtype: 'app-main' }),
-                image = Ext.String.format("data:{0};base64,{1}",type.fileType,rows.filedata);
+            var link = document.createElement('link'),
+                main = Ext.create({xtype:'app-main'}),
+                imageInfo = Ext.decode(rows.logoinfo),
+                photoInfo = Ext.decode(rows.fileinfo),
+                imageLogo = Ext.String.format("data:{0};base64,{1}",imageInfo.fileType,rows.logodata),
+                photoData = Ext.String.format("data:{0};base64,{1}",photoInfo.fileType,rows.filedata);
 
-            main.down('image[name=filelogo]').setSrc(image);
-            main.down('tbtext[name=filelogo]').update(rows.legalname);
+            main.down('image[name=filedata]').setSrc(photoData);
+            main.down('image[name=filelogo]').setSrc(imageLogo);
+            main.down('mainmodulesearch').setRawValue(rows.legalname);
             main.down('tbtext[name=username]').update(Ext.String.format('<a>{0}</a>',rows.fullname));
+
+            link.href = imageLogo;
+            link.type = 'image/x-icon';
+            link.rel = 'shortcut icon';
+            
+            document.getElementsByTagName('head')[0].appendChild(link);
 
             console.info(Ext.String.format('Is Test Base Access: {0}',result.isTest));
 

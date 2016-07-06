@@ -12,6 +12,8 @@ Ext.define( 'iSterilization.view.main.Main', {
 
     controller: 'main',
 
+    module: null,
+
     initComponent: function () {
         var me = this;
 

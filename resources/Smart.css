@@ -1,3 +1,42 @@
+.main-field .x-form-text {
+    color: rgb(64, 70, 75);
+    background: transparent !important;
+    height: 42px !important;
+    font-size: 28px !important;
+    font-weight: 700 !important;
+}
+
+.main-field .x-form-trigger {
+    line-height: 42px !important;
+}
+
+.main-field .x-form-spinner-default {
+    line-height: 42px !important;
+}
+
+.main-field .x-form-trigger-default:before {
+    font-size: 18px;
+}
+
+
+.main-field .x-form-text-default {
+    color: rgb(64, 70, 75);
+    background: transparent;
+}
+
+.main-field .x-form-trigger-default {
+    color: rgb(64, 70, 75);
+    background: transparent;
+}
+
+
+.main-field .x-form-trigger-wrap-default {
+    border-width: 0px;
+    border-style: none;
+    border-color: transparent;
+}
+
+
 .x-tree-icon {
     height: 26px !important;
     vertical-align: initial !important;

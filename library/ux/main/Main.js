@@ -6,7 +6,8 @@ Ext.define( 'Smart.ux.main.Main', {
 
     requires: [
         'Ext.list.Tree',
-        'Ext.plugin.Viewport'
+        'Ext.plugin.Viewport',
+        'Smart.ux.main.MainModuleSearch'
     ],
 
     plugins: 'viewport',
@@ -15,10 +16,73 @@ Ext.define( 'Smart.ux.main.Main', {
 
     plain: true,
 
+    module: {},
+
     initComponent: function () {
         var me = this;
+        me.makeDocked();
         me.buildItems();
         me.callParent();
+    },
+
+    makeDocked: function () {
+        var me = this;
+
+        me.dockedItems = [
+            {
+                xtype: 'toolbar',
+                cls: 'panel-shadow main-treelist-height main-toolbar-color',
+                defaults: {
+                    scale: 'large',
+                    showSmartTheme: 'noborder'
+                },
+                items: [
+                    {
+                        margin: '0 0 0 4',
+                        width: 42,
+                        height: 42,
+                        xtype: 'image',
+                        name: 'filelogo'
+                    }, {
+                        width: 230,
+                        xtype: 'mainmodulesearch'
+                    }, {
+                        xtype: 'tbfill'
+                    }, {
+                        xtype: 'tbtext',
+                        name: 'username'
+                    }, {
+                        xtype: 'splitter'
+                    }, {
+                        width: 42,
+                        height: 42,
+                        xtype: 'image',
+                        name: 'filedata'
+                    }, {
+                        iconCls: 'fa fa-indent',
+                        enableToggle: true,
+                        reference: 'navBtn',
+                        toggleHandler: 'onToggleNav'
+                    }, {
+                        iconCls: 'fa fa-bars',
+                        enableToggle: true,
+                        toggleHandler: 'onToggleMicro'
+                    }, {
+                        iconCls: 'fa fa-times',
+                        showSmartTheme: 'darkred',
+                        handler: 'onComeLogOut'
+                    }, {
+                        iconCls: "fa fa-desktop",
+                        showSmartTheme: 'darkred',
+                        handler: 'onToggleScreen'
+                    }, {
+                        iconCls: "fa fa-cogs",
+                        showSmartTheme: 'darkred',
+                        handler: 'onDockToggle'
+                    }
+                ]
+            }
+        ];
     },
 
     buildItems: function () {
@@ -30,27 +94,6 @@ Ext.define( 'Smart.ux.main.Main', {
                 xtype: 'panel',
                 name: 'westpage',
                 width: 250,
-				dockedItems: [
-                    {
-                        xtype: 'toolbar',
-                        cls: 'panel-shadow main-treelist-height main-toolbar-color',
-                        items: [
-                            {
-                                width: 42,
-                                height: 42,
-                                xtype: 'image',
-                                name: 'filelogo'
-                            }, {
-                                xtype: 'tbtext',
-                                name: 'filelogo'
-                            }
-                        ]
-                    }
-                ],
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
                 border: false,
                 layout: 'fit',
                 items: [
@@ -64,54 +107,6 @@ Ext.define( 'Smart.ux.main.Main', {
                 region: 'center',
                 xtype: 'panel',
 				layout: 'fit',
-                dockedItems: [
-                    {
-                        xtype: 'toolbar',
-                        cls: 'panel-shadow main-toolbar-height main-toolbar-color',
-                        defaults: {
-                            scale: 'large',
-                            showSmartTheme: 'noborder'
-                        },
-                        items: [
-                            {
-                                iconCls: 'fa fa-indent',
-                                enableToggle: true,
-                                reference: 'navBtn',
-                                toggleHandler: 'onToggleNav'
-                            }, {
-                                iconCls: 'fa fa-bars',
-                                enableToggle: true,
-                                toggleHandler: 'onToggleMicro'
-                            }, {
-                                xtype: 'tbfill'
-                            }, {
-                                xtype: 'tbtext',
-                                name: 'username'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                width: 42,
-                                height: 42,
-                                xtype: 'image',
-                                name: 'filedata'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                iconCls: 'fa fa-times',
-                                showSmartTheme: 'darkred',
-                                handler: 'onComeLogOut'
-                            }, {
-                                iconCls: "fa fa-desktop",
-                                showSmartTheme: 'darkred',
-                                handler: 'onToggleScreen'
-                            }, {
-                                iconCls: "fa fa-cogs",
-                                showSmartTheme: 'darkred',
-                                handler: 'onDockToggle'
-                            }
-                        ]
-                    }
-                ],
 				items: [
 					{
 						xtype: 'container',
