@@ -38,7 +38,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
 
     //routes ===================================>>
 
-    onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+    updateRecord: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
         var me = this;
 
         Ext.getStore('enumtype').setParams({

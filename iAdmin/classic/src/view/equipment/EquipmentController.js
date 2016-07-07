@@ -78,7 +78,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         var me = this,
             xdata = view.xdata,
             portrait = view.down('portrait'),
-            grid = view.down('itembaselayout'),
+            grid = view.down('itembaseresult'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
@@ -90,7 +90,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         grid.setDisabled(false);
         portrait.setUrl(me.url);
         portrait.beFileData(xdata.get('filetype'));
-        grid.setSource.apply(grid, [values,fields]);
+        // grid.setSource.apply(grid, [values,fields]);
     },
 
     onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
@@ -124,7 +124,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
     updateView: function () {
         var me = this,
             view = me.getView(),
-            grid = view.down('itembaselayout');
+            grid = view.down('itembaseresult');
 
         me.setModuleForm(view);
         me.setModuleData('equipment');
@@ -143,7 +143,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         var me = this,
             view = me.getView(),
             portrait = view.down('portrait'),
-            grid = view.down('itembaselayout');
+            grid = view.down('itembaseresult');
 
         view.reset();
 
