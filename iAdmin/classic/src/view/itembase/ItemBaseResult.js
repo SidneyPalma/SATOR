@@ -6,18 +6,44 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
 
     requires: [
         'Ext.grid.Panel',
-        'Ext.grid.column.*',
-        'iAdmin.store.moviment.*'
+        'Smart.plugins.*',
+        'Ext.grid.column.*'
     ],
 
+    rowLines: false,
+    columnLines: false,
     hideHeaders: false,
     headerBorders: false,
 
-    cls: 'list-grid',
+    cls: 'update-grid',
 
     selType: 'cellmodel',
 
-    store: 'movimentitem',
+    plugins: ['insertrecordgrid'],
+
+    store: Ext.create('Smart.data.StoreBase', {
+
+        url: '../iAdmin/business/Calls/itembase.php',
+
+        fields: [
+            {
+                name: 'id',
+                type: 'int'
+            }, {
+                name: 'fieldname',
+                type: 'auto'
+            }, {
+                name: 'datavalue',
+                type: 'auto'
+            }, {
+                name: 'formfield',
+                type: 'auto'
+            }, {
+                name: 'reference',
+                type: 'auto'
+            }
+        ]
+    }),
 
     initComponent: function () {
         var me = this;
@@ -28,84 +54,48 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.moviment.MovimentItem');
-
         me.columns = [
             {
-                flex: 1,
-                text: 'Insumo',
-                sortable: false,
-                dataIndex: 'inputname'
-            }, {
-                width: 180,
-                sortable: false,
-                text: 'Apresentação',
-                dataIndex: 'presentationdescription'
-            }, {
-                width: 60,
-                text: 'Sigla',
-                sortable: false,
-                dataIndex: 'acronym'
-            }, {
                 width: 120,
-                align: 'right',
+                text: 'Campo',
                 sortable: false,
-                text: 'Quantidade',
-                dataIndex: 'quantity',
-                renderer: Smart.maskRenderer('0,000',true)
+                dataIndex: 'fieldname'
             }, {
-                width: 100,
+                flex: 1,
                 sortable: false,
-                xtype: 'datecolumn',
+                text: 'Resultado',
+                dataIndex: 'datavalue'
+            }, {
+                width: 250,
+                sortable: false,
+                text: 'Valor Referencia',
+                dataIndex: 'reference'
+            }, {
+                width: 70,
+                sortable: false,
                 align: 'center',
-                text: 'Validade',
-                dataIndex: 'datevalidity'
-            }, {
-                width: 150,
-                sortable: false,
-                text: 'Lote N#',
-                dataIndex: 'lotpart'
-            }, {
-                width: 80,
-                align: 'center',
-                name: 'action-record',
                 xtype: 'actioncolumn',
                 items: [
                     {
-                        handler: 'onUpdateItem',
-                        getTip: function(v, meta, rec) {
-                            var isactive = parseInt(rec.data.isactive);
-                            return (isactive == 0) ? "Confirmar lançamento!" : "";
+                        handler: 'insertLayout',
+                        getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                            var c = store.getCount();
+                            return ( rowIndex == c-1 && c != 0 ) ? "insert-icon fa fa-plus-circle action-insert-color-font" : "";
                         },
-                        getClass: function(v, meta, rec) {
-                            var isactive = parseInt(rec.data.isactive);
-                            return (isactive == 0) ? "fa fa-check-circle action-select-color" : "";
-                        },
-                        isDisabled: function (view, rowIdx, colIdx, item, rec) {
-                            var isactive = parseInt(rec.data.isactive);
-                            return (isactive == 1);
+                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                            var c = view.store.getCount();
+                            return !( rowIndex == c-1 && c != 0 );
                         }
                     }, {
-                        width: 5,
-                        disabled: true,
-                        xtype: 'splitter'
+                        handler: 'updateLayout',
+                        iconCls: "update-icon fa fa-check-circle action-update-color-font"
                     }, {
-                        handler: 'onDeleteItem',
-                        iconCls: "fa fa-times-circle action-delete-color",
-                        tooltip: 'Excluir lançamento!'
+                        handler: 'deleteLayout',
+                        iconCls: "delete-icon fa fa-minus-circle action-delete-color-font"
                     }
                 ]
             }
         ];
-    },
-
-    dockedItems: [
-        {
-            xtype: 'pagingtoolbar',
-            store: 'movimentitem',
-            dock: 'bottom',
-            displayInfo: true
-        }
-    ]
+    }
 
 });

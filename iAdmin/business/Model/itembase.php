@@ -45,6 +45,12 @@ class itembase extends \Smart\Data\Model {
     private $layoutvalues;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $resultfields;
+
+    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
@@ -191,6 +197,22 @@ class itembase extends \Smart\Data\Model {
      */
     public function setLayoutvalues($layoutvalues) {
         $this->layoutvalues = $layoutvalues;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getResultfields() {
+        return $this->resultfields;
+    }
+
+    /**
+     * @param type $resultfields
+     * @return \iAdmin\Model\itembase
+     */
+    public function setResultfields($resultfields) {
+        $this->resultfields = $resultfields;
         return $this;
     }
 

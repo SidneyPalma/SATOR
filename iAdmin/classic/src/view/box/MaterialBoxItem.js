@@ -63,7 +63,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 dataIndex: 'isconsigned',
                 readOnly: true
             }, {
-                width: 80,
+                width: 50,
                 align: 'center',
                 xtype: 'actioncolumn',
                 items: [
@@ -77,9 +77,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                             var c = view.store.getCount();
                             return !( rowIndex == c-1 && c != 0 );
                         }
-                    }, {
-                        disabled: true,
-                        xtype: 'splitter'
                     }, {
 
                         handler: 'deleteLayout',

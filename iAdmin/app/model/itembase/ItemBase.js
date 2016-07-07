@@ -30,6 +30,9 @@ Ext.define( 'iAdmin.model.itembase.ItemBase', {
             name: 'layoutvalues',
             type: 'auto'
         }, {
+            name: 'resultfields',
+            type: 'auto'
+        }, {
             name: 'proprietaryid',
             type: 'int'
         }, {

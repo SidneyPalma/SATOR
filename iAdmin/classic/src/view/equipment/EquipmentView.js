@@ -11,6 +11,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
         'Smart.form.Portrait',
         'Ext.grid.property.Grid',
         'iAdmin.store.itembase.*',
+        'iAdmin.view.itembase.ItemBaseResult',
         'iAdmin.view.equipment.EquipmentController',
         'iAdmin.view.helper.packing.PackingSearch',
         'iAdmin.view.person.proprietary.ProprietarySearch',
@@ -357,7 +358,8 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                         disabled: true,
                         title: 'Resultado Layout',
                         iconCls: "fa fa-language",
-                        xtype: 'itembaselayout'
+                        xtype: 'itembaseresult'
+                        // xtype: 'itembaselayout'
                     }
                 ]
             }

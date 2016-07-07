@@ -86,6 +86,7 @@ class material extends \Smart\Data\Cache {
                 i.barcode,
                 coalesce(i.layoutfields,'{}') as layoutfields,
                 coalesce(i.layoutvalues,'{}') as layoutvalues,
+                coalesce(i.resultfields,'{}') as resultfields,
                 i.proprietaryid,
                 i.manufacturerid,
                 i.dateacquisition,
