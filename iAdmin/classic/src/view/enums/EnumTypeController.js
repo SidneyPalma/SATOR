@@ -38,9 +38,10 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
 
     //routes ===================================>>
 
-    updateRecord: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this;
-        console.info(record);
+    updateRecord: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
+
         Ext.getStore('enumtype').setParams({
             method: 'selectCode',
             rows: Ext.encode({ id: record.get('id') })

@@ -93,8 +93,9 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         // grid.setSource.apply(grid, [values,fields]);
     },
 
-    onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this;
+    onViewEdit: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
 
         Ext.getStore('equipment').setParams({
             method: 'selectCode',
