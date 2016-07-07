@@ -118,8 +118,10 @@ Ext.define( 'iAdmin.view.users.UsersController', {
         });
     },
 
-    onActionUpdateTree: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+    onActionUpdateTree: function(grid, rowIndex, colIndex) {
         var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex),
             usersmenu = Ext.getStore('usersmenu'),
             menuaction = Ext.getStore('usersmenuaction'),
             menuaccess = Ext.widget('usersmenuaccess', { xdata: record });
@@ -143,9 +145,10 @@ Ext.define( 'iAdmin.view.users.UsersController', {
         });
     },
 
-    onActionDeleteProfile: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+    onActionDeleteProfile: function(grid, rowIndex, colIndex) {
         var me = this,
-            store = grid.getStore();
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
 
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
@@ -171,9 +174,10 @@ Ext.define( 'iAdmin.view.users.UsersController', {
 
     },
 
-    onActionDeleteTree: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+    onActionDeleteTree: function(grid, rowIndex, colIndex) {
         var me = this,
-            store = grid.getStore();
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
 
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
@@ -197,9 +201,10 @@ Ext.define( 'iAdmin.view.users.UsersController', {
 
     },
 
-    onActionDelete: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+    onActionDelete: function(grid, rowIndex, colIndex) {
         var me = this,
-            store = grid.getStore();
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
 
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
@@ -227,8 +232,10 @@ Ext.define( 'iAdmin.view.users.UsersController', {
         );
     },
 
-    onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this;
+    onViewEdit: function(grid, rowIndex, colIndex) {
+        var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
 
         Ext.getStore('users').setParams({
             method: 'selectCode',

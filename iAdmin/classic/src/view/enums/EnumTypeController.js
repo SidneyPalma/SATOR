@@ -98,8 +98,10 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
         });
     },
 
-    onActionUpdate: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var typelistedit = Ext.widget('enumtypelistedit', {
+    onActionUpdate: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex),
+            typelistedit = Ext.widget('enumtypelistedit', {
                 xdata: record
             });
 

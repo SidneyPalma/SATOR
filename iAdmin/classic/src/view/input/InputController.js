@@ -92,8 +92,9 @@ Ext.define( 'iAdmin.view.input.InputController', {
         });
     },
 
-    onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this;
+    onViewEdit: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
 
         Ext.getStore('input').setParams({
             method: 'selectCode',

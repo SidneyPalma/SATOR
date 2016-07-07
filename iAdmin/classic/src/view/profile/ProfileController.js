@@ -97,8 +97,9 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         return context.record.data.leaf;
     },
 
-    onActionDeleteTree: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+    onActionDeleteTree: function(grid, rowIndex, colIndex) {
         var me = this,
+            record = grid.getStore().getAt(rowIndex),
 			params = record.data,
 			profilemenuid = record.get('profilemenuid');
 
@@ -128,8 +129,10 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
 
     },
 
-    onActionDelete: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var store = grid.getStore();
+    onActionDelete: function(grid, rowIndex, colIndex) {
+        var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
 
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
@@ -157,15 +160,19 @@ Ext.define( 'iAdmin.view.profile.ProfileController', {
         );
     },
 
-    onProfileUpdate: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var profileedit = Ext.widget('profileedit', { xdata: record });
+    onProfileUpdate: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex),
+            profileedit = Ext.widget('profileedit', { xdata: record });
 
         profileedit.show(null,function() {
             this.down('form').loadRecord(this.xdata);
         });
     },
 
-    onProfileUpdateMenuTree: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+    onProfileUpdateMenuTree: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
         Ext.widget('profilemenuedit', { xdata: record }).show();
     },
 
