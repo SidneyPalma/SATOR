@@ -59,6 +59,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentList', {
                 xtype: 'gridpanel',
                 store: 'equipment',
                 hideHeaders: false,
+                insertRecord: true,
                 headerBorders: false,
                 cls: 'search-grid',
                 listeners: {
