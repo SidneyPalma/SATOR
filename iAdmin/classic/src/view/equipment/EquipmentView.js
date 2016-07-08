@@ -171,7 +171,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                 region: 'center',
                 xtype: 'tabpanel',
                 focusOnToFront: false,
-                deferredRender: false,
+                deferredRender: true,
                 items: [
                     {
                         tabIndex: 0,

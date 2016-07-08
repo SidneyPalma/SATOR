@@ -12,11 +12,9 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseLayout', {
 
     cls: 'update-grid',
 
-    rowLines: false,
     columnLines: false,
-
-    plugins: ['insertrecordgrid'],
-
+    insertRecord: true,
+    
     listeners: {
         insertrecord: 'insertLayout',
         deleterecord: 'deleteLayout',

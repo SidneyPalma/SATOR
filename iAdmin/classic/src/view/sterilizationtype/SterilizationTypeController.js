@@ -47,14 +47,15 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     deleteLayout: function(grid, rowIndex, colIndex) {
         var me = this,
-            record = grid.getStore().getAt(rowIndex);
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
                 if (choice === 'yes') {
-                    view.store.remove(record);
-                    view.store.sync({
+                    store.remove(record);
+                    store.sync({
                         callback: function () {
-                            view.store.load();
+                            store.load();
                         }
                     });
                 }

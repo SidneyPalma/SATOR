@@ -6,17 +6,18 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
 
     requires: [
         'Ext.form.Panel',
-        'Ext.window.Window'
+        'Ext.window.Window',
+        'iAdmin.view.itembase.ItemBaseController'
     ],
 
     layout: 'fit',
 
-    grid: null,
     width: 400,
     modal: true,
     resizable: false,
     showAnimate: true,
     alwaysOnTop: true,
+    controller: 'itembase',
 
     title: 'Criando campos',
 
@@ -40,6 +41,10 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                 },
                 items: [
                     {
+                        xtype: 'hiddenfield',
+                        name: 'fieldCls',
+                        value: "smart-field-style-action"
+                    }, {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'textfield',
@@ -57,7 +62,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                                 flex: 1,
                                 margin: '0 0 0 5',
                                 pageSize: 0,
-                                name: 'type',
+                                name: 'xtype',
                                 editable: false,
                                 allowBlank: false,
                                 xtype: 'combobox',
@@ -75,17 +80,14 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                             }
                         ]
                     }, {
-                        fieldLabel: 'Valor Default',
-                        name: 'defaultValue'
-                    }, {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'textfield',
                         items: [
                             {
                                 flex: 1,
-                                fieldLabel: 'Valor Referência',
-                                name: 'referenceValue'
+                                fieldLabel: 'Valor Default',
+                                name: 'defaultValue'
                             }, {
                                 xtype: 'splitter'
                             }, {
@@ -111,8 +113,18 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                                 fieldLabel: 'Máximo',
                                 name: 'maxValue',
                                 value: 0
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                fieldLabel: 'Posição',
+                                name: 'showOrder',
+                                value: 0
                             }
                         ]
+                    }, {
+                        fieldLabel: 'Valor Referência',
+                        name: 'referenceValue'
                     }, {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
@@ -122,7 +134,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                         items: [
                             {
                                 flex: 1,
-                                boxLabel  : 'Money',
+                                boxLabel  : 'É decimal',
                                 name      : 'money',
                                 checked   : false
                             }, {
@@ -147,28 +159,17 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
 
     buttons: [
         {
+            scale: 'medium',
+            text: 'Confirmar',
+            showSmartTheme: 'red',
+            handler: 'updateSource'
+        }, {
             scope: this,
             scale: 'medium',
             text: 'Fechar',
             showSmartTheme: 'red',
             handler: function (btn) {
                 btn.up('window').close();
-            }
-        }, {
-            scale: 'medium',
-            text: 'Confirmar',
-            showSmartTheme: 'red',
-            handler: function (btn) {
-                var view = btn.up('window'),
-                    grid = view.grid,
-                    form = view.down('form'),
-                    source = grid.getSource(),
-                    values = form.getValues();
-
-                if(form.isValid()) {
-                    grid.fireEvent('updatesource', grid, source, values, {});
-                    view.close();
-                }
             }
         }
     ]

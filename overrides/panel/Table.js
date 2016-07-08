@@ -4,26 +4,43 @@ Ext.define( 'Ext.overrides.panel.Table', {
 
     rowLines: false,
     hideHeaders: true,
+    insertRecord: false,
     recordsRenderer: false,
 
-    initComponent: function () {
+    getEmptyTextElement: function () {
         var me = this,
-            id = Ext.id();
+            empty = [
+                '<div style="text-align: center; line-height: 40px;" class="insert-record">Nenhum dado disponível...</div>',
+                '<div style="text-align: center; line-height: 40px;"><h3 class="insert-record" style="cursor: pointer; color: red;">Inserir Novo Registro</h3></div>'
+            ];
 
-        me.insertRecordId = id;
+        return me.insertRecord ? empty[1] : empty[0];
+    },
+
+    initComponent: function () {
+        var me = this;
 
         me.viewConfig = {
             deferEmptyText: false,
             loadMask: { msg: 'Carregando...!' },
-            emptyText: [
-                '<div style="text-align: center;">Nenhum dado disponível...</div>',
-                Ext.String.format('<div style="text-align: center;"><h2><i id="{0}"></i></h2></div>',id)
-            ]
+            emptyText: me.getEmptyTextElement()
         };
 
         me.callParent();
 
+        me.onAfter( 'afterrender', me.fnAfterRender, me);
         me.onBefore( 'beforerender', me.fnBeforeRender, me);
+    },
+
+    fnAfterRender: function () {
+        var me = this;
+        if(me.insertRecord) {
+            me.el.on('click', function (event, target) {
+                console.info(target);
+            }, null, {
+                delegate: 'h3.insert-record'
+            });
+        }
     },
 
     fnBeforeRender: function (view, eOpts) {
@@ -62,4 +79,4 @@ Ext.define( 'Ext.overrides.panel.Table', {
         me.getView().refresh();
     }
 
-    });
+});

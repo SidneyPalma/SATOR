@@ -16,13 +16,17 @@ Ext.define( 'Smart.data.StoreBase', {
         var me = this;
 
         me.callParent();
-        me.getProxy().setUrl(me.getUrl());
+		//me.callParent(arguments);
+        me.getProxy().setUrl((config) ? config.url : me.url);
         me.getProxy().setApiUrl();
 
-        me.on({
-            write: { fn: 'fnWrite', scope: me },
-            beforeload: { fn: 'fnBeforeLoad', scope: me }
-        });
+        me.onBefore( 'write', me.fnWrite, me);
+        me.onBefore( 'beforeload', me.fnBeforeLoad, me);
+
+        // me.on({
+        //     write: { fn: 'fnWrite', scope: me },
+        //     beforeload: { fn: 'fnBeforeLoad', scope: me }
+        // });
     },
 
     fnBeforeLoad: function (store, operation, eOpts) {

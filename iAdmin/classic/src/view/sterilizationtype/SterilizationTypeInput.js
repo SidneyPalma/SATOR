@@ -13,10 +13,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeInput', {
 
     cls: 'update-grid',
 
-    rowLines: false,
     columnLines: false,
-
-    plugins: ['insertrecordgrid'],
+    insertRecord: true,
 
     listeners: {
         insertrecord: 'insertLayout',

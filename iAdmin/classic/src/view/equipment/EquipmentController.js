@@ -91,6 +91,11 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         portrait.setUrl(me.url);
         portrait.beFileData(xdata.get('filetype'));
         // grid.setSource.apply(grid, [values,fields]);
+
+        grid.getStore().setParams({
+            method: 'selectData',
+            query: xdata.get('id')
+        }).load();
     },
 
     onViewEdit: function(grid, rowIndex, colIndex) {

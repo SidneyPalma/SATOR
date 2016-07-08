@@ -7,19 +7,18 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
     requires: [
         'Ext.grid.Panel',
         'Smart.plugins.*',
-        'Ext.grid.column.*'
+        'Ext.grid.column.*',
+        'iAdmin.store.itembase.ItemBaseResult'
     ],
 
-    rowLines: false,
     columnLines: false,
     hideHeaders: false,
+    insertRecord: true,
     headerBorders: false,
 
     cls: 'update-grid',
 
-    selType: 'cellmodel',
-
-    plugins: ['insertrecordgrid'],
+    // store: 'itembaseresult',
 
     store: Ext.create('Smart.data.StoreBase', {
 
@@ -30,16 +29,28 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
                 name: 'id',
                 type: 'int'
             }, {
+                name: 'itembaseid',
+                type: 'int'
+            }, {
+                name: 'showorder',
+                type: 'int'
+            }, {
+                name: 'fieldtext',
+                type: 'auto'
+            }, {
                 name: 'fieldname',
                 type: 'auto'
             }, {
                 name: 'datavalue',
                 type: 'auto'
             }, {
+                name: 'reference',
+                type: 'auto'
+            }, {
                 name: 'formfield',
                 type: 'auto'
             }, {
-                name: 'reference',
+                name: 'datafield',
                 type: 'auto'
             }
         ]
@@ -54,12 +65,20 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
     buildItems: function () {
         var me = this;
 
+        // Ext.create('iAdmin.store.itembase.ItemBaseResult');
+
         me.columns = [
             {
+                width: 70,
+                text: '##',
+                align: 'center',
+                sortable: false,
+                dataIndex: 'showroder'
+            }, {
                 width: 120,
                 text: 'Campo',
                 sortable: false,
-                dataIndex: 'fieldname'
+                dataIndex: 'fieldtext'
             }, {
                 flex: 1,
                 sortable: false,
@@ -88,10 +107,18 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
                         }
                     }, {
                         handler: 'updateLayout',
-                        iconCls: "update-icon fa fa-check-circle action-update-color-font"
+                        iconCls: "update-icon fa fa-check-circle action-update-color-font",
+                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                            var datafield = record.get('datafield');
+                            return (datafield == '[{}]');
+                        }
                     }, {
                         handler: 'deleteLayout',
-                        iconCls: "delete-icon fa fa-minus-circle action-delete-color-font"
+                        iconCls: "delete-icon fa fa-minus-circle action-delete-color-font",
+                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                            var datafield = record.get('datafield');
+                            return (datafield == '[{}]');
+                        }
                     }
                 ]
             }
