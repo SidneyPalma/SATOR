@@ -11,7 +11,7 @@ Ext.define( 'Ext.overrides.panel.Table', {
         var me = this,
             empty = [
                 '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum dado disponível...</h4>',
-                '<h3 style="text-align: center;" class="insert-record smart-btn-insert-record">Inserir Novo Registro</h3>'
+                '<h3 style="text-align: center;" class="insert-record smart-btn-insert-record">Novo Registro</h3>'
             ];
 
         return me.insertRecord ? empty[1] : empty[0];

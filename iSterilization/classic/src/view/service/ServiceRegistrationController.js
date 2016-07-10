@@ -50,10 +50,8 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
     },
 
     onAfterRenderView: function (view) {
-        var xdata = view.xdata,
-            grid = view.down('serviceregistrationresult'),
-            values = Ext.decode(xdata ? xdata.get('resultvalue') : '{}'),
-            fields = Ext.decode(xdata ? xdata.get('resultfield') : '{}');
+        var me = this,
+            xdata = view.xdata;
 
         if(!xdata) {
             view.down('itembasesearch').setReadColor(false);
@@ -61,8 +59,21 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         };
 
         view.loadRecord(xdata);
-        grid.setSource.apply(grid, [values,fields]);
+        me.onLoadResultValue();
         view.down('button[name=pendent]').setDisabled(xdata.get('resultstate') != 'L');
+    },
+
+    onLoadResultValue: function () {
+        var me = this,
+            view = me.getView(),
+            xdata = view.xdata,
+            grid = view.down('serviceregistrationresult'),
+            values = Ext.decode(xdata ? xdata.get('resultvalue') : '{}');
+
+        grid.getStore().setParams({
+            method: 'selectData',
+            query: xdata.get('id')
+        }).load();
     },
 
     onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
@@ -103,28 +114,33 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
 	updateAccept: function (editor, context, eOpts) {
         var me = this,
             data = me.getView().xdata,
-            id = data.get('id'),
+            // id = data.get('id'),
             resultstate = data.get('resultstate');
 
-		return ((id.length != 0) && (resultstate == 'L'));
+        return (resultstate == 'L');
+		// return ((id.length != 0) && (resultstate == 'L'));
 	},
 	
     updateValues: function (editor, context, eOpts) {
         var me = this,
+            fields = [],
+            values = [],
             result = {},
             view = me.getView(),
-            id = view.down('hiddenfield[name=id]'),
-            grid = view.down('serviceregistrationresult'),
-            resultvalue = view.down('hiddenfield[name=resultvalue]'),
-            resultfield = view.down('hiddenfield[name=resultfield]');
+            record = context.record,
+            id = view.down('hiddenfield[name=id]');
 
-        if(id.getValue().length == 0) {
-            return false;
-        }
+        context.grid.store.each(function (rec) {
+            values.push({
+                field: rec.get('fieldname'),
+                value: rec.get('datavalue')
+            });
+            fields.push(Ext.decode(rec.get('formfield')));
+        });
 
         result.id = id.getValue();
-        result.resultfield = resultfield.getValue();
-        result.resultvalue = Ext.encode(grid.getSource());
+        result.resultvalue = Ext.encode(values);
+        result.resultfield = Ext.encode(fields);
 
         Ext.Ajax.request({
             scope: me,
@@ -132,6 +148,15 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
             params: {
                 action: 'update',
                 rows: Ext.encode(result)
+            },
+            success: function() {
+                delete result.id;
+                delete result.resultfield;
+                record.set('resultvalue',Ext.encode({
+                    field: record.get('fieldname'),
+                    value: record.get('datavalue')
+                }));
+                record.commit();
             }
         });
     },

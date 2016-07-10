@@ -33,11 +33,11 @@ class itembase extends \Smart\Data\Cache {
 
                 foreach ($base as $item) {
                     $list[$i]['id'] = $i+1;
-                    $list[$i]['fieldtext'] = $item['displayName'];
-                    $list[$i]['fieldname'] = $item["editor"]['name'];
-                    $list[$i]['datavalue'] = $item["editor"]['defaultValue'];
-                    $list[$i]['reference'] = $item["editor"]["referenceValue"];
                     $list[$i]['formfield'] = self::arrayToJson($item["editor"]);
+                    $list[$i]['fieldtext'] = $this->removeAccents($item['displayName']);
+                    $list[$i]['fieldname'] = $this->removeAccents($item["editor"]['name']);
+                    $list[$i]['datavalue'] = $this->removeAccents($item["editor"]['defaultValue']);
+                    $list[$i]['reference'] = $this->removeAccents($item["editor"]["referenceValue"]);
                     $list[$i]['showorder'] = str_pad($item["editor"]['showOrder'],2,'0',STR_PAD_LEFT);
                     $i++;
                 }
@@ -46,8 +46,6 @@ class itembase extends \Smart\Data\Cache {
 
                 $rows = self::sorterArray($rows,'showorder');
             }
-
-
 
             self::_setRows($rows);
 

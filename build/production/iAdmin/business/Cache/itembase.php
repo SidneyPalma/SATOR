@@ -11,7 +11,13 @@ class itembase extends \Smart\Data\Cache {
         $query = $data['query'];
         $proxy = $this->getStore()->getProxy();
 
-		$sql = "SELECT coalesce(resultfields,'{}') as datafield FROM itembase WHERE id = :id";
+		$sql = "
+            SELECT
+                resultfields as datafield
+            FROM
+                itembase
+            WHERE id = :id
+              and resultfields is not null";
 
         try {
             $pdo = $proxy->prepare($sql);
@@ -19,24 +25,29 @@ class itembase extends \Smart\Data\Cache {
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
-			$datafield = $rows[0]['datafield'];
+            if(count($rows) != 0) {
+                $datafield = $rows[0]['datafield'];
 
-            $i = 0;
-            $base = self::jsonToArray($datafield);
+                $i = 0;
+                $base = self::jsonToArray($datafield);
 
-            foreach ($base as $item) {
-                $list[$i]['id'] = $i+1;
-                $list[$i]['itembaseid'] = $query;
-                $list[$i]['datafield'] = $datafield;
-                $list[$i]['showorder'] = isset($item['showorder']) ? $item['showorder'] : '';
-                $list[$i]['fieldname'] = isset($item['fieldname']) ? $item['fieldname'] : '';
-                $list[$i]['datavalue'] = isset($item['datavalue']) ? $item['datavalue'] : '';
-                $list[$i]['reference'] = isset($item['reference']) ? $item['reference'] : '';
-                $list[$i]['formfield'] = isset($item['formfield']) ? $item['formfield'] : '';
-                $i++;
+                foreach ($base as $item) {
+                    $list[$i]['id'] = $i+1;
+                    $list[$i]['fieldtext'] = $item['displayName'];
+                    $list[$i]['fieldname'] = $item["editor"]['name'];
+                    $list[$i]['datavalue'] = $item["editor"]['defaultValue'];
+                    $list[$i]['reference'] = $item["editor"]["referenceValue"];
+                    $list[$i]['formfield'] = self::arrayToJson($item["editor"]);
+                    $list[$i]['showorder'] = str_pad($item["editor"]['showOrder'],2,'0',STR_PAD_LEFT);
+                    $i++;
+                }
+
+                $rows = $list;
+
+                $rows = self::sorterArray($rows,'showorder');
             }
 
-            self::_setRows($base);
+            self::_setRows($rows);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);

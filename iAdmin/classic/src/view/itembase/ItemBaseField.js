@@ -71,7 +71,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                                 displayField: 'name',
                                 store: {
                                     data: [
-                                        { id: 'combobox', name: 'combobox' },
+                                        // { id: 'combobox', name: 'combobox' },
                                         { id: 'textfield', name: 'textfield' },
                                         { id: 'datefield', name: 'datefield' },
                                         { id: 'numberfield', name: 'numberfield' }

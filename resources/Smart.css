@@ -268,7 +268,7 @@
 }
 
 .update-grid .fa {
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 .update-grid .x-tree-node-text {
@@ -279,14 +279,9 @@
     vertical-align: middle;
 }
 
-/*.update-grid .x-grid-cell-inner {*/
-    /*font-size: 14px;*/
-    /*line-height: 25px;*/
-/*}*/
-
 .update-grid .x-grid-cell-inner {
     font-size: 18px !important;
-    line-height: 27px !important;
+    line-height: 25px !important;
 }
 
 .update-grid .x-grid-body {

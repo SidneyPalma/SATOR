@@ -78,9 +78,9 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
             this.down('numberfield[name=showOrder]').setValue(fields.showOrder);
             this.down('checkboxfield[name=readOnly]').setValue(fields.readOnly);
             this.down('textfield[name=name]').setValue(fields.displayName);
-            this.down('textfield[name=referenceValue]').setValue(fields.reference);
             this.down('checkboxfield[name=allowBlank]').setValue(fields.allowBlank);
             this.down('textfield[name=defaultValue]').setValue(fields.defaultValue);
+            this.down('textfield[name=referenceValue]').setValue(fields.referenceValue);
         });
     },
 
