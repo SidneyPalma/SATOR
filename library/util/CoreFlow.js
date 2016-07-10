@@ -567,7 +567,13 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.stencil = new joint.ui.Stencil({
                 graph: this.graph,
                 paper: this.paper,
-                groups: stencil.groups
+                groups: stencil.groups,
+                search: {
+                    '*': ['attrs/text/text'],
+                    'basic.Image': ['description'],
+                    'basic.Path': ['description'],
+                    'placeholder': 'Pesquisar'
+                }
             });
 
             this.graph.addCells([

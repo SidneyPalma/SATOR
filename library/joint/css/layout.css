@@ -1,3 +1,14 @@
+.stencil .search {
+   color: red;
+   box-shadow: none;
+   text-shadow: none;
+   -moz-box-shadow: none;
+   box-sizing: border-box;
+   -webkit-box-shadow: none;
+   background-color: #FFFFFF;
+   border: 1px solid #d0d0d0;
+}
+
 .stencil-container {
    border-top: 0px solid #4f4f4f;
    border-right: 0px solid lightgray;
