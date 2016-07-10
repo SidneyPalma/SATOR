@@ -83,14 +83,10 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
 
         if(!xdata) return false;
 
-        var values = Ext.decode(xdata.get('layoutvalues') || {});
-        var fields = Ext.decode(xdata.get('layoutfields') || {});
-
         view.loadRecord(xdata);
         grid.setDisabled(false);
         portrait.setUrl(me.url);
         portrait.beFileData(xdata.get('filetype'));
-        // grid.setSource.apply(grid, [values,fields]);
 
         grid.getStore().setParams({
             method: 'selectData',

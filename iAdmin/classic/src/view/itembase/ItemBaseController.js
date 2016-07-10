@@ -7,91 +7,100 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
     url: '../iAdmin/business/Calls/itembase.php',
 
     insertLayout: function(grid, rowIndex, colIndex) {
-        var record = grid.getStore().getAt(rowIndex);
+        var me = this,
+            view = me.getView();
 
         Ext.widget('itembasefield').show(null,function() {
             this.grid = grid;
-            this.xdata = record;
-            this.method = 'insert'
+            this.itembaseid = view.down('hiddenfield[name=id]').getValue();
         });
     },
 
     deleteLayout: function(grid, rowIndex, colIndex) {
         var me = this,
-            record = grid.getStore().getAt(rowIndex);
-        //     result = {},
-        //     view = me.getView(),
-        //     id = view.down('hiddenfield[name=id]');
-        //
-        // Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
-        //     function (choice) {
-        //         if (choice === 'yes') {
-        //
-        //             delete source[record.data.name];
-        //
-        //             result.id = id.getValue();
-        //             result.layoutvalues = Ext.encode(source);
-        //
-        //             Ext.Ajax.request({
-        //                 scope: me,
-        //                 url: me.url,
-        //                 params: {
-        //                     action: 'update',
-        //                     rows: Ext.encode(result)
-        //                 },
-        //                 success: function(response, opts) {
-        //                     grid.setSource(source);
-        //                 }
-        //             });
-        //         }
-        //     }
-        // );
+            target = [],
+            result = {},
+            view = me.getView(),
+            store = grid.getStore(),
+            record = store.getAt(rowIndex),
+            id = view.down('hiddenfield[name=id]');
+
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+
+                    store.remove(record);
+
+                    store.each(function (rec) {
+                        target.push({
+                            displayName: rec.get('fieldtext'),
+                            editor: Ext.decode(rec.get('formfield'))
+                        });
+                    });
+
+                    result.id = id.getValue();
+                    result.resultfields = Ext.encode(target);
+
+                    Ext.Ajax.request({
+                        scope: me,
+                        url: me.url,
+                        params: {
+                            action: 'update',
+                            rows: Ext.encode(result)
+                        },
+                        success: function(response, opts) {
+                            store.load();
+                        }
+                    });
+                }
+            }
+        );
     },
 
     updateLayout: function(grid, rowIndex, colIndex) {
         var me = this,
-            record = grid.getStore().getAt(rowIndex);
-            // view = me.getView(),
-            // fields = Ext.decode(view.xdata.get('layoutfields'));
+            view = me.getView(),
+            record = grid.getStore().getAt(rowIndex),
+            fields = Ext.decode(record.get('formfield'));
 
-        // Ext.widget('itembasefield').show(null,function() {
-        //     var name = record.get('name'),
-        //         editor = fields[name].editor;
-        //
-        //     this.grid = grid;
-        //     this.data = view.xdata;
-        //
-        //     this.down('textfield[name=name]').setReadColor(true);
-        //     this.down('combobox[name=type]').setValue(editor.xtype);
-        //     this.down('textfield[name=mask]').setValue(editor.mask);
-        //     this.down('checkboxfield[name=money]').setValue(editor.money);
-        //     this.down('numberfield[name=minValue]').setValue(editor.minValue);
-        //     this.down('numberfield[name=maxValue]').setValue(editor.maxValue);
-        //     this.down('checkboxfield[name=readOnly]').setValue(editor.readOnly);
-        //     this.down('textfield[name=name]').setValue(fields[name].displayName);
-        //     this.down('checkboxfield[name=allowBlank]').setValue(editor.allowBlank);
-        //     this.down('textfield[name=defaultValue]').setValue(editor.defaultValue);
-        //     this.down('textfield[name=referenceValue]').setValue(editor.referenceValue);
-        // });
+        Ext.widget('itembasefield').show(null,function() {
+
+            this.grid = grid;
+            this.xdata = record;
+            this.itembaseid = view.down('hiddenfield[name=id]').getValue();
+
+            this.down('textfield[name=name]').setReadColor(true);
+            this.down('textfield[name=mask]').setValue(fields.mask);
+            this.down('combobox[name=xtype]').setValue(fields.xtype);
+            this.down('checkboxfield[name=money]').setValue(fields.money);
+            this.down('numberfield[name=minValue]').setValue(fields.minValue);
+            this.down('numberfield[name=maxValue]').setValue(fields.maxValue);
+            this.down('numberfield[name=showOrder]').setValue(fields.showOrder);
+            this.down('checkboxfield[name=readOnly]').setValue(fields.readOnly);
+            this.down('textfield[name=name]').setValue(fields.displayName);
+            this.down('textfield[name=referenceValue]').setValue(fields.reference);
+            this.down('checkboxfield[name=allowBlank]').setValue(fields.allowBlank);
+            this.down('textfield[name=defaultValue]').setValue(fields.defaultValue);
+        });
     },
 
     updateSource: function () {
         var me = this,
-            result = {},
             target = [],
+            result = {},
             view = me.getView(),
             form = view.down('form'),
             values = form.getValues(),
             source = {
                 displayName: values.name,
                 editor: new Object(values)
-            },
-            id = view.down('hiddenfield[name=id]');
+            };
 
         if(!form.isValid()) {
             return false;
         }
 
+        source.editor.displayName = values.name;
         source.editor.name = values.name.replace(/ /g,'');
 
         if( (values.mask.length != 0)||(values.xtype == 'datefield') ) {
@@ -113,29 +122,21 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
                 break;
         }
 
-        view.grid.store.each(function (rec) {
-            var formfield = Ext.decode(rec.get('formfield'));
-            target.push(formfield);
-        });
-
-        if(view.method == 'insert') {
+        if(view.xdata) {
+            view.xdata.set('formfield',Ext.encode(source.editor));
+        } else {
             target.push(source);
         }
 
-// 'showorder',
-// 'fieldtext',
-// 'fieldname',
-// 'datavalue',
-// 'reference',
-// 'formfield',
-// 'datafield',
+        view.grid.store.each(function (rec) {
+            target.push({
+                displayName: rec.get('fieldtext'),
+                editor: Ext.decode(rec.get('formfield'))
+            });
+        });
 
-        result.id = view.xdata.get('itembaseid');
+        result.id = view.itembaseid;
         result.resultfields = Ext.encode(target);
-
-        console.info(source);
-
-        return false;
 
         Ext.Ajax.request({
             scope: me,

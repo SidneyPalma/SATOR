@@ -11,6 +11,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
         'Smart.form.Portrait',
         'Ext.grid.property.Grid',
         'iAdmin.store.itembase.*',
+        'iAdmin.view.itembase.ItemBaseResult',
         'iAdmin.view.material.MaterialTypeFlow',
         'iAdmin.view.material.MaterialController',
         'iAdmin.view.helper.packing.PackingSearch',
@@ -397,7 +398,8 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         disabled: true,
                         title: 'Resultado Layout',
                         iconCls: "fa fa-language",
-                        xtype: 'itembaselayout'
+                        xtype: 'itembaseresult'
+                        // xtype: 'itembaselayout'
                     }
                 ]
             }

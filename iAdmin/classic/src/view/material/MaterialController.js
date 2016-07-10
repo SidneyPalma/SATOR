@@ -54,25 +54,26 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         var me = this,
             xdata = view.xdata,
             portrait = view.down('portrait'),
-            grid = view.down('itembaselayout'),
+            grid = view.down('itembaseresult'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
-
-        var values = Ext.decode(xdata.get('layoutvalues') || {});
-        var fields = Ext.decode(xdata.get('layoutfields') || {});
 
         view.loadRecord(xdata);
         grid.setDisabled(false);
         portrait.setUrl(me.url);
         portrait.beFileData(xdata.get('filetype'));
-        grid.setSource.apply(grid,[values,fields]);
 
         var materialboxname = xdata.get('materialboxname') ? xdata.get('materialboxname') : '';
 
         view.down('packingsearch').setReadColor(materialboxname.length != 0);
 
         Ext.getStore('materialtypeflow').setParams({
+            query: xdata.get('id')
+        }).load();
+
+        grid.getStore().setParams({
+            method: 'selectData',
             query: xdata.get('id')
         }).load();
     },
@@ -127,7 +128,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
     updateView: function () {
         var me = this,
             view = me.getView(),
-            grid = view.down('itembaselayout');
+            grid = view.down('itembaseresult');
 
         me.setModuleForm(view);
         me.setModuleData('material');
@@ -149,7 +150,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         var me = this,
             view = me.getView(),
             portrait = view.down('portrait'),
-            grid = view.down('itembaselayout');
+            grid = view.down('itembaseresult');
 
         view.reset();
 

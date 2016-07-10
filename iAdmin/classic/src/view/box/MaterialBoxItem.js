@@ -15,9 +15,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
 
     rowLines: false,
     hideHeaders: false,
+    insertRecord: true,
     headerBorders: false,
-
-    plugins: ['insertrecordgrid'],
 
     listeners: {
         insertrecord: 'insertLayout',

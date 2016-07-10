@@ -10,8 +10,8 @@ Ext.define( 'Ext.overrides.panel.Table', {
     getEmptyTextElement: function () {
         var me = this,
             empty = [
-                '<div style="text-align: center; line-height: 40px;" class="insert-record">Nenhum dado disponível...</div>',
-                '<div style="text-align: center; line-height: 40px;"><h3 class="insert-record" style="cursor: pointer; color: red;">Inserir Novo Registro</h3></div>'
+                '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum dado disponível...</h4>',
+                '<h3 style="text-align: center;" class="insert-record smart-btn-insert-record">Inserir Novo Registro</h3>'
             ];
 
         return me.insertRecord ? empty[1] : empty[0];
@@ -36,7 +36,7 @@ Ext.define( 'Ext.overrides.panel.Table', {
         var me = this;
         if(me.insertRecord) {
             me.el.on('click', function (event, target) {
-                console.info(target);
+                me.fireEvent('insertrecord', me, me.store, event, target);
             }, null, {
                 delegate: 'h3.insert-record'
             });

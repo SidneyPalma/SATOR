@@ -100,6 +100,9 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'numberfield',
+                        defaults: {
+                            hideTrigger: true
+                        },
                         items: [
                             {
                                 flex: 1,

@@ -7,8 +7,8 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
     requires: [
         'Ext.grid.Panel',
         'Smart.plugins.*',
-        'Ext.grid.column.*',
-        'iAdmin.store.itembase.ItemBaseResult'
+        'Ext.grid.column.*'
+        // 'iAdmin.store.itembase.ItemBaseResult'
     ],
 
     columnLines: false,
@@ -17,6 +17,14 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
     headerBorders: false,
 
     cls: 'update-grid',
+
+    listeners: {
+        insertrecord: 'insertLayout',
+        updaterecord: 'updateLayout',
+        deleterecord: 'deleteLayout'
+        // updatesource: 'updateSource',
+        // edit: 'updateValues'
+    },
 
     // store: 'itembaseresult',
 
@@ -29,11 +37,8 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
                 name: 'id',
                 type: 'int'
             }, {
-                name: 'itembaseid',
-                type: 'int'
-            }, {
                 name: 'showorder',
-                type: 'int'
+                type: 'auto'
             }, {
                 name: 'fieldtext',
                 type: 'auto'
@@ -73,19 +78,19 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
                 text: '##',
                 align: 'center',
                 sortable: false,
-                dataIndex: 'showroder'
+                dataIndex: 'showorder'
             }, {
-                width: 120,
+                width: 200,
                 text: 'Campo',
                 sortable: false,
                 dataIndex: 'fieldtext'
+            // }, {
+            //     flex: 1,
+            //     sortable: false,
+            //     text: 'Resultado',
+            //     dataIndex: 'datavalue'
             }, {
                 flex: 1,
-                sortable: false,
-                text: 'Resultado',
-                dataIndex: 'datavalue'
-            }, {
-                width: 250,
                 sortable: false,
                 text: 'Valor Referencia',
                 dataIndex: 'reference'
@@ -110,14 +115,14 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
                         iconCls: "update-icon fa fa-check-circle action-update-color-font",
                         isDisabled: function(view, rowIndex, colIndex, item, record) {
                             var datafield = record.get('datafield');
-                            return (datafield == '[{}]');
+                            return (datafield == '');
                         }
                     }, {
                         handler: 'deleteLayout',
                         iconCls: "delete-icon fa fa-minus-circle action-delete-color-font",
                         isDisabled: function(view, rowIndex, colIndex, item, record) {
                             var datafield = record.get('datafield');
-                            return (datafield == '[{}]');
+                            return (datafield == '');
                         }
                     }
                 ]
