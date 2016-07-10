@@ -571,8 +571,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                 search: {
                     '*': ['attrs/text/text'],
                     'basic.Image': ['description'],
-                    'basic.Path': ['description'],
-                    'placeholder': 'Pesquisar'
+                    'basic.Path': ['description']
                 }
             });
 

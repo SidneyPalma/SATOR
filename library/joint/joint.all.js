@@ -32647,7 +32647,7 @@ this["joint"]["templates"]["stencil"]["search.html"] = Handlebars.template(funct
 
 
 
-	return "<input class=\"search\" type=\"search\" placeholder=\"search\"/>\n";
+	return "<input class=\"search\" type=\"search\" placeholder=\"Pesquisar\"/>\n";
 });
 
 this["joint"]["templates"]["stencil"]["stencil.html"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
