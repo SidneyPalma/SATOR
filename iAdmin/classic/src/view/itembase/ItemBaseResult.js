@@ -8,7 +8,6 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
         'Ext.grid.Panel',
         'Smart.plugins.*',
         'Ext.grid.column.*'
-        // 'iAdmin.store.itembase.ItemBaseResult'
     ],
 
     columnLines: false,
@@ -25,8 +24,6 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
         // updatesource: 'updateSource',
         // edit: 'updateValues'
     },
-
-    // store: 'itembaseresult',
 
     store: Ext.create('Smart.data.StoreBase', {
 
@@ -70,8 +67,6 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
     buildItems: function () {
         var me = this;
 
-        // Ext.create('iAdmin.store.itembase.ItemBaseResult');
-
         me.columns = [
             {
                 width: 70,
@@ -84,11 +79,6 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseResult', {
                 text: 'Campo',
                 sortable: false,
                 dataIndex: 'fieldtext'
-            // }, {
-            //     flex: 1,
-            //     sortable: false,
-            //     text: 'Resultado',
-            //     dataIndex: 'datavalue'
             }, {
                 flex: 1,
                 sortable: false,

@@ -1,88 +1,121 @@
 //@charset UTF-8
 Ext.define( 'iAdmin.view.itembase.ItemBaseLayout', {
-    extend: 'Ext.grid.property.Grid',
+    extend: 'Ext.grid.Panel',
 
     xtype: 'itembaselayout',
 
     requires: [
-        'Ext.form.Panel',
+        'Ext.grid.Panel',
         'Smart.plugins.*',
-        'Ext.grid.property.Grid'
+        'Ext.grid.column.*'
     ],
+
+    columnLines: false,
+    hideHeaders: false,
+    insertRecord: true,
+    headerBorders: false,
 
     cls: 'update-grid',
 
-    columnLines: false,
-    insertRecord: true,
-    
     listeners: {
         insertrecord: 'insertLayout',
-        deleterecord: 'deleteLayout',
         updaterecord: 'updateLayout',
-        updatesource: 'updateSource',
-        edit: 'updateValues'
+        deleterecord: 'deleteLayout'
     },
 
-    rendererField: function(value, metaData, record, rowIndex, colIndex, store) {
-        var me = this,
-            id1 = Ext.id(),
-            id2 = Ext.id(),
-            id3 = Ext.id(),
-            c = store.getCount(),
-            s = '<div>' +
-                    '<div style="float: left;">{0}</div>' +
-                    '<div id="{1}" style="float: right; padding-left: 6px;"></div>' +
-                    '<div id="{2}" style="float: right; padding-left: 6px;"></div>' +
-                    '<div id="{3}" style="float: right;"></div>' +
-                '</div>';
+    store: Ext.create('Smart.data.StoreBase', {
 
-        if( rowIndex == c-1 && c != 0 ) {
-            Ext.defer(function () {
-                Ext.widget('component', {
-                    renderTo: id1,
-                    cls:"delete-icon fa fa-minus-circle action-delete-color-font"
-                }).getEl().on('click', function () { me.grid.fireEvent('deleterecord', me.grid, store, record, {}); }, me.grid);
-                Ext.widget('component', {
-                    renderTo: id2,
-                    cls:"update-icon fa fa-check-circle action-update-color-font"
-                }).getEl().on('click', function () { me.grid.fireEvent('updaterecord', me.grid, store, record, {}); }, me.grid);
-                Ext.widget('component', {
-                    renderTo: id3,
-                    cls:"insert-icon fa fa-plus-circle action-insert-color-font"
-                }).getEl().on('click', function () { me.grid.fireEvent('insertrecord', me.grid, store, {}); }, me.grid);
-            }, 50);
-            return Ext.String.format(s, value, id1, id2, id3);
-        } else {
-            Ext.defer(function () {
-                Ext.widget('component', {
-                    renderTo: id1,
-                    cls:"delete-icon fa fa-minus-circle action-delete-color-font"
-                }).getEl().on('click', function () { me.grid.fireEvent('deleterecord', me.grid, store, record, {}); }, me.grid);
-                Ext.widget('component', {
-                    renderTo: id2,
-                    cls:"update-icon fa fa-check-circle action-update-color-font"
-                }).getEl().on('click', function () { me.grid.fireEvent('updaterecord', me.grid, store, record, {}); }, me.grid);
-            }, 50);
-            return Ext.String.format(s, value, id1, id2, id3);
-        }
-    },
+        url: '../iAdmin/business/Calls/itembase.php',
 
-    rendererValue: function (value, metaData, record) {
-        var me = this,
-            name = record.get('name'),
-            s = '<div>' +
-                    '<div style="float: left;">{0}</div>' +
-                    '<div style="float: right; color: red; width: 200px">{1}</div>' +
-                '</div>';
+        fields: [
+            {
+                name: 'id',
+                type: 'int'
+            }, {
+                name: 'showorder',
+                type: 'auto'
+            }, {
+                name: 'fieldtext',
+                type: 'auto'
+            }, {
+                name: 'fieldname',
+                type: 'auto'
+            }, {
+                name: 'datavalue',
+                type: 'auto'
+            }, {
+                name: 'reference',
+                type: 'auto'
+            }, {
+                name: 'formfield',
+                type: 'auto'
+            }, {
+                name: 'datafield',
+                type: 'auto'
+            }
+        ]
+    }),
 
-        return Ext.String.format(s, value, 'OlaMundo');
-    },
-
-    fnBeforeRender: function (view, eOpts) {
+    initComponent: function () {
         var me = this;
-        me.columns[0].width = 170;
-        me.columns[0].renderer = me.rendererField;
-        //me.columns[1].renderer = me.rendererValue;
+        me.buildItems();
+        me.callParent();
+    },
+
+    buildItems: function () {
+        var me = this;
+
+        me.columns = [
+            {
+                width: 70,
+                text: '##',
+                align: 'center',
+                sortable: false,
+                dataIndex: 'showorder'
+            }, {
+                width: 200,
+                text: 'Campo',
+                sortable: false,
+                dataIndex: 'fieldtext'
+            }, {
+                flex: 1,
+                sortable: false,
+                text: 'Valor Referencia',
+                dataIndex: 'reference'
+            }, {
+                width: 70,
+                sortable: false,
+                align: 'center',
+                xtype: 'actioncolumn',
+                items: [
+                    {
+                        handler: 'insertLayout',
+                        getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                            var c = store.getCount();
+                            return ( rowIndex == c-1 && c != 0 ) ? "insert-icon fa fa-plus-circle action-insert-color-font" : "";
+                        },
+                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                            var c = view.store.getCount();
+                            return !( rowIndex == c-1 && c != 0 );
+                        }
+                    }, {
+                        handler: 'updateLayout',
+                        iconCls: "update-icon fa fa-check-circle action-update-color-font",
+                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                            var datafield = record.get('datafield');
+                            return (datafield == '');
+                        }
+                    }, {
+                        handler: 'deleteLayout',
+                        iconCls: "delete-icon fa fa-minus-circle action-delete-color-font",
+                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                            var datafield = record.get('datafield');
+                            return (datafield == '');
+                        }
+                    }
+                ]
+            }
+        ];
     }
 
 });
