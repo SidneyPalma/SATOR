@@ -358,8 +358,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                         disabled: true,
                         title: 'Resultado Layout',
                         iconCls: "fa fa-language",
-                        xtype: 'itembaselayout',
-                        url: '../iAdmin/business/Calls/itembase.php'
+                        xtype: 'itembaselayout'
                     }
                 ]
             }

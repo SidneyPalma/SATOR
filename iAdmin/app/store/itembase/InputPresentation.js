@@ -1,5 +1,5 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.store.input.InputPresentation', {
+Ext.define( 'iAdmin.store.itembase.InputPresentation', {
     extend: 'Smart.data.StoreBase',
 
     alias: 'store.InputPresentation',
@@ -7,12 +7,12 @@ Ext.define( 'iAdmin.store.input.InputPresentation', {
     storeId: 'inputpresentation',
 
     requires: [
-        'iAdmin.model.input.InputPresentation'
+        'iAdmin.model.itembase.InputPresentation'
     ],
 
     url: '../iAdmin/business/Calls/inputpresentation.php',
 
-    model: 'iAdmin.model.input.InputPresentation',
+    model: 'iAdmin.model.itembase.InputPresentation',
 
     config: {
         extraParams: {

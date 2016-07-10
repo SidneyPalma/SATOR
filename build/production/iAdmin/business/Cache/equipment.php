@@ -57,32 +57,32 @@ class equipment extends \Smart\Data\Cache {
 
         $sql = "
             SELECT
-                i.name,
-                i.description,
-                i.barcode,
-                coalesce(i.resultfield,'{}') as resultfield,
-                i.proprietaryid,
-                i.manufacturerid,
-                i.dateacquisition,
-                i.patrimonialcode,
-                i.itembasetype,
-                i.registrationanvisa,
-                i.isactive,
-                dbo.binary2base64(i.filedata) as filedata,
-                i.fileinfo,
+                ib.name,
+                ib.description,
+                ib.barcode,
+                ib.itembasetype,
+                coalesce(ib.resultfield,'{}') as resultfield,
+                ib.proprietaryid,
+                ib.manufacturerid,
+                ib.dateacquisition,
+                ib.patrimonialcode,
+                ib.registrationanvisa,
+                ib.isactive,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo,
                 e.*,
                 pt.name as proprietaryname,
                 mf.name as manufacturername,
                 ca.name as cmeareasname,
                 es.name as equipmentstatusname
             FROM
-                itembase i
-                inner join equipment e on ( e.id = i.id )
-                inner join proprietary pt on ( pt.id = i.proprietaryid )
-                inner join manufacturer mf on ( mf.id = i.manufacturerid )
+                itembase ib
+                inner join equipment e on ( e.id = ib.id )
+                inner join proprietary pt on ( pt.id = ib.proprietaryid )
+                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
                 inner join areas ca on ( ca.id = e.cmeareasid )
                 inner join equipmentstatus es on ( es.id = e.equipmentstatusid )
-            WHERE i.id = :id";
+            WHERE ib.id = :id";
 
         try {
             $pdo = $proxy->prepare($sql);

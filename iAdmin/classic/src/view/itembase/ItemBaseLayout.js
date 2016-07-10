@@ -35,7 +35,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseLayout', {
 
         me.store = Ext.create('Smart.data.StoreBase', {
 
-            url: me.url,
+            url: '../iAdmin/business/Calls/itembase.php',
 
             fields: [
                 {

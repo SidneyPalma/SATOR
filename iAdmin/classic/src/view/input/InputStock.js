@@ -7,7 +7,7 @@ Ext.define( 'iAdmin.view.input.InputStock', {
     requires: [
         'Ext.grid.Panel',
         'Ext.grid.column.*',
-        'iAdmin.store.input.*'
+        'iAdmin.store.itembase.*'
     ],
 
     hideHeaders: false,
@@ -28,7 +28,7 @@ Ext.define( 'iAdmin.view.input.InputStock', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.input.InputStock');
+        Ext.create('iAdmin.store.itembase.InputStock');
 
         me.columns = [
             {

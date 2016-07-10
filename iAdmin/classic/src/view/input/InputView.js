@@ -9,7 +9,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
         'Smart.plugins.*',
         'Ext.panel.Panel',
         'Smart.form.Portrait',
-        'iAdmin.store.input.*',
+        'iAdmin.store.itembase.*',
         'iAdmin.view.input.InputStock',
         'iAdmin.view.input.InputController',
         'iAdmin.view.itembase.ItemBaseLayout',
@@ -58,8 +58,6 @@ Ext.define( 'iAdmin.view.input.InputView', {
 
     buildItems: function () {
         var me = this;
-
-        Ext.create('iAdmin.store.input.Input');
 
         me.items = [
             {
@@ -192,7 +190,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                                 flex: 1,
                                                 allowBlank: true,
                                                 fieldLabel: 'Registro ANVISA',
-                                                name: 'codeanvisa'
+                                                name: 'registrationanvisa'
                                             }
                                         ]
                                     }, {
@@ -231,6 +229,32 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                                 name: 'manufacturername'
                                             }
                                         ]
+                                    }, {
+                                        flex: 2,
+                                        xtype: 'container'
+                                    }
+                                ]
+                            }, {
+                                xtype: 'fieldcontainer',
+                                layout: 'hbox',
+                                defaults: {
+                                    allowBlank: false
+                                },
+                                items: [
+                                    {
+                                        flex: 2,
+                                        margin: '0 5 0 0',
+                                        fieldLabel: 'Proprietário',
+                                        xtype: 'proprietarysearch',
+                                        hiddenNameId: 'proprietaryid',
+                                        name: 'proprietaryname'
+                                    }, {
+                                        flex: 1,
+                                        margin: '0 0 0 5',
+                                        xtype: 'datefield',
+                                        fieldLabel: 'Data Aquisição',
+                                        name: 'dateacquisition',
+                                        plugins: 'textmask'
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
@@ -400,8 +424,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
                         disabled: true,
                         title: 'Resultado Layout',
                         iconCls: "fa fa-language",
-                        xtype: 'itembaselayout',
-                        url: '../iAdmin/business/Calls/input.php'
+                        xtype: 'itembaselayout'
                     }
                 ]
             }

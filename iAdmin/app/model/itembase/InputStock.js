@@ -1,5 +1,5 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.model.input.InputPresentation', {
+Ext.define( 'iAdmin.model.itembase.InputStock', {
     extend: 'Ext.data.Model',
 
     requires: [
@@ -19,21 +19,17 @@ Ext.define( 'iAdmin.model.input.InputPresentation', {
             persist: true,
             critical: true
         }, {
-            name: 'presentation',
+            name: 'datevalidity',
             type: 'auto',
-            persist: true,
-            critical: true
+            serializeType: 'date'
         }, {
-            name: 'presentationdescription',
+            name: 'presentation',
             type: 'auto'
         }, {
-            name: 'acronym',
+            name: 'lotpart',
             type: 'auto'
         }, {
-            name: 'measurebase',
-            type: 'auto'
-        }, {
-            name: 'filtertype',
+            name: 'lotamount',
             type: 'auto'
         }
     ]

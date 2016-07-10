@@ -14,20 +14,20 @@ class material extends \Smart\Data\Cache {
 
         $sql = "
             SELECT
-                i.name,
-                i.description,
-                i.barcode,
-                i.proprietaryid,
-                i.manufacturerid,
-                i.dateacquisition,
-                i.patrimonialcode,
-                i.itembasetype,
-                i.registrationanvisa,
-                i.isactive,
+                ib.name,
+                ib.description,
+                ib.barcode,
+                ib.itembasetype,
+                ib.proprietaryid,
+                ib.manufacturerid,
+                ib.dateacquisition,
+                ib.patrimonialcode,
+                ib.registrationanvisa,
+                ib.isactive,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
                 dbo.getEnum('itemgroup',m.itemgroup) as itemgroupdescription,
-                dbo.binary2base64(i.filedata) as filedata,
-                i.fileinfo,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo,
                 materialboxname = (
                   SELECT TOP 1
                     mb.name
@@ -37,7 +37,7 @@ class material extends \Smart\Data\Cache {
                                             mbi.materialboxid = mb.id
                                         AND mbi.materialid = m.id
                                         AND mbi.boxitemstatus = 'A' )
-                    inner join itembase ib on ( ib.id = mbi.materialid )
+                    inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ),
                 m.*,
                 ms.name as materialstatusname,
@@ -45,13 +45,13 @@ class material extends \Smart\Data\Cache {
                 pt.name as proprietaryname,
                 mf.name as manufacturername
             FROM
-                itembase i
-                inner join material m on ( m.id = i.id )
+                itembase ib
+                inner join material m on ( m.id = ib.id )
                 inner join materialstatus ms on ( ms.id = m.materialstatusid )
                 inner join packing pk on ( pk.id = m.packingid )
-                inner join proprietary pt on ( pt.id = i.proprietaryid )
-                inner join manufacturer mf on ( mf.id = i.manufacturerid )
-            WHERE i.name LIKE :name OR i.description LIKE :description";
+                inner join proprietary pt on ( pt.id = ib.proprietaryid )
+                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+            WHERE ib.name LIKE :name OR ib.description LIKE :description";
 
         try {
             $pdo = $proxy->prepare($sql);
@@ -81,21 +81,21 @@ class material extends \Smart\Data\Cache {
 
         $sql = "
             SELECT
-                i.name,
-                i.description,
-                i.barcode,
-                coalesce(i.resultfield,'{}') as resultfield,
-                i.proprietaryid,
-                i.manufacturerid,
-                i.dateacquisition,
-                i.patrimonialcode,
-                i.itembasetype,
-                i.registrationanvisa,
-                i.isactive,
+                ib.name,
+                ib.description,
+                ib.barcode,
+                ib.itembasetype,
+                coalesce(ib.resultfield,'{}') as resultfield,
+                ib.proprietaryid,
+                ib.manufacturerid,
+                ib.dateacquisition,
+                ib.patrimonialcode,
+                ib.registrationanvisa,
+                ib.isactive,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
                 dbo.getEnum('itemgroup',m.itemgroup) as itemgroupdescription,
-                dbo.binary2base64(i.filedata) as filedata,
-                i.fileinfo,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo,
                 materialboxname = (
                   SELECT TOP 1
                     mb.name
@@ -105,7 +105,7 @@ class material extends \Smart\Data\Cache {
                                             mbi.materialboxid = mb.id
                                         AND mbi.materialid = m.id
                                         AND mbi.boxitemstatus = 'A' )
-                    inner join itembase ib on ( ib.id = mbi.materialid )
+                    inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ),
                 m.*,
                 ms.name as materialstatusname,
@@ -113,13 +113,13 @@ class material extends \Smart\Data\Cache {
                 pt.name as proprietaryname,
                 mf.name as manufacturername
             FROM
-                itembase i
-                inner join material m on ( m.id = i.id )
+                itembase ib
+                inner join material m on ( m.id = ib.id )
                 inner join materialstatus ms on ( ms.id = m.materialstatusid )
                 inner join packing pk on ( pk.id = m.packingid )
-                inner join proprietary pt on ( pt.id = i.proprietaryid )
-                inner join manufacturer mf on ( mf.id = i.manufacturerid )
-            WHERE i.id = :id";
+                inner join proprietary pt on ( pt.id = ib.proprietaryid )
+                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+            WHERE ib.id = :id";
 
         try {
             $pdo = $proxy->prepare($sql);

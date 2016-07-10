@@ -7,7 +7,7 @@ Ext.define( 'iAdmin.view.input.InputPresentation', {
     requires: [
         'Ext.grid.Panel',
         'Ext.grid.column.*',
-        'iAdmin.store.input.*',
+        'iAdmin.store.itembase.*',
         'Ext.grid.plugin.CellEditing'
     ],
 
@@ -38,7 +38,7 @@ Ext.define( 'iAdmin.view.input.InputPresentation', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.input.InputPresentation');
+        Ext.create('iAdmin.store.itembase.InputPresentation');
 
         me.columns = [
             {

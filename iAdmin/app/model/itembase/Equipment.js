@@ -47,10 +47,6 @@ Ext.define( 'iAdmin.model.itembase.Equipment', {
             name: 'registrationanvisavalid',
             type: 'auto',
             serializeType: 'date'
-        }, {
-            name: 'itembasetype',
-            type: 'auto',
-            defaultValue: 'E'
         }
     ]
 

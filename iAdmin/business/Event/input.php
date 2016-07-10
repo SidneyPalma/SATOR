@@ -11,6 +11,17 @@ class input extends \Smart\Data\Event {
      */
     public function preInsert( \iAdmin\Model\input &$model ) {
         Session::hasProfile('','');
+
+        $itembase = new \iAdmin\Coach\itembase();
+        $itembase->getStore()->getModel()->set('itembasetype','I');
+        $itembase->update();
+
+        $id = $itembase->getStore()->getModel()->getId();
+        $model->setId($id);
+
+        if(strlen($id) == 0) {
+            throw new \PDOException('Não foi possível inserir o registro!');
+        }
     }
 
     /**
@@ -34,6 +45,10 @@ class input extends \Smart\Data\Event {
      */
     public function preUpdate( \iAdmin\Model\input &$model ) {
         Session::hasProfile('','');
+
+
+        $itembase = new \iAdmin\Coach\itembase();
+        $itembase->update();
     }
 
     /**

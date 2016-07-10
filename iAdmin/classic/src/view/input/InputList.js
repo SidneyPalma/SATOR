@@ -8,7 +8,7 @@ Ext.define( 'iAdmin.view.input.InputList', {
         'Ext.grid.Panel',
         'Ext.form.Panel',
         'Ext.grid.column.*',
-        'iAdmin.store.input.*',
+        'iAdmin.store.itembase.*',
         'iAdmin.view.input.InputController'
     ],
 
@@ -52,7 +52,7 @@ Ext.define( 'iAdmin.view.input.InputList', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.input.Input');
+        Ext.create('iAdmin.store.itembase.Input');
 
         me.items = [
             {

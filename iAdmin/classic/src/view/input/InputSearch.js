@@ -6,7 +6,7 @@ Ext.define( 'iAdmin.view.input.InputSearch', {
 
     requires: [
         'Smart.form.field.ComboSearch',
-        'iAdmin.store.input.Input'
+        'iAdmin.store.itembase.Input'
     ],
 
     displayField: 'name',
@@ -14,6 +14,6 @@ Ext.define( 'iAdmin.view.input.InputSearch', {
     pageSize: 0,
     showClear: true,
 
-    store: 'iAdmin.store.input.Input'
+    store: 'iAdmin.store.itembase.Input'
 
 });
