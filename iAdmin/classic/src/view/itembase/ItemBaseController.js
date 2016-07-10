@@ -39,7 +39,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
                     });
 
                     result.id = id.getValue();
-                    result.resultfields = Ext.encode(target);
+                    result.resultfield = Ext.encode(target);
 
                     Ext.Ajax.request({
                         scope: me,
@@ -136,7 +136,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
         });
 
         result.id = view.itembaseid;
-        result.resultfields = Ext.encode(target);
+        result.resultfield = Ext.encode(target);
 
         Ext.Ajax.request({
             scope: me,

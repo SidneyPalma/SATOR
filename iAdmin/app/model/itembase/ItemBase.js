@@ -24,13 +24,7 @@ Ext.define( 'iAdmin.model.itembase.ItemBase', {
             name: 'barcode',
             type: 'auto'
         }, {
-            name: 'layoutfields',
-            type: 'auto'
-        }, {
-            name: 'layoutvalues',
-            type: 'auto'
-        }, {
-            name: 'resultfields',
+            name: 'resultfield',
             type: 'auto'
         }, {
             name: 'proprietaryid',
