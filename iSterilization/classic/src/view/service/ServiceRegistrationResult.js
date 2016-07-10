@@ -76,7 +76,7 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationResult', {
                 text: 'Campo',
                 sortable: false,
                 dataIndex: 'fieldtext',
-                renderer: function (value,metaData,record) {
+                renderer: function (value,metaData) {
                     metaData.style = 'background: rgb(232, 237, 252); font-weight: bold;';
                     return value;
                 }
@@ -96,28 +96,6 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationResult', {
                 sortable: false,
                 text: 'Valor Referencia',
                 dataIndex: 'reference'
-            // }, {
-            //     width: 45,
-            //     sortable: false,
-            //     align: 'center',
-            //     xtype: 'actioncolumn',
-            //     items: [
-            //         {
-            //             handler: 'updateLayout',
-            //             iconCls: "update-icon fa fa-check-circle action-update-color-font",
-            //             isDisabled: function(view, rowIndex, colIndex, item, record) {
-            //                 var datafield = record.get('datafield');
-            //                 return (datafield == '');
-            //             }
-            //         }, {
-            //             handler: 'deleteLayout',
-            //             iconCls: "delete-icon fa fa-minus-circle action-delete-color-font",
-            //             isDisabled: function(view, rowIndex, colIndex, item, record) {
-            //                 var datafield = record.get('datafield');
-            //                 return (datafield == '');
-            //             }
-            //         }
-            //     ]
             }
         ];
     }

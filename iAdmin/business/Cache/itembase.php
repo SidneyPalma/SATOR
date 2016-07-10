@@ -13,11 +13,11 @@ class itembase extends \Smart\Data\Cache {
 
 		$sql = "
             SELECT
-                resultfields as datafield
+                ib.resultfield
             FROM
-                itembase
-            WHERE id = :id
-              and resultfields is not null";
+                itembase ib
+            WHERE ib.id = :id
+              and ib.resultfield is not null";
 
         try {
             $pdo = $proxy->prepare($sql);
@@ -26,10 +26,10 @@ class itembase extends \Smart\Data\Cache {
             $rows = $pdo->fetchAll();
 
             if(count($rows) != 0) {
-                $datafield = $rows[0]['datafield'];
+                $resultfield = $rows[0]['resultfield'];
 
                 $i = 0;
-                $base = self::jsonToArray($datafield);
+                $base = self::jsonToArray($resultfield);
 
                 foreach ($base as $item) {
                     $list[$i]['id'] = $i+1;

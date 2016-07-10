@@ -108,17 +108,15 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
 
         resultvalue.setValue(Ext.encode(values));
         resultfield.setValue(Ext.encode(fields));
-        grid.setSource.apply(grid, [values,fields]);
+        // grid.setSource.apply(grid, [values,fields]);
     },
 
 	updateAccept: function (editor, context, eOpts) {
         var me = this,
             data = me.getView().xdata,
-            // id = data.get('id'),
             resultstate = data.get('resultstate');
 
         return (resultstate == 'L');
-		// return ((id.length != 0) && (resultstate == 'L'));
 	},
 	
     updateValues: function (editor, context, eOpts) {

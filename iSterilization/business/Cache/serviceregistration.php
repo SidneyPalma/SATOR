@@ -13,12 +13,12 @@ class serviceregistration extends \Smart\Data\Cache {
         $sql = "
             select
                 coalesce(sr.resultvalue,'[]') as resultvalue,
-                coalesce(sr.resultfield,ib.resultfields) as resultfield
+                coalesce(sr.resultfield,ib.resultfield) as resultfield
             from
                 serviceregistration sr
                 left join itembase ib on ( ib.id = sr.itembaseid )
             where sr.id = :id
-              and coalesce(sr.resultfield,ib.resultfields) is not null";
+              and coalesce(sr.resultfield,ib.resultfield) is not null";
 
         try {
             $pdo = $proxy->prepare($sql);
