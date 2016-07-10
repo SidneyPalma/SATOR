@@ -45,6 +45,7 @@ class equipment extends \Smart\Data\Event {
      * @param \iAdmin\Model\equipment $model
      */
     public function posUpdate( \iAdmin\Model\equipment &$model ) {
+
     }
 
     /**

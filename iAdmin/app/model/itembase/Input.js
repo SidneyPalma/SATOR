@@ -16,7 +16,9 @@ Ext.define( 'iAdmin.model.itembase.Input', {
             type: 'auto'
         }, {
             name: 'presentationdescription',
-            type: 'auto'
+            type: 'auto',
+            persist: true,
+            critical: true
         }, {
             name: 'providerid',
             type: 'int'
