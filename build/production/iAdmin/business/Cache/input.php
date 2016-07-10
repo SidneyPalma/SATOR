@@ -6,6 +6,57 @@ use iAdmin\Model\input as Model;
 
 class input extends \Smart\Data\Cache {
 
+    public function selectData(array $data) {
+        $list = array();
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            SELECT
+                i.resultfield
+            FROM
+                input i
+            WHERE i.id = :id
+              and i.resultfield is not null";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = self::encodeUTF8($pdo->fetchAll());
+
+            if(count($rows) != 0) {
+                $resultfield = $rows[0]['resultfield'];
+
+                $i = 0;
+                $base = self::jsonToArray($resultfield);
+
+                foreach ($base as $item) {
+                    $list[$i]['id'] = $i+1;
+                    $list[$i]['formfield'] = self::arrayToJson($item);
+                    $list[$i]['fieldname'] = $item['name'];
+                    $list[$i]['fieldtext'] = $item['displayName'];
+                    $list[$i]['datavalue'] = $item['defaultValue'];
+                    $list[$i]['reference'] = $item["referenceValue"];
+                    $list[$i]['showorder'] = str_pad($item['showOrder'],2,'0',STR_PAD_LEFT);
+                    $i++;
+                }
+
+                $rows = $list;
+
+                $rows = self::sorterArray($rows,'showorder');
+            }
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectLike(array $data) {
         $query = $data['query'];
         $start = $data['start'];

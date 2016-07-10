@@ -12,6 +12,7 @@ Ext.define( 'iAdmin.view.input.InputView', {
         'iAdmin.store.input.*',
         'iAdmin.view.input.InputStock',
         'iAdmin.view.input.InputController',
+        'iAdmin.view.itembase.ItemBaseLayout',
         'iAdmin.view.input.InputPresentation',
         'iAdmin.view.helper.provider.ProviderSearch',
         'iAdmin.view.helper.manufacturer.ManufacturerSearch',
@@ -394,6 +395,13 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                 tableName: 'input'
                             }
                         ]
+                    }, {
+                        tabIndex: 3,
+                        disabled: true,
+                        title: 'Resultado Layout',
+                        iconCls: "fa fa-language",
+                        xtype: 'itembaselayout',
+                        url: '../iAdmin/business/Calls/input.php'
                     }
                 ]
             }

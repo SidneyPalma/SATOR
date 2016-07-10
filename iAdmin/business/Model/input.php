@@ -33,6 +33,12 @@ class input extends \Smart\Data\Model {
     private $barcode;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $resultfield;
+
+    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -207,6 +213,22 @@ class input extends \Smart\Data\Model {
      */
     public function setBarcode($barcode) {
         $this->barcode = $barcode;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getResultfield() {
+        return $this->resultfield;
+    }
+
+    /**
+     * @param type $resultfield
+     * @return \iAdmin\Model\input
+     */
+    public function setResultfield($resultfield) {
+        $this->resultfield = $resultfield;
         return $this;
     }
 

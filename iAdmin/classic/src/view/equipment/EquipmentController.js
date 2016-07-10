@@ -50,30 +50,6 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
 
     //routes ========================>
 
-	//onSelectRecord: function (combo, record, eOpts) {
-	//	var me = this,
-	//		view = me.getView(),
-     //       grid = view.down('itembaselayout');
-    //
-     //   Ext.getStore('equipment').setParams({
-     //       method: 'selectCode',
-     //       query: record.get('id'),
-     //       rows: Ext.encode({ id: record.get('id') })
-     //   }).load({
-     //       scope: me,
-     //       callback: function(records, operation, success) {
-     //           var record = records[0],
-     //               values = Ext.decode(record.get('layoutvalues')),
-     //               fields = Ext.decode(record.get('layoutfields'));
-    //
-     //           view.xdata = record;
-     //           grid.setDisabled(false);
-     //           view.down('form').loadRecord(record);
-     //           grid.setSource.apply(grid, [values,fields]);
-     //       }
-     //   });
-	//},
-
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
@@ -150,6 +126,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         view.reset();
 
         grid.setDisabled(true);
+        grid.getStore().removeAll();
         view.down('tabpanel').setActiveTab(0);
         view.down('textfield[name=name]').setReadColor(false);
         portrait.beFileData();

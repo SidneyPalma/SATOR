@@ -1,7 +1,7 @@
 //@charset UTF-8
 Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
     extend: 'Smart.app.ViewControllerBase',
-
+    
     alias: 'controller.itembase',
 
     url: '../iAdmin/business/Calls/itembase.php',
@@ -119,29 +119,6 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
             success: function() {
                 view.grid.store.load();
                 view.close();
-            }
-        });
-    },
-
-    updateValues: function (editor, context, eOpts) {
-        var me = this,
-            result = {},
-            grid = editor.grid,
-            view = me.getView(),
-            id = view.down('hiddenfield[name=id]');
-
-        result.id = id.getValue();
-        result.layoutvalues = Ext.encode(grid.getSource());
-
-        Ext.Ajax.request({
-			scope: me,
-			url: me.url,
-			params: {
-				action: 'update',
-				rows: Ext.encode(result)
-			},
-			success: function(response, opts) {
-				view.xdata.set('layoutvalues',result.layoutvalues);
             }
         });
     }

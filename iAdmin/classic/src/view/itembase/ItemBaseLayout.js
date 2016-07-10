@@ -23,43 +23,49 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseLayout', {
         deleterecord: 'deleteLayout'
     },
 
-    store: Ext.create('Smart.data.StoreBase', {
-
-        url: '../iAdmin/business/Calls/itembase.php',
-
-        fields: [
-            {
-                name: 'id',
-                type: 'int'
-            }, {
-                name: 'showorder',
-                type: 'auto'
-            }, {
-                name: 'fieldtext',
-                type: 'auto'
-            }, {
-                name: 'fieldname',
-                type: 'auto'
-            }, {
-                name: 'datavalue',
-                type: 'auto'
-            }, {
-                name: 'reference',
-                type: 'auto'
-            }, {
-                name: 'formfield',
-                type: 'auto'
-            }, {
-                name: 'datafield',
-                type: 'auto'
-            }
-        ]
-    }),
-
     initComponent: function () {
         var me = this;
+        me.buildStore();
         me.buildItems();
         me.callParent();
+    },
+
+    buildStore: function () {
+        var me = this;
+
+        me.store = Ext.create('Smart.data.StoreBase', {
+
+            url: me.url,
+
+            fields: [
+                {
+                    name: 'id',
+                    type: 'int'
+                }, {
+                    name: 'showorder',
+                    type: 'auto'
+                }, {
+                    name: 'fieldtext',
+                    type: 'auto'
+                }, {
+                    name: 'fieldname',
+                    type: 'auto'
+                }, {
+                    name: 'datavalue',
+                    type: 'auto'
+                }, {
+                    name: 'reference',
+                    type: 'auto'
+                }, {
+                    name: 'formfield',
+                    type: 'auto'
+                }, {
+                    name: 'datafield',
+                    type: 'auto'
+                }
+            ]
+        });
+
     },
 
     buildItems: function () {

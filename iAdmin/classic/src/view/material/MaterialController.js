@@ -155,6 +155,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         view.reset();
 
         grid.setDisabled(true);
+        grid.getStore().removeAll();
         view.down('tabpanel').setActiveTab(0);
         view.down('textfield[name=name]').setReadColor(false);
         portrait.beFileData();

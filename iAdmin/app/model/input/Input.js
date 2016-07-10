@@ -20,6 +20,9 @@ Ext.define( 'iAdmin.model.input.Input', {
             name: 'description',
             type: 'auto'
         }, {
+            name: 'resultfield',
+            type: 'auto'
+        }, {
             name: 'barcode',
             type: 'auto'
         }, {
