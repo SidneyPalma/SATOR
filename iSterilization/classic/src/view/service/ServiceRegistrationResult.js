@@ -17,7 +17,6 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationResult', {
 
     columnLines: false,
     hideHeaders: false,
-    insertRecord: false,
     headerBorders: false,
 
     cls: 'update-grid',
