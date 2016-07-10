@@ -122,7 +122,8 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                                 flex: 1,
                                 fieldLabel: 'Posição',
                                 name: 'showOrder',
-                                value: 0
+                                value: 0,
+                                minValue: 0
                             }
                         ]
                     }, {
