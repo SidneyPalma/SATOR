@@ -54,7 +54,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         var me = this,
             xdata = view.xdata,
             portrait = view.down('portrait'),
-            grid = view.down('itembaseresult'),
+            grid = view.down('itembaselayout'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
@@ -128,7 +128,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
     updateView: function () {
         var me = this,
             view = me.getView(),
-            grid = view.down('itembaseresult');
+            grid = view.down('itembaselayout');
 
         me.setModuleForm(view);
         me.setModuleData('material');
@@ -150,7 +150,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         var me = this,
             view = me.getView(),
             portrait = view.down('portrait'),
-            grid = view.down('itembaseresult');
+            grid = view.down('itembaselayout');
 
         view.reset();
 

@@ -78,7 +78,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         var me = this,
             xdata = view.xdata,
             portrait = view.down('portrait'),
-            grid = view.down('itembaseresult'),
+            grid = view.down('itembaselayout'),
             id = view.down('hiddenfield[name=id]').getValue();
 
         if(!xdata) return false;
@@ -126,7 +126,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
     updateView: function () {
         var me = this,
             view = me.getView(),
-            grid = view.down('itembaseresult');
+            grid = view.down('itembaselayout');
 
         me.setModuleForm(view);
         me.setModuleData('equipment');
@@ -145,7 +145,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         var me = this,
             view = me.getView(),
             portrait = view.down('portrait'),
-            grid = view.down('itembaseresult');
+            grid = view.down('itembaselayout');
 
         view.reset();
 
