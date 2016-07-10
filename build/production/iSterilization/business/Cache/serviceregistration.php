@@ -12,35 +12,42 @@ class serviceregistration extends \Smart\Data\Cache {
 
         $sql = "
             select
-                sr.id,
-                ib.resultfields as resultfield,
-                sr.resultvalue
+                sr.resultvalue,
+                --coalesce(sr.resultvalue,'[]') as resultvalue,
+                coalesce(sr.resultfield,ib.resultfield) as resultfield
             from
                 serviceregistration sr
                 left join itembase ib on ( ib.id = sr.itembaseid )
             where sr.id = :id
-              and ib.resultfields is not null";
+              and coalesce(sr.resultfield,ib.resultfield) is not null";
 
         try {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
             $pdo->execute();
-            $rows = $pdo->fetchAll();
+            $rows = self::encodeUTF8($pdo->fetchAll());
 
             if(count($rows) != 0) {
+                $resultvalue = $rows[0]['resultvalue'];
                 $resultfield = $rows[0]['resultfield'];
 
                 $i = 0;
+                $json = self::jsonToArray($resultvalue);
                 $base = self::jsonToArray($resultfield);
 
                 foreach ($base as $item) {
                     $list[$i]['id'] = $i+1;
+                    $defaultValue = $item['defaultValue'];
+                    $value = isset($json[$i]['value']) ? $json[$i]['value'] : '';
+
+                    $defaultValue = strlen($value) != 0 ? $value : $defaultValue;
+
+                    $list[$i]['datavalue'] = $defaultValue;
+                    $list[$i]['fieldname'] = $item['name'];
                     $list[$i]['fieldtext'] = $item['displayName'];
-                    $list[$i]['fieldname'] = $item["editor"]['name'];
-                    $list[$i]['datavalue'] = $item["editor"]['defaultValue'];
-                    $list[$i]['reference'] = $item["editor"]["referenceValue"];
-                    $list[$i]['formfield'] = self::arrayToJson($item["editor"]);
-                    $list[$i]['showorder'] = str_pad($item["editor"]['showOrder'],2,'0',STR_PAD_LEFT);
+                    $list[$i]['reference'] = $item["referenceValue"];
+                    $list[$i]['formfield'] = self::arrayToJson($item);
+                    $list[$i]['showorder'] = str_pad($item['showOrder'],2,'0',STR_PAD_LEFT);
                     $i++;
                 }
 

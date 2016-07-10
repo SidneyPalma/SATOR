@@ -1165,7 +1165,6 @@ $include-iadmin-store-input-inputpresentation: dynamic(true);;
 $include-iadmin-store-input-inputstock: dynamic(true);;
 $include-iadmin-store-itembase-equipment: dynamic(true);;
 $include-iadmin-store-itembase-itembase: dynamic(true);;
-$include-iadmin-store-itembase-itembaseresult: dynamic(true);;
 $include-iadmin-store-itembase-material: dynamic(true);;
 $include-iadmin-store-itembase-materialtypeflow: dynamic(true);;
 $include-iadmin-store-menu-action: dynamic(true);;

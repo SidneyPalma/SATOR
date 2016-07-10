@@ -13,32 +13,32 @@ class itembase extends \Smart\Data\Cache {
 
 		$sql = "
             SELECT
-                resultfields as datafield
+                ib.resultfield
             FROM
-                itembase
-            WHERE id = :id
-              and resultfields is not null";
+                itembase ib
+            WHERE ib.id = :id
+              and ib.resultfield is not null";
 
         try {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
             $pdo->execute();
-            $rows = $pdo->fetchAll();
+            $rows = self::encodeUTF8($pdo->fetchAll());
 
             if(count($rows) != 0) {
-                $datafield = $rows[0]['datafield'];
+                $resultfield = $rows[0]['resultfield'];
 
                 $i = 0;
-                $base = self::jsonToArray($datafield);
+                $base = self::jsonToArray($resultfield);
 
                 foreach ($base as $item) {
                     $list[$i]['id'] = $i+1;
+                    $list[$i]['formfield'] = self::arrayToJson($item);
+                    $list[$i]['fieldname'] = $item['name'];
                     $list[$i]['fieldtext'] = $item['displayName'];
-                    $list[$i]['fieldname'] = $item["editor"]['name'];
-                    $list[$i]['datavalue'] = $item["editor"]['defaultValue'];
-                    $list[$i]['reference'] = $item["editor"]["referenceValue"];
-                    $list[$i]['formfield'] = self::arrayToJson($item["editor"]);
-                    $list[$i]['showorder'] = str_pad($item["editor"]['showOrder'],2,'0',STR_PAD_LEFT);
+                    $list[$i]['datavalue'] = $item['defaultValue'];
+                    $list[$i]['reference'] = $item["referenceValue"];
+                    $list[$i]['showorder'] = str_pad($item['showOrder'],2,'0',STR_PAD_LEFT);
                     $i++;
                 }
 

@@ -36,19 +36,7 @@ class itembase extends \Smart\Data\Model {
      * @Policy {"nullable":true}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $layoutfields;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
-     */
-    private $layoutvalues;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
-     */
-    private $resultfields;
+    private $resultfield;
 
     /**
      * @Policy {"nullable":false}
@@ -171,48 +159,16 @@ class itembase extends \Smart\Data\Model {
     /**
      * @return type string
      */
-    public function getLayoutfields() {
-        return $this->layoutfields;
+    public function getResultfield() {
+        return $this->resultfield;
     }
 
     /**
-     * @param type $layoutfields
+     * @param type $resultfield
      * @return \iAdmin\Model\itembase
      */
-    public function setLayoutfields($layoutfields) {
-        $this->layoutfields = $layoutfields;
-        return $this;
-    }
-
-    /**
-     * @return type string
-     */
-    public function getLayoutvalues() {
-        return $this->layoutvalues;
-    }
-
-    /**
-     * @param type $layoutvalues
-     * @return \iAdmin\Model\itembase
-     */
-    public function setLayoutvalues($layoutvalues) {
-        $this->layoutvalues = $layoutvalues;
-        return $this;
-    }
-
-    /**
-     * @return type string
-     */
-    public function getResultfields() {
-        return $this->resultfields;
-    }
-
-    /**
-     * @param type $resultfields
-     * @return \iAdmin\Model\itembase
-     */
-    public function setResultfields($resultfields) {
-        $this->resultfields = $resultfields;
+    public function setResultfield($resultfield) {
+        $this->resultfield = $resultfield;
         return $this;
     }
 

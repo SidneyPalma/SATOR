@@ -12,7 +12,7 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationResult', {
     requires: [
         'Ext.grid.Panel',
         'Ext.grid.column.*',
-        'Ext.grid.plugin.CellEditing',
+        'Ext.grid.plugin.CellEditing'
     ],
 
     columnLines: false,
