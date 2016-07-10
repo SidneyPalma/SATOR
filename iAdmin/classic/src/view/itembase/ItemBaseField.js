@@ -12,7 +12,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
 
     layout: 'fit',
 
-    width: 400,
+    width: 550,
     modal: true,
     resizable: false,
     showAnimate: true,
@@ -52,7 +52,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                         labelCls: 'sub-title-label',
                         items: [
                             {
-                                flex: 1,
+                                flex: 2,
                                 allowBlank: false,
                                 margin: '0 5 0 0',
                                 fieldLabel: 'Nome do Campo',
@@ -71,10 +71,8 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                                 displayField: 'name',
                                 store: {
                                     data: [
-                                        // { id: 'combobox', name: 'combobox' },
                                         { id: 'textfield', name: 'textfield' },
-                                        { id: 'datefield', name: 'datefield' },
-                                        { id: 'numberfield', name: 'numberfield' }
+                                        { id: 'datefield', name: 'datefield' }
                                     ]
                                 }
                             }
@@ -82,44 +80,17 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                     }, {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
-                        defaultType: 'textfield',
                         items: [
                             {
-                                flex: 1,
+                                flex: 2,
+                                xtype: 'textfield',
                                 fieldLabel: 'Valor Default',
                                 name: 'defaultValue'
                             }, {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                fieldLabel: 'Máscara',
-                                name: 'mask'
-                            }
-                        ]
-                    }, {
-                        xtype: 'fieldcontainer',
-                        layout: 'hbox',
-                        defaultType: 'numberfield',
-                        defaults: {
-                            hideTrigger: true
-                        },
-                        items: [
-                            {
-                                flex: 1,
-                                fieldLabel: 'Mínimo',
-                                name: 'minValue',
-                                value: 0
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
-                                fieldLabel: 'Máximo',
-                                name: 'maxValue',
-                                value: 0
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
+                                xtype: 'numberfield',
                                 fieldLabel: 'Posição',
                                 name: 'showOrder',
                                 value: 0,
@@ -129,30 +100,6 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseField', {
                     }, {
                         fieldLabel: 'Valor Referência',
                         name: 'referenceValue'
-                    }, {
-                        xtype: 'fieldcontainer',
-                        layout: 'hbox',
-                        fieldLabel: 'Complementos',
-                        defaultType: 'checkboxfield',
-                        labelCls: 'sub-title-label',
-                        items: [
-                            {
-                                flex: 1,
-                                boxLabel  : 'É decimal',
-                                name      : 'money',
-                                checked   : false
-                            }, {
-                                flex: 1,
-                                boxLabel  : 'Permite vazio',
-                                name      : 'allowBlank',
-                                checked   : true
-                            }, {
-                                flex: 1,
-                                boxLabel  : 'Somente leitura',
-                                name      : 'readOnly',
-                                checked   : false
-                            }
-                        ]
                     }
                 ]
             }

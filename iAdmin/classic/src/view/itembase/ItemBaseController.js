@@ -70,15 +70,9 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
             this.itembaseid = view.down('hiddenfield[name=id]').getValue();
 
             this.down('textfield[name=name]').setReadColor(true);
-            this.down('textfield[name=mask]').setValue(fields.mask);
             this.down('combobox[name=xtype]').setValue(fields.xtype);
-            this.down('checkboxfield[name=money]').setValue(fields.money);
-            this.down('numberfield[name=minValue]').setValue(fields.minValue);
-            this.down('numberfield[name=maxValue]').setValue(fields.maxValue);
             this.down('numberfield[name=showOrder]').setValue(fields.showOrder);
-            this.down('checkboxfield[name=readOnly]').setValue(fields.readOnly);
             this.down('textfield[name=name]').setValue(fields.displayName);
-            this.down('checkboxfield[name=allowBlank]').setValue(fields.allowBlank);
             this.down('textfield[name=defaultValue]').setValue(fields.defaultValue);
             this.down('textfield[name=referenceValue]').setValue(fields.referenceValue);
         });
@@ -91,48 +85,25 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseController', {
             view = me.getView(),
             form = view.down('form'),
             values = form.getValues(),
-            source = {
-                displayName: values.name,
-                editor: new Object(values)
-            };
+            source = new Object(values);
 
         if(!form.isValid()) {
             return false;
         }
 
-        source.editor.displayName = values.name;
-        source.editor.name = values.name.replace(/ /g,'');
+        source.displayName = values.name;
+        source.name = values.name.replace(/ /g,'');
 
-        if( (values.mask.length != 0)||(values.xtype == 'datefield') ) {
-            source.editor.plugins = 'textmask';
-        }
-        
-        switch (values.xtype) {
-            case 'combobox':
-                var store = values.defaultValue.split(',');
-        
-                delete source.editor.mask;
-                delete source.editor.plugins;
-        
-                source.editor.pageSize = 0;
-                source.editor.store = store;
-                source.editor.value = store[0];
-                source.editor.editable = false;
-                source.editor.forceSelection = true;
-                break;
-        }
+        source.plugins = values.xtype == 'datefield' ? 'textmask' : null;
 
         if(view.xdata) {
-            view.xdata.set('formfield',Ext.encode(source.editor));
+            view.xdata.set('formfield',Ext.encode(source));
         } else {
             target.push(source);
         }
 
         view.grid.store.each(function (rec) {
-            target.push({
-                displayName: rec.get('fieldtext'),
-                editor: Ext.decode(rec.get('formfield'))
-            });
+            target.push(Ext.decode(rec.get('formfield')));
         });
 
         result.id = view.itembaseid;

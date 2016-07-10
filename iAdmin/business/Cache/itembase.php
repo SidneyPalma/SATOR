@@ -23,7 +23,7 @@ class itembase extends \Smart\Data\Cache {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
             $pdo->execute();
-            $rows = $pdo->fetchAll();
+            $rows = self::encodeUTF8($pdo->fetchAll());
 
             if(count($rows) != 0) {
                 $resultfield = $rows[0]['resultfield'];
@@ -33,12 +33,12 @@ class itembase extends \Smart\Data\Cache {
 
                 foreach ($base as $item) {
                     $list[$i]['id'] = $i+1;
-                    $list[$i]['formfield'] = self::arrayToJson($item["editor"]);
-                    $list[$i]['fieldtext'] = $this->removeAccents($item['displayName']);
-                    $list[$i]['fieldname'] = $this->removeAccents($item["editor"]['name']);
-                    $list[$i]['datavalue'] = $this->removeAccents($item["editor"]['defaultValue']);
-                    $list[$i]['reference'] = $this->removeAccents($item["editor"]["referenceValue"]);
-                    $list[$i]['showorder'] = str_pad($item["editor"]['showOrder'],2,'0',STR_PAD_LEFT);
+                    $list[$i]['formfield'] = self::arrayToJson($item);
+                    $list[$i]['fieldname'] = $item['name'];
+                    $list[$i]['fieldtext'] = $item['displayName'];
+                    $list[$i]['datavalue'] = $item['defaultValue'];
+                    $list[$i]['reference'] = $item["referenceValue"];
+                    $list[$i]['showorder'] = str_pad($item['showOrder'],2,'0',STR_PAD_LEFT);
                     $i++;
                 }
 

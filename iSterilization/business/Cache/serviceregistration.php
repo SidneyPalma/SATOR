@@ -12,7 +12,8 @@ class serviceregistration extends \Smart\Data\Cache {
 
         $sql = "
             select
-                coalesce(sr.resultvalue,'[]') as resultvalue,
+                sr.resultvalue,
+                --coalesce(sr.resultvalue,'[]') as resultvalue,
                 coalesce(sr.resultfield,ib.resultfield) as resultfield
             from
                 serviceregistration sr
@@ -24,30 +25,28 @@ class serviceregistration extends \Smart\Data\Cache {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
             $pdo->execute();
-            $rows = $pdo->fetchAll();
+            $rows = self::encodeUTF8($pdo->fetchAll());
 
             if(count($rows) != 0) {
-                $resultfield = $rows[0]['resultfield'];
                 $resultvalue = $rows[0]['resultvalue'];
-                
+                $resultfield = $rows[0]['resultfield'];
+
                 $i = 0;
-                $base = self::jsonToArray($resultfield);
                 $json = self::jsonToArray($resultvalue);
+                $base = self::jsonToArray($resultfield);
 
                 foreach ($base as $item) {
                     $list[$i]['id'] = $i+1;
-                    $recordsValue = $this->removeAccents($json[$i]['value']);
-                    $defaultValue = $this->removeAccents($item['defaultValue']);
+                    $defaultValue = $item['defaultValue'];
+                    $value = isset($json[$i]['value']) ? $json[$i]['value'] : '';
 
-                    if($this->removeAccents($item['name']) == $this->removeAccents($json[$i]['field'])) {
-                        $recordsValue = strlen($recordsValue) != 0 ? $recordsValue : $defaultValue;
-                    }
+                    $defaultValue = strlen($value) != 0 ? $value : $defaultValue;
 
-                    $list[$i]['datavalue'] = $recordsValue;
+                    $list[$i]['datavalue'] = $defaultValue;
+                    $list[$i]['fieldname'] = $item['name'];
+                    $list[$i]['fieldtext'] = $item['displayName'];
+                    $list[$i]['reference'] = $item["referenceValue"];
                     $list[$i]['formfield'] = self::arrayToJson($item);
-                    $list[$i]['fieldname'] = $this->removeAccents($item['name']);
-                    $list[$i]['fieldtext'] = $this->removeAccents($item['displayName']);
-                    $list[$i]['reference'] = $this->removeAccents($item["referenceValue"]);
                     $list[$i]['showorder'] = str_pad($item['showOrder'],2,'0',STR_PAD_LEFT);
                     $i++;
                 }
