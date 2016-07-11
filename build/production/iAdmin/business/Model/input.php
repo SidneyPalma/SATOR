@@ -10,7 +10,7 @@ class input extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "strategy":"AUTO", "type":"integer", "policy":false, "logallow":true, "default":""}
+     * @Column {"description":"", "strategy":"NONE", "type":"integer", "policy":false, "logallow":true, "default":""}
      */
     private $id;
 
@@ -25,18 +25,6 @@ class input extends \Smart\Data\Model {
      * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,presentation"}
      */
     private $presentationdescription;
-
-    /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $manufacturerid;
-
-	/**
-	 * @Policy {"nullable":true}
-	 * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,manufacturerid"}
-	 */
-	private $manufacturername;
 
     /**
      * @Policy {"nullable":false}

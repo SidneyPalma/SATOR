@@ -16,7 +16,7 @@ Ext.define( 'iAdmin.store.itembase.ItemBase', {
 
     config: {
         extraParams: {
-            fields: Ext.encode(['id','name','layoutvalues','layoutfields']),
+            fields: Ext.encode(['id','name','resultfield']),
             params: Ext.encode(['name'])
         }
     }

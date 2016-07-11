@@ -60,16 +60,17 @@ class moviment extends \Smart\Data\Cache {
 
         $sql = "
             select
-                i.id,
-                i.name,
+                ib.id,
+                ib.name,
                 i.hasstock,
                 i.hasbatch,
                 m.name as manufacturername
             from
                 input i
-                inner join manufacturer m on ( m.id = i.manufacturerid )
-            where i.name like :name
-              and i.isactive = 1";
+                inner join itembase ib on ( ib.id = i.id )
+                inner join manufacturer m on ( m.id = ib.manufacturerid )
+            where ib.name like :name
+              and ib.isactive = 1";
 
         try {
             $pdo = $proxy->prepare($sql);
@@ -101,7 +102,7 @@ class moviment extends \Smart\Data\Cache {
         $sql = "
             select
                 it.id,
-                i.name,
+                ib.name,
                 it.inputid,
                 lotamount = (
                     select
@@ -126,7 +127,8 @@ class moviment extends \Smart\Data\Cache {
             from
                 inputstock it
                 inner join input i on ( i.id = it.inputid )
-            where i.name like :name
+                inner join itembase ib on ( ib.id = i.id )
+            where ib.name like :name
               and it.lotamount > 0
               and it.datevalidity >= getdate()";
 

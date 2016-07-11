@@ -7,13 +7,11 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationView', {
     requires: [
         'Ext.tab.*',
         'Ext.panel.Panel',
-        'Smart.plugins.SmartRegion',
+        'Smart.plugins.*',
         'Ext.grid.plugin.RowEditing',
         'iSterilization.store.service.*',
-        'iAdmin.view.itembase.ItemBaseSearch',
-        'iAdmin.view.helper.areas.CMEAreasSearch',
-        'iSterilization.view.service.ServiceRegistrationController',
-        'iSterilization.view.service.ServiceRegistrationResult'
+        'iSterilization.view.service.ServiceRegistrationResult',
+        'iSterilization.view.service.ServiceRegistrationController'
     ],
 
     controller: 'serviceregistration',
@@ -103,24 +101,20 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationView', {
                         xtype: 'hiddenfield',
                         name: 'resultfield'
                     }, {
-                        showClear: false,
                         useReadColor: true,
                         fieldLabel: 'Item',
-                        xtype: 'itembasesearch',
-                        hiddenNameId: 'itembaseid',
                         name: 'itembasename',
-                        fieldCls: 'smart-field-style-action',
-                        listeners: {
-                            select: 'selectItemBase'
-                        }
+                        fieldCls: 'smart-field-style-action'
+                        // listeners: {
+                        //     select: 'selectItemBase'
+                        // }
                     }, {
-                        showClear: false,
+                        allowBlank: true,
+                        useReadColor: true,
                         fieldLabel: 'Área CME',
-                        xtype: 'cmeareassearch',
-                        hiddenNameId: 'cmeareasid',
                         name: 'cmeareasname'
                     }, {
-                        xtype: 'comboenum',
+                        useReadColor: true,
                         fieldLabel: 'Tipo de Serviço',
                         name: 'servicetypedescription'
                     }, {
@@ -158,31 +152,51 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationView', {
                         defaultType: 'button',
                         defaults: {
                             scale: 'large',
-                            showSmartTheme: 'red'
+                            showSmartTheme: 'red',
+                            style: 'font-size: 20px;'
                         },
                         items: [
                             {
-                                flex: 1,
+                                flex: 2,
                                 iconCls: "fa fa-upload",
                                 text: 'Salvar',
-                                handler: 'updateView'
+                                name: 'update',
+                                listeners: {
+                                    click: 'updateView'
+                                }
                             }, {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                iconCls: "fa fa-file-o",
-                                text: 'Novo',
-                                handler: 'insertView'
-                            }, {
-                                xtype: 'splitter'
+                                iconCls: "fa fa-print",
+                                handler: 'printerView'
                             }, {
                                 flex: 1,
-                                disabled: true,
                                 name: 'pendent',
-								iconCls: "fa fa-check",
-                                text: 'Concluir',
-								handler: 'updateFlux',
+                                iconCls: "fa fa-times-circle",
+                                handler: 'updateFlux',
                                 showSmartTheme: ''
+                            //     flex: 1,
+                            //     iconCls: "fa fa-upload",
+                            //     text: 'Salvar',
+                            //     handler: 'updateView'
+                            // }, {
+                            //     xtype: 'splitter'
+                            // }, {
+                            //     flex: 1,
+                            //     iconCls: "fa fa-file-o",
+                            //     text: 'Novo',
+                            //     handler: 'insertView'
+                            // }, {
+                            //     xtype: 'splitter'
+                            // }, {
+                            //     flex: 1,
+                            //     disabled: true,
+                            //     name: 'pendent',
+								// iconCls: "fa fa-check",
+                            //     text: 'Concluir',
+								// handler: 'updateFlux',
+                            //     showSmartTheme: ''
                             }
                         ]
                     }

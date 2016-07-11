@@ -36,8 +36,6 @@ class input extends \Smart\Data\Event {
         $inputpresentation->getStore()->getModel()->set('inputid',$id);
         $inputpresentation->getStore()->getModel()->set('presentation',$presentation);
         $inputpresentation->update();
-
-        $this->getProxy()->setUpload($model);
     }
 
     /**
@@ -45,13 +43,17 @@ class input extends \Smart\Data\Event {
      */
     public function preUpdate( \iAdmin\Model\input &$model ) {
         Session::hasProfile('','');
+
+
+        $itembase = new \iAdmin\Coach\itembase();
+        $itembase->update();
     }
 
     /**
      * @param \iAdmin\Model\input $model
      */
     public function posUpdate( \iAdmin\Model\input &$model ) {
-        $this->getProxy()->setUpload($model);
+
     }
 
     /**

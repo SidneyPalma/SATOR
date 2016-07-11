@@ -72,12 +72,12 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationResult', {
 
         me.columns = [
             {
-                width: 150,
+                width: 250,
                 text: 'Campo',
                 sortable: false,
                 dataIndex: 'fieldtext',
                 renderer: function (value,metaData) {
-                    metaData.style = 'background: rgb(232, 237, 252); font-weight: bold;';
+                    metaData.style = 'background: rgba(239, 235, 223, .4);';
                     return value;
                 }
             }, {
@@ -95,7 +95,11 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationResult', {
                 flex: 1,
                 sortable: false,
                 text: 'Valor Referencia',
-                dataIndex: 'reference'
+                dataIndex: 'reference',
+                renderer: function (value,metaData) {
+                    metaData.style = 'background: rgba(239, 235, 223, .4);';
+                    return value;
+                }
             }
         ];
     }

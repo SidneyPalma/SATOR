@@ -53,11 +53,6 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         var me = this,
             xdata = view.xdata;
 
-        if(!xdata) {
-            view.down('itembasesearch').setReadColor(false);
-            return false
-        };
-
         view.loadRecord(xdata);
         me.onLoadResultValue();
         view.down('button[name=pendent]').setDisabled(xdata.get('resultstate') != 'L');
@@ -67,8 +62,7 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         var me = this,
             view = me.getView(),
             xdata = view.xdata,
-            grid = view.down('serviceregistrationresult'),
-            values = Ext.decode(xdata ? xdata.get('resultvalue') : '{}');
+            grid = view.down('serviceregistrationresult');
 
         grid.getStore().setParams({
             method: 'selectData',
@@ -92,15 +86,51 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         });
     },
 
-    insertViewNew: function (btn) {
-        var me = this;
-        me.redirectTo('serviceregistrationview');
+    insertViewNew: function () {
+        Ext.widget('serviceregistrationnew').show();
+    },
+
+    onSelectServiceRegistration: function (combo, record, eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('hiddenfield[name=cmeareasid]').reset();
+        view.down('textfield[name=cmeareasname]').reset();
+
+        if(record.get('itembasetype') == 'E') {
+            view.down('hiddenfield[name=cmeareasid]').setValue(record.get('cmeareasid'));
+            view.down('textfield[name=cmeareasname]').setValue(record.get('cmeareasname'));
+        }
+    },
+
+    onBeforeQueryServiceRegistration: function ( queryPlan, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            combo = queryPlan.combo,
+            itembasetype = view.down('radiogroup').getValue();
+
+        delete combo.lastQuery;
+        combo.store.removeAll();
+        combo.store.setParams({ itembasetype: itembasetype.registrationtype });
+
+        view.down('comboenum').reset();
+        view.down('hiddenfield[name=cmeareasid]').reset();
+        view.down('textfield[name=cmeareasname]').reset();
+    },
+
+    onRegistrationTypeChange: function (field, newValue , oldValue , eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('comboenum').reset();
+        view.down('serviceitembasesearch').reset();
+        view.down('hiddenfield[name=cmeareasid]').reset();
+        view.down('textfield[name=cmeareasname]').reset();
     },
 
     selectItemBase: function ( combo, record, eOpts ) {
         var me = this,
             view = me.getView(),
-            grid = view.down('serviceregistrationresult'),
             values = Ext.decode(record.get('layoutvalues')),
             fields = Ext.decode(record.get('layoutfields')),
             resultvalue = view.down('hiddenfield[name=resultvalue]'),
@@ -108,7 +138,6 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
 
         resultvalue.setValue(Ext.encode(values));
         resultfield.setValue(Ext.encode(fields));
-        // grid.setSource.apply(grid, [values,fields]);
     },
 
 	updateAccept: function (editor, context, eOpts) {
@@ -166,16 +195,23 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         me.setModuleForm(view);
         me.setModuleData('serviceregistration');
 
-        me._success = function (batch, options) {
-            if(options.operations.create) {
-                var opr = batch.getOperations()[0],
-                    rec = opr.getRecords()[0];
-                view.xdata = rec;
+        me._success = function (form, action) {
+            if(action.result.crud == 'insert') {
+                Ext.getStore('serviceregistration').setParams({
+                    method: 'selectCode',
+                    rows: Ext.encode({ id: action.result.rows.id })
+                }).load({
+                    scope: me,
+                    callback: function(records, operation, success) {
+                        me.getView().close();
+                        var record = records[0];
+                        me.redirectTo( 'serviceregistrationview/' + record.get('id'));
+                    }
+                });
             }
-            view.down('itembasesearch').setReadColor(true);
         }
 
-        me.updateRecord();
+        me.updateModule();
     },
 	
 	updateFlux: function () {
@@ -224,12 +260,28 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
 
     insertView: function () {
         var me = this,
-            view = me.getView(),
-            grid = view.down('serviceregistrationresult');
+            view = me.getView().down('form');
 
-        view.reset();
-        grid.setSource({});
-        view.down('itembasesearch').setReadColor(false);
+        me.setModuleForm(view);
+        me.setModuleData('serviceregistration');
+
+        me._success = function (form, action) {
+            if(action.result.crud == 'insert') {
+                Ext.getStore('serviceregistration').setParams({
+                    method: 'selectCode',
+                    rows: Ext.encode({ id: action.result.rows.id })
+                }).load({
+                    scope: me,
+                    callback: function(records, operation, success) {
+                        me.getView().close();
+                        var record = records[0];
+                        me.redirectTo( 'serviceregistrationview/' + record.get('id'));
+                    }
+                });
+            }
+        }
+
+        me.updateModule();
     }
 
 });

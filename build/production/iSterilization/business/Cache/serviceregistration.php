@@ -13,7 +13,6 @@ class serviceregistration extends \Smart\Data\Cache {
         $sql = "
             select
                 sr.resultvalue,
-                --coalesce(sr.resultvalue,'[]') as resultvalue,
                 coalesce(sr.resultfield,ib.resultfield) as resultfield
             from
                 serviceregistration sr
