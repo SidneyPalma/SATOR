@@ -13,7 +13,7 @@ class material extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            SELECT
+            SELECT -- top 100
                 ib.name,
                 ib.description,
                 ib.barcode,
@@ -26,8 +26,8 @@ class material extends \Smart\Data\Cache {
                 ib.isactive,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
                 dbo.getEnum('itemgroup',m.itemgroup) as itemgroupdescription,
-                dbo.binary2base64(ib.filedata) as filedata,
-                ib.fileinfo,
+                --dbo.binary2base64(ib.filedata) as filedata,
+                --ib.fileinfo,
                 materialboxname = (
                   SELECT TOP 1
                     mb.name

@@ -2,6 +2,10 @@
 Ext.define( 'iSterilization.model.service.ServiceItemBase', {
     extend: 'Ext.data.Model',
 
+    requires: [
+        'Smart.util.Resource'
+    ],
+
     fields: [
         {
             name: 'id',
@@ -28,6 +32,9 @@ Ext.define( 'iSterilization.model.service.ServiceItemBase', {
             name: 'itembasetype',
             type: 'auto'
         }, {
+            name: 'itembasetypedescription',
+            type: 'auto'
+        }, {
             name: 'registrationanvisa',
             type: 'auto'
         }, {
@@ -36,6 +43,23 @@ Ext.define( 'iSterilization.model.service.ServiceItemBase', {
         }, {
             name: 'cmeareasname',
             type: 'auto'
+        }, {
+            name: 'filedata',
+            type: 'auto',
+            convert: function (value, record) {
+                return (value) ? value : Smart.Rss.getFileImage('smart');
+            }
+        }, {
+            name: 'fileinfo',
+            type: 'auto'
+        }, {
+            name: 'filetype',
+            type: 'auto',
+            convert: function (value, record) {
+                var info = record.get('fileinfo'),
+                    type = (info && info.length !== 0) ? Ext.decode(info) : null;
+                return (type) ? Ext.String.format('data:{0};base64,{1}', type.fileType, record.get('filedata')) : record.get('filedata');
+            }
         }
     ]
 
