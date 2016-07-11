@@ -73,7 +73,7 @@ class serviceregistration extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            SELECT top 100
+            SELECT
                 ib.id,
                 ib.id as itembaseid,
                 ib.name as itembasename,
