@@ -1,0 +1,50 @@
+//@charset UTF-8
+Ext.define( 'iAdmin.model.box.MaterialBoxTarge', {
+    extend: 'Ext.data.Model',
+
+    requires: [
+        'Smart.data.identifier.Auto'
+    ],
+
+    identifier: 'auto',
+
+    fields: [
+        {
+            name: 'id',
+            type: 'int',
+            serializeType: 'auto'
+        }, {
+            name: 'colorcode',
+            type: 'int'
+        }, {
+            name: 'colorname',
+            type: 'auto'
+        }, {
+            name: 'materialboxid',
+            type: 'int',
+            persist: true,
+            critical: true
+        }, {
+            name: 'targecolorid',
+            type: 'int',
+            persist: true,
+            critical: true
+        }, {
+            name: 'targecolorname',
+            type: 'auto'
+        }, {
+            name: 'colorschema',
+            type: 'auto'
+        }, {
+            name: 'numberproceedings',
+            type: 'int'
+        }, {
+            name: 'proprietaryname',
+            type: 'auto'
+        }, {
+            name: 'isconsigned',
+            type: 'int'
+        }
+    ]
+
+});
