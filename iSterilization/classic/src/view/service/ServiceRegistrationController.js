@@ -282,6 +282,19 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         }
 
         me.updateModule();
+    },
+
+    printerView: function () {
+        var me = this,
+            view = me.getView(),
+            id = view.xdata.get('id'),
+            url = 'business/Calls/Quick/ServiceRegistration.php?id={0}';
+
+        // if(Ext.getStore('serviceregistration').getCount() == 0) {
+        //     return false;
+        // }
+
+        window.open(Ext.String.format(url,id));
     }
 
 });
