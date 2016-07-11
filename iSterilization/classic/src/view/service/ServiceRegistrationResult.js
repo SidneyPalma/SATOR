@@ -76,9 +76,9 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationResult', {
                 text: 'Campo',
                 sortable: false,
                 dataIndex: 'fieldtext',
-                renderer: function (value,metaData) {
+                renderer: function (value,metaData,record) {
                     metaData.style = 'background: rgba(239, 235, 223, .4);';
-                    return value;
+                    return record.get('showorder') + '. '+ record.get('fieldtext');
                 }
             }, {
                 flex: 1,

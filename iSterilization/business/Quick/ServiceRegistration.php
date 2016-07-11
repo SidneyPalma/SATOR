@@ -92,36 +92,77 @@ class ServiceRegistration extends Report {
     }
 
     public function Header() {
+        $id = $this->post->id;
         $this->squareWidth = intval($this->getInternalW() / 6);
 
-//        $id = $this->rows[0]['id'];
-//        $cmeareasname = $this->rows[0]['cmeareasname'];
-//        $movimentdate = $this->rows[0]['movimentdate'];
-//        $movimenttypedescription = $this->rows[0]['movimenttypedescription'];
-//        $documenttypedescription = $this->rows[0]['documenttypedescription'];
-//        $movimentstatusdescription = $this->rows[0]['movimentstatusdescription'];
-//
+        $sql = "
+            SELECT
+                ib.id,
+                ib.name as itembasename,
+                ib.barcode,
+                ib.itembasetype,
+                dbo.getEnum('servicetype',sr.servicetype) as servicetypedescription,
+                dbo.getEnum('itembasetype',ib.itembasetype) as itembasetypedescription,
+                ib.registrationanvisa,
+                mf.name as manufacturername,
+                e.cmeareasid,
+                e.cmeareasname
+            FROM
+                serviceregistration sr
+                inner join itembase ib on ( ib.id = sr.itembaseid )
+                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+                outer apply (
+                    select
+                        e.cmeareasid,
+                        a.name as cmeareasname
+                    from
+                        equipment e
+                        inner join areas a on ( a.id = e.cmeareasid )
+                    where e.id = ib.id
+                ) e
+            WHERE sr.id = :id";
+
+        $pdo = $this->proxy->prepare($sql);
+        $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+
+        $pdo->execute();
+        $rows = $pdo->fetchAll();
+
+        $cmeareasname = $rows[0]['cmeareasname'];
+//        $movimentdate = $rows[0]['movimentdate'];
+        $itembasename = $rows[0]['itembasename'];
+        $manufacturername = $rows[0]['manufacturername'];
+        $registrationanvisa = $rows[0]['registrationanvisa'];
+        $servicetypedescription = $rows[0]['servicetypedescription'];
+        $itembasetypedescription = $rows[0]['itembasetypedescription'];
+
 //        $date = new \DateTime($movimentdate);
-//        $id = str_pad($id, 6, '0', STR_PAD_LEFT);
-//
-//        $this->configStyleHeader(14);
-//        $this->Cell($this->getInternalW(),6, "Movimento de $movimenttypedescription N# $id",0,1,'C',false);
-//        $this->configStyleHeader(10);
-//        $this->Cell($this->getInternalW(),6, 'Data: '. $date->format('d/m/Y'),0,1,'C',false);
-//
-//        $this->SetLineWidth(.2);
-//        $this->Cell($this->getInternalW(),3, '','B',1,'C');
-//        $this->Ln(4);
-//
-//        $this->SetFont('Arial', '', 10);
-//        $this->Cell($this->squareWidth,5,'Documento:',0,0,'L',0);
-//        $this->configStyleHeader(10);
-//        $this->Cell($this->squareWidth*4,5,"$documenttypedescription - $movimentstatusdescription",0,1,'L',0);
-//        $this->SetFont('Arial', '', 10);
-//        $this->Cell($this->squareWidth,5,'CMEArea:',0,0,'L',0);
-//        $this->configStyleHeader(10);
-//        $this->Cell($this->squareWidth*4,5,$cmeareasname,0,1,'L',0);
-//        $this->Ln(1);
+        $id = str_pad($id, 6, '0', STR_PAD_LEFT);
+
+        $this->configStyleHeader(14);
+        $this->Cell($this->getInternalW(),6, utf8_decode("Registro de Serviços N# $id"),0,1,'C',false);
+        $this->configStyleHeader(10);
+        //$this->Cell($this->getInternalW(),6, 'Data: '. $date->format('d/m/Y'),0,1,'C',false);
+
+        $this->SetLineWidth(.2);
+        $this->Cell($this->getInternalW(),3, '','B',1,'C');
+        $this->Ln(4);
+
+        $this->SetFont('Arial', '', 10);
+        $this->Cell($this->squareWidth,5,'Nome do Item:',0,0,'L',0);
+        $this->configStyleHeader(10);
+        $this->Cell($this->squareWidth*4,5,"$itembasename - $manufacturername",0,1,'L',0);
+
+        $this->SetFont('Arial', '', 10);
+        $this->Cell($this->squareWidth,5,utf8_decode('Item/Serviço:'),0,0,'L',0);
+        $this->configStyleHeader(10);
+        $this->Cell($this->squareWidth*4,5,"$itembasetypedescription - $servicetypedescription",0,1,'L',0);
+
+        $this->SetFont('Arial', '', 10);
+        $this->Cell($this->squareWidth,5,'CMEArea:',0,0,'L',0);
+        $this->configStyleHeader(10);
+        $this->Cell($this->squareWidth*4,5,$cmeareasname,0,1,'L',0);
+        $this->Ln(1);
     }
 
     public function getHeaderColumns() {
@@ -132,7 +173,7 @@ class ServiceRegistration extends Report {
 
         $this->Cell($sw * 1.0,7,'Campo','B',0,'L',1);
         $this->Cell($sw * 2.0,7,'Resultado','B',0,'L',1);
-        $this->Cell($sw * 3.0,7,'Referencia','B',1,'L',1);
+        $this->Cell($sw * 3.0,7,'Valor Referencia','B',1,'L',1);
     }
 
     public function Detail() {
