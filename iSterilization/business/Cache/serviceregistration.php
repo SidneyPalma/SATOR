@@ -73,7 +73,7 @@ class serviceregistration extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            SELECT
+            SELECT TOP 50
                 ib.id,
                 ib.id as itembaseid,
                 ib.name as itembasename,
@@ -84,7 +84,9 @@ class serviceregistration extends \Smart\Data\Cache {
                 ib.manufacturerid,
                 mf.name as manufacturername,
                 e.cmeareasid,
-                e.cmeareasname
+                e.cmeareasname,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo
             FROM
                 itembase ib
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )

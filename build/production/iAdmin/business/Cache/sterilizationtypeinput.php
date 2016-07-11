@@ -15,12 +15,13 @@ class sterilizationtypeinput extends \Smart\Data\Cache {
                 sti.id, 
                 sti.sterilizationtypeid, 
                 sti.inputid,
-                i.name as inputname,
+                ib.name as inputname,
                 i.presentation,
                 dbo.getEnum('presentation',i.presentation) as presentationdescription
             FROM
                 sterilizationtypeinput sti
                 inner join input i on ( i.id = sti.inputid )
+                inner join itembase ib on ( ib.id = i.id )
             WHERE sti.sterilizationtypeid = :id";
 
         try {

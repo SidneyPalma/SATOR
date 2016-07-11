@@ -65,4 +65,65 @@ class serviceregistration extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectItem(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $itembasetype = $data['itembasetype'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            SELECT TOP 50
+                ib.id,
+                ib.id as itembaseid,
+                ib.name as itembasename,
+                ib.description,
+                ib.barcode,
+                ib.itembasetype,
+                ib.registrationanvisa,
+                ib.manufacturerid,
+                mf.name as manufacturername,
+                e.cmeareasid,
+                e.cmeareasname,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo
+            FROM
+                itembase ib
+                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+                outer apply (
+                    select
+                        e.cmeareasid,
+                        a.name as cmeareasname
+                    from
+                        equipment e
+                        inner join areas a on ( a.id = e.cmeareasid )
+                    where e.id = ib.id
+                ) e
+            WHERE ib.isactive = 1
+              and ib.itembasetype = :itembasetype
+              and ( ib.name LIKE :name OR ib.barcode LIKE :barcode )";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $query = "%{$query}%";
+
+            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":itembasetype", $itembasetype, \PDO::PARAM_STR);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }

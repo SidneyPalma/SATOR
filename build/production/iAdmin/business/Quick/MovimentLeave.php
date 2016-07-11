@@ -33,7 +33,7 @@ class MovimentLeave extends Report {
                 m.documentnumber, 
                 dbo.getEnum('documenttype',m.documenttype) as documenttypedescription,             
                 dbo.getEnum('movimentstatus',m.movimentstatus) as movimentstatusdescription,
-                i.name as inputname,
+                ib.name as inputname,
                 dbo.getEnum('presentation',mi.presentation) as presentationdescription,
                 mi.quantity, 
                 mi.datevalidity, 
@@ -45,6 +45,7 @@ class MovimentLeave extends Report {
                 inner join areas a on ( a.id = m.cmeareasid )
                 inner join movimentitem mi on ( mi.movimentid = m.id )
                 inner join input i on ( i.id = mi.inputid )
+                inner join itembase ib on ( ib.id = i.id )
             where m.id = :id
             order by mi.movimentid";
 

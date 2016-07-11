@@ -14,13 +14,14 @@ class movimentitem extends \Smart\Data\Cache {
         $sql = "
             select
                 mi.*,
-                i.name as inputname,
+                ib.name as inputname,
                 ip.acronym,
                 ip.measurebase,
                 dbo.getEnum('presentation',ip.presentation) as presentationdescription
             from
                 movimentitem mi
                 inner join input i on ( i.id = mi.inputid )
+                inner join itembase ib on ( ib.id = i.id )
                 inner join inputpresentation ip on ( ip.inputid = i.id and mi.presentation = ip.presentation )
             where mi.movimentid = :movimentid";
 
