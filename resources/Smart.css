@@ -518,13 +518,18 @@
 }
 
 .buildapp {
-    position: absolute;
+    top: 0px;
     left: 0px;
-    bottom: 0px;
-    margin: 0 0 40px 20px;
-    opacity: .5;
     z-index: 3;
-    color: antiquewhite;
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    margin: 50px 0 0 10px;
+    font-family: 'Open Sans', Arial, sans-serif;
+}
+
+.buildapp a:hover {
+    color: yellow;
 }
 
 .marquee {
@@ -550,7 +555,8 @@
     font-size: 16px;
     text-align: center;
     text-decoration: none;
-    font-family: Tahoma, Arial, sans-serif !important;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+    font-family: 'Open Sans', Arial, sans-serif !important;
 }
 .marquee a:hover {
     color: yellow;
