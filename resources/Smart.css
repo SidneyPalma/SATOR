@@ -289,11 +289,6 @@
     border-color: rgb(208, 208, 208);
 }
 
-.panel-header-flow > .x-panel-header-default {
-    background-color: rgb(242, 225, 145);
-    border: 1px solid rgb(242, 225, 145);
-}
-
 /*
     update-grid
 */
@@ -318,6 +313,7 @@
 }
 
 .update-grid .x-grid-cell-inner {
+    color: black;
     font-size: 18px !important;
     line-height: 25px !important;
 }

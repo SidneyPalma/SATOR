@@ -10,6 +10,8 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
         'Ext.grid.column.*',
         'Smart.form.Portrait',
         'iSterilization.store.processing.*',
+        'iSterilization.view.processing.FlowProcessingInput',
+        'iSterilization.view.processing.FlowProcessingMaterial',
         'iSterilization.view.processing.FlowProcessingController'
     ],
 
@@ -44,9 +46,9 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
         ]
     },
 
-    // listeners: {
-    //     afterrender: 'onFocusSearch'
-    // },
+    listeners: {
+        afterrender: 'onFocusSearch'
+    },
 
     initComponent: function () {
         var me = this;
@@ -59,8 +61,7 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
 
         me.items = [
             {
-                xtype: 'container',
-                height: 190,
+                xtype: 'form',
                 showSmartTransparent: true,
                 items: [
                     {
@@ -68,10 +69,10 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            useReadColor: true,
                             anchor: '100%',
-                            cls: 'siemens-field',
-                            labelCls: 'field-font'
+                            useReadColor: true,
+                            cls: 'processing-field',
+                            labelCls: 'processing-field-font'
                         },
                         items: [
                             {
@@ -106,8 +107,8 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                                 defaults: {
                                     useReadColor: true,
                                     anchor: '100%',
-                                    cls: 'siemens-field',
-                                    labelCls: 'field-font'
+                                    cls: 'processing-field',
+                                    labelCls: 'processing-field-font'
                                 },
                                 items: [
                                     {
@@ -124,14 +125,18 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
+                                name: 'search',
+                                reference: 'search',
                                 fieldLabel: 'Leitura do Item',
                                 xtype: 'textfield',
-                                cls: 'siemens-field',
-                                labelCls: 'field-font'
+                                cls: 'processing-field',
+                                labelCls: 'processing-field-font'
                             }
                         ]
                     }
                 ]
+            }, {
+                xtype: 'splitter'
             }, {
                 flex: 1,
                 xtype: 'container',
@@ -142,13 +147,31 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                 items: [
                     {
                         flex: 1,
-                        xtype: 'portrait',
-                        hideButtons: true
+                        xtype: 'container',
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [
+                            {
+                                flex: 1,
+                                titleAlign: 'center',
+                                title: 'Avisos',
+                                xtype: 'panel',
+                                iconCls: "fa fa-exclamation-triangle",
+                                cls: 'processing-panel-header-flow'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 3,
+                                xtype: 'portrait',
+                                hideButtons: true
+                            }
+                        ]
                     }, {
                         xtype: 'splitter'
                     }, {
                         flex: 2,
-                        xtype: 'container',
                         xtype: 'container',
                         layout: {
                             type: 'hbox',
@@ -158,42 +181,17 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                             {
                                 flex: 1,
                                 titleAlign: 'center',
+                                iconCls: "fa fa-database",
                                 title: 'Insumos do Fluxo',
-                                cls: 'panel-frame panel-header-flow update-grid',
-                                xtype: 'gridpanel',
-                                store: Ext.create('Ext.data.Store', {
-                                    fields:[ 'name', 'email', 'phone'],
-                                    data: [
-                                        { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
-                                        { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
-                                        { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
-                                        { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
-                                    ]
-                                }),
-                                columns: [
-                                    { text: 'Email', dataIndex: 'email', flex: 1 }
-                                ]
+                                xtype: 'flowprocessinginput'
                             }, {
                                 xtype: 'splitter'
                             }, {
                                 flex: 2,
                                 titleAlign: 'center',
-                                cls: 'panel-frame panel-header-flow update-grid',
-                                title: 'Itens no Processamento',
-                                xtype: 'gridpanel',
-                                store: Ext.create('Ext.data.Store', {
-                                    fields:[ 'name', 'email', 'phone'],
-                                    data: [
-                                        { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
-                                        { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
-                                        { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
-                                        { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
-                                    ]
-                                }),
-                                columns: [
-                                    { text: 'Name', dataIndex: 'name', flex: 1 },
-                                    { text: 'Phone', dataIndex: 'phone', width: 150 }
-                                ]
+                                iconCls: "fa fa-cubes",
+                                title: 'Materiais no Processamento',
+                                xtype: 'flowprocessingmaterial'
                             }
                         ]
                     }
