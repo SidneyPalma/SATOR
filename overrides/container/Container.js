@@ -34,9 +34,9 @@ Ext.define( 'Ext.overrides.container.Container', {
         }
         
         if(me.showSmartTransparent === true) {
-            me.style = Ext.apply({
+            me.bodyStyle = Ext.apply({
                 'background-color': 'transparent'
-            }, me.style);
+            }, me.bodyStyle);
         }
 
         if(me.frame === true) {
