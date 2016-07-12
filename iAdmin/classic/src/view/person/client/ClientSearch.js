@@ -11,7 +11,7 @@ Ext.define( 'iAdmin.view.person.client.ClientSearch', {
 
     displayField: 'name',
 
-    pageSize: 0,
+    pageSize: 10,
     showClear: true,
 
     store: 'iAdmin.store.person.Client'
