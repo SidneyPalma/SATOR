@@ -61,59 +61,6 @@ class input extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
-    public function selectCode_(array $data) {
-        $query = $data['query'];
-        $proxy = $this->getStore()->getProxy();
-
-        $sql = "
-            SELECT
-                i.id, 
-                i.name, 
-                i.description, 
-                i.barcode, 
-                i.presentation, 
-                dbo.getEnum('presentation',i.presentation) as presentationdescription,
-                i.manufacturerid, 
-                i.providerid, 
-                i.codeanvisa, 
-                i.hasstock,
-                i.reactive,
-                i.hasbatch,
-                i.isactive, 
-                i.minstock, 
-                i.maxstock, 
-                i.deadline, 
-                i.reactive, 
-                i.resetpoint, 
-                i.validityactivation,
-                dbo.binary2base64(i.filedata) as filedata,
-                i.fileinfo,
-                m.name as manufacturername,
-                p.name as providername
-            FROM
-                input i
-                inner join provider p on ( p.id = i.providerid )
-                inner join manufacturer m on ( m.id = i.manufacturerid )
-            WHERE i.id = :id";
-
-        try {
-            $pdo = $proxy->prepare($sql);
-
-            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
-
-            $pdo->execute();
-            $rows = $pdo->fetchAll();
-
-            self::_setRows($rows);
-
-        } catch ( \PDOException $e ) {
-            self::_setSuccess(false);
-            self::_setText($e->getMessage());
-        }
-
-        return self::getResultToJson();
-    }
-
     public function selectCode(array $data) {
         $query = $data['query'];
         $proxy = $this->getStore()->getProxy();

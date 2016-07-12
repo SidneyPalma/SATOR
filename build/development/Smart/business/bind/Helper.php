@@ -34,7 +34,7 @@ class Helper extends \Smart\Data\Proxy
         $start = $data['start'];
         $limit = $data['limit'];
 
-        $sql = "SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :TABLE_SCHEMA";
+        $sql = "SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :TABLE_SCHEMA ORDER BY TABLE_NAME";
 
         try {
 
