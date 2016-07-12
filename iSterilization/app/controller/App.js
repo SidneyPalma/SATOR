@@ -21,6 +21,9 @@ Ext.define( 'iSterilization.controller.App', {
         },
         'serviceregistrationlist': {
             action: 'setServiceRegistrationList'
+        },
+        'flowprocessingview': {
+            action: 'setFlowProcessingList'
         }
     },
 
@@ -59,6 +62,13 @@ Ext.define( 'iSterilization.controller.App', {
             rc = me.getMainTree().getSelection();
 
         me.onMainPageView({ xtype: 'serviceregistrationlist', iconCls: rc.get("iconCls") });
+    },
+
+    setFlowProcessingList: function () {
+        var me = this,
+            rc = me.getMainTree().getSelection();
+
+        me.onMainPageView({ xtype: 'flowprocessingview', iconCls: rc.get("iconCls") });
     }
 
     //routes ========================>

@@ -8,19 +8,24 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
         'Ext.grid.Panel',
         'Ext.panel.Panel',
         'Ext.grid.column.*',
+        'Smart.form.Portrait',
         'iSterilization.store.processing.*',
         'iSterilization.view.processing.FlowProcessingController'
     ],
 
-    layout: 'fit',
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
 
     controller: 'flowprocessing',
+    bodyCls: 'flow-processing',
     cls: 'panel-frame panel-frame-tpTree',
     iconCls: "fa fa-users",
     showSmartAnimate: true,
 
     header: {
-        title: 'Listar Processamentos',
+        title: 'Processamento de Materiais',
         defaultType: 'button',
         defaults: {
             showSmartTheme: 'header'
@@ -39,9 +44,9 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
         ]
     },
 
-    listeners: {
-        afterrender: 'onFocusSearch'
-    },
+    // listeners: {
+    //     afterrender: 'onFocusSearch'
+    // },
 
     initComponent: function () {
         var me = this;
@@ -52,112 +57,145 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iSterilization.store.processing.FlowProcessing');
-
         me.items = [
             {
-                xtype: 'gridpanel',
-                store: 'flowprocessing',
-                hideHeaders: false,
-                headerBorders: false,
-                cls: 'search-grid',
-                listeners: {
-                    itemdblclick: 'onViewEdit'
-                },
-                columns: [
+                xtype: 'container',
+                height: 190,
+                showSmartTransparent: true,
+                items: [
                     {
-                        width: 250,
-                        text: 'Nome do item',
-                        dataIndex: 'itembasename'
-                    }, {
-                        flex: 1,
-                        text: 'Descrição',
-                        dataIndex: 'description'
-                    }, {
-                        width: 250,
-                        text: 'Tipo de Serviço',
-                        dataIndex: 'servicetypedescription'
-                    }, {
-                        width: 100,
-                        text: 'Área CME',
-                        dataIndex: 'cmeareasname'
-                    }, {
-                        width: 200,
-                        text: 'Status',
-                        dataIndex: 'resultstatedescription',
-                        renderer: function (value,metaData,record) {
-                            var resultstate = record.get('resultstate');
-                            metaData.style = resultstate == 'P' ? 'color: green; font-weight: bold;' : '';
-                            return value;
-                        }
-                    }, {
-                        width: 100,
-                        text: 'Aprovado',
-                        dataIndex: 'enduptime',
-                        align: 'center',
-                        xtype: 'datecolumn'
-                    }, {
-                        width: 140,
-                        text: 'Ações',
-                        align: 'center',
-                        xtype: 'actioncolumn',
-                        items: [
-                            {
-                                handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
-                                tooltip: 'Editar lançamento!'
-                            }, {
-                                disabled: true,
-                                xtype: 'splitter'
-                            }, {
-                                handler: '',
-                                iconCls: "fa fa-thumbs-up action-select-color",
-                                tooltip: 'Aprovar lançamento!'
-                            }, {
-                                disabled: true,
-                                xtype: 'splitter'
-                            }, {
-                                handler: '',
-                                iconCls: "fa fa-trash action-delete-color",
-                                tooltip: 'Descartar lançamento!'
-                            }
-                        ]
-                    }
-                ],
-                dockedItems: [
-                    {
-                        xtype:  'panel',
+                        xtype: 'container',
                         layout: 'hbox',
-                        bodyStyle: 'padding-bottom: 10px;',
+                        defaultType: 'textfield',
+                        defaults: {
+                            useReadColor: true,
+                            anchor: '100%',
+                            cls: 'siemens-field',
+                            labelCls: 'field-font'
+                        },
                         items: [
                             {
                                 flex: 1,
-                                xtype: 'textfield',
-                                name: 'search',
-                                reference: 'search',
-                                showFetch: true
+                                fieldLabel: 'Operador'
                             }, {
-                                width: 200,
-                                showClear: true,
-                                margin: '0 10 0 10',
-                                xtype: 'comboenum',
-                                name: 'resultstatedescription',
-                                listeners: {
-                                    showclear: 'showClear',
-                                    select: 'selectResultState'
-                                }
+                                xtype: 'splitter'
                             }, {
-                                xtype: 'button',
-                                iconCls: "fa fa-file-o",
-                                handler: 'insertViewNew',
-                                tooltip: 'Novo cadastro!'
+                                flex: 1,
+                                fieldLabel: 'Responsável'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                fieldLabel: 'Cliente'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                fieldLabel: 'Prioridade'
                             }
                         ]
                     }, {
-                        xtype: 'pagingtoolbar',
-                        store: 'flowprocessing',
-                        dock: 'bottom',
-                        displayInfo: true
+                        xtype: 'container',
+                        layout: 'hbox',
+                        items: [
+                            {
+                                flex: 1,
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    useReadColor: true,
+                                    anchor: '100%',
+                                    cls: 'siemens-field',
+                                    labelCls: 'field-font'
+                                },
+                                items: [
+                                    {
+                                        flex: 1,
+                                        fieldLabel: 'Local'
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 1,
+                                        fieldLabel: 'Etapa'
+                                    }
+                                ]
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                fieldLabel: 'Leitura do Item',
+                                xtype: 'textfield',
+                                cls: 'siemens-field',
+                                labelCls: 'field-font'
+                            }
+                        ]
+                    }
+                ]
+            }, {
+                flex: 1,
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                },
+                items: [
+                    {
+                        flex: 1,
+                        xtype: 'portrait',
+                        hideButtons: true
+                    }, {
+                        xtype: 'splitter'
+                    }, {
+                        flex: 2,
+                        xtype: 'container',
+                        xtype: 'container',
+                        layout: {
+                            type: 'hbox',
+                            align: 'stretch'
+                        },
+                        items: [
+                            {
+                                flex: 1,
+                                titleAlign: 'center',
+                                title: 'Insumos do Fluxo',
+                                cls: 'panel-frame panel-header-flow update-grid',
+                                xtype: 'gridpanel',
+                                store: Ext.create('Ext.data.Store', {
+                                    fields:[ 'name', 'email', 'phone'],
+                                    data: [
+                                        { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
+                                        { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
+                                        { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
+                                        { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
+                                    ]
+                                }),
+                                columns: [
+                                    { text: 'Email', dataIndex: 'email', flex: 1 }
+                                ]
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 2,
+                                titleAlign: 'center',
+                                cls: 'panel-frame panel-header-flow update-grid',
+                                title: 'Itens no Processamento',
+                                xtype: 'gridpanel',
+                                store: Ext.create('Ext.data.Store', {
+                                    fields:[ 'name', 'email', 'phone'],
+                                    data: [
+                                        { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
+                                        { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
+                                        { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
+                                        { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
+                                    ]
+                                }),
+                                columns: [
+                                    { text: 'Name', dataIndex: 'name', flex: 1 },
+                                    { text: 'Phone', dataIndex: 'phone', width: 150 }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }

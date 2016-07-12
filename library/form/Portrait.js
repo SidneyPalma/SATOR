@@ -14,7 +14,13 @@ Ext.define( 'Smart.form.Portrait', {
         tableName: null
     },
 
-    layout: 'border',
+    // layout: 'border',
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+
+    hideButtons: false,
 
     bodyCls: 'smart-portrait',
     cls: 'smart-background-transparent',
@@ -40,11 +46,13 @@ Ext.define( 'Smart.form.Portrait', {
 
         me.items = [
             {
-                region: 'center',
+                flex: 1,
+                // region: 'center',
                 xtype: 'image'
             }, {
+                hidden: me.hideButtons,
                 margin: '5 0 0 0',
-                region: 'south',
+                // region: 'south',
                 xtype: 'container',
                 layout: 'hbox',
                 defaultType: 'button',

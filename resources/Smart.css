@@ -1,3 +1,36 @@
+.flow-processing {
+    background: rgba(91, 105, 108, .6) !important;
+}
+
+.field-font {
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    line-height: 25px;
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
+.siemens-field .x-form-text {
+    color: rgb(0, 0, 0);
+    opacity: .5;
+    height: 58px !important;
+    font-size: 32px !important;
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
+.siemens-field .x-form-trigger {
+    line-height: 58px !important;
+}
+
+.siemens-field .x-form-spinner-default {
+    line-height: 44px !important;
+}
+
+.siemens-field .x-form-trigger-default:before {
+    font-size: 18px;
+}
+
+
+
 .main-field .x-form-text {
     color: rgb(64, 70, 75);
     background: transparent !important;
@@ -254,6 +287,11 @@
 
 .panel-frame-tpTree .x-form-trigger-wrap-default.x-form-trigger-wrap-focus {
     border-color: rgb(208, 208, 208);
+}
+
+.panel-header-flow > .x-panel-header-default {
+    background-color: rgb(242, 225, 145);
+    border: 1px solid rgb(242, 225, 145);
 }
 
 /*
