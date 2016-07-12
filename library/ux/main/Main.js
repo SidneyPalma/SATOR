@@ -57,7 +57,10 @@ Ext.define( 'Smart.ux.main.Main', {
                         width: 42,
                         height: 42,
                         xtype: 'image',
-                        name: 'filedata'
+                        name: 'filedata',
+                        style: {
+                            'border-radius': '50%;'
+                        }
                     }, {
                         iconCls: 'fa fa-indent',
                         enableToggle: true,
