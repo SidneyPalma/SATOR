@@ -21,10 +21,16 @@ class inputpresentation extends \Smart\Data\Model {
     private $inputid;
 
     /**
-     * @Policy {"nullable":false, "length":3}
+     * @Policy {"nullable":false}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $presentation;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,presentation"}
+     */
+    private $presentationdescription;
 
     /**
      * @Policy {"nullable":false, "length":3}

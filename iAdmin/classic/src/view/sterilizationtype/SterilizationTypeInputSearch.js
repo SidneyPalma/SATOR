@@ -7,11 +7,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeInputSearch', {
     requires: [
         'Ext.form.Panel',
         'Ext.window.Window',
-        'iAdmin.view.input.InputSearch',
+        'iAdmin.view.input.InputPresentationSearch',
         'iAdmin.view.sterilizationtype.SterilizationTypeController'
     ],
 
-    width: 350,
+    width: 450,
     modal: true,
     resizable: false,
     showAnimate: true,
@@ -46,11 +46,20 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeInputSearch', {
                         name: 'id'
                     }, {
                         xtype: 'hiddenfield',
+                        name: 'presentation'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'acronym'
+                    }, {
+                        xtype: 'hiddenfield',
                         name: 'sterilizationtypeid'
                     }, {
                         fieldLabel: 'Insumo',
-                        xtype: 'inputsearch',
-                        hiddenNameId: 'inputid'
+                        xtype: 'inputpresentationsearch',
+                        hiddenNameId: 'inputpresentationid',
+                        listeners: {
+                            select: 'selectInput'
+                        }
                     }
                 ]
             }

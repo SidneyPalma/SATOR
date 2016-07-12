@@ -63,6 +63,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         );
     },
 
+    selectInput: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView();
+        
+        view.down('hiddenfield[name=acronym]').setValue(record.get('acronym'));
+        view.down('hiddenfield[name=presentation]').setValue(record.get('presentation'));
+    },
+
     updateInput: function () {
         var me = this,
             view = me.getView();

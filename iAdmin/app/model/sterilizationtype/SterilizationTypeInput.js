@@ -19,7 +19,7 @@ Ext.define( 'iAdmin.model.sterilizationtype.SterilizationTypeInput', {
             persist: true,
             critical: true
         }, {
-            name: 'inputid',
+            name: 'inputpresentationid',
             type: 'int',
             persist: true,
             critical: true
@@ -37,6 +37,9 @@ Ext.define( 'iAdmin.model.sterilizationtype.SterilizationTypeInput', {
             type: 'auto'
         }, {
             name: 'presentationdescription',
+            type: 'auto'
+        }, {
+            name: 'acronym',
             type: 'auto'
         }
     ]
