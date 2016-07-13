@@ -101,6 +101,16 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                         items: [
                             {
                                 flex: 1,
+                                name: 'search',
+                                reference: 'search',
+                                fieldLabel: 'Leitura do Item',
+                                xtype: 'textfield',
+                                cls: 'processing-field',
+                                labelCls: 'processing-field-font'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
                                 xtype: 'container',
                                 layout: 'hbox',
                                 defaultType: 'textfield',
@@ -121,16 +131,6 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                                         fieldLabel: 'Etapa'
                                     }
                                 ]
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
-                                name: 'search',
-                                reference: 'search',
-                                fieldLabel: 'Leitura do Item',
-                                xtype: 'textfield',
-                                cls: 'processing-field',
-                                labelCls: 'processing-field-font'
                             }
                         ]
                     }
@@ -179,19 +179,19 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                         },
                         items: [
                             {
-                                flex: 1,
-                                titleAlign: 'center',
-                                iconCls: "fa fa-database",
-                                title: 'Insumos do Fluxo',
-                                xtype: 'flowprocessinginput'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
                                 flex: 2,
                                 titleAlign: 'center',
                                 iconCls: "fa fa-cubes",
-                                title: 'Materiais no Processamento',
+                                title: 'Materiais',
                                 xtype: 'flowprocessingmaterial'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                titleAlign: 'center',
+                                iconCls: "fa fa-database",
+                                title: 'Insumos',
+                                xtype: 'flowprocessinginput'
                             }
                         ]
                     }

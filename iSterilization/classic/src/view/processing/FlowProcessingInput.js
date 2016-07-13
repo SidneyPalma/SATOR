@@ -1,6 +1,6 @@
 //@charset UTF-8
 Ext.define( 'iSterilization.view.processing.FlowProcessingInput', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Ext.tree.Panel',
 
     xtype: 'flowprocessinginput',
 
@@ -9,21 +9,37 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingInput', {
         'Ext.grid.column.*'
     ],
 
+    rootVisible: false,
+
     cls: 'processing-panel-header-flow processing-update-grid',
 
-    store: Ext.create('Ext.data.Store', {
-        fields:['email'],
-        data: [
-            { email: 'lisa@simpsons.com' },
-            { email: 'bart@simpsons.com' },
-            { email: 'homer@simpsons.com' },
-            { email: 'marge@simpsons.com' }
-        ]
+    store: Ext.create('Ext.data.TreeStore', {
+        root: {
+            expanded: true,
+            children: [
+                { text: 'Lavagem Manual', leaf: true },
+                { text: 'Termodesinfectora', expanded: true, children: [
+                    { text: 'Ácido', leaf: true },
+                    { text: 'Sabão', leaf: true}
+                ] },
+                { text: 'buy lottery tickets', leaf: true }
+            ]
+        }
     }),
+
+    // store: Ext.create('Ext.data.Store', {
+    //     fields:['email'],
+    //     data: [
+    //         { email: 'lisa@simpsons.com' },
+    //         { email: 'bart@simpsons.com' },
+    //         { email: 'homer@simpsons.com' },
+    //         { email: 'marge@simpsons.com' }
+    //     ]
+    // }),
 
     initComponent: function () {
         var me = this;
-        me.buildItems();
+        //me.buildItems();
         me.callParent();
     },
 
