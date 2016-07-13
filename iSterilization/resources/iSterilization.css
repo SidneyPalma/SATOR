@@ -72,13 +72,18 @@
 }
 
 .processing-field .x-form-trigger {
-    line-height: 58px !important;
+    line-height: 52px !important;
 }
 
 .processing-field .x-form-spinner-default {
     line-height: 44px !important;
 }
 
+.processing-field .x-form-trigger-default {
+    color: rgb(115, 47, 73);
+    background: rgb(208, 208, 208);
+}
+
 .processing-field .x-form-trigger-default:before {
-    font-size: 18px;
+    font-size: 19px;
 }
