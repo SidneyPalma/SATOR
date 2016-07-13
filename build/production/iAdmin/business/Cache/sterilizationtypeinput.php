@@ -14,13 +14,14 @@ class sterilizationtypeinput extends \Smart\Data\Cache {
             SELECT
                 sti.id, 
                 sti.sterilizationtypeid, 
-                sti.inputid,
+				sti.inputpresentationid,
                 ib.name as inputname,
-                i.presentation,
-                dbo.getEnum('presentation',i.presentation) as presentationdescription
+                sti.presentation,
+                dbo.getEnum('presentation',sti.presentation) as presentationdescription
             FROM
                 sterilizationtypeinput sti
-                inner join input i on ( i.id = sti.inputid )
+				inner join inputpresentation ip on ( ip.id = sti.inputpresentationid )
+                inner join input i on ( i.id = ip.inputid )
                 inner join itembase ib on ( ib.id = i.id )
             WHERE sti.sterilizationtypeid = :id";
 

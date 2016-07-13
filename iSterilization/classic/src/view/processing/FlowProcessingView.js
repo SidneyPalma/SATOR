@@ -65,6 +65,7 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                 showSmartTransparent: true,
                 items: [
                     {
+                        margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'textfield',
@@ -76,31 +77,57 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                         },
                         items: [
                             {
-                                flex: 1,
-                                fieldLabel: 'Operador'
+                                flex: 3,
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    anchor: '100%',
+                                    useReadColor: true,
+                                    cls: 'processing-field',
+                                    labelCls: 'processing-field-font'
+                                },
+                                items: [
+                                    {
+                                        flex: 1,
+                                        fieldLabel: 'Operador',
+                                        value: 'sator.etimba'
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 1,
+                                        fieldLabel: 'Cliente',
+                                        value: 'Centro Cirúrgico'
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 1,
+                                        fieldLabel: 'Fluxo',
+                                        value: 'Vapor Saturado (134°c)'
+                                    }
+                                ]
                             }, {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                fieldLabel: 'Responsável'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
-                                fieldLabel: 'Cliente'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
-                                fieldLabel: 'Prioridade'
+                                fieldLabel: 'Prioridade',
+                                value: 'Normal'
                             }
                         ]
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
+                        defaultType: 'textfield',
+                        defaults: {
+                            useReadColor: true,
+                            anchor: '100%',
+                            cls: 'processing-field',
+                            labelCls: 'processing-field-font'
+                        },
                         items: [
                             {
-                                flex: 1,
+                                flex: 3,
+                                margin: '10 0 0 0',
                                 xtype: 'container',
                                 layout: 'hbox',
                                 defaultType: 'textfield',
@@ -112,25 +139,30 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                                 },
                                 items: [
                                     {
-                                        flex: 1,
-                                        fieldLabel: 'Local'
+                                        flex: 2,
+                                        name: 'search',
+                                        showClear: true,
+                                        reference: 'search',
+                                        fieldLabel: 'Leitura do Item',
+                                        useReadColor: false,
+                                        xtype: 'textfield',
+                                        cls: 'processing-field',
+                                        labelCls: 'processing-field-font'
                                     }, {
                                         xtype: 'splitter'
                                     }, {
                                         flex: 1,
-                                        fieldLabel: 'Etapa'
+                                        fieldLabel: 'Local',
+                                        value: 'Recepção Expurgo'
                                     }
                                 ]
                             }, {
                                 xtype: 'splitter'
                             }, {
+                                margin: '10 0 0 0',
                                 flex: 1,
-                                name: 'search',
-                                reference: 'search',
-                                fieldLabel: 'Leitura do Item',
-                                xtype: 'textfield',
-                                cls: 'processing-field',
-                                labelCls: 'processing-field-font'
+                                fieldLabel: 'Próxima etapa',
+                                value: '. . .'
                             }
                         ]
                     }
@@ -146,32 +178,7 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                 },
                 items: [
                     {
-                        flex: 1,
-                        xtype: 'container',
-                        layout: {
-                            type: 'vbox',
-                            align: 'stretch'
-                        },
-                        items: [
-                            {
-                                flex: 1,
-                                titleAlign: 'center',
-                                title: 'Avisos',
-                                xtype: 'panel',
-                                iconCls: "fa fa-exclamation-triangle",
-                                cls: 'processing-panel-header-flow'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 3,
-                                xtype: 'portrait',
-                                hideButtons: true
-                            }
-                        ]
-                    }, {
-                        xtype: 'splitter'
-                    }, {
-                        flex: 2,
+                        flex: 3,
                         xtype: 'container',
                         layout: {
                             type: 'hbox',
@@ -179,21 +186,51 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                         },
                         items: [
                             {
-                                flex: 1,
-                                titleAlign: 'center',
-                                iconCls: "fa fa-database",
-                                title: 'Insumos do Fluxo',
-                                xtype: 'flowprocessinginput'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
                                 flex: 2,
                                 titleAlign: 'center',
                                 iconCls: "fa fa-cubes",
-                                title: 'Materiais no Processamento',
-                                xtype: 'flowprocessingmaterial'
+                                title: 'Materiais',
+                                xtype: 'flowprocessingmaterial',
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                xtype: 'container',
+                                layout: {
+                                    type: 'vbox',
+                                    align: 'stretch'
+                                },
+                                defaults: {
+                                    cls: 'processing-panel-header-flow'
+                                },
+                                items: [
+                                    {
+                                        flex: 3,
+                                        titleAlign: 'center',
+                                        title: 'Material selecionado',
+                                        iconCls: "fa fa-exclamation-triangle",
+                                        xtype: 'portrait',
+                                        hideButtons: true
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 2,
+                                        titleAlign: 'center',
+                                        title: 'Avisos',
+                                        xtype: 'panel',
+                                        iconCls: "fa fa-exclamation-triangle"
+                                    }
+                                ]
                             }
                         ]
+                    }, {
+                        xtype: 'splitter'
+                    }, {
+                        flex: 1,
+                        titleAlign: 'center',
+                        iconCls: "fa fa-database",
+                        title: 'Insumos',
+                        xtype: 'flowprocessinginput'
                     }
                 ]
             }
