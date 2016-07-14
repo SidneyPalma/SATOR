@@ -8,8 +8,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellRule', {
         'Ext.form.Panel',
         'Ext.window.Window',
         'Ext.grid.column.*',
-        'Ext.grid.plugin.CellEditing',
         'Smart.form.field.ComboEnum',
+        'Ext.grid.plugin.CellEditing',
         'iAdmin.view.sterilizationtype.SterilizationTypeController'
     ],
 
@@ -70,8 +70,16 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellRule', {
                         xtype: 'radiogroup',
                         columns: 2,
                         items: [
-                            { boxLabel: 'Source', name: 'basicrule', inputValue: 'source', checked: true },
-                            { boxLabel: 'Target', name: 'basicrule', inputValue: 'target' }
+                            {
+                                boxLabel: 'Source',
+                                name: 'basicrule',
+                                inputValue: 'source',
+                                checked: true
+                            }, {
+                                boxLabel: 'Target',
+                                name: 'basicrule',
+                                inputValue: 'target'
+                            }
                         ],
                         listeners: {
                             change: 'onSelectBasicStep'
@@ -112,13 +120,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellRule', {
                                 dataIndex: 'basicsteplinks',
                                 editor: {
                                     xtype: 'numberfield',
-                                    hideTrigger: true,
                                     minValue: 0,
-                                    maxValue: 9
-                                },
-                                renderer: function (v,m,r) {
-                                    var basicstep = r.get('basicstep');
-                                    return (basicstep == 'multiLinks') ? (v == 0 ? 'Não' : 'Sim') : v;
+                                    maxValue: 9,
+                                    hideTrigger: true
                                 }
                             }
                         ],

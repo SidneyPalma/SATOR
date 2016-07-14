@@ -188,9 +188,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         me.router.graph.rules = me.getCoreFlowRule();
 
         if(view.xdata) {
-            var rule = Ext.decode(view.xdata.get('dataflowrule'));
-            me.router.graph.rules = rule || me.router.graph.rules;
-            me.router.graph.fromJSON(Ext.decode(view.xdata.get('graphpaper')));
+            var g = view.xdata.get('graphpaper'),
+                d = view.xdata.get('dataflowrule');
+
+            me.router.graph.rules = d ? Ext.decode(d) : me.router.graph.rules;
+
+            if(g) {
+                me.router.graph.fromJSON(Ext.decode(g));
+            }
         }
 
         me.router.paper.isValid();
@@ -330,13 +335,18 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     },
 
     onStepDblClick: function (router, cellView, evt, x, y, scope) {
-        var win = Ext.widget('coreflowcellview', {cellView: cellView}),
-            stepflaglist = Ext.decode(cellView.model.get('stepflaglist'));
+        var stepflaglist = cellView.model.get('stepflaglist'),
+            win = Ext.widget('coreflowcellview', {cellView: cellView});
 
         win.show(null,function () {
             Ext.getStore('sterilizationtypeflag').load({
                 callback: function(records, operation, success) {
-                    Ext.each(stepflaglist,function (item) {
+
+                    if(!stepflaglist) {
+                        return false;
+                    }
+
+                    Ext.each(Ext.decode(stepflaglist),function (item) {
                         var model = Ext.getStore('sterilizationtypeflag').findRecord('code',item);
                         if(model) {
                             model.set('isactive',true);
@@ -345,6 +355,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     });
                 }
             });
+
             this.down('textfield[name=name]').setValue(cellView.model.get('name'));
             this.down('hiddenfield[name=id]').setValue(cellView.model.get('typeid'));
             this.down('hiddenfield[name=type]').setValue(cellView.model.get('type'));
@@ -405,7 +416,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 "basic.Equipment"
             ],
             basic = {
-                "multiLinks": "Somente associações simples",
+                "multiLinks": "Multiplos links",
                 "uml.StartState": "Iniciar fluxo",
                 "basic.Area": "CMEArea",
                 "basic.SubArea": "CMESubArea",
@@ -434,6 +445,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 });
             }
         }
+        console.info(data);
 
         view.down('gridpanel').getStore().loadData(data);
     },

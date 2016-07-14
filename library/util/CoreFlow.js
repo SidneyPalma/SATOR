@@ -411,12 +411,9 @@ Ext.define( 'Smart.util.CoreFlow', {
                 }
             }, this);
 
-            this.paper.on('cell:pointerclick', function(cellView, evt, x, y) {
-                var cell = cellView.model;
-                // cell.setAreasId(this.graph);
-                console.info(cell.get('isstartstate'), cell.get('typeid'));
-                // console.info('[',cell.get('steppriority'),'] ',cell.get('typeid'),'->> ',cell.get('steplevel'),' - ',cell.get('areasiddo'),cell.get('areasidto'));
-            }, this);
+            // this.paper.on('cell:pointerclick', function(cellView, evt, x, y) {
+            //     var cell = cellView.model;
+            // }, this);
 
             this.paper.on('cell:pointerup', function(cellView) {
                 var linked = cellView.model;
@@ -452,12 +449,16 @@ Ext.define( 'Smart.util.CoreFlow', {
                  *  basic.Area is (target) from {basic.Area,...} ( links inbound to basic.Area  )
                  */
                 var rules = graph.rules;
-
-                var targetType = target.get('type');
-                var sourceType = source.get('type');
+                console.info(rules);
+                // console.warn(target);
+                // console.info(source);
+                var targetType = target.get('type'); // Area
+                var sourceType = source.get('type'); // Equipament
 
                 var targetRules = rules[targetType];
                 var sourceRules = rules[sourceType];
+                console.info('sourceRules',sourceRules);
+                console.warn('targetRules',targetRules);
 
                 var targetLinks = graph.getConnectedLinks(target, { inbound : true });
                 var sourceLinks = graph.getConnectedLinks(source, { outbound : true });
@@ -471,7 +472,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                  */
                 if (sourceRules.source) {
                     if (!sourceRules.source[targetType]) {
-                        showToast('Tipo errado de elemento, esta associação não é permitida!');
+                        showToast('Tipo errado de elemento, esta associação não é permitida!','warning');
                         return false;
                     }
                 } else {
@@ -479,11 +480,13 @@ Ext.define( 'Smart.util.CoreFlow', {
                     return false;
                 }
 
+
+                console.warn(sourceValid,targetValid,annotations );
                 /**
                  * multiplicity
                  */
                 if ( (sourceValid || targetValid) && annotations ) {
-                    showToast('Esta categoria de conexões multiplas não é permitida!');
+                    showToast('Esta categoria de conexões multiplas não é permitida!','warning');
                     return false;
                 }
 
