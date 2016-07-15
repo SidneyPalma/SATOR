@@ -20,15 +20,6 @@ Ext.define( 'iAdmin.model.sterilizationtype.SterilizationType', {
             name: 'description',
             type: 'auto'
         }, {
-            name: 'validdays',
-            type: 'int'
-        }, {
-            name: 'prioritylevel',
-            type: 'auto'
-        }, {
-            name: 'priorityleveldescription',
-            type: 'auto'
-        }, {
             name: 'graphpaper',
             type: 'auto'
         }, {
@@ -40,10 +31,6 @@ Ext.define( 'iAdmin.model.sterilizationtype.SterilizationType', {
         }, {
             name: 'isactive',
             type: 'int'
-        }, {
-            name: 'expireto',
-            type: 'auto',
-            serializeType: 'date'
         }
     ]
 

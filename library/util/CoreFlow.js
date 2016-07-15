@@ -588,9 +588,9 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.stencil.$el.on('contextmenu', function(evt) { evt.preventDefault(); });
             $('.stencil-paper-drag').on('contextmenu', function(evt) { evt.preventDefault(); });
             var layoutOptions = {
-                columnWidth: ( this.stencil.options.width / 1.5 ),
-                columns: 2,
-                rowHeight: 70,
+                columnWidth: ( this.stencil.options.width / 1.7 ),
+                columns: 3,
+                rowHeight: 60,
                 resizeToFit: true,
                 dy: 10,
                 dx: 10

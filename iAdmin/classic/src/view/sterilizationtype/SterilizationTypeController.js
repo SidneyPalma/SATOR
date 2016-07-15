@@ -96,25 +96,17 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     },
 
     onAfterRenderView: function (view) {
-        var xdata = view.xdata;
+        var me = this,
+            xdata = view.xdata;
 
         if(!xdata) return false;
 
         view.loadRecord(xdata);
-
-        Ext.getStore('sterilizationtypematerial').setParams({
-            method: 'selectItems',
-            query: xdata.get('id')
-        }).load();
-
-        Ext.getStore('sterilizationtypeinput').setParams({
-            method: 'selectCode',
-            query: xdata.get('id')
-        }).load();
     },
 
-    onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this;
+    onViewEdit: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
 
         Ext.getStore('sterilizationtype').setParams({
             method: 'selectCode',
@@ -170,16 +162,12 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 cell.remove();
             }
         });
-
-        view.down('tabpanel').setActiveTab(0);
-        view.down('textfield[name=name]').setReadColor(false);
-        Ext.getStore('sterilizationtypematerial').removeAll();
     },
 
-    activatedCoreFlow: function () {
+    onAfterLayout: function () {
         var me = this,
             view = me.getView(),
-            flow = view.down('sterilizationtypeflow'),
+            flow = view.down('form[name=sterilizationtypeflow]'),
             core = Ext.create('Smart.util.CoreFlow', { url: me.url });
 
         me.router = new core.router();
