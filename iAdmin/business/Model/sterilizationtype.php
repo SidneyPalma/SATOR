@@ -27,24 +27,6 @@ class sterilizationtype extends \Smart\Data\Model {
     private $description;
 
     /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":"1"}
-     */
-    private $validdays;
-
-    /**
-     * @Policy {"nullable":false, "length":1}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"'N'"}
-     */
-    private $prioritylevel;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,prioritylevel"}
-     */
-    private $priorityleveldescription;
-
-    /**
      * @Policy {"nullable":true}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -67,12 +49,6 @@ class sterilizationtype extends \Smart\Data\Model {
      * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
      */
     private $isactive;
-
-    /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"date", "policy":true, "logallow":true, "default":""}
-     */
-    private $expireto;
 
     /**
      * @return type integer
@@ -119,38 +95,6 @@ class sterilizationtype extends \Smart\Data\Model {
      */
     public function setDescription($description) {
         $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * @return type integer
-     */
-    public function getValiddays() {
-        return $this->validdays;
-    }
-
-    /**
-     * @param type $validdays
-     * @return \iAdmin\Model\sterilizationtype
-     */
-    public function setValiddays($validdays) {
-        $this->validdays = $validdays;
-        return $this;
-    }
-
-    /**
-     * @return type string
-     */
-    public function getPrioritylevel() {
-        return $this->prioritylevel;
-    }
-
-    /**
-     * @param type $prioritylevel
-     * @return \iAdmin\Model\sterilizationtype
-     */
-    public function setPrioritylevel($prioritylevel) {
-        $this->prioritylevel = $prioritylevel;
         return $this;
     }
 
@@ -218,19 +162,4 @@ class sterilizationtype extends \Smart\Data\Model {
         return $this;
     }
 
-    /**
-     * @return type date
-     */
-    public function getExpireto() {
-        return $this->expireto;
-    }
-
-    /**
-     * @param type $expireto
-     * @return \iAdmin\Model\processtype
-     */
-    public function setExpireto($expireto) {
-        $this->expireto = $expireto;
-        return $this;
-    }
 }

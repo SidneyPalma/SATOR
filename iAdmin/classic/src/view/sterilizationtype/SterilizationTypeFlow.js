@@ -29,16 +29,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeFlow', {
             {
                 width: 300,
                 xtype: 'panel',
-                layout: 'border',
-                padding: 5,
-                items: [
-                    {
-                        region: 'center',
-                        xtype: 'container',
-                        html: [
-                            '<div class="stencil-container"></div>'
-                        ]
-                    }
+                html: [
+                    '<div class="stencil-container"></div>'
                 ]
             }, {
                 flex: 1,
@@ -50,7 +42,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeFlow', {
                     {
                         width: 60,
                         dock: 'right',
-                        padding: 5,
                         xtype: 'segmentedbutton',
                         vertical: true,
                         allowToggle: false,
@@ -97,7 +88,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeFlow', {
     },
 
     listeners: {
-        activate: 'activatedCoreFlow',
+        afterlayout: 'onAfterLayout',
         graphchanged: 'onGraphChanged',
         annotateshow: 'onAnnotateShow',
         linkdblclick: 'onLinkDblClick',

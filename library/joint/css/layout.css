@@ -1,3 +1,11 @@
+.stencil-container {
+   padding: 20px 0 0 0;
+}
+
+.paper-container {
+   padding: 0 10px 0 10px;
+}
+
 .stencil .search {
    color: red;
    box-shadow: none;
