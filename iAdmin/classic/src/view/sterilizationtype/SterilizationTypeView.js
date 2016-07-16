@@ -104,7 +104,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                         flex: 1,
                         xtype: 'form',
                         html: [
-                            '<div class="paper-container"></div>'
+                            '<div class="paper-container"><span id="paper-container-span">Descrição do Fluxo</span></div>'
                         ],
                         dockedItems: [
                             {

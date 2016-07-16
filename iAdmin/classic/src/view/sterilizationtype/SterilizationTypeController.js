@@ -178,8 +178,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         if(view.xdata) {
             var g = view.xdata.get('graphpaper'),
                 d = view.xdata.get('dataflowrule');
-
             me.router.graph.rules = d ? Ext.decode(d) : me.router.graph.rules;
+            Ext.getBody().getById('paper-container-span').update(view.xdata.get('name'));
 
             if(g) {
                 me.router.graph.fromJSON(Ext.decode(g));
