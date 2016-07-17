@@ -59,6 +59,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                         xtype: 'textareafield',
                         name: 'description',
                         fieldLabel: 'Descrição'
+                    }, {
+                        name: 'isactive',
+                        xtype: 'checkboxfield',
+                        boxLabel: 'Ativo'
                     }
                 ]
             }
