@@ -165,7 +165,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             }
         }
 
-        me.router.paper.isValid();
+        if(me.router.paper.isValid()) {
+            Ext.getBody().getById('paper-container-span').removeCls('isactive-of');
+            Ext.getBody().getById('paper-container-span').addCls('isactive-on');
+        }
     },
 
     getCoreFlowRule: function () {
@@ -195,7 +198,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             }
         });
 
-        this.router.paper.isValid();
+        if(this.router.paper.isValid()) {
+            Ext.getBody().getById('paper-container-span').removeCls('isactive-of');
+            Ext.getBody().getById('paper-container-span').addCls('isactive-on');
+        }
     },
 
     onAnnotateShow: function (router, cellView, evt, x, y, scope) {
