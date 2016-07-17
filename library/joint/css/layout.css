@@ -7,18 +7,33 @@
 }
 
 .paper-container > span {
-   top: 20px;
+   top: 10px;
    left: 20px;
    z-index: 4;
    color: wheat;
-   font-size: 24px;
+   font-size: 16px;
    font-weight: 500;
-   line-height: 32px;
+   line-height: 24px;
    position: absolute;
    border-radius: 10px;
    padding: 5px 10px 5px 10px;
-   background:  rgb(192, 41, 66);
    text-shadow: 1px 1px 2px #1D1D1D;
+
+   box-shadow: 0px 1px 5px #333333;
+   -webkit-box-shadow: 0px 1px 5px #333333;
+   -moz-box-shadow: 0px 1px 5px #333333;
+}
+
+.isactive-of {
+   background: rgb(192, 41, 66);
+}
+
+.isactive-on {
+   background: rgb(25, 125, 25);
+}
+
+.stencil {
+   top: 5px;
 }
 
 .stencil .search {
@@ -26,6 +41,7 @@
    box-shadow: none;
    text-shadow: none;
    padding-left: 10px;
+   font-family: inherit;
    -moz-box-shadow: none;
    box-sizing: border-box;
    -webkit-box-shadow: none;
@@ -34,11 +50,14 @@
 }
 
 .stencil-container {
+   top: 5px;
    border-top: 0px solid #4f4f4f;
    border-right: 0px solid lightgray;
-   background-color: hsla(220,11%,97%,.95);
+   /*background-color: hsla(220,11%,97%,.95);*/
+   background-color: transparent;
    color: #bcbcbc;
 }
+
 .stencil-container > label {
    display: block;
    text-align: center;
@@ -63,12 +82,12 @@
 }
 
 /* Hide some nodes of elements in stencil. */
-.stencil .elements .element.basic.Image text,
-.stencil .elements .element.devs.Atomic .inPorts text,
-.stencil .elements .element.devs.Atomic .outPorts text,
-.stencil .elements .element.pn.Transition text {
-   display: none;
-}
+/*.stencil .elements .element.basic.Image text,*/
+/*.stencil .elements .element.devs.Atomic .inPorts text,*/
+/*.stencil .elements .element.devs.Atomic .outPorts text,*/
+/*.stencil .elements .element.pn.Transition text {*/
+   /*display: none;*/
+/*}*/
 
 /* filter */
 .stencil .element.unmatched {

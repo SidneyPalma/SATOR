@@ -303,8 +303,8 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.graph.rules = {};
 
             var link = new joint.dia.Link({
-                router: { name: 'manhattan' },
-                connector: { name: 'rounded' },
+                router: { name: 'orthogonal' },
+                // connector: { name: 'rounded' },
                 attrs: {
                     '.connection': {
                         stroke: '#333333',

@@ -96,7 +96,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                 items: [
                     {
                         width: 400,
-                        xtype: 'panel',
+                        xtype: 'container',
                         html: [
                             '<div class="stencil-container"></div>'
                         ]
@@ -104,11 +104,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                         flex: 1,
                         xtype: 'form',
                         html: [
-                            '<div class="paper-container"><span id="paper-container-span">Descrição do Fluxo</span></div>'
+                            '<div class="paper-container"><span id="paper-container-span" class="isactive-of">Descrição do Fluxo</span></div>'
                         ],
                         dockedItems: [
                             {
-                                width: 60,
+                                width: 50,
                                 dock: 'right',
                                 xtype: 'segmentedbutton',
                                 vertical: true,
@@ -121,9 +121,24 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                 },
                                 items: [
                                     {
-                                        iconCls: "fa fa-sitemap",
+                                    //     showSmartTheme: 'red',
+                                    //     iconCls: "fa fa-upload",
+                                    //     handler: 'updateView'
+                                    // }, {
+                                    //     disabled: true,
+                                    //     name: 'pendent',
+                                    //     showSmartTheme: 'red',
+                                    //     iconCls: "fa fa-check",
+                                    //     handler: 'updateFlux',
+                                    //     showSmartTheme: ''
+                                        handler: 'updateEdit',
                                         showSmartTheme: 'red',
-                                        handler: 'updateViewFlow'
+                                        iconCls: "fa fa-pencil-square-o"
+                                    }, {
+                                        iconCls: "fa fa-upload",
+                                        //iconCls: "fa fa-sitemap",
+                                        showSmartTheme: 'red',
+                                        handler: 'updateFlow'
                                     }, {
                                         iconCls: "fa fa-reply",
                                         handler: 'commandManagerUndo'

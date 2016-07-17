@@ -121,32 +121,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         });
     },
 
-    insertViewNew: function (btn) {
-        var me = this;
-        me.redirectTo('sterilizationtypeview');
-    },
-
-    updateView: function () {
-        var me = this,
-            view = me.getView(),
-            graphpaper = view.down('hiddenfield[name=graphpaper]');
-
-        graphpaper.setValue(Ext.encode(me.router.graph.toJSON()));
-
-        me.setModuleForm(view);
-        me.setModuleData('sterilizationtype');
-
-        me._success = function (form, action) {
-            if(action.result.crud == 'insert') {
-                view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
-                Ext.getStore('sterilizationtypematerial').setParams({
-                    method: 'selectItems',
-                    query: action.result.rows.id
-                }).load();
-            }
-        }
-
-        me.updateModule();
+    insertViewNew: function () {
+        Ext.widget('sterilizationtypeedit').show(null,function () {
+            this.setTitle('Novo Fluxo');
+            this.down('textfield[name=name]').setReadColor(false);
+        });
     },
 
     insertView: function () {
@@ -543,7 +522,44 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         });
     },
 
-    updateViewFlow: function () {
+    updateEdit: function () {
+        var me = this,
+            view = me.getView(),
+            win = Ext.widget('sterilizationtypeedit');
+
+        win.show(null,function () {
+            this.down('form').loadRecord(view.xdata);
+        });
+    },
+
+    updateView: function () {
+        var me = this,
+            view = me.getView().down('form');
+
+        me.setModuleForm(view);
+        me.setModuleData('sterilizationtype');
+
+        me._success = function (form, action) {
+            me.getView().close();
+            if(action.result.crud == 'insert') {
+                Ext.getStore('sterilizationtype').setParams({
+                    method: 'selectCode',
+                    rows: Ext.encode({ id: action.result.rows.id })
+                }).load({
+                    scope: me,
+                    callback: function(records, operation, success) {
+                        var record = records[0];
+                        me.redirectTo( 'sterilizationtypeview/' + record.get('id'));
+                    }
+                });
+            }
+        }
+
+        me.updateModule();
+    },
+
+
+    updateFlow: function () {
         var me = this,
             dataflowstep = [],
             stepflaglist = "",
@@ -556,9 +572,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             });
         };
 
-        if(!me.router.paper.isValid()) {
-            return false;
-        }
+        // if(!me.router.paper.isValid()) {
+        //     return false;
+        // }
 
         Ext.each(cells,function(item){
             if(item instanceof joint.shapes.basic.Step) {
@@ -579,11 +595,20 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         dataflowstep = sortByKey(dataflowstep, "steplevel");
 
+        view.setLoading('Salvando alterações...');
+
         Ext.Ajax.request({
             url: me.url,
             params: {
                 action: 'update',
-                rows: Ext.encode({ id: view.xdata.get('id'), dataflowstep: Ext.encode(dataflowstep) })
+                rows: Ext.encode({
+                    id: view.xdata.get('id'),
+                    dataflowstep: Ext.encode(dataflowstep),
+                    graphpaper: Ext.encode(me.router.graph.toJSON())
+                })
+            },
+            callback: function () {
+                view.setLoading(false);
             }
         });
     },
