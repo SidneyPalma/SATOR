@@ -612,6 +612,15 @@
     -moz-transform:translateX(100%);
     -webkit-transform:translateX(100%);
 }
+
+.marquee.down p a.one:after {
+    content: "Você está agora usando o sistema em uma base de teste não homologada!";
+}
+
+.marquee.down p a.two:after {
+    content: "Toda informação neste sistema poderá ser descartada a qualquer momento!";
+}
+
 .marquee.down p {
     transform:translateY(-100%);
     -moz-transform:translateY(-100%);
