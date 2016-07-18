@@ -35,9 +35,9 @@
 }
 
 .processing-update-grid .x-grid-cell-inner {
-    font-size: 22px !important;
-    line-height: 25px !important;
-    font-family: 'Lucida Sans Typewriter';
+    font-size: 16px !important;
+    line-height: 19px !important;
+    /*font-family: 'Lucida Sans Typewriter';*/
 }
 
 .processing-update-grid .x-grid-body {
@@ -57,26 +57,26 @@
 */
 
 .processing-field-font {
-    font-size: 20px;
-    line-height: 25px;
+    font-size: 18px;
+    line-height: 21px;
     color: rgb(255, 255, 255);
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
 }
 
 .processing-field .x-form-text {
     opacity: .5;
-    height: 58px;
-    font-size: 32px;
+    height: 25px;
+    font-size: 21px;
     font-weight: 700;
     color: rgb(0, 0, 0);
 }
 
 .processing-field .x-form-trigger {
-    line-height: 52px !important;
+    line-height: 37px !important;
 }
 
 .processing-field .x-form-spinner-default {
-    line-height: 44px !important;
+    line-height: 34px !important;
 }
 
 .processing-field .x-form-trigger-default {
@@ -84,6 +84,6 @@
     background: rgb(208, 208, 208);
 }
 
-.processing-field .x-form-trigger-default:before {
-    font-size: 19px;
-}
+/*.processing-field .x-form-trigger-default:before {*/
+    /*font-size: 19px;*/
+/*}*/

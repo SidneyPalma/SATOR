@@ -2,6 +2,6 @@
 
 require_once '../../vendor/autoload.php';
 
-$object = new \iAdmin\Coach\sterilizationtypeinput();
+$object = new \iAdmin\Coach\cycle();
 
 echo $object->callAction();

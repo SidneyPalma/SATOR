@@ -147,7 +147,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         var me = this,
             view = me.getView(),
             flow = view.down('form[name=sterilizationtypeflow]'),
-            core = Ext.create('Smart.util.CoreFlow', { url: me.url });
+            core = Ext.create('Smart.util.CoreFlow', { url: me.url }),
+            containerSpan = Ext.getBody().getById('paper-container-span');
 
         me.router = new core.router();
         me.router.initializeEditor(flow.getWidth()-350,flow.getHeight(),core.stencil,flow);
@@ -158,7 +159,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             var g = view.xdata.get('graphpaper'),
                 d = view.xdata.get('dataflowrule');
             me.router.graph.rules = d ? Ext.decode(d) : me.router.graph.rules;
-            Ext.getBody().getById('paper-container-span').update(view.xdata.get('name'));
+            containerSpan.update(view.xdata.get('name'));
 
             if(g) {
                 me.router.graph.fromJSON(Ext.decode(g));
@@ -166,8 +167,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         }
 
         if(me.router.paper.isValid()) {
-            Ext.getBody().getById('paper-container-span').removeCls('isactive-of');
-            Ext.getBody().getById('paper-container-span').addCls('isactive-on');
+            containerSpan.addCls('isactive-on');
+            containerSpan.removeCls('isactive-of');
+        } else {
+            containerSpan.addCls('isactive-of');
+            containerSpan.removeCls('isactive-on');
         }
     },
 
@@ -190,7 +194,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     },
 
     onGraphChanged: function (graph, scope) {
-        var items = graph.getElements();
+        var items = graph.getElements(),
+            containerSpan = Ext.getBody().getById('paper-container-span');
 
         Ext.each(items,function(item){
             if(item instanceof joint.shapes.basic.Step) {
@@ -199,8 +204,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         });
 
         if(this.router.paper.isValid()) {
-            Ext.getBody().getById('paper-container-span').removeCls('isactive-of');
-            Ext.getBody().getById('paper-container-span').addCls('isactive-on');
+            containerSpan.addCls('isactive-on');
+            containerSpan.removeCls('isactive-of');
+        } else {
+            containerSpan.addCls('isactive-of');
+            containerSpan.removeCls('isactive-on');
         }
     },
 

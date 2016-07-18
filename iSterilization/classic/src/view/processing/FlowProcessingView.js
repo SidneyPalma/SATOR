@@ -161,7 +161,7 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                             }, {
                                 margin: '10 0 0 0',
                                 flex: 1,
-                                fieldLabel: 'Próxima etapa',
+                                fieldLabel: 'Equipamento',
                                 value: '. . .'
                             }
                         ]
@@ -190,7 +190,7 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
                                 titleAlign: 'center',
                                 iconCls: "fa fa-cubes",
                                 title: 'Materiais',
-                                xtype: 'flowprocessingmaterial',
+                                xtype: 'flowprocessingmaterial'
                             }, {
                                 xtype: 'splitter'
                             }, {

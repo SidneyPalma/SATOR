@@ -4,12 +4,12 @@ namespace iAdmin\Coach;
 
 use Smart\Utils\Session;
 
-class sterilizationtypeinput extends \Smart\Setup\Setup {
+class cycle extends \Smart\Setup\Setup {
 
     /**
-     * @var \iAdmin\Model\sterilizationtypeinput $model
+     * @var \iAdmin\Model\cycle $model
      */
-    public $model = '\iAdmin\Model\sterilizationtypeinput';
+    public $model = '\iAdmin\Model\cycle';
 
     public function select() {
         try {
