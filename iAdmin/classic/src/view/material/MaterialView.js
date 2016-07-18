@@ -11,6 +11,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
         'Smart.form.Portrait',
         'Ext.grid.property.Grid',
         'iAdmin.store.itembase.*',
+        'iAdmin.view.material.MaterialCycle',
         'iAdmin.view.itembase.ItemBaseLayout',
         'iAdmin.view.material.MaterialTypeFlow',
         'iAdmin.view.material.MaterialController',
@@ -115,13 +116,28 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         fieldLabel: 'Kit ativo',
                         name: 'materialboxname'
                     }, {
-                        xtype: 'label',
-                        cls: 'sub-title-label',
-                        text: 'Tipo de fluxo por prioridade'
+                        xtype: 'radiogroup',
+                        vertical: true,
+                        columns: 2,
+                        items: [
+                            { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
+                            { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 }
+                        ],
+                        listeners: {
+                            change: 'onChangeExtensionType'
+                        }
                     }, {
                         height: 96,
-                        margin: '10 0 0 0',
-                        xtype: 'materialtypeflow'
+                        layout: 'card',
+                        xtype: 'container',
+                        name: 'containercard',
+                        items: [
+                            {
+                                xtype: 'materialcycle'
+                            }, {
+                                xtype: 'materialtypeflow'
+                            }
+                        ]
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
