@@ -124,6 +124,23 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellRule', {
                                     maxValue: 9,
                                     hideTrigger: true
                                 }
+                                // getEditor: function(record) {
+                                //     var basicstep = record.get('basicstep');
+                                //
+                                //     if(basicstep == "multiLinks") {
+                                //         return Ext.create('Ext.grid.CellEditor', {
+                                //             field: Ext.widget('checkboxfield')
+                                //         });
+                                //     } else {
+                                //         return Ext.create('Ext.grid.CellEditor', {
+                                //             field: Ext.widget('numberfield', {
+                                //                 minValue: 0,
+                                //                 maxValue: 9,
+                                //                 hideTrigger: true
+                                //             })
+                                //         });
+                                //     }
+                                // }
                             }
                         ],
                         selType: 'cellmodel',
