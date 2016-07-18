@@ -68,6 +68,10 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
             method: 'selectData',
             query: xdata.get('id')
         }).load();
+
+        Ext.getStore('equipmentcycle').setParams({
+            query: xdata.get('id')
+        }).load();
     },
 
     onViewEdit: function(grid, rowIndex, colIndex) {
