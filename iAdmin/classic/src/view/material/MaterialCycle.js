@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.view.equipment.EquipmentCycle', {
+Ext.define( 'iAdmin.view.material.MaterialCycle', {
     extend: 'Ext.grid.Panel',
 
-    xtype: 'equipmentcycle',
+    xtype: 'materialcycle',
 
     requires: [
         'Ext.grid.Panel',
@@ -11,7 +11,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentCycle', {
         'Ext.grid.plugin.CellEditing'
     ],
 
-    store: 'equipmentcycle',
+    store: 'materialcycle',
 
     initComponent: function () {
         var me = this;
@@ -22,7 +22,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentCycle', {
     makeColumn: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.itembase.EquipmentCycle');
+        Ext.create('iAdmin.store.itembase.MaterialCycle');
 
         me.columns = [
             {

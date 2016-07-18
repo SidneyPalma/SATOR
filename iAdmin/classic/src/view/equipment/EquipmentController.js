@@ -50,6 +50,31 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
 
     //routes ========================>
 
+    onCycleChange: function (checkcolumn, rowIndex, checked, eOpts) {
+        var store = Ext.getStore('equipmentcycle'),
+            record = store.getAt(rowIndex);
+
+        if(!checked) {
+            store.remove(record);
+        }
+
+        store.sync({
+            success: function (batch, options) {
+                var opr = batch.getOperations()[0],
+                    rec = opr.getRecords()[0];
+
+                if(options.operations.create) {
+                    record.set('id',rec.get('id'));
+                }
+
+                if(options.operations.destroy) {
+                    store.load();
+                }
+
+            }
+        });
+    },
+
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,

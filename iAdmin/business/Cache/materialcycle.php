@@ -12,7 +12,7 @@ class materialcycle extends \Smart\Data\Cache {
 
         $sql = "
             SELECT
-                c.id,
+                mc.id,
                 :materialid as materialid,
                 c.id as cycleid,
                 c.name as cyclename,

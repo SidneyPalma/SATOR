@@ -50,6 +50,37 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
 
     //routes ========================>
 
+    onCycleChange: function (checkcolumn, rowIndex, checked, eOpts) {
+        var store = Ext.getStore('materialcycle'),
+            record = store.getAt(rowIndex);
+
+        if(!checked) {
+            store.remove(record);
+        }
+
+        store.sync({
+            success: function (batch, options) {
+                var opr = batch.getOperations()[0],
+                    rec = opr.getRecords()[0];
+
+                if(options.operations.create) {
+                    record.set('id',rec.get('id'));
+                }
+
+                if(options.operations.destroy) {
+                    store.load();
+                }
+
+            }
+        });
+    },
+
+    onChangeExtensionType: function ( field, newValue, oldValue, eOpts) {
+        var me = this,
+            view = me.getView();
+        view.down('container[name=containercard]').getLayout().setActiveItem(newValue.extensiontype);
+    },
+
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
@@ -74,6 +105,10 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
 
         grid.getStore().setParams({
             method: 'selectData',
+            query: xdata.get('id')
+        }).load();
+
+        Ext.getStore('materialcycle').setParams({
             query: xdata.get('id')
         }).load();
     },
