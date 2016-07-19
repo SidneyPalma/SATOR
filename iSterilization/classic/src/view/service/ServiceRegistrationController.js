@@ -70,8 +70,9 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         }).load();
     },
 
-    onViewEdit: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        var me = this;
+    onViewEdit: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
 
         Ext.getStore('serviceregistration').setParams({
             method: 'selectCode',
