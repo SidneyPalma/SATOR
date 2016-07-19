@@ -16,6 +16,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
         'iAdmin.view.material.MaterialTypeFlow',
         'iAdmin.view.material.MaterialController',
         'iAdmin.view.helper.packing.PackingSearch',
+        'iAdmin.view.itembase.ItemBaseServiceType',
         'iAdmin.view.person.proprietary.ProprietarySearch',
         'iAdmin.view.helper.manufacturer.ManufacturerSearch',
         'iAdmin.view.sterilizationtype.SterilizationTypeSearch',
@@ -118,16 +119,17 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                     }, {
                         xtype: 'radiogroup',
                         vertical: true,
-                        columns: 2,
+                        columns: 3,
                         items: [
                             { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
-                            { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 }
+                            { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 },
+                            { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 2 }
                         ],
                         listeners: {
                             change: 'onChangeExtensionType'
                         }
                     }, {
-                        height: 96,
+                        height: 150,
                         layout: 'card',
                         xtype: 'container',
                         name: 'containercard',
@@ -136,6 +138,8 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                 xtype: 'materialcycle'
                             }, {
                                 xtype: 'materialtypeflow'
+                            }, {
+                                xtype: 'itembaseservicetype'
                             }
                         ]
                     }, {

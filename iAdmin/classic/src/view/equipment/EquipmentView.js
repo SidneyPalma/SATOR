@@ -112,13 +112,28 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                         xtype: 'textfield',
                         name: 'sterilizationname'
                     }, {
-                        xtype: 'label',
-                        cls: 'sub-title-label',
-                        text: 'Ciclo para o Equipamento'
+                        xtype: 'radiogroup',
+                        vertical: true,
+                        columns: 2,
+                        items: [
+                            { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
+                            { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 1 }
+                        ],
+                        listeners: {
+                            change: 'onChangeExtensionType'
+                        }
                     }, {
-                        height: 96,
-                        margin: '10 0 0 0',
-                        xtype: 'equipmentcycle'
+                        height: 150,
+                        layout: 'card',
+                        xtype: 'container',
+                        name: 'containercard',
+                        items: [
+                            {
+                                xtype: 'equipmentcycle'
+                            }, {
+                                xtype: 'itembaseservicetype'
+                            }
+                        ]
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
