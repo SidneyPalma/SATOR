@@ -86,12 +86,16 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationNew', {
                         name: 'cmeareasname',
                         fieldCls: 'smart-field-style-action'
                     }, {
+                        xtype: 'hiddenfield',
+                        name: 'servicetype'
+                    }, {
                         showClear: true,
                         xtype: 'servicetypesearch',
                         fieldLabel: 'Tipo de Serviço',
                         name: 'servicetypedescription',
                         fieldCls: 'smart-field-style-action',
                         listeners: {
+                            select: 'onSelectServiceType',
                             beforequery: 'onBeforeQueryServiceType'
                         }
                     }, {
