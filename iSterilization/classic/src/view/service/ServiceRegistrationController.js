@@ -103,9 +103,12 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         Ext.widget('serviceregistrationnew').show();
     },
 
-    // showclear: function (field,eOpts) {
-    //     console.info(field.name);
-    // },
+    onShowClear: function (field,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('form').reset();
+    },
 
     onSelectServiceRegistration: function (combo, record, eOpts) {
         var me = this,
@@ -134,13 +137,6 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
 
         view.down('hiddenfield[name=cmeareasid]').reset();
         view.down('textfield[name=cmeareasname]').reset();
-    },
-
-    onSelectServiceType: function (combo, record, eOpts) {
-        var me = this,
-            view = me.getView();
-
-        view.down('hiddenfield[name=servicetype]').setValue(record.get('servicetype'));
     },
 
     onBeforeQueryServiceType: function ( queryPlan, eOpts ) {
