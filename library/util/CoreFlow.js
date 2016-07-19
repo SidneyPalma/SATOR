@@ -120,7 +120,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                 attrs: {
                     'rect': { fill: 'transparent', stroke: 'transparent', width: 15, height: 15 },
                     'image': { 'ref-x': 0, 'ref-y': 0, ref: 'rect', width: 50, height: 50 },
-                    'text': { text: '', 'font-size': 14 }
+                    'text': { text: '', 'font-size': 14,  y:"0.1em" }
                 }
             }, joint.shapes.basic.Image.prototype.defaults)
         });
