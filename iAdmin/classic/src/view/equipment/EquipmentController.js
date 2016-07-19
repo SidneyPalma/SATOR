@@ -75,6 +75,12 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         });
     },
 
+    onChangeExtensionType: function ( field, newValue, oldValue, eOpts) {
+        var me = this,
+            view = me.getView();
+        view.down('container[name=containercard]').getLayout().setActiveItem(newValue.extensiontype);
+    },
+
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,
@@ -95,6 +101,10 @@ Ext.define( 'iAdmin.view.equipment.EquipmentController', {
         }).load();
 
         Ext.getStore('equipmentcycle').setParams({
+            query: xdata.get('id')
+        }).load();
+
+        Ext.getStore('itembaseservicetype').setParams({
             query: xdata.get('id')
         }).load();
     },

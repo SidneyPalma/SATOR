@@ -80,6 +80,10 @@ Ext.define( 'iAdmin.view.input.InputController', {
             method: 'selectData',
             query: xdata.get('id')
         }).load();
+
+        Ext.getStore('itembaseservicetype').setParams({
+            query: xdata.get('id')
+        }).load();
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {

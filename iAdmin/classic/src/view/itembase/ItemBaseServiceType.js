@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.view.equipment.EquipmentCycle', {
+Ext.define( 'iAdmin.view.itembase.ItemBaseServiceType', {
     extend: 'Ext.grid.Panel',
 
-    xtype: 'equipmentcycle',
+    xtype: 'itembaseservicetype',
 
     requires: [
         'Ext.grid.Panel',
@@ -10,7 +10,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentCycle', {
         'iAdmin.store.itembase.*'
     ],
 
-    store: 'equipmentcycle',
+    store: 'itembaseservicetype',
 
     initComponent: function () {
         var me = this;
@@ -21,19 +21,19 @@ Ext.define( 'iAdmin.view.equipment.EquipmentCycle', {
     makeColumn: function () {
         var me = this;
 
-        Ext.create('iAdmin.store.itembase.EquipmentCycle');
+        Ext.create('iAdmin.store.itembase.ItemBaseServiceType');
 
         me.columns = [
             {
                 flex: 1,
-                dataIndex: 'cyclename'
+                dataIndex: 'servicetypedescription'
             }, {
                 width: 50,
                 align: 'center',
                 dataIndex: 'isactive',
                 xtype: 'checkcolumn',
                 listeners: {
-                    checkchange: 'onCycleChange'
+                    checkchange: 'onItemChange'
                 }
             }
         ];

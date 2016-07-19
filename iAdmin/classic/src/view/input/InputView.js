@@ -108,6 +108,13 @@ Ext.define( 'iAdmin.view.input.InputView', {
                     }, {
                         xtype: 'label',
                         cls: 'sub-title-label',
+                        text: 'Serviços'
+                    }, {
+                        margin: '10 0 10 0',
+                        xtype: 'itembaseservicetype'
+                    }, {
+                        xtype: 'label',
+                        cls: 'sub-title-label',
                         text: 'Seleções'
                     }, {
                         columns: 1,
