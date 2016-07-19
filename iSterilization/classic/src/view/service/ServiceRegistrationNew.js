@@ -9,6 +9,7 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationNew', {
         'Smart.plugins.*',
         'Ext.window.Window',
         'Smart.form.field.ComboEnum',
+        'iSterilization.view.service.ServiceTypeSearch',
         'iSterilization.view.service.ServiceItemBaseSearch',
         'iSterilization.view.service.ServiceRegistrationController'
     ],
@@ -86,10 +87,13 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationNew', {
                         fieldCls: 'smart-field-style-action'
                     }, {
                         showClear: true,
-                        xtype: 'comboenum',
+                        xtype: 'servicetypesearch',
                         fieldLabel: 'Tipo de Serviço',
                         name: 'servicetypedescription',
-                        fieldCls: 'smart-field-style-action'
+                        fieldCls: 'smart-field-style-action',
+                        listeners: {
+                            beforequery: 'onBeforeQueryServiceType'
+                        }
                     }, {
                         fieldLabel: 'Descrição',
                         name: 'description'

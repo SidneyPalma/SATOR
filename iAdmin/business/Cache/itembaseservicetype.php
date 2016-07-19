@@ -43,4 +43,34 @@ class itembaseservicetype extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectType(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                ibst.servicetype,
+                dbo.getEnum('servicetype',ibst.servicetype) as servicetypedescription
+            from
+                itembaseservicetype ibst
+            where ibst.itembaseid = :id";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }
