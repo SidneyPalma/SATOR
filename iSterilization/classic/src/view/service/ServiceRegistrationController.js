@@ -92,8 +92,10 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
 
     onSelectServiceRegistration: function (combo, record, eOpts) {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            servicetypesearch = view.down('servicetypesearch');
 
+        servicetypesearch.reset();
         view.down('hiddenfield[name=cmeareasid]').reset();
         view.down('textfield[name=cmeareasname]').reset();
 
@@ -113,16 +115,26 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         combo.store.removeAll();
         combo.store.setParams({ itembasetype: itembasetype.registrationtype });
 
-        view.down('comboenum').reset();
         view.down('hiddenfield[name=cmeareasid]').reset();
         view.down('textfield[name=cmeareasname]').reset();
+    },
+
+    onBeforeQueryServiceType: function ( queryPlan, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            combo = queryPlan.combo,
+            serviceitembasesearch = view.down('serviceitembasesearch');
+
+        delete combo.lastQuery;
+        combo.store.removeAll();
+        queryPlan.query = serviceitembasesearch.getValue();
     },
 
     onRegistrationTypeChange: function (field, newValue , oldValue , eOpts) {
         var me = this,
             view = me.getView();
 
-        view.down('comboenum').reset();
+        view.down('servicetypesearch').reset();
         view.down('serviceitembasesearch').reset();
         view.down('hiddenfield[name=cmeareasid]').reset();
         view.down('textfield[name=cmeareasname]').reset();
