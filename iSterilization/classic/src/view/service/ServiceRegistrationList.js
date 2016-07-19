@@ -109,14 +109,14 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationList', {
                                 disabled: true,
                                 xtype: 'splitter'
                             }, {
-                                handler: '',
+                                handler: 'onViewUpdate',
                                 iconCls: "fa fa-thumbs-up action-select-color",
                                 tooltip: 'Aprovar lançamento!'
                             }, {
                                 disabled: true,
                                 xtype: 'splitter'
                             }, {
-                                handler: '',
+                                handler: 'onViewDelete',
                                 iconCls: "fa fa-trash action-delete-color",
                                 tooltip: 'Descartar lançamento!'
 							}
