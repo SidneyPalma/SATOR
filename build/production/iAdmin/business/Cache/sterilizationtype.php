@@ -60,13 +60,43 @@ class sterilizationtype extends \Smart\Data\Cache {
 
         switch($shapeType) {
             case 'area':
-                $sql = "SELECT a.id, a.sterilizationname as name, a.description, a.isactive, c.isstartstate FROM areas a inner join cmeareas c on ( c.id = a.id ) WHERE a.sterilizationflow = 1 order by a.orderby";
+                $sql = "
+                    SELECT
+                      a.id,
+                      a.sterilizationname as name,
+                      a.description,
+                      a.isactive,
+                      c.isstartstate
+                    FROM
+                      areas a
+                      inner join cmeareas c on ( c.id = a.id )
+                    WHERE a.sterilizationflow = 1 order by a.orderby";
                 break;
             case 'subarea':
-                $sql = "SELECT a.id, a.sterilizationname as name, a.description, a.isactive FROM areas a inner join cmesubareas s on ( s.id = a.id ) WHERE a.sterilizationflow = 1 order by a.orderby";
+                $sql = "
+                    SELECT
+                      a.id,
+                      a.sterilizationname as name,
+                      a.description,
+                      a.isactive
+                    FROM
+                      areas a
+                      inner join cmesubareas s on ( s.id = a.id )
+                    WHERE a.sterilizationflow = 1 order by a.orderby";
                 break;
             case 'equipment':
-                $sql = "SELECT e.id, e.sterilizationname as name, i.description, i.isactive FROM itembase i inner join equipment e on ( e.id = i.id ) WHERE i.itembasetype = 'E' and e.sterilizationflow = 1";
+                $sql = "
+                    SELECT
+                        e.id,
+                        e.sterilizationname as name,
+                        ib.description,
+                        dbo.binary2base64(ib.filedata) as filedata,
+                        ib.fileinfo,
+                        ib.isactive
+                    FROM
+                      itembase ib
+                      inner join equipment e on ( e.id = ib.id )
+                    WHERE ib.itembasetype = 'E' and e.sterilizationflow = 1";
                 break;
         }
 
@@ -84,7 +114,7 @@ class sterilizationtype extends \Smart\Data\Cache {
     }
 
     public function selectFlag(array $data) {
-        $flags = $this->recordFlag($data);
+//        $flags = $this->recordFlag($data);
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
@@ -102,15 +132,15 @@ class sterilizationtype extends \Smart\Data\Cache {
         try {
 
             $rows = $proxy->query($sql)->fetchAll();
-            $i = 0;
-            if(count($flags) != 0) {
-                foreach($rows as $data) {
-                    if(in_array($data['code'], $flags)) {
-                        $rows[$i]['isactive'] = 1;
-                    }
-                    $i++;
-                }
-            }
+//            $i = 0;
+//            if(count($flags) != 0) {
+//                foreach($rows as $data) {
+//                    if(in_array($data['code'], $flags)) {
+//                        $rows[$i]['isactive'] = 1;
+//                    }
+//                    $i++;
+//                }
+//            }
 
             self::_setRows($rows);
         } catch ( \PDOException $e ) {
