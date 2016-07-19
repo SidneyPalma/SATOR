@@ -72,6 +72,7 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationNew', {
                         xtype: 'serviceitembasesearch',
                         fieldCls: 'smart-field-style-action',
                         listeners: {
+                            showclear:  'onShowClear',
                             select: 'onSelectServiceRegistration',
                             beforequery: 'onBeforeQueryServiceRegistration'
                         }
