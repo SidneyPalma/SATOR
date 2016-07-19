@@ -87,6 +87,18 @@ Ext.define( 'iSterilization.view.service.ServiceRegistrationController', {
         });
     },
 
+    onViewUpdate: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
+
+    },
+
+    onViewDelete: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
+
+    },
+
     insertViewNew: function () {
         Ext.widget('serviceregistrationnew').show();
     },
