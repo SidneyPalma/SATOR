@@ -258,6 +258,11 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         fieldLabel: 'Área CME',
                                         fieldCls: 'smart-field-style-action'
                                     }, {
+                                        useReadColor: true,
+                                        name: 'equipmentname',
+                                        fieldLabel: 'Equipamento',
+                                        fieldCls: 'smart-field-style-action'
+                                    }, {
                                         allowBlank: false,
                                         xtype: 'inputleavesearch',
                                         fieldLabel: 'Insumo',

@@ -62,6 +62,24 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
         store.clearFilter(true);
     },
 
+    onBeforeQueryEquipment: function ( queryPlan, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            combo = queryPlan.combo,
+            cmeareassearch = view.down('cmeareassearch');
+
+        delete combo.lastQuery;
+        combo.store.removeAll();
+        combo.store.setParams({ cmeareasid: cmeareassearch.getValue() });
+    },
+
+    onShowClear: function (field,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('form').reset();
+    },
+
     onAfterRenderView: function (view) {
         var me = this,
             xdata = view.xdata,

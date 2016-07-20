@@ -66,14 +66,20 @@ Ext.define( 'iAdmin.view.moviment.MovimentNew', {
                         name: 'cmeareasname',
                         hiddenNameId: 'cmeareasid',
                         fieldLabel: 'Área CME',
-                        xtype: 'cmeareassearch'
+                        xtype: 'cmeareassearch',
+                        listeners: {
+                            showclear: 'onShowClear'
+                        }
                     }, {
                         disabled: true,
-                        allowBlank: false,
+                        allowBlank: true,
                         name: 'equipmentname',
                         hiddenNameId: 'equipmentid',
                         fieldLabel: 'Equipamento',
-                        xtype: 'equipmentcmeareassearch'
+                        xtype: 'equipmentcmeareassearch',
+                        listeners: {
+                            beforequery: 'onBeforeQueryEquipment'
+                        }
                     }, {
                         xtype: 'container',
                         layout: 'hbox',

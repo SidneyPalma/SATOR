@@ -61,7 +61,7 @@ class Cache {
 
         // get params
         foreach ($params as $key => $value) {
-            $p[] = "$value COLLATE Latin1_General_CI_AI LIKE :$value";
+            $p[] = "$value LIKE :$value";
         }
 
         $sql = "SELECT " .implode(',', $f). " FROM {$extend} WHERE " . implode(' OR ', $p);

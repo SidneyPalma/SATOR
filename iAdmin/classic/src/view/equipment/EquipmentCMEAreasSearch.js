@@ -9,11 +9,31 @@ Ext.define( 'iAdmin.view.equipment.EquipmentCMEAreasSearch', {
         'iAdmin.store.itembase.Equipment'
     ],
 
+    displayValue: 'equipmentid',
     displayField: 'equipmentname',
 
-    pageSize: 0,
     showClear: true,
 
-    store: 'iAdmin.store.itembase.Equipment'
+    url: '../iAdmin/business/Calls/equipment.php',
+
+    params: {
+        query: null,
+        cmeareasid: null,
+        action: 'select',
+        method: 'selectArea'
+    },
+
+    fields: [
+        {
+            name: 'id',
+            type: 'int'
+        }, {
+            name: 'equipmentid',
+            type: 'int'
+        }, {
+            name: 'equipmentname',
+            type: 'auto'
+        }
+    ]
 
 });
