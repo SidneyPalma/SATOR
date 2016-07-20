@@ -44,8 +44,8 @@ class Proxy extends \PDO {
              * Char set UTF-8
              * @author: https://www.drupal.org/node/1540686
              */
-            $this->setAttribute( \PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_SYSTEM);
 //            $this->setAttribute( \PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_UTF8);
+            $this->setAttribute( \PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_SYSTEM);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
