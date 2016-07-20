@@ -23,7 +23,7 @@ class equipment extends \Smart\Data\Cache {
 
         // set params
         foreach ($params as $key => $value) {
-            $p[] = "$value LIKE :$value";
+            $p[] = "$value COLLATE Latin1_General_CI_AI LIKE :$value";
         }
 
         $sql = "SELECT " .implode(',', $f). " FROM itembase WHERE itembasetype = 'E' and ( " . implode(' OR ', $p) . " )";
