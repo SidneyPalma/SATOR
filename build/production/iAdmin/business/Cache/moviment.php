@@ -22,11 +22,13 @@ class moviment extends \Smart\Data\Cache {
         $sql = "
             SELECT
                 m.*,
-                a.name as cmeareasname
+                a.name as cmeareasname,
+                ib.name as equipmentname
             FROM
                 moviment m
                 left join cmeareas ca on ( ca.id = m.cmeareasid )
                 left join areas a on ( a.id = ca.id )
+                left join itembase ib on ( ib.id = m.equipmentid )
             WHERE ( " . implode(' OR ', $p) . " )";
 
         try {

@@ -1216,6 +1216,7 @@ $include-iadmin-view-enums-enumtypecontroller: dynamic(true);;
 $include-iadmin-view-enums-enumtypelist: dynamic(true);;
 $include-iadmin-view-enums-enumtypelistedit: dynamic(true);;
 $include-iadmin-view-enums-enumtypeview: dynamic(true);;
+$include-iadmin-view-equipment-equipmentcmeareassearch: dynamic(true);;
 $include-iadmin-view-equipment-equipmentcontroller: dynamic(true);;
 $include-iadmin-view-equipment-equipmentcycle: dynamic(true);;
 $include-iadmin-view-equipment-equipmentlist: dynamic(true);;
