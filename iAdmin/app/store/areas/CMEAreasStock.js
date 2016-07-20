@@ -12,13 +12,6 @@ Ext.define( 'iAdmin.store.areas.CMEAreasStock', {
 
     url: '../iAdmin/business/Calls/cmeareasstock.php',
 
-    model: 'iAdmin.model.areas.CMEAreasStock',
-
-    config: {
-        extraParams: {
-            action: 'select',
-            method: 'selectCode'
-        }
-    }
+    model: 'iAdmin.model.areas.CMEAreasStock'
 
 });

@@ -10,8 +10,6 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasEdit', {
         'Ext.button.Segmented',
         'Smart.form.field.ComboEnum',
         'iAdmin.model.areas.CMEAreas',
-        'iAdmin.view.areas.CMEAreasStock',
-        'iAdmin.view.areas.CMEAreasDeposit',
         'iAdmin.view.helper.areas.CMEAreasSearch',
         'iAdmin.view.helper.areas.CMEAreasController'
     ],
@@ -85,14 +83,6 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasEdit', {
                                 name: 'orderby'
                             }
                         ]
-                    }, {
-                        xtype: 'label',
-                        cls: 'sub-title-label',
-                        text: 'Estoque'
-                    }, {
-                        height: 96,
-                        margin: '10 0 0 0',
-                        xtype: 'cmeareasstock'
                     }, {
                         xtype: 'container',
                         layout: 'hbox',

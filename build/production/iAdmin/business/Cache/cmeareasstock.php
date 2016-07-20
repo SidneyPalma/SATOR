@@ -6,7 +6,7 @@ use iAdmin\Model\cmeareasstock as Model;
 
 class cmeareasstock extends \Smart\Data\Cache {
 
-    public function selectCode(array $data) {
+    public function selectLike(array $data) {
         $query = $data['query'];
         $proxy = $this->getStore()->getProxy();
 
@@ -14,7 +14,9 @@ class cmeareasstock extends \Smart\Data\Cache {
             SELECT
                 it.id,
                 it.inputid,
+                ib.name as inputname, 
                 it.cmeareasid,
+                a.name as cmeareasname, 
                 it.datevalidity,
                 it.presentation,
                 dbo.getEnum('presentation',it.presentation) as presentationdescription,
@@ -22,12 +24,17 @@ class cmeareasstock extends \Smart\Data\Cache {
                 it.lotamount
             FROM
                 cmeareasstock it
-            WHERE it.cmeareasid = :id";
+                inner join areas a on ( a.id = it.cmeareasid )
+                inner join itembase ib on ( ib.id = it.inputid )
+            WHERE ib.name LIKE :inputname OR a.name LIKE :cmeareasname";
 
         try {
             $pdo = $proxy->prepare($sql);
 
-            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+            $query = "%{$query}%";
+
+            $pdo->bindValue(":inputname", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":cmeareasname", $query, \PDO::PARAM_STR);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();
