@@ -361,7 +361,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     });
                 }
 
-                cell.prop('attrs/text/font-size',16);
+                cell.prop('attrs/text/font-size',18);
 
                 scope.fireEvent('dropcellview', this.graph, cell, scope);
             }, this);
