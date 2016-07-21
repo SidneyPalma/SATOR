@@ -28,6 +28,18 @@ class moviment extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $equipmentid;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,equipmentid,itembase"}
+     */
+    private $equipmentname;
+
+    /**
+     * @Policy {"nullable":false}
      * @Column {"description":"", "type":"date", "policy":true, "logallow":true, "default":"getdate()"}
      */
     private $movimentdate;
@@ -105,10 +117,26 @@ class moviment extends \Smart\Data\Model {
 
     /**
      * @param type $cmeareasid
-     * @return \iAdmin\Model\material
+     * @return \iAdmin\Model\moviment
      */
     public function setCmeareasid($cmeareasid) {
         $this->cmeareasid = $cmeareasid;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getEquipmentid() {
+        return $this->equipmentid;
+    }
+
+    /**
+     * @param type $equipmentid
+     * @return \iAdmin\Model\moviment
+     */
+    public function setEquipmentid($equipmentid) {
+        $this->equipmentid = $equipmentid;
         return $this;
     }
 

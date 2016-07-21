@@ -4,6 +4,12 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
 
     alias: 'controller.cmeareas',
 
+    fetchField: function (search, button) {
+        Ext.getStore('cmeareasstock').setParams({
+            query: search.getValue()
+        }).load();
+    },
+
     onViewShow: function (panel, eOpts) {
         var me = this,
             view = me.getView(),
@@ -17,9 +23,6 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
             view = me.getView();
 
         view.down('form').loadRecord(record);
-        Ext.getStore('cmeareasstock').setParams({
-            query: record.get('id')
-        }).load();
     },
 
     updateView: function () {
@@ -28,16 +31,6 @@ Ext.define( 'iAdmin.view.helper.areas.CMEAreasController', {
 
         me.setModuleData('cmeareas');
         me.setModuleForm(view.down('form'));
-
-        me._success = function (batch, options) {
-            if(options.operations.create) {
-                var opr = batch.getOperations()[0],
-                    rec = opr.getRecords()[0];
-                Ext.getStore('cmeareasstock').setParams({
-                    query: rec.get('id')
-                }).load();
-            }
-        }
 
         me.updateRecord();
     },

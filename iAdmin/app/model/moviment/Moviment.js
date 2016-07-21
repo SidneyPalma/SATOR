@@ -20,6 +20,12 @@ Ext.define( 'iAdmin.model.moviment.Moviment', {
             name: 'cmeareasname',
             type: 'auto'
         }, {
+            name: 'equipmentid',
+            type: 'int'
+        }, {
+            name: 'equipmentname',
+            type: 'auto'
+        }, {
             name: 'idformat',
             type: 'auto',
             convert: function (value, record) {

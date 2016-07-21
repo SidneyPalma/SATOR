@@ -22,8 +22,8 @@ Ext.define( 'iAdmin.controller.App', {
         'equipmentlist': {
             action: 'setEquipmentList'
         },
-        'classcouncillist': {
-            action: 'setClassCouncilList'
+        'cmeareasstocklist': {
+            action: 'setCMEAreasStockList'
         },
         'sterilizationtypelist': {
             action: 'setSterilizationTypeList'
@@ -76,11 +76,11 @@ Ext.define( 'iAdmin.controller.App', {
         me.onMainPageView({ xtype: 'equipmentlist', iconCls: rc.get("iconCls") });
     },
 
-    setClassCouncilList: function () {
+    setCMEAreasStockList: function () {
         var me = this,
             rc = me.getMainTree().getSelection();
 
-        me.onMainPageView({ xtype: 'classcouncillist', iconCls: rc.get("iconCls") });
+        me.onMainPageView({ xtype: 'cmeareasstocklist', iconCls: rc.get("iconCls") });
     },
 
     setSterilizationTypeList: function () {

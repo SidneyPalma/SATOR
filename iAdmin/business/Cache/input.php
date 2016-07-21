@@ -13,7 +13,7 @@ class input extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            SELECT top 100
+            SELECT
                 ib.name,
                 ib.description,
                 ib.barcode,
@@ -24,8 +24,6 @@ class input extends \Smart\Data\Cache {
                 ib.patrimonialcode,
                 ib.registrationanvisa,
                 ib.isactive, 
-                dbo.binary2base64(ib.filedata) as filedata,
-                ib.fileinfo,
                 dbo.getEnum('presentation',i.presentation) as presentationdescription,
                 i.*,
                 p.name as providername,
@@ -37,7 +35,7 @@ class input extends \Smart\Data\Cache {
                 inner join provider p on ( p.id = i.providerid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
-            WHERE ib.name LIKE :name OR ib.description LIKE :description";
+            WHERE ib.name COLLATE Latin1_General_CI_AI LIKE :name OR ib.description COLLATE Latin1_General_CI_AI LIKE :description";
 
         try {
             $pdo = $proxy->prepare($sql);

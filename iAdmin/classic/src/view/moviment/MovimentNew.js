@@ -10,7 +10,8 @@ Ext.define( 'iAdmin.view.moviment.MovimentNew', {
         'Ext.window.Window',
         'Smart.form.field.ComboEnum',
         'iAdmin.view.helper.areas.CMEAreasSearch',
-        'iAdmin.view.moviment.MovimentController'
+        'iAdmin.view.moviment.MovimentController',
+        'iAdmin.view.equipment.EquipmentCMEAreasSearch'
     ],
 
     width: 550,
@@ -65,7 +66,20 @@ Ext.define( 'iAdmin.view.moviment.MovimentNew', {
                         name: 'cmeareasname',
                         hiddenNameId: 'cmeareasid',
                         fieldLabel: 'Área CME',
-                        xtype: 'cmeareassearch'
+                        xtype: 'cmeareassearch',
+                        listeners: {
+                            showclear: 'onShowClear'
+                        }
+                    }, {
+                        disabled: true,
+                        allowBlank: true,
+                        name: 'equipmentname',
+                        hiddenNameId: 'equipmentid',
+                        fieldLabel: 'Equipamento',
+                        xtype: 'equipmentcmeareassearch',
+                        listeners: {
+                            beforequery: 'onBeforeQueryEquipment'
+                        }
                     }, {
                         xtype: 'container',
                         layout: 'hbox',

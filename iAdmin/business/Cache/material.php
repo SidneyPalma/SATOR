@@ -13,7 +13,7 @@ class material extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            SELECT -- top 100
+            SELECT
                 ib.name,
                 ib.description,
                 ib.barcode,
@@ -26,8 +26,6 @@ class material extends \Smart\Data\Cache {
                 ib.isactive,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
                 dbo.getEnum('itemgroup',m.itemgroup) as itemgroupdescription,
-                --dbo.binary2base64(ib.filedata) as filedata,
-                --ib.fileinfo,
                 materialboxname = (
                   SELECT TOP 1
                     mb.name
@@ -51,7 +49,7 @@ class material extends \Smart\Data\Cache {
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
-            WHERE ib.name LIKE :name OR ib.description LIKE :description";
+            WHERE ib.name COLLATE Latin1_General_CI_AI LIKE :name OR ib.description COLLATE Latin1_General_CI_AI LIKE :description";
 
         try {
             $pdo = $proxy->prepare($sql);

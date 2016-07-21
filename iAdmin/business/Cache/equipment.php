@@ -6,6 +6,47 @@ use iAdmin\Model\equipment as Model;
 
 class equipment extends \Smart\Data\Cache {
 
+    public function selectArea(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $cmeareasid = $data['cmeareasid'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            SELECT
+                ib.id,
+                ib.id as equipmentid,
+                ib.name as equipmentname
+            FROM
+                itembase ib
+                inner join equipment e on ( e.id = ib.id )
+            WHERE ib.itembasetype = 'E'
+              and e.cmeareasid = :cmeareasid
+              and ib.name COLLATE Latin1_General_CI_AI LIKE :name";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $query = "%{$query}%";
+
+            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":cmeareasid", $cmeareasid, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectLike(array $data) {
         $p = $f = array();
         $query = $data['query'];
@@ -23,7 +64,7 @@ class equipment extends \Smart\Data\Cache {
 
         // set params
         foreach ($params as $key => $value) {
-            $p[] = "$value LIKE :$value";
+            $p[] = "$value COLLATE Latin1_General_CI_AI LIKE :$value";
         }
 
         $sql = "SELECT " .implode(',', $f). " FROM itembase WHERE itembasetype = 'E' and ( " . implode(' OR ', $p) . " )";

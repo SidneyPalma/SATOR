@@ -20,6 +20,18 @@ Ext.define( 'iAdmin.model.areas.CMEAreasStock', {
             name: 'cmeareasid',
             type: 'int'
         }, {
+            name: 'inputname',
+            type: 'auto'
+        }, {
+            name: 'cmeareasname',
+            type: 'auto'
+        }, {
+            name: 'equipmentid',
+            type: 'int'
+        }, {
+            name: 'equipmentname',
+            type: 'auto'
+        }, {
             name: 'datevalidity',
             type: 'auto',
             serializeType: 'date'
