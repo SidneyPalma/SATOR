@@ -26,6 +26,9 @@ Ext.define( 'iAdmin.model.areas.CMEAreasStock', {
             name: 'cmeareasname',
             type: 'auto'
         }, {
+            name: 'equipmentid',
+            type: 'int'
+        }, {
             name: 'equipmentname',
             type: 'auto'
         }, {

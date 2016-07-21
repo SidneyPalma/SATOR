@@ -16,7 +16,9 @@ class cmeareasstock extends \Smart\Data\Cache {
                 it.inputid,
                 ib.name as inputname, 
                 it.cmeareasid,
-                a.name as cmeareasname, 
+                a.name as cmeareasname,
+                it.equipmentid,
+                eq.name as equipmentname,
                 it.datevalidity,
                 it.presentation,
                 dbo.getEnum('presentation',it.presentation) as presentationdescription,
@@ -26,6 +28,7 @@ class cmeareasstock extends \Smart\Data\Cache {
                 cmeareasstock it
                 inner join areas a on ( a.id = it.cmeareasid )
                 inner join itembase ib on ( ib.id = it.inputid )
+                left join itembase eq on ( eq.id = it.equipmentid )
             WHERE ib.name LIKE :inputname OR a.name LIKE :cmeareasname";
 
         try {

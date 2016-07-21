@@ -68,8 +68,14 @@ Ext.define( 'iAdmin.view.areas.CMEAreasStockList', {
                         text: 'Insumo',
                         dataIndex: 'inputname'
                     }, {
-                        flex: 1,
-                        text: 'Nome da Área/Equipamento'
+                        flex: 2,
+                        text: 'Nome da Área/Equipamento',
+                        renderer: function (value, metaData, record) {
+                            var cmeareasname = record.get('cmeareasname'),
+                                equipmentname = record.get('equipmentname');
+
+                            return cmeareasname + ( equipmentname ? ('/' + equipmentname)  : '' );
+                        }
                     }, {
                         width: 200,
                         sortable: false,
