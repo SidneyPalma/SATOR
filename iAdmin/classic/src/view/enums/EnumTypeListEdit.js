@@ -63,13 +63,34 @@ Ext.define( 'iAdmin.view.enums.EnumTypeListEdit', {
                                 fieldLabel: 'Descrição',
                                 name: 'description'
                             }, {
-                                fieldLabel: 'Tipo de filtro',
-                                name: 'filtertype'
+                                xtype: 'container',
+                                layout: 'hbox',
+                                items: [
+                                    {
+                                        flex: 2,
+                                        xtype: 'textfield',
+                                        fieldLabel: 'Tipo de filtro',
+                                        name: 'filtertype'
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 1,
+                                        minValue: 0,
+                                        fieldLabel: 'Ordenar',
+                                        xtype: 'numberfield',
+                                        name: 'orderby'
+                                    }
+                                ]
                             }, {
                                 height: 130,
                                 xtype: 'textareafield',
                                 fieldLabel: 'Observação',
                                 name: 'observation'
+                            }, {
+                                name: 'isactive',
+                                xtype: 'checkboxfield',
+                                fieldLabel: 'Status',
+                                boxLabel: 'Ativo'
                             }
                         ]
                     }
