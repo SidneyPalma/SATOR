@@ -48,14 +48,15 @@ Ext.define( 'iAdmin.view.box.MaterialBoxTarge', {
                     return value;
                 }
             }, {
-                width: 20,
+                width: 30,
                 renderer: function (value,metaData,record) {
-                    metaData.style = Ext.String.format('background: #{0};',record.get('colorschema'));
+                    metaData.style = Ext.String.format('background-color: #{0};',record.get('colorschema'));
                 }
             }, {
                 flex: 1,
                 dataIndex: 'targecolorname',
                 editor: {
+                    pageSize: 0,
                     showClear: false,
                     allowBlank: false,
                     xtype: 'materialboxTargecolorsearch'
