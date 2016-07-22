@@ -55,22 +55,6 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
         });
     },
 
-    // updateRecord: function(grid, rowIndex, colIndex) {
-    //     var me = this,
-    //         record = grid.getStore().getAt(rowIndex);
-    //
-    //     Ext.getStore('enumtype').setParams({
-    //         method: 'selectCode',
-    //         rows: Ext.encode({ id: record.get('id') })
-    //     }).load({
-    //         scope: me,
-    //         callback: function(records, operation, success) {
-    //             var record = records[0];
-    //             me.redirectTo( 'enumtypeview/' + record.get('id'));
-    //         }
-    //     });
-    // },
-
     insertViewNew: function () {
         var me = this;
         me.redirectTo('enumtypeview');
@@ -125,7 +109,6 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
         typelistedit.show(null,function(){
             this.down('form').loadRecord(record);
         });
-
     },
 
     insertEnumItem: function () {
