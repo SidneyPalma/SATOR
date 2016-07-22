@@ -82,7 +82,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeList', {
                         xtype:'actioncolumn',
                         width: 50,
                         align: 'center',
-                        handler: 'updateRecord',
+                        handler: 'onViewEdit',
                         iconCls: "fa fa-pencil action-update-color",
                         tooltip: 'Editar cadastro de enumeradores!'
                     }

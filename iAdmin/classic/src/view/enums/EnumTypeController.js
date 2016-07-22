@@ -38,12 +38,13 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
 
     //routes ===================================>>
 
-    updateRecord: function(grid, rowIndex, colIndex) {
+    onViewEdit: function(grid, rowIndex, colIndex) {
         var me = this,
             record = grid.getStore().getAt(rowIndex);
 
         Ext.getStore('enumtype').setParams({
             method: 'selectCode',
+            query: record.get('id'),
             rows: Ext.encode({ id: record.get('id') })
         }).load({
             scope: me,
@@ -53,6 +54,22 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
             }
         });
     },
+
+    // updateRecord: function(grid, rowIndex, colIndex) {
+    //     var me = this,
+    //         record = grid.getStore().getAt(rowIndex);
+    //
+    //     Ext.getStore('enumtype').setParams({
+    //         method: 'selectCode',
+    //         rows: Ext.encode({ id: record.get('id') })
+    //     }).load({
+    //         scope: me,
+    //         callback: function(records, operation, success) {
+    //             var record = records[0];
+    //             me.redirectTo( 'enumtypeview/' + record.get('id'));
+    //         }
+    //     });
+    // },
 
     insertViewNew: function () {
         var me = this;
@@ -111,7 +128,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
 
     },
 
-    insertEnumList: function () {
+    insertEnumItem: function () {
         var me = this,
             view = me.getView();
 
@@ -119,7 +136,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
         view.down('hiddenfield[name=enumtypeid]').setValue(view.xdata.get('enumtypeid'));
     },
 
-    updateEnumList: function () {
+    updateEnumItem: function () {
         var me = this,
             view = me.getView();
 
