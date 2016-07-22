@@ -586,6 +586,15 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             });
         };
 
+        Ext.each(cells,function(item){
+            if(item instanceof joint.shapes.basic.Step) {
+                console.info(item);
+                // if(!item.get('isValid')) {
+                //     error.push(item);
+                // }
+            }
+        });
+
         // if(!me.router.paper.isValid()) {
         //     return false;
         // }

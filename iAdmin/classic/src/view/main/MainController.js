@@ -11,6 +11,7 @@ Ext.define( 'iAdmin.view.main.MainController', {
         'iAdmin.view.person.client.ClientEdit',
         'iAdmin.view.person.proprietary.ProprietaryEdit',
         'iAdmin.view.person.collaborator.CollaboratorEdit',
+        'iAdmin.view.helper.cycle.CycleEdit',
         'iAdmin.view.helper.place.PlaceEdit',
         'iAdmin.view.helper.flowing.FlowingEdit',
         'iAdmin.view.helper.packing.PackingEdit',
