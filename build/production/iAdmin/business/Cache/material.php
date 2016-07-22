@@ -49,7 +49,7 @@ class material extends \Smart\Data\Cache {
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
-            WHERE ib.name LIKE :name OR ib.description LIKE :description";
+            WHERE ib.name COLLATE Latin1_General_CI_AI LIKE :name OR ib.description COLLATE Latin1_General_CI_AI LIKE :description";
 
         try {
             $pdo = $proxy->prepare($sql);

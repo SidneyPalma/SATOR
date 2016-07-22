@@ -123,7 +123,7 @@ class Cache {
                 $pdo->bindValue(":$value", "$query", \PDO::PARAM_STR);
             }
             
-            $pdo->execute();            
+            $pdo->execute();
             $rows = $pdo->fetchAll();
             
             self::_setRows($rows);

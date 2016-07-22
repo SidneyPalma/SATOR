@@ -61,13 +61,14 @@ class moviment extends \Smart\Data\Event {
             $sql = "
                 select
                     mi.id,
-                    m.cmeareasid,
-                    mi.movimentid,
+                    mi.lotpart,
                     mi.inputid,
-                    mi.presentation,
                     mi.quantity,
-                    mi.datevalidity,
-                    mi.lotpart
+                    m.cmeareasid,
+                    m.equipmentid,
+                    mi.movimentid,
+                    mi.presentation,
+                    mi.datevalidity
                 from
                     movimentitem mi
                     inner join moviment m on ( m.id = mi.movimentid )
@@ -95,6 +96,7 @@ class moviment extends \Smart\Data\Event {
                 @inputid int  = :inputid,
                 @cmeareasid int = :cmeareasid,
                 @movimentid int = :movimentid, 
+                @equipmentid int = :equipmentid,
                 @lotpart varchar(20) 	= :lotpart,
                 @quantity decimal(12,3) = :quantity,
                 @presentation char(03)  = :presentation,
@@ -122,6 +124,7 @@ class moviment extends \Smart\Data\Event {
                         lotamount = coalesce(lotamount,0) + coalesce(@quantity,0)
                     where inputid = @inputid
                       and cmeareasid = @cmeareasid
+                      and equipmentid = @equipmentid
                       and presentation = @presentation
                       and datevalidity = @datevalidity
                       and lotpart = @lotpart;
@@ -130,9 +133,9 @@ class moviment extends \Smart\Data\Event {
                     begin
                         insert 
                             cmeareasstock 
-                            ( inputid, cmeareasid, presentation, lotamount, datevalidity, lotpart )
+                            ( inputid, cmeareasid, equipmentid, presentation, lotamount, datevalidity, lotpart )
                         values
-                            ( @inputid, @cmeareasid, @presentation, coalesce(@quantity,0), @datevalidity, @lotpart );
+                            ( @inputid, @cmeareasid, @equipmentid, @presentation, coalesce(@quantity,0), @datevalidity, @lotpart );
                             
                         set @rowcount = @@rowcount;
                     end            
@@ -165,15 +168,16 @@ class moviment extends \Smart\Data\Event {
                         lotamount = coalesce(lotamount,0) + coalesce(@quantity,0)
                     where inputid = @inputid
                       and cmeareasid = @cmeareasid
+                      and equipmentid = @equipmentid
                       and presentation = @presentation;
             
                     if(@rowcount = 0)
                     begin
                         insert 
                             cmeareasstock 
-                            ( inputid, cmeareasid, presentation, lotamount )
+                            ( inputid, cmeareasid, equipmentid, presentation, lotamount )
                         values
-                            ( @inputid, @cmeareasid, @presentation, coalesce(@quantity,0) );
+                            ( @inputid, @cmeareasid, @equipmentid, @presentation, coalesce(@quantity,0) );
                             
                         set @rowcount = @@rowcount;
                     end            
@@ -213,13 +217,14 @@ class moviment extends \Smart\Data\Event {
 
             $pdo = $this->getProxy()->prepare($sql);
             $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
-            $pdo->bindValue(":inputid", $inputid, \PDO::PARAM_INT);
-            $pdo->bindValue(":cmeareasid", $cmeareasid, \PDO::PARAM_INT);
-            $pdo->bindValue(":presentation", $presentation, \PDO::PARAM_STR);
-            $pdo->bindValue(":quantity", $quantity, \PDO::PARAM_STR);
-            $pdo->bindValue(":datevalidity", $datevalidity, \PDO::PARAM_STR);
             $pdo->bindValue(":lotpart", $lotpart, \PDO::PARAM_STR);
+            $pdo->bindValue(":inputid", $inputid, \PDO::PARAM_INT);
+            $pdo->bindValue(":quantity", $quantity, \PDO::PARAM_STR);
             $pdo->bindValue(":movimentid", $movimentid, \PDO::PARAM_INT);
+            $pdo->bindValue(":cmeareasid", $cmeareasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":equipmentid", $equipmentid, \PDO::PARAM_INT);
+            $pdo->bindValue(":presentation", $presentation, \PDO::PARAM_STR);
+            $pdo->bindValue(":datevalidity", $datevalidity, \PDO::PARAM_STR);
 
             $pdo->execute();
             $data = $pdo->fetchAll();
@@ -336,12 +341,12 @@ class moviment extends \Smart\Data\Event {
 
             $pdo = $this->getProxy()->prepare($sql);
             $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
-            $pdo->bindValue(":inputid", $inputid, \PDO::PARAM_INT);
-            $pdo->bindValue(":presentation", $presentation, \PDO::PARAM_STR);
-            $pdo->bindValue(":quantity", $quantity, \PDO::PARAM_STR);
-            $pdo->bindValue(":datevalidity", $datevalidity, \PDO::PARAM_STR);
             $pdo->bindValue(":lotpart", $lotpart, \PDO::PARAM_STR);
+            $pdo->bindValue(":inputid", $inputid, \PDO::PARAM_INT);
+            $pdo->bindValue(":quantity", $quantity, \PDO::PARAM_STR);
             $pdo->bindValue(":movimentid", $movimentid, \PDO::PARAM_INT);
+            $pdo->bindValue(":presentation", $presentation, \PDO::PARAM_STR);
+            $pdo->bindValue(":datevalidity", $datevalidity, \PDO::PARAM_STR);
 
             $pdo->execute();
             $data = $pdo->fetchAll();
