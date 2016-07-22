@@ -586,9 +586,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             });
         };
 
-        Ext.each(cells,function(item){
+        me.router.paper.isValid(me.router.graph);
+
+        Ext.each(me.router.graph.getElements(),function(item){
             if(item instanceof joint.shapes.basic.Step) {
-                console.info(item);
+                console.info(item.attributes);
                 // if(!item.get('isValid')) {
                 //     error.push(item);
                 // }

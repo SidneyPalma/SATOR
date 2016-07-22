@@ -85,12 +85,12 @@ Ext.define( 'iAdmin.view.enums.EnumTypeListEdit', {
             iconCls: "fa fa-upload",
             text: 'Salvar',
             showSmartTheme: 'red',
-            handler: 'updateEnumList'
+            handler: 'updateEnumItem'
         }, {
             iconCls: "fa fa-file-o",
             text: 'Novo',
             showSmartTheme: 'red',
-            handler: 'insertEnumList'
+            handler: 'insertEnumItem'
         }
     ]
 
