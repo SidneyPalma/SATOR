@@ -572,6 +572,38 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         me.updateModule();
     },
 
+    selectFlow: function (item) {
+        var me = this,
+            items = [],
+            graph = me.router.graph,
+            areas = ['basic.Area','basic.SubArea'],
+            basicStep = (item instanceof joint.shapes.basic.Step),
+            sourceLinks = graph.getConnectedLinks(item, { inbound : true }),
+            targetLinks = graph.getConnectedLinks(item, { outbound : true });
+
+        if(targetLinks.length != 0) {
+            var target = graph.getCell(targetLinks[0].prop('target/id'));
+        }
+
+        if(sourceLinks.length != 0) {
+            var source = graph.getCell(sourceLinks[0].prop('source/id'));
+        }
+
+        items.push({
+            "steplevel": item.get('steplevel'),
+            "elementtype": item.get('type'),
+            "elementname": item.get('name'),
+            "stepflaglist": item.get('stepflaglist'),
+            "steppriority": item.get('steppriority') || 0,
+            'isstartstate': item.get('isstartstate') || 0,
+            "source": (source) ? source.get('steplevel'): null,
+            "target": (target) ? target.get('steplevel'): null,
+            "areasid": ( areas.indexOf(item.get('type')) != -1 ) ? item.get('typeid') : null,
+            "equipmentid": ( item.get('type') == 'basic.Equipment' ) ? item.get('typeid') : null
+        });
+
+        return items;
+    },
 
     updateFlow: function () {
         var me = this,
@@ -586,36 +618,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             });
         };
 
-        me.router.paper.isValid(me.router.graph);
-
-        Ext.each(me.router.graph.getElements(),function(item){
-            if(item instanceof joint.shapes.basic.Step) {
-                console.info(item.attributes);
-                // if(!item.get('isValid')) {
-                //     error.push(item);
-                // }
-            }
-        });
-
-        // if(!me.router.paper.isValid()) {
-        //     return false;
-        // }
+        me.router.paper.setStepLevel();
 
         Ext.each(cells,function(item){
-            if(item instanceof joint.shapes.basic.Step) {
-                stepflaglist = (item.get('type') == 'basic.Equipment') ? item.get('stepflaglist') : '';
-                dataflowstep.push({
-                    "steplevel": item.get('steplevel'),
-                    "stepitems": {
-                        "typeid": item.get('typeid'),
-                        "stepflaglist": stepflaglist,
-                        "areasiddo": item.get('areasiddo'),
-                        "areasidto": item.get('areasidto'),
-                        "steppriority": item.get('steppriority') || 0,
-                        'isstartstate': item.get('isstartstate') || 0
-                    }
-                });
-            }
+            var flow = me.selectFlow(item);
+            Ext.each(flow, function (step) {
+                dataflowstep.push(step);
+            });
         });
 
         dataflowstep = sortByKey(dataflowstep, "steplevel");

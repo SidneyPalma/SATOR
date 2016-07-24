@@ -48,31 +48,31 @@
     btn-green
     rgb(179, 219, 101);
 */
-.smart-btn-green {
-    background-image: none !important;
-    border-width: 1px !important;
-    border-style: solid !important;
-    background-color: rgb(179, 219, 101) !important;
-    border-color: rgb(179, 219, 101) !important;
-}
+/*.smart-btn-green {*/
+    /*background-image: none !important;*/
+    /*border-width: 1px !important;*/
+    /*border-style: solid !important;*/
+    /*background-color: rgb(179, 219, 101) !important;*/
+    /*border-color: rgb(179, 219, 101) !important;*/
+/*}*/
 
-.smart-btn-green-over {
-    background-color: rgb(179, 219, 101) !important;
-    border-color: rgb(179, 219, 101) !important;
-}
+/*.smart-btn-green-over {*/
+    /*background-color: rgb(179, 219, 101) !important;*/
+    /*border-color: rgb(179, 219, 101) !important;*/
+/*}*/
 
-.smart-btn-green.x-btn-pressed {
-    background-color: rgb(179, 219, 101) !important;
-    border-color: rgb(179, 219, 101) !important;
-}
+/*.smart-btn-green.x-btn-pressed {*/
+    /*background-color: rgb(179, 219, 101) !important;*/
+    /*border-color: rgb(179, 219, 101) !important;*/
+/*}*/
 
-.smart-btn-green.x-btn-focus, .x-btn-focus.x-btn-pressed {
-    box-shadow: 0px 0px 0px 0px inset !important;
-}
+/*.smart-btn-green.x-btn-focus, .x-btn-focus.x-btn-pressed {*/
+    /*box-shadow: 0px 0px 0px 0px inset !important;*/
+/*}*/
 
-.smart-btn-green .x-btn-inner {
-    color: black !important;
-}
+/*.smart-btn-green .x-btn-inner {*/
+    /*color: black !important;*/
+/*}*/
 
 
 /*
@@ -83,23 +83,52 @@
     background-image: none !important;
     border-width: 1px !important;
     border-style: solid !important;
-    background-color: rgb(0, 125, 113) !important;
-    border-color: rgb(0, 125, 113) !important;
+    background-color: rgb(102, 0, 255) !important;
+    border-color: rgb(102, 0, 255) !important;
 }
 
 .smart-btn-blue-over {
     color: white !important;
-    background-color: rgb(26, 179, 148) !important;
-    border-color: rgb(26, 179, 148) !important;
+    background-color: rgb(51, 0, 153) !important;
+    border-color: rgb(51, 0, 153) !important;
 }
 
 .smart-btn-blue.x-btn-pressed {
+    color: white !important;
+    background-color: rgb(102, 0, 255) !important;
+    border-color: rgb(102, 0, 255) !important;
+}
+
+.smart-btn-blue.x-btn-focus, .x-btn-focus.x-btn-pressed {
+    color: white !important;
+    box-shadow: 0px 0px 0px 0px inset !important;
+}
+
+/*
+    btn-green
+*/
+.smart-btn-green {
+    color: white !important;
+    background-image: none !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    background-color: rgb(0, 125, 113) !important;
+    border-color: rgb(0, 125, 113) !important;
+}
+
+.smart-btn-green-over {
+    color: white !important;
+    background-color: rgb(0, 51, 51) !important;
+    border-color: rgb(0, 51, 51) !important;
+}
+
+.smart-btn-green.x-btn-pressed {
     color: white !important;
     background-color: rgb(0, 125, 113) !important;
     border-color: rgb(0, 125, 113) !important;
 }
 
-.smart-btn-blue.x-btn-focus, .x-btn-focus.x-btn-pressed {
+.smart-btn-green.x-btn-focus, .x-btn-focus.x-btn-pressed {
     color: white !important;
     box-shadow: 0px 0px 0px 0px inset !important;
 }
