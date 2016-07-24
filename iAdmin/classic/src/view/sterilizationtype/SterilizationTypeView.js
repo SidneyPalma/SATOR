@@ -116,29 +116,22 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                 style: 'padding-top: 5px;',
                                 defaults: {
                                     scale: 'large',
-                                    showSmartTheme: 'blue',
+                                    showSmartTheme: 'green',
                                     style: 'font-size: 24px;'
                                 },
                                 items: [
                                     {
-                                    //     showSmartTheme: 'red',
-                                    //     iconCls: "fa fa-upload",
-                                    //     handler: 'updateView'
-                                    // }, {
-                                    //     disabled: true,
-                                    //     name: 'pendent',
-                                    //     showSmartTheme: 'red',
-                                    //     iconCls: "fa fa-check",
-                                    //     handler: 'updateFlux',
-                                    //     showSmartTheme: ''
-                                        handler: 'updateEdit',
-                                        showSmartTheme: 'red',
-                                        iconCls: "fa fa-pencil-square-o"
-                                    }, {
                                         iconCls: "fa fa-upload",
-                                        //iconCls: "fa fa-sitemap",
                                         showSmartTheme: 'red',
                                         handler: 'updateFlow'
+                                    }, {
+                                        handler: 'updateEdit',
+                                        showSmartTheme: 'blue',
+                                        iconCls: "fa fa-pencil-square-o"
+                                    }, {
+                                        iconCls: "fa fa-sitemap",
+                                        showSmartTheme: 'blue',
+                                        handler: 'updateFlux'
                                     }, {
                                         iconCls: "fa fa-reply",
                                         handler: 'commandManagerUndo'

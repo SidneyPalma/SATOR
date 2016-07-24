@@ -33,7 +33,9 @@ Ext.define( 'Smart.util.CoreFlow', {
 
 			setAreasId: function (graph) {
                 var basic = ['basic.Area','basic.SubArea'];
+                // var basic = ['basic.Area','basic.SubArea','basic.Equipment'];
 
+                // if(!this.get('isValid')) {
                 if((!this.get('isValid'))||(this.get('type') !== 'basic.Equipment')) {
                     this.set('areasiddo',0);
                     this.set('areasidto',0);
@@ -61,7 +63,9 @@ Ext.define( 'Smart.util.CoreFlow', {
 			setStepLevel: function (graph) {
                 var level = 0;
                 var model = this;
-                var links = graph.getConnectedLinks(model, { inbound : true });
+                var sourceLinks = graph.getConnectedLinks(model, { inbound : true });
+                var targetLinks = graph.getConnectedLinks(model, { outbound : true });
+
                 /**
                  * Define Level of Element
                  * has inbound,
@@ -69,26 +73,23 @@ Ext.define( 'Smart.util.CoreFlow', {
                  * is basic.Equipment
                  * finally uml.StartState
                  */
-                while ( links.length != 0 ) {
+                while ( sourceLinks.length != 0 ) {
                     level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
-                    model = graph.getCell(links[0].prop('source/id'));
-                    links = graph.getConnectedLinks(model, { inbound : true });
+                    model = graph.getCell(sourceLinks[0].prop('source/id'));
+                    sourceLinks = graph.getConnectedLinks(model, { inbound : true });
                 }
 
-                this.set('steplevel',(model.get('type') == 'uml.StartState') ? level : 0);
-
-                return level;
+                this.set('steplevel',(this.get('type') == 'uml.StartState') ? 0 : level);
 			},
             isValid: function (graph) {
                 var exclude = ['uml.StartState','uml.BreakFlow'];
-                var inbound = graph.getConnectedLinks(this, { inbound : true });
-                var outbound = graph.getConnectedLinks(this, { outbound : true });
-                var valid = (inbound.length != 0) && (outbound.length != 0);
+                var sourceLinks = graph.getConnectedLinks(this, { inbound : true });
+                var targetLinks = graph.getConnectedLinks(this, { outbound : true });
+                var valid = (sourceLinks.length != 0) && (targetLinks.length != 0);
 
-                // excluido bpmn.Annotation
                 if(valid) {
                     valid = false;
-                    Ext.each(inbound,function(link) {
+                    Ext.each(sourceLinks,function(link) {
                         var source = graph.getCell(link.prop('source/id'));
                         var sourceType = source.get('type');
                         if((source instanceof joint.shapes.basic.Step)||(exclude.indexOf(sourceType) != -1)) {
@@ -404,6 +405,28 @@ Ext.define( 'Smart.util.CoreFlow', {
                 return valid;
             };
 
+            this.paper.setStepLevel = function () {
+                var graph = this.model;
+                var cells = graph.getElements();
+
+                /**
+                 * Define Level of Element
+                 */
+                Ext.each(cells, function (cell) {
+                    var level = 0;
+                    var model = cell;
+                    var sourceLinks = graph.getConnectedLinks(model, { inbound : true });
+
+                    while ( sourceLinks.length != 0 ) {
+                        level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
+                        model = graph.getCell(sourceLinks[0].prop('source/id'));
+                        sourceLinks = graph.getConnectedLinks(model, { inbound : true });
+                    }
+
+                    cell.set('steplevel',level);
+                });
+            };
+
             this.paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
                 if(cellView.model instanceof joint.shapes.bpmn.Annotation) {
                     scope.fireEvent('annotateshow', this, cellView, evt, x, y, scope);
@@ -418,6 +441,14 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             this.paper.on('cell:pointerclick', function(cellView, evt, x, y) {
                 var cell = cellView.model;
+                // var sourceLinks = this.graph.getConnectedLinks(cell, { inbound : true });
+                // var targetLinks = this.graph.getConnectedLinks(cell, { outbound : true });
+                //
+                // var source = this.graph.getCell(sourceLinks[0].prop('source/id'));
+                // var target = this.graph.getCell(targetLinks[0].prop('target/id'));
+                //
+                // console.info(source,target);
+
             }, this);
 
             this.paper.on('cell:pointerup', function(cellView) {
