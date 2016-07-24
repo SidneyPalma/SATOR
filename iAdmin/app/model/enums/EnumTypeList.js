@@ -30,7 +30,9 @@ Ext.define( 'iAdmin.model.enums.EnumTypeList', {
             type: 'auto'
         }, {
             name: 'isactive',
-            type: 'int'
+            type: 'int',
+            persist: true,
+            critical: true
         }, {
             name: 'orderby',
             type: 'int'
