@@ -48,11 +48,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                         xtype: 'hiddenfield',
                         name: 'id'
                     }, {
-                    //     allowBlank: true,
-                    //     xtype: 'hiddenfield',
-                    //     name: 'graphpaper'
-                    // }, {
-                        useReadColor: true,
                         name: 'name',
                         fieldLabel: 'Nome'
                     }, {

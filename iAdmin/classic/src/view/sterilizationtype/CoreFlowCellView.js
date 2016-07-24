@@ -60,7 +60,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                         },
                         items: [
                             {
-                                flex: 2,
+                                flex: 4,
                                 name: 'name',
                                 fieldLabel: 'Nome',
                                 fieldStyle: {
