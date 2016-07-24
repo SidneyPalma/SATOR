@@ -414,7 +414,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.$el.find( "svg" ).css( "border", valid ? "1px solid black" : "1px solid red");
                 this.$el.find( "svg" ).css( "background-color", valid ? "white" : "rgba(245, 241, 225, .5)");
 
-                return valid;
+                return (valid) ? 1 : 0;
             };
 
             this.paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
@@ -926,14 +926,14 @@ Ext.define( 'Smart.util.CoreFlow', {
 
         },
 
-        toJSON: function() {
-
-            var windowFeatures = 'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no';
-            var windowName = _.uniqueId('json_output');
-            var jsonWindow = window.open('', windowName, windowFeatures);
-
-            jsonWindow.document.write(JSON.stringify(this.graph.toJSON()));
-        },
+        // toJSON: function() {
+        //
+        //     var windowFeatures = 'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no';
+        //     var windowName = _.uniqueId('json_output');
+        //     var jsonWindow = window.open('', windowName, windowFeatures);
+        //
+        //     jsonWindow.document.write(JSON.stringify(this.graph.toJSON()));
+        // },
 
         initializeToolbarTooltips: function() {
 

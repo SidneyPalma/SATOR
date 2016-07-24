@@ -333,16 +333,16 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
             switch(cellView.model.get('type')) {
                 case "basic.Area":
-                    filtertype = "'A'";
+                    filtertype = "A";
                     break;
                 case "basic.SubArea":
-                    filtertype = "'S'";
+                    filtertype = "S";
                     break;
                 case "basic.Equipment":
-                    filtertype = "'E'";
+                    filtertype = "E";
                     break;
                 default:
-                    filtertype = "'A','S',''";
+                    filtertype = "AS";
             }
 
             Ext.getStore('sterilizationtypeflag').load({
@@ -574,12 +574,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     updateView: function () {
         var me = this,
-            view = me.getView().down('form');
+            view = me.getView().down('form'),
+            span = Ext.getBody().getById('paper-container-span');
 
         me.setModuleForm(view);
         me.setModuleData('sterilizationtype');
 
         me._success = function (form, action) {
+            span.update(view.down('textfield[name=name]').getValue());
             me.getView().close();
             if(action.result.crud == 'insert') {
                 Ext.getStore('sterilizationtype').setParams({
@@ -620,7 +622,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             "elementname": item.get('name'),
             "stepflaglist": item.get('stepflaglist'),
             "steppriority": item.get('steppriority') || 0,
-            // 'isstartstate': item.get('isstartstate') || 0,
             "source": (source) ? source.get('steplevel'): null,
             "target": (target) ? target.get('steplevel'): null,
             "areasid": ( areas.indexOf(item.get('type')) != -1 ) ? item.get('typeid') : null,

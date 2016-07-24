@@ -30,10 +30,14 @@ Ext.define( 'iAdmin.model.sterilizationtype.SterilizationType', {
             type: 'auto'
         }, {
             name: 'authenticate',
-            type: 'int'
+            type: 'int',
+            persist: true,
+            critical: true
         }, {
             name: 'isactive',
-            type: 'int'
+            type: 'int',
+            persist: true,
+            critical: true
         }
     ]
 
