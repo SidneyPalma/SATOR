@@ -574,10 +574,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     selectFlow: function (item) {
         var me = this,
-            items = [],
+            basic = {},
             graph = me.router.graph,
             areas = ['basic.Area','basic.SubArea'],
-            basicStep = (item instanceof joint.shapes.basic.Step),
             sourceLinks = graph.getConnectedLinks(item, { inbound : true }),
             targetLinks = graph.getConnectedLinks(item, { outbound : true });
 
@@ -589,20 +588,20 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             var source = graph.getCell(sourceLinks[0].prop('source/id'));
         }
 
-        items.push({
+        basic = {
             "steplevel": item.get('steplevel'),
             "elementtype": item.get('type'),
             "elementname": item.get('name'),
             "stepflaglist": item.get('stepflaglist'),
             "steppriority": item.get('steppriority') || 0,
-            'isstartstate': item.get('isstartstate') || 0,
+            // 'isstartstate': item.get('isstartstate') || 0,
             "source": (source) ? source.get('steplevel'): null,
             "target": (target) ? target.get('steplevel'): null,
             "areasid": ( areas.indexOf(item.get('type')) != -1 ) ? item.get('typeid') : null,
             "equipmentid": ( item.get('type') == 'basic.Equipment' ) ? item.get('typeid') : null
-        });
+        };
 
-        return items;
+        return basic;
     },
 
     updateFlow: function () {
@@ -618,18 +617,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             });
         };
 
-        me.router.paper.setStepLevel();
+        view.setLoading('Salvando alterações...');
 
         Ext.each(cells,function(item){
             var flow = me.selectFlow(item);
-            Ext.each(flow, function (step) {
-                dataflowstep.push(step);
-            });
+            dataflowstep.push(flow);
         });
 
         dataflowstep = sortByKey(dataflowstep, "steplevel");
-
-        view.setLoading('Salvando alterações...');
 
         Ext.Ajax.request({
             url: me.url,

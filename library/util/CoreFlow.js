@@ -379,7 +379,8 @@ Ext.define( 'Smart.util.CoreFlow', {
                 gridSize: 10,
                 model: this.graph,
                 defaultLink: link,
-                perpendicularLinks: true
+                perpendicularLinks: true,
+                isLevel: Ext.emptyFn
             });
 
             this.paper.isValid = function () {
@@ -395,7 +396,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                         }
                     }
                     equip += (item.get('type') == 'basic.Equipment') ? 1 : 0;
-                });
+                },this);
 
                 valid = ((equip != 0)&&(error.length == 0));
 
@@ -403,28 +404,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.$el.find( "svg" ).css( "background-color", valid ? "white" : "rgba(245, 241, 225, .5)");
 
                 return valid;
-            };
-
-            this.paper.setStepLevel = function () {
-                var graph = this.model;
-                var cells = graph.getElements();
-
-                /**
-                 * Define Level of Element
-                 */
-                Ext.each(cells, function (cell) {
-                    var level = 0;
-                    var model = cell;
-                    var sourceLinks = graph.getConnectedLinks(model, { inbound : true });
-
-                    while ( sourceLinks.length != 0 ) {
-                        level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
-                        model = graph.getCell(sourceLinks[0].prop('source/id'));
-                        sourceLinks = graph.getConnectedLinks(model, { inbound : true });
-                    }
-
-                    cell.set('steplevel',level);
-                });
             };
 
             this.paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
@@ -441,6 +420,8 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             this.paper.on('cell:pointerclick', function(cellView, evt, x, y) {
                 var cell = cellView.model;
+
+                console.info(cell.get('steppriority'));
                 // var sourceLinks = this.graph.getConnectedLinks(cell, { inbound : true });
                 // var targetLinks = this.graph.getConnectedLinks(cell, { outbound : true });
                 //
