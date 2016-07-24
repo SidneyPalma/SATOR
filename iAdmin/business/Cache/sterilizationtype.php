@@ -116,6 +116,7 @@ class sterilizationtype extends \Smart\Data\Cache {
     public function selectFlag(array $data) {
 //        $flags = $this->recordFlag($data);
         $proxy = $this->getStore()->getProxy();
+        $filtertype = $data['filtertype'];
 
         $sql = "
 			select
@@ -127,6 +128,7 @@ class sterilizationtype extends \Smart\Data\Cache {
 				enumtype et
 				inner join enumtypelist etl on ( etl.enumtypeid = et.id )
 			where et.name = 'markflagstep'
+			  and etl.filtertype like '%{$filtertype}%'
 			order by etl.orderby";
 
         try {

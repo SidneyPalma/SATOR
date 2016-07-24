@@ -83,20 +83,20 @@
     background-image: none !important;
     border-width: 1px !important;
     border-style: solid !important;
-    background-color: rgb(102, 0, 255) !important;
-    border-color: rgb(102, 0, 255) !important;
+    background-color: rgb(0, 153, 204) !important;
+    border-color: rgb(0, 153, 204) !important;
 }
 
 .smart-btn-blue-over {
     color: white !important;
-    background-color: rgb(51, 0, 153) !important;
-    border-color: rgb(51, 0, 153) !important;
+    background-color: rgb(0, 102, 255) !important;
+    border-color: rgb(0, 102, 255) !important;
 }
 
 .smart-btn-blue.x-btn-pressed {
     color: white !important;
-    background-color: rgb(102, 0, 255) !important;
-    border-color: rgb(102, 0, 255) !important;
+    background-color: rgb(0, 153, 204) !important;
+    border-color: rgb(0, 153, 204) !important;
 }
 
 .smart-btn-blue.x-btn-focus, .x-btn-focus.x-btn-pressed {
@@ -167,6 +167,37 @@
 }
 
 /*
+    btn-darkred
+*/
+.smart-btn-darkred {
+    background-image: none !important;
+    border-style: none !important;
+    border-color: rgba(128,0,0, 1) !important;
+}
+
+.smart-btn-darkred-over {
+    background-color: rgba(220,20,60, 1) !important;
+    border-color: rgba(220,20,60, 1) !important;
+}
+
+.smart-btn-darkred .x-btn-icon > .x-btn-icon-el {
+    font-size: 24px !important;
+}
+
+.smart-btn-darkred-over .x-btn-icon > .x-btn-icon-el {
+    color: white !important;
+}
+
+
+.smart-btn-darkred.x-btn-pressed {
+    border-color: rgba(220,20,60, .5) !important;
+}
+
+.smart-btn-darkred.x-btn-focus, .x-btn-focus.x-btn-pressed {
+    box-shadow: 0px 0px 0px 0px inset !important;
+}
+
+/*
     btn-sepia
 */
 .smart-btn-sepia {
@@ -197,36 +228,6 @@
     box-shadow: 0px 0px 0px 0px inset !important;
 }
 
-/*
-    btn-darkred
-*/
-.smart-btn-darkred {
-    background-image: none !important;
-    border-style: none !important;
-    border-color: rgba(128,0,0, 1) !important;
-}
-
-.smart-btn-darkred-over {
-    background-color: rgba(220,20,60, 1) !important;
-    border-color: rgba(220,20,60, 1) !important;
-}
-
-.smart-btn-darkred .x-btn-icon > .x-btn-icon-el {
-    font-size: 24px !important;
-}
-
-.smart-btn-darkred-over .x-btn-icon > .x-btn-icon-el {
-    color: white !important;
-}
-
-
-.smart-btn-darkred.x-btn-pressed {
-    border-color: rgba(220,20,60, .5) !important;
-}
-
-.smart-btn-darkred.x-btn-focus, .x-btn-focus.x-btn-pressed {
-    box-shadow: 0px 0px 0px 0px inset !important;
-}
 
 /*
     btn-noborder

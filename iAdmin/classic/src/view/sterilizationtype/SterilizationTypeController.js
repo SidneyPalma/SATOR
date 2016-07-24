@@ -123,8 +123,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     insertViewNew: function () {
         Ext.widget('sterilizationtypeedit').show(null,function () {
+            this.down('form').reset();
             this.setTitle('Novo Fluxo');
-            this.down('textfield[name=name]').setReadColor(false);
         });
     },
 
@@ -147,31 +147,32 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         var me = this,
             view = me.getView(),
             flow = view.down('form[name=sterilizationtypeflow]'),
-            core = Ext.create('Smart.util.CoreFlow', { url: me.url }),
-            containerSpan = Ext.getBody().getById('paper-container-span');
+            span = Ext.getBody().getById('paper-container-span'),
+            core = Ext.create('Smart.util.CoreFlow', { url: me.url, scope: me });
 
         me.router = new core.router();
+        me.router.setScope(flow);
         me.router.initializeEditor(flow.getWidth()-350,flow.getHeight(),core.stencil,flow);
-
         me.router.graph.rules = me.getCoreFlowRule();
 
         if(view.xdata) {
             var g = view.xdata.get('graphpaper'),
                 d = view.xdata.get('dataflowrule');
+
             me.router.graph.rules = d ? Ext.decode(d) : me.router.graph.rules;
-            containerSpan.update(view.xdata.get('name'));
+            span.update(view.xdata.get('name'));
 
             if(g) {
                 me.router.graph.fromJSON(Ext.decode(g));
             }
         }
 
-        if(me.router.paper.isValid()) {
-            containerSpan.addCls('isactive-on');
-            containerSpan.removeCls('isactive-of');
+        if(me.router.paper.authenticate()) {
+            span.addCls('isactive-on');
+            span.removeCls('isactive-of');
         } else {
-            containerSpan.addCls('isactive-of');
-            containerSpan.removeCls('isactive-on');
+            span.addCls('isactive-of');
+            span.removeCls('isactive-on');
         }
     },
 
@@ -203,7 +204,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             }
         });
 
-        if(this.router.paper.isValid()) {
+        if(this.router.paper.authenticate()) {
             containerSpan.addCls('isactive-on');
             containerSpan.removeCls('isactive-of');
         } else {
@@ -316,11 +317,38 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     },
 
     onStepDblClick: function (router, cellView, evt, x, y, scope) {
-        var stepflaglist = cellView.model.get('stepflaglist'),
-            win = Ext.widget('coreflowcellview', {cellView: cellView});
+        var me = this,
+            view = me.getView(),
+            flow = view.down('form[name=sterilizationtypeflow]'),
+            stepflaglist = cellView.model.get('stepflaglist'),
+            win = Ext.widget('coreflowcellview', {
+                cellView: cellView,
+                outerScope: me
+            });
+
+        me.router.setScope(flow);
 
         win.show(null,function () {
+            var filtertype = '';
+
+            switch(cellView.model.get('type')) {
+                case "basic.Area":
+                    filtertype = "A";
+                    break;
+                case "basic.SubArea":
+                    filtertype = "S";
+                    break;
+                case "basic.Equipment":
+                    filtertype = "E";
+                    break;
+                default:
+                    filtertype = "AS";
+            }
+
             Ext.getStore('sterilizationtypeflag').load({
+                params: {
+                    filtertype: filtertype
+                },
                 callback: function(records, operation, success) {
 
                     if(!stepflaglist) {
@@ -337,17 +365,12 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 }
             });
 
-            this.down('textfield[name=name]').setValue(cellView.model.get('name'));
-            this.down('hiddenfield[name=id]').setValue(cellView.model.get('typeid'));
-            this.down('hiddenfield[name=type]').setValue(cellView.model.get('type'));
-            this.down('textfield[name=steplevel]').setValue(cellView.model.get('myLevel'));
-            this.down('textareafield[name=description]').setValue(cellView.model.get('description'));
-            if(cellView.model.get('type') != 'basic.Equipment') {
-                this.down('gridpanel').hide();
-                this.down('textfield[name=steplevel]').hide();
-                this.down('button[handler=updateCell]').hide();
-            }
-        });
+            win.down('textfield[name=name]').setValue(cellView.model.get('name'));
+            win.down('hiddenfield[name=id]').setValue(cellView.model.get('typeid'));
+            win.down('hiddenfield[name=type]').setValue(cellView.model.get('type'));
+            win.down('textfield[name=steplevel]').setValue(cellView.model.get('steplevel'));
+            win.down('textareafield[name=description]').setValue(cellView.model.get('description'));
+        },me);
     },
 
     updateCell: function () {
@@ -370,7 +393,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             me.connection(links,true);
         }
 
+        view.outerScope.updateFlow();
+
         view.close();
+
     },
 
     updateFlowRules: function () {
@@ -548,12 +574,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     updateView: function () {
         var me = this,
-            view = me.getView().down('form');
+            view = me.getView().down('form'),
+            span = Ext.getBody().getById('paper-container-span');
 
         me.setModuleForm(view);
         me.setModuleData('sterilizationtype');
 
         me._success = function (form, action) {
+            span.update(view.down('textfield[name=name]').getValue());
             me.getView().close();
             if(action.result.crud == 'insert') {
                 Ext.getStore('sterilizationtype').setParams({
@@ -574,10 +602,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     selectFlow: function (item) {
         var me = this,
-            items = [],
+            basic = {},
             graph = me.router.graph,
             areas = ['basic.Area','basic.SubArea'],
-            basicStep = (item instanceof joint.shapes.basic.Step),
             sourceLinks = graph.getConnectedLinks(item, { inbound : true }),
             targetLinks = graph.getConnectedLinks(item, { outbound : true });
 
@@ -589,20 +616,19 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             var source = graph.getCell(sourceLinks[0].prop('source/id'));
         }
 
-        items.push({
+        basic = {
             "steplevel": item.get('steplevel'),
             "elementtype": item.get('type'),
             "elementname": item.get('name'),
             "stepflaglist": item.get('stepflaglist'),
             "steppriority": item.get('steppriority') || 0,
-            'isstartstate': item.get('isstartstate') || 0,
             "source": (source) ? source.get('steplevel'): null,
             "target": (target) ? target.get('steplevel'): null,
             "areasid": ( areas.indexOf(item.get('type')) != -1 ) ? item.get('typeid') : null,
             "equipmentid": ( item.get('type') == 'basic.Equipment' ) ? item.get('typeid') : null
-        });
+        };
 
-        return items;
+        return basic;
     },
 
     updateFlow: function () {
@@ -612,24 +638,20 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             view = me.getView(),
             cells = me.router.graph.getElements(),
             sortByKey = function (array, key) {
-            return array.sort(function(a, b) {
-                var x = a[key]; var y = b[key];
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-            });
-        };
+                return array.sort(function(a, b) {
+                    var x = a[key]; var y = b[key];
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                });
+            };
 
-        me.router.paper.setStepLevel();
+        view.setLoading('Salvando alterações...');
 
         Ext.each(cells,function(item){
             var flow = me.selectFlow(item);
-            Ext.each(flow, function (step) {
-                dataflowstep.push(step);
-            });
+            dataflowstep.push(flow);
         });
 
         dataflowstep = sortByKey(dataflowstep, "steplevel");
-
-        view.setLoading('Salvando alterações...');
 
         Ext.Ajax.request({
             url: me.url,
@@ -638,6 +660,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 rows: Ext.encode({
                     id: view.xdata.get('id'),
                     dataflowstep: Ext.encode(dataflowstep),
+                    authenticate: me.router.paper.authenticate(),
                     graphpaper: Ext.encode(me.router.graph.toJSON())
                 })
             },

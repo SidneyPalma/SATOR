@@ -125,13 +125,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                         showSmartTheme: 'red',
                                         handler: 'updateFlow'
                                     }, {
-                                        handler: 'updateEdit',
-                                        showSmartTheme: 'blue',
-                                        iconCls: "fa fa-pencil-square-o"
-                                    }, {
-                                        iconCls: "fa fa-sitemap",
-                                        showSmartTheme: 'blue',
-                                        handler: 'updateFlux'
+                                        iconCls: "fa fa-pencil-square-o",
+                                        showSmartTheme: 'red',
+                                        handler: 'updateEdit'
+                                    // }, {
+                                    //     iconCls: "fa fa-sitemap",
+                                    //     showSmartTheme: 'blue',
+                                    //     handler: 'updateFlux'
                                     }, {
                                         iconCls: "fa fa-reply",
                                         handler: 'commandManagerUndo'

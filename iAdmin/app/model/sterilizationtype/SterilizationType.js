@@ -29,8 +29,15 @@ Ext.define( 'iAdmin.model.sterilizationtype.SterilizationType', {
             name: 'dataflowstep',
             type: 'auto'
         }, {
+            name: 'authenticate',
+            type: 'int',
+            persist: true,
+            critical: true
+        }, {
             name: 'isactive',
-            type: 'int'
+            type: 'int',
+            persist: true,
+            critical: true
         }
     ]
 

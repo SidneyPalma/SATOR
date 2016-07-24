@@ -103,15 +103,21 @@ Ext.define( 'iAdmin.view.enums.EnumTypeListEdit', {
 
     buttons: [
         {
+            iconCls: "fa fa-file-o",
+            text: 'Novo',
+            showSmartTheme: 'red',
+            handler: 'insertEnumItem'
+        }, {
             iconCls: "fa fa-upload",
             text: 'Salvar',
             showSmartTheme: 'red',
             handler: 'updateEnumItem'
         }, {
-            iconCls: "fa fa-file-o",
-            text: 'Novo',
+            text: 'Fechar',
             showSmartTheme: 'red',
-            handler: 'insertEnumItem'
+            handler: function (btn) {
+                btn.up('window').close();
+            }
         }
     ]
 

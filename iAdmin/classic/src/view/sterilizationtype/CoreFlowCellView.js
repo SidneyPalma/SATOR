@@ -56,16 +56,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                         labelCls: 'sub-title-label',
                         defaultType: 'textfield',
                         defaults: {
-                            useReadColor: true
+                            useReadColor: true,
+                            fieldStyle: { fontSize: '16px;' }
                         },
                         items: [
                             {
-                                flex: 2,
+                                flex: 4,
                                 name: 'name',
-                                fieldLabel: 'Nome',
-                                fieldStyle: {
-                                    fontSize: '16px;'
-                                }
+                                fieldLabel: 'Nome'
                             }, {
                                 flex: 1,
                                 margin: '0 0 0 10',
@@ -83,29 +81,99 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                             fontSize: '16px;'
                         }
                     }, {
-                        dockedItems: [
+                        height: 350,
+                        xtype: 'tabpanel',
+                        items: [
                             {
-                                xtype: 'label',
-                                cls: 'sub-title-label',
-                                text: 'Comportamento',
-                                margin: '0 0 10 0'
-                            }
-                        ],
-                        height: 300,
-                        xtype: 'gridpanel',
-                        store: 'sterilizationtypeflag',
-                        rowLines: false,
-                        hideHeaders: true,
-                        headerBorders: false,
-                        columns: [
-                            {
-                                width: 30,
-                                align: 'center',
-                                dataIndex: 'isactive',
-                                xtype: 'checkcolumn'
+                                title: 'Gerais',
+                                dockedItems: [
+                                    {
+                                        xtype: 'label',
+                                        cls: 'sub-title-label',
+                                        text: 'Comportamento',
+                                        margin: '20 0 10 0'
+                                    }
+                                ],
+                                xtype: 'gridpanel',
+                                store: 'sterilizationtypeflag',
+                                rowLines: false,
+                                hideHeaders: true,
+                                headerBorders: false,
+                                columns: [
+                                    {
+                                        width: 30,
+                                        align: 'center',
+                                        dataIndex: 'isactive',
+                                        xtype: 'checkcolumn'
+                                    }, {
+                                        flex: 1,
+                                        text: 'Configurações',
+                                        dataIndex: 'description'
+                                    }
+                                ]
                             }, {
-                                flex: 1,
-                                dataIndex: 'description'
+                                title: 'Parametros',
+                                dockedItems: [
+                                    {
+                                        xtype: 'label',
+                                        cls: 'sub-title-label',
+                                        text: 'Testes',
+                                        margin: '20 0 10 0'
+                                    }
+                                ],
+                                xtype: 'form',
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '100%'
+                                },
+                                items: [
+                                    {
+                                        // name: 'isactive',
+                                        xtype: 'checkboxfield',
+                                        style: { fontSize: '16px;' },
+                                        boxLabel: 'Abre tela de Leitura de Materiais'
+                                    }, {
+                                        xtype: 'checkboxfield',
+                                        style: { fontSize: '16px;' },
+                                        boxLabel: 'Primeira leitura habilitar todos os itens do Kit'
+                                    }, {
+                                        xtype: 'fieldcontainer',
+                                        defaultType: 'textfield',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            anchor: '100%'
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                fieldLabel: 'Informar o insumo'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                fieldLabel: 'Informar o ativação'
+                                            }
+                                        ]
+                                    }, {
+                                        xtype: 'fieldcontainer',
+                                        defaultType: 'textfield',
+                                        layout: 'hbox',
+                                        defaults: {
+                                            anchor: '100%'
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                fieldLabel: 'Temperatura/umidade'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 1,
+                                                fieldLabel: 'Impressão de etiqueta'
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -119,6 +187,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
     buttons: [
         {
             text: 'Salvar',
+            iconCls: "fa fa-upload",
             showSmartTheme: 'red',
             handler: 'updateCell'
         }, {
