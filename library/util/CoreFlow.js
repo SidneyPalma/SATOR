@@ -140,9 +140,9 @@ Ext.define( 'Smart.util.CoreFlow', {
         });
 
         me.stencil.groups = {
-            area: { index: 1, label: 'CME Area' },
-            subarea: { index: 2, label: 'CME SubArea' },
-            equipment: { index: 3, label: 'Equipamento' },
+            area: { index: 1, label: 'CME Areas' },
+            subarea: { index: 2, label: 'CME SubAreas' },
+            equipment: { index: 3, label: 'Equipamentos' },
             transitions: { index: 4, label: 'Transições' }
         };
 
@@ -323,8 +323,13 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             this.graph.on('change:source change:target', function(link) {
                 if (link.get('source').id && link.get('target').id) {
+                    scope.fireEvent('graphchanged', this.graph, scope);
                     scope.fireEvent('targetchange', this.graph, link, scope);
                 }
+            },this);
+
+            this.graph.on('remove', function(cell) {
+                scope.fireEvent('graphchanged', this.graph, scope);
             },this);
 
             this.graph.on('add', function(cell) {
