@@ -332,8 +332,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     onStepDblClick: function (router, cellView, evt, x, y, scope) {
         var me = this,
             view = me.getView(),
-            flow = view.down('form[name=sterilizationtypeflow]'),
             stepflaglist = cellView.model.get('stepflaglist'),
+            stepsettings = cellView.model.get('stepsettings'),
+            flow = view.down('form[name=sterilizationtypeflow]'),
             win = Ext.widget('coreflowcellview', {
                 cellView: cellView,
                 outerScope: me
@@ -383,14 +384,35 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             win.down('hiddenfield[name=type]').setValue(cellView.model.get('type'));
             win.down('textfield[name=steplevel]').setValue(cellView.model.get('steplevel'));
             win.down('textareafield[name=description]').setValue(cellView.model.get('description'));
+
+            win.down('inputpresentationsearch[name=inputpresentation]').setDisabled(filtertype != 'E');
+            win.down('servicetypesearch[name=serviceequipment]').setDisabled(filtertype != 'E');
+            win.down('servicetypesearch[name=serviceareas]').setDisabled(filtertype != 'E');
+            win.down('comboenum[name=tagprinterdescription]').setDisabled(filtertype != 'S');
+
+            if(stepsettings) {
+                var settings = Ext.decode(stepsettings);
+                win.down('servicetypesearch[name=serviceequipment]').setRawValue(settings.serviceequipment);
+                win.down('inputpresentationsearch[name=inputpresentation]').setRawValue(settings.inputpresentation);
+                win.down('servicetypesearch[name=serviceareas]').setRawValue(settings.serviceareas);
+                win.down('comboenum[name=tagprinterdescription]').setRawValue(settings.tagprinterdescription);
+
+                win.down('hiddenfield[name=inputpresentationid]').setValue(settings.inputpresentationid);
+                win.down('hiddenfield[name=servicetypeequipment]').setValue(settings.servicetypeequipment);
+                win.down('hiddenfield[name=servicetypeareas]').setValue(settings.servicetypeareas);
+                win.down('hiddenfield[name=tagprinter]').setValue(settings.tagprinter);
+            }
+
         },me);
     },
 
     updateCell: function () {
         var me = this,
             data = [],
+            list = {},
             view = me.getView(),
             graph = view.cellView.paper.model,
+            settings = view.down('form[name=settings]'),
             store = Ext.getStore('sterilizationtypeflag'),
             links = graph.getConnectedLinks(view.cellView.model, { inbound: true });
 
@@ -398,7 +420,20 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             if(rec.get('isactive')) data.push(rec.get('code'));
         });
 
+        list = {
+            serviceequipment: view.down('servicetypesearch[name=serviceequipment]').getRawValue(),
+            inputpresentation: view.down('inputpresentationsearch[name=inputpresentation]').getRawValue(),
+            serviceareas: view.down('servicetypesearch[name=serviceareas]').getRawValue(),
+            tagprinterdescription: view.down('comboenum[name=tagprinterdescription]').getRawValue(),
+
+            inputpresentationid: view.down('hiddenfield[name=inputpresentationid]').getValue(),
+            servicetypeequipment:  view.down('hiddenfield[name=servicetypeequipment]').getValue(),
+            servicetypeareas:  view.down('hiddenfield[name=servicetypeareas]').getValue(),
+            tagprinter:  view.down('hiddenfield[name=tagprinter]').getValue()
+        };
+
         view.cellView.model.set('stepflaglist',Ext.encode(data));
+        view.cellView.model.set('stepsettings',Ext.encode(list));
 
         me.connection(links);
 
@@ -634,6 +669,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             "elementtype": item.get('type'),
             "elementname": item.get('name'),
             "stepflaglist": item.get('stepflaglist'),
+            "stepsettings": item.get('stepsettings'),
             "steppriority": item.get('steppriority') || 0,
             "source": (source) ? source.get('steplevel'): null,
             "target": (target) ? target.get('steplevel'): null,
@@ -647,7 +683,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     updateFlow: function () {
         var me = this,
             dataflowstep = [],
-            stepflaglist = "",
             view = me.getView(),
             cells = me.router.graph.getElements(),
             sortByKey = function (array, key) {

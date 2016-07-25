@@ -89,19 +89,25 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                             {
                                 title: 'Parametros',
                                 xtype: 'form',
+                                name: 'settings',
                                 layout: 'anchor',
                                 defaults: {
                                     anchor: '100%'
                                 },
                                 items: [
                                     {
+                                        // E
                                         pageSize: 0,
+                                        showClear: true,
+                                        name: 'inputpresentation',
                                         hiddenNameId: 'inputpresentationid',
                                         fieldLabel: 'Teste Ativação Insumo Obrigatório',
                                         xtype: 'inputpresentationsearch'
                                     }, {
+                                        // E
                                         pageSize: 0,
                                         showClear: true,
+                                        name: 'serviceequipment',
                                         hiddenNameId: 'servicetypeequipment',
                                         fieldLabel: 'Teste Indicador Obrigatório',
                                         xtype: 'servicetypesearch',
@@ -109,15 +115,19 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                                             beforequery: 'onBeforeQueryService'
                                         }
                                     }, {
+                                        // E
                                         pageSize: 0,
                                         showClear: true,
+                                        name: 'serviceareas',
                                         hiddenNameId: 'servicetypeareas',
-                                        fieldLabel: 'Registrar Temperatura/Umidade da Área',
+                                        fieldLabel: 'Registrar Temperatura/Umidade da Área do Equipamento',
                                         xtype: 'servicetypesearch',
                                         listeners: {
                                             beforequery: 'onBeforeQueryService'
                                         }
                                     }, {
+                                        // S
+                                        showClear: true,
                                         xtype: 'comboenum',
                                         hiddenNameId: 'tagprinter',
                                         fieldLabel: 'Libera Impressão de Etiqueta',
