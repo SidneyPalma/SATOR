@@ -39,6 +39,12 @@ class cycle extends \Smart\Data\Model {
     private $temperature;
 
     /**
+     * @Policy {"nullable":false, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $timetoopen;
+
+    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
      */
@@ -121,6 +127,22 @@ class cycle extends \Smart\Data\Model {
      */
     public function setTemperature($temperature) {
         $this->temperature = $temperature;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getTimetoopen() {
+        return $this->timetoopen;
+    }
+
+    /**
+     * @param type $timetoopen
+     * @return \iAdmin\Model\cycle
+     */
+    public function setTimetoopen($timetoopen) {
+        $this->timetoopen = $timetoopen;
         return $this;
     }
 

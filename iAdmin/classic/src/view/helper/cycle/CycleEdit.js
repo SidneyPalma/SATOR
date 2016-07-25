@@ -84,6 +84,15 @@ Ext.define( 'iAdmin.view.helper.cycle.CycleEdit', {
                                 plugins: 'textmask',
                                 mask: 'ºC #0,00',
                                 money: true
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                name: 'timetoopen',
+                                fieldLabel: 'Abertura',
+                                plugins: 'textmask',
+                                mask: 'Min #0,00',
+                                money: true
                             }
                         ]
                     }, {

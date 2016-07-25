@@ -49,6 +49,12 @@ Ext.define( 'iAdmin.model.itembase.ItemBase', {
             name: 'registrationanvisa',
             type: 'auto'
         }, {
+            name: 'itemgroup',
+            type: 'auto'
+        }, {
+            name: 'itemgroupdescription',
+            type: 'auto'
+        }, {
             name: 'isactive',
             type: 'int'
         }, {
