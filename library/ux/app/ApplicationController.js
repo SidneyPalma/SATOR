@@ -11,6 +11,9 @@ Ext.define( 'Smart.ux.app.ApplicationController', {
 
         me.addRef([
             {
+                ref: 'MainForm',
+                selector: 'app-main'
+            }, {
                 ref: 'MainTree',
                 selector: 'app-main treelist'
             }, {
