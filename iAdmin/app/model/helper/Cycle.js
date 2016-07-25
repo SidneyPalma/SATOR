@@ -21,9 +21,12 @@ Ext.define( 'iAdmin.model.helper.Cycle', {
             type: 'auto'
         }, {
             name: 'duration',
-            type: 'int'
+            type: 'auto'
         }, {
             name: 'temperature',
+            type: 'auto'
+        }, {
+            name: 'timetoopen',
             type: 'auto'
         }
     ]

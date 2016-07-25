@@ -109,6 +109,8 @@ class equipment extends \Smart\Data\Cache {
                 ib.patrimonialcode,
                 ib.registrationanvisa,
                 ib.isactive,
+                ib.itemgroup,
+                dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo,
                 e.*,

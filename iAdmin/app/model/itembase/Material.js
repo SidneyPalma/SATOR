@@ -40,12 +40,6 @@ Ext.define( 'iAdmin.model.itembase.Material', {
             name: 'isconsigned',
             type: 'int'
         }, {
-            name: 'itemgroup',
-            type: 'auto'
-        }, {
-            name: 'itemgroupdescription',
-            type: 'auto'
-        }, {
             name: 'itemsize',
             type: 'auto'
         }, {

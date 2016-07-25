@@ -315,16 +315,17 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                         name: 'manufacturername'
                                     }, {
                                         flex: 1,
-                                        margin: '0 0 0 5',
+                                        margin: '0 5 0 5',
                                         fieldLabel: 'CME Areas',
                                         xtype: 'cmeareassearch',
                                         hiddenNameId: 'cmeareasid',
                                         name: 'cmeareasname'
                                     }, {
-                                        xtype: 'splitter'
-                                    }, {
                                         width: 150,
-                                        xtype: 'container'
+                                        margin: '0 5 0 0',
+                                        xtype: 'comboenum',
+                                        fieldLabel: 'Grupo do Item',
+                                        name: 'itemgroupdescription'
                                     }, {
                                         flex: 2,
                                         xtype: 'container'
