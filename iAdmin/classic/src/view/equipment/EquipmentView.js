@@ -324,6 +324,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                         width: 150,
                                         margin: '0 5 0 0',
                                         xtype: 'comboenum',
+                                        queryFilter: 'EP',
                                         fieldLabel: 'Grupo do Item',
                                         name: 'itemgroupdescription'
                                     }, {
