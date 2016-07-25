@@ -170,6 +170,12 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                         text: 'Tipo de filtro',
                         dataIndex: 'filtertype'
                     }, {
+                        width: 40,
+                        align: 'center',
+                        renderer: function (value, meta, rec) {
+                            return parseInt(rec.get('isactive')) ? '<div style="color: #732f49; font-size: 20px;"><i class="fa fa-check-square-o"></i></div>' : '';
+                        }
+                    }, {
                         sortable: false,
                         text: 'Ações',
                         width: 90,

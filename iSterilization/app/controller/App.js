@@ -24,6 +24,9 @@ Ext.define( 'iSterilization.controller.App', {
         },
         'flowprocessingview': {
             action: 'setFlowProcessingList'
+        },
+        'traceabilityview': {
+            action: 'setTraceabilityView'
         }
     },
 
@@ -69,6 +72,13 @@ Ext.define( 'iSterilization.controller.App', {
             rc = me.getMainTree().getSelection();
 
         me.onMainPageView({ xtype: 'flowprocessingview', iconCls: rc.get("iconCls") });
+    },
+
+    setTraceabilityView: function () {
+        var me = this,
+            rc = me.getMainTree().getSelection();
+
+        me.onMainPageView({ xtype: 'traceabilityview', iconCls: rc.get("iconCls") });
     }
 
     //routes ========================>

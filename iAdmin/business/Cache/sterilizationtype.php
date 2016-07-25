@@ -128,6 +128,7 @@ class sterilizationtype extends \Smart\Data\Cache {
 				enumtype et
 				inner join enumtypelist etl on ( etl.enumtypeid = et.id )
 			where et.name = 'markflagstep'
+			  and etl.isactive = 1
 			  and etl.filtertype like '%{$filtertype}%'
 			order by etl.orderby";
 
