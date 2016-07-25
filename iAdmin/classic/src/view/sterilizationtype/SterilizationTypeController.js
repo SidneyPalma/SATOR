@@ -283,15 +283,18 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         view.close();
     },
 
-    onBeforeQueryServiceType: function ( queryPlan, eOpts ) {
+    onBeforeQueryService: function ( queryPlan, eOpts ) {
         var me = this,
             view = me.getView(),
-            combo = queryPlan.combo;
+            combo = queryPlan.combo,
+            equipmentid = view.down('hiddenfield[name=id]');
 
         delete combo.lastQuery;
         combo.store.removeAll();
-        // queryPlan.query = serviceitembasesearch.getValue();
+        queryPlan.query = equipmentid.getValue();
     },
+
+
 
     onTargetChange: function (graph, link, scope) {
         var me = this,

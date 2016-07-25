@@ -87,15 +87,45 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                         xtype: 'tabpanel',
                         items: [
                             {
-                                title: 'Gerais',
-                                dockedItems: [
+                                title: 'Parametros',
+                                xtype: 'form',
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '100%'
+                                },
+                                items: [
                                     {
-                                        xtype: 'label',
-                                        cls: 'sub-title-label',
-                                        text: 'Comportamento',
-                                        margin: '20 0 10 0'
+                                        pageSize: 0,
+                                        hiddenNameId: 'inputpresentationid',
+                                        fieldLabel: 'Teste Ativação Insumo Obrigatório',
+                                        xtype: 'inputpresentationsearch'
+                                    }, {
+                                        pageSize: 0,
+                                        showClear: true,
+                                        hiddenNameId: 'servicetypeequipment',
+                                        fieldLabel: 'Teste Indicador Obrigatório',
+                                        xtype: 'servicetypesearch',
+                                        listeners: {
+                                            beforequery: 'onBeforeQueryService'
+                                        }
+                                    }, {
+                                        pageSize: 0,
+                                        showClear: true,
+                                        hiddenNameId: 'servicetypeareas',
+                                        fieldLabel: 'Registrar Temperatura/Umidade da Área',
+                                        xtype: 'servicetypesearch',
+                                        listeners: {
+                                            beforequery: 'onBeforeQueryService'
+                                        }
+                                    }, {
+                                        xtype: 'comboenum',
+                                        hiddenNameId: 'tagprinter',
+                                        fieldLabel: 'Libera Impressão de Etiqueta',
+                                        name: 'tagprinterdescription'
                                     }
-                                ],
+                                ]
+                            }, {
+                                title: 'Gerais',
                                 xtype: 'gridpanel',
                                 store: 'sterilizationtypeflag',
                                 rowLines: false,
@@ -111,69 +141,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                                         flex: 1,
                                         text: 'Configurações',
                                         dataIndex: 'description'
-                                    }
-                                ]
-                            }, {
-                                title: 'Parametros',
-                                dockedItems: [
-                                    {
-                                        xtype: 'label',
-                                        cls: 'sub-title-label',
-                                        text: 'Testes',
-                                        margin: '20 0 10 0'
-                                    }
-                                ],
-                                xtype: 'form',
-                                layout: 'anchor',
-                                defaults: {
-                                    anchor: '100%'
-                                },
-                                items: [
-                                    {
-                                        xtype: 'fieldcontainer',
-                                        defaultType: 'textfield',
-                                        layout: 'hbox',
-                                        defaults: {
-                                            anchor: '100%'
-                                        },
-                                        items: [
-                                            {
-                                                flex: 1,
-                                                pageSize: 0,
-                                                fieldLabel: 'Informar o insumo',
-                                                xtype: 'inputpresentationsearch'
-                                            }, {
-                                                xtype: 'splitter'
-                                            }, {
-                                                flex: 1,
-                                                pageSize: 0,
-                                                fieldLabel: 'Serviço de ativação',
-                                                showClear: true,
-                                                xtype: 'servicetypesearch',
-                                                // name: 'servicetypedescription',
-                                                listeners: {
-                                                    beforequery: 'onBeforeQueryServiceType'
-                                                }
-                                            }
-                                        ]
-                                    }, {
-                                        xtype: 'fieldcontainer',
-                                        defaultType: 'textfield',
-                                        layout: 'hbox',
-                                        defaults: {
-                                            anchor: '100%'
-                                        },
-                                        items: [
-                                            {
-                                                flex: 1,
-                                                fieldLabel: 'Temperatura/umidade'
-                                            }, {
-                                                xtype: 'splitter'
-                                            }, {
-                                                flex: 1,
-                                                fieldLabel: 'Impressão de etiqueta'
-                                            }
-                                        ]
                                     }
                                 ]
                             }
