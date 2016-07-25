@@ -355,6 +355,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                         flex: 2,
                                         margin: '0 5 0 0',
                                         xtype: 'comboenum',
+                                        queryFilter: 'M',
                                         fieldLabel: 'Grupo do Item',
                                         name: 'itemgroupdescription'
                                     }, {

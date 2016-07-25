@@ -249,12 +249,19 @@ Ext.define( 'iAdmin.view.input.InputView', {
                                 },
                                 items: [
                                     {
-                                        flex: 2,
+                                        flex: 1,
                                         margin: '0 5 0 0',
                                         fieldLabel: 'Proprietário',
                                         xtype: 'proprietarysearch',
                                         hiddenNameId: 'proprietaryid',
                                         name: 'proprietaryname'
+                                    }, {
+                                        flex: 1,
+                                        margin: '0 5 0 5',
+                                        xtype: 'comboenum',
+                                        queryFilter: 'I',
+                                        fieldLabel: 'Grupo do Item',
+                                        name: 'itemgroupdescription'
                                     }, {
                                         flex: 1,
                                         margin: '0 0 0 5',
