@@ -19,7 +19,6 @@ Ext.define( 'iSterilization.view.service.ServiceTypeSearch', {
     params: {
         action: 'select',
         method: 'selectType'
-        // params: Ext.encode(['servicetypedescription'])
     },
 
     fields: [
