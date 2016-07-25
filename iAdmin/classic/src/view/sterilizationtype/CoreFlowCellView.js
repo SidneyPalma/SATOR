@@ -9,6 +9,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
         'Ext.window.Window',
         'iAdmin.store.sterilizationtype.*',
         'Smart.form.field.ComboEnum',
+        'iAdmin.view.input.InputPresentationSearch',
+        'iSterilization.view.service.ServiceTypeSearch',
         'iAdmin.view.sterilizationtype.SterilizationTypeController'
     ],
 
@@ -128,15 +130,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                                 },
                                 items: [
                                     {
-                                        // name: 'isactive',
-                                        xtype: 'checkboxfield',
-                                        style: { fontSize: '16px;' },
-                                        boxLabel: 'Abre tela de Leitura de Materiais'
-                                    }, {
-                                        xtype: 'checkboxfield',
-                                        style: { fontSize: '16px;' },
-                                        boxLabel: 'Primeira leitura habilitar todos os itens do Kit'
-                                    }, {
                                         xtype: 'fieldcontainer',
                                         defaultType: 'textfield',
                                         layout: 'hbox',
@@ -146,12 +139,21 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                                         items: [
                                             {
                                                 flex: 1,
-                                                fieldLabel: 'Informar o insumo'
+                                                pageSize: 0,
+                                                fieldLabel: 'Informar o insumo',
+                                                xtype: 'inputpresentationsearch'
                                             }, {
                                                 xtype: 'splitter'
                                             }, {
                                                 flex: 1,
-                                                fieldLabel: 'Informar o ativação'
+                                                pageSize: 0,
+                                                fieldLabel: 'Serviço de ativação',
+                                                showClear: true,
+                                                xtype: 'servicetypesearch',
+                                                // name: 'servicetypedescription',
+                                                listeners: {
+                                                    beforequery: 'onBeforeQueryServiceType'
+                                                }
                                             }
                                         ]
                                     }, {

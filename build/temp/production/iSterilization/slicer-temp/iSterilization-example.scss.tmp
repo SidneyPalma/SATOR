@@ -938,6 +938,7 @@ $include-ext-view-view: dynamic(true);;
 $include-ext-window-messagebox: dynamic(true);;
 $include-ext-window-toast: dynamic(true);;
 $include-ext-window-window: dynamic(true);;
+$include-image: dynamic(true);;
 $include-smart-buttonexporter: dynamic(true);;
 $include-smart-cookie: dynamic(true);;
 $include-smart-coreflow: dynamic(true);;
@@ -1220,6 +1221,8 @@ $include-isterilization-view-service-serviceregistrationnew: dynamic(true);;
 $include-isterilization-view-service-serviceregistrationresult: dynamic(true);;
 $include-isterilization-view-service-serviceregistrationview: dynamic(true);;
 $include-isterilization-view-service-servicetypesearch: dynamic(true);;
+$include-isterilization-view-traceability-traceabilitycontroller: dynamic(true);;
+$include-isterilization-view-traceability-traceabilityview: dynamic(true);;
 
 
 /* ======================== ETC ======================== */

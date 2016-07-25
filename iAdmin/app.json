@@ -5,7 +5,10 @@
     "classpath": [
         "app",
         "${toolkit.name}/src",
-        "${app.dir}/../library"
+        "${app.dir}/../library",
+        "${app.dir}/../iSterilization/app/store",
+        "${app.dir}/../iSterilization/app/model",
+        "${app.dir}/../iSterilization/classic/src/view/service"
     ],
     "overrides": [
         "overrides",

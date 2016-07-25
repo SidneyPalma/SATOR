@@ -12,7 +12,11 @@ Ext.Loader.setConfig({
         'Smart.form.field': '../library/form/field',
         'Smart.ux.app': '../library/ux/app',
         'Smart.ux.main': '../library/ux/main',
-        'Smart.ux.login': '../library/ux/login'
+        'Smart.ux.login': '../library/ux/login',
+
+        'iSterilization.store.service': '../iSterilization/app/store/service',
+        'iSterilization.model.service': '../iSterilization/app/model/service',
+        'iSterilization.view.service': '../iSterilization/classic/src/view/service'
     }
 });
 
