@@ -24,15 +24,24 @@ Ext.Loader.setConfig({
         'iAdmin.model.profile': '../iAdmin/app/model/profile',
         'iAdmin.store.itembase': '../iAdmin/app/store/itembase',
         'iAdmin.model.itembase': '../iAdmin/app/model/itembase',
+
+        'iAdmin.store.box': '../iAdmin/app/store/box',
+        'iAdmin.model.box': '../iAdmin/app/model/box',
+
         'iAdmin.store.material': '../iAdmin/app/store/material',
         'iAdmin.model.material': '../iAdmin/app/model/material',
 
+        'iAdmin.store.equipment': '../iAdmin/app/store/equipment',
+        'iAdmin.model.equipment': '../iAdmin/app/model/equipment',
+
+        'iAdmin.view.box': '../iAdmin/classic/src/view/box',
         'iAdmin.view.users': '../iAdmin/classic/src/view/users',
         'iAdmin.view.input': '../iAdmin/classic/src/view/input',
         'iAdmin.view.enums': '../iAdmin/classic/src/view/enums',
         'iAdmin.view.profile': '../iAdmin/classic/src/view/profile',
         'iAdmin.view.itembase': '../iAdmin/classic/src/view/itembase',
         'iAdmin.view.material': '../iAdmin/classic/src/view/material',
+        'iAdmin.view.equipment': '../iAdmin/classic/src/view/equipment',
 		'iAdmin.view.sterilizationtype': '../iAdmin/classic/src/view/sterilizationtype',
         'iAdmin.view.person.client': '../iAdmin/classic/src/view/person/client',
         'iAdmin.view.helper.packing': '../iAdmin/classic/src/view/helper/packing',

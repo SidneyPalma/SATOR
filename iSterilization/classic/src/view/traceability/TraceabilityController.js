@@ -13,7 +13,7 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityController', {
         }
     },
 
-    url: '../iSterilization/business/Calls/traceability.php'
+    url: '../iSterilization/business/Calls/traceability.php',
 
     // fetchField: function (search, button) {
     //     Ext.getStore('flowprocessing').setParams({
@@ -34,5 +34,28 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityController', {
     //     app.onMainPageView({xtype: 'flowprocessingview', xdata: null});
     // }
     //routes ===================================>>
+
+    onAfterRenderView: function (view) {
+        var me = this,
+            datepicker = view.down('datepicker');
+
+        me.selectDatePicker(datepicker,datepicker.getValue());
+    },
+
+    selectDatePicker: function (datePicker, date, eOpts) {
+        var me = this,
+            view = me.getView(),
+            labelperiod = view.down('label[name=labelperiod]');
+
+        labelperiod.setText(me.getDateFormated(date));
+    },
+    
+    selectTraceability: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            traceability = view.down('container[name=traceability]');
+
+        traceability.getLayout().setActiveItem(record.get('traceability_type'));
+    }
 
 });

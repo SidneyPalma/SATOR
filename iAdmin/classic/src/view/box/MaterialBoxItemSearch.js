@@ -1,5 +1,5 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.view.material.MaterialBoxItemSearch', {
+Ext.define( 'iAdmin.view.box.MaterialBoxItemSearch', {
     extend: 'Smart.form.field.ComboSearch',
 
     xtype: 'materialboxitemsearch',

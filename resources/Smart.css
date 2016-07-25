@@ -251,6 +251,10 @@
     line-height: 32px;
 }
 
+.title-label-bold {
+    font-weight: 700;
+}
+
 .sub-title-label {
     font-size: 18px;
     line-height: 18px;

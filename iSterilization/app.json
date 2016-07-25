@@ -1,6 +1,6 @@
 {
     "name": "iSterilization",
-    "version": "1.0.0.165",
+    "version": "1.0.0.166",
     "indexHtmlPath": "index.html",
     "classpath": [
         "app",
@@ -8,12 +8,14 @@
         "${app.dir}/../library",
         "${app.dir}/../iAdmin/app/store",
         "${app.dir}/../iAdmin/app/model",
+        "${app.dir}/../iAdmin/classic/src/view/box",
         "${app.dir}/../iAdmin/classic/src/view/input",
         "${app.dir}/../iAdmin/classic/src/view/users",
         "${app.dir}/../iAdmin/classic/src/view/enums",
         "${app.dir}/../iAdmin/classic/src/view/profile",
         "${app.dir}/../iAdmin/classic/src/view/itembase",
         "${app.dir}/../iAdmin/classic/src/view/material",
+        "${app.dir}/../iAdmin/classic/src/view/equipment",
         "${app.dir}/../iAdmin/classic/src/view/helper/areas",
         "${app.dir}/../iAdmin/classic/src/view/person/client",
         "${app.dir}/../iAdmin/classic/src/view/helper/packing",
@@ -208,6 +210,6 @@
     "id": "3bab7068-1bf6-40c7-b473-b9f76862105a",
     "buildby": {
         "logusername": "DSADES21",
-        "lastdateapp": "2016-07-25 00:17"
+        "lastdateapp": "2016-07-25 12:31"
     }
 }

@@ -29,7 +29,7 @@ class Start {
         return self::$dtb;
     }
     public static function areTestBase() {
-        return is_numeric(strripos(self::getDataBase(), 'test'));
+        return is_numeric(strripos(self::getDataBase(), 'testemunho'));
     }
     public static function setTimeZone() {
         date_default_timezone_set(self::$tmz);
