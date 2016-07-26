@@ -1,5 +1,5 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.processing.FlowProcessingInput', {
+Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
     extend: 'Ext.tree.Panel',
 
     xtype: 'flowprocessinginput',

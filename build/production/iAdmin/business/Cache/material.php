@@ -24,8 +24,9 @@ class material extends \Smart\Data\Cache {
                 ib.patrimonialcode,
                 ib.registrationanvisa,
                 ib.isactive,
+                ib.itemgroup,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
-                dbo.getEnum('itemgroup',m.itemgroup) as itemgroupdescription,
+                dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
                 materialboxname = (
                   SELECT TOP 1
                     mb.name
@@ -90,8 +91,9 @@ class material extends \Smart\Data\Cache {
                 ib.patrimonialcode,
                 ib.registrationanvisa,
                 ib.isactive,
+                ib.itemgroup,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
-                dbo.getEnum('itemgroup',m.itemgroup) as itemgroupdescription,
+                dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo,
                 materialboxname = (

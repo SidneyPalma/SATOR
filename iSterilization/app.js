@@ -20,6 +20,10 @@ Ext.Loader.setConfig({
         'iAdmin.model.enums': '../iAdmin/app/model/enums',
 
         'iAdmin.store.input': '../iAdmin/app/store/input',
+
+        'iAdmin.store.helper': '../iAdmin/app/store/helper',
+        'iAdmin.model.helper': '../iAdmin/app/model/helper',
+
         'iAdmin.store.profile': '../iAdmin/app/store/profile',
         'iAdmin.model.profile': '../iAdmin/app/model/profile',
         'iAdmin.store.itembase': '../iAdmin/app/store/itembase',
@@ -42,10 +46,11 @@ Ext.Loader.setConfig({
         'iAdmin.view.itembase': '../iAdmin/classic/src/view/itembase',
         'iAdmin.view.material': '../iAdmin/classic/src/view/material',
         'iAdmin.view.equipment': '../iAdmin/classic/src/view/equipment',
-		'iAdmin.view.sterilizationtype': '../iAdmin/classic/src/view/sterilizationtype',
+		// 'iAdmin.view.sterilizationtype': '../iAdmin/classic/src/view/sterilizationtype',
         'iAdmin.view.person.client': '../iAdmin/classic/src/view/person/client',
-        'iAdmin.view.helper.packing': '../iAdmin/classic/src/view/helper/packing',
+        'iAdmin.view.helper.targe': '../iAdmin/classic/src/view/helper/targe',
         'iAdmin.view.helper.cmeareas': '../iAdmin/classic/src/view/helper/areas',
+        'iAdmin.view.helper.packing': '../iAdmin/classic/src/view/helper/packing',
         'iAdmin.view.helper.provider': '../iAdmin/classic/src/view/helper/provider',
         'iAdmin.view.person.proprietary': '../iAdmin/classic/src/view/person/proprietary',
         'iAdmin.view.helper.manufacturer': '../iAdmin/classic/src/view/helper/manufacturer',

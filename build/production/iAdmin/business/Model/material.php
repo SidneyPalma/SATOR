@@ -60,18 +60,6 @@ class material extends \Smart\Data\Model {
      * @Policy {"nullable":true, "length":3}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $itemgroup;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,itemgroup"}
-     */
-    private $itemgroupdescription;
-
-    /**
-     * @Policy {"nullable":true, "length":3}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
-     */
     private $itemsize;
 
     /**
@@ -184,22 +172,6 @@ class material extends \Smart\Data\Model {
      */
     public function setIsconsigned($isconsigned) {
         $this->isconsigned = $isconsigned;
-        return $this;
-    }
-
-    /**
-     * @return type string
-     */
-    public function getItemgroup() {
-        return $this->itemgroup;
-    }
-
-    /**
-     * @param type $itemgroup
-     * @return \iAdmin\Model\material
-     */
-    public function setItemgroup($itemgroup) {
-        $this->itemgroup = $itemgroup;
         return $this;
     }
 

@@ -1,6 +1,6 @@
 {
     "name": "iSterilization",
-    "version": "1.0.0.166",
+    "version": "1.0.0.174",
     "indexHtmlPath": "index.html",
     "classpath": [
         "app",
@@ -16,6 +16,7 @@
         "${app.dir}/../iAdmin/classic/src/view/itembase",
         "${app.dir}/../iAdmin/classic/src/view/material",
         "${app.dir}/../iAdmin/classic/src/view/equipment",
+        "${app.dir}/../iAdmin/classic/src/view/helper/targe",
         "${app.dir}/../iAdmin/classic/src/view/helper/areas",
         "${app.dir}/../iAdmin/classic/src/view/person/client",
         "${app.dir}/../iAdmin/classic/src/view/helper/packing",
@@ -210,6 +211,6 @@
     "id": "3bab7068-1bf6-40c7-b473-b9f76862105a",
     "buildby": {
         "logusername": "DSADES21",
-        "lastdateapp": "2016-07-25 12:31"
+        "lastdateapp": "2016-07-25 20:25"
     }
 }

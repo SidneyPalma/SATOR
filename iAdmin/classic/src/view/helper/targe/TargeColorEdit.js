@@ -8,7 +8,7 @@ Ext.define( 'iAdmin.view.helper.targe.TargeColorEdit', {
         'Ext.form.Panel',
         'Ext.window.Window',
         'Ext.button.Segmented',
-        'Ext.ux.colorpick.Field',
+        // 'Ext.ux.colorpick.Field',
         'Smart.form.field.ComboEnum',
         'iAdmin.model.helper.TargeColor',
 		'iAdmin.view.helper.targe.TargeColorSearch',

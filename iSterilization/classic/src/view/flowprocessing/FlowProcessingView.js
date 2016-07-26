@@ -1,5 +1,5 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
+Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
     extend: 'Ext.form.Panel',
 
     xtype: 'flowprocessingview',
@@ -9,10 +9,10 @@ Ext.define( 'iSterilization.view.processing.FlowProcessingView', {
         'Ext.panel.Panel',
         'Ext.grid.column.*',
         'Smart.form.Portrait',
-        'iSterilization.store.processing.*',
-        'iSterilization.view.processing.FlowProcessingInput',
-        'iSterilization.view.processing.FlowProcessingMaterial',
-        'iSterilization.view.processing.FlowProcessingController'
+        'iSterilization.store.flowprocessing.*',
+        'iSterilization.view.flowprocessing.FlowProcessingInput',
+        'iSterilization.view.flowprocessing.FlowProcessingMaterial',
+        'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
     layout: {

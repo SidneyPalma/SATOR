@@ -48,7 +48,7 @@ class enumtype extends \Smart\Data\Cache {
         $description = $type . 'description';
         $proxy = $this->getStore()->getProxy();
 
-        $filter = strlen($filter) != 0 ? "and etl.filtertype = '$filter'" : "";
+        $filter = strlen($filter) != 0 ? "and etl.filtertype like '%{$filter}%'" : "";
 
         $sql = "
             select
