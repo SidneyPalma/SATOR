@@ -22,9 +22,8 @@ Ext.define( 'Smart.ux.app.Application', {
 
     launch: function (a) {
         var me = this,
-            loggedIn;
-
-        loggedIn = localStorage.getItem(Ext.manifest.name + 'In');
+            workstation = localStorage.getItem('workstation'),
+            loggedIn = localStorage.getItem(Ext.manifest.name + 'In');
 
         me.redirectTo(Ext.manifest.name.toLowerCase());
 
@@ -43,10 +42,10 @@ Ext.define( 'Smart.ux.app.Application', {
                 if((result.success)&&(result.modulebuild != Ext.manifest.version)) {
                     success = false;
                     Ext.Msg.show({
-                        title: 'Operação falhou!',
-                        msg: 'Você está executando uma versão diferente da atualmente homolagada!',
+                        icon: Ext.Msg.WARNING,
                         buttons: Ext.Msg.CANCEL,
-                        icon: Ext.Msg.WARNING
+                        title: 'Operação falhou!',
+                        msg: 'Você está executando uma versão diferente da atualmente homolagada!'
                     });
                 }
 
@@ -80,6 +79,8 @@ Ext.define( 'Smart.ux.app.Application', {
                 }
             }
         });
+
+        Smart.workstation = workstation ? Ext.decode(workstation) : null;
 
         Ext.getBody().getById('preloader').hide();
         Ext.getBody().getById('buildapp').update('v'+Ext.manifest.version);

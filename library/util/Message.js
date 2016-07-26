@@ -299,6 +299,31 @@ Ext.define( 'Smart.util.Message', {
 
     fieldObservation: function () {
         return this.get('msg.fieldObservation', 'É importante o preenchimento da observação para esclarecimentos posteriores!');
+    },
+
+    showToast: function (text,iconMsg,orientation) {
+        var iconCls = {
+                info: ['x-message-box-info','rgb(15, 58, 208)'],
+                error: ['x-message-box-error','rgb(192, 41, 66)'],
+                warning: ['x-message-box-warning','rgb(237, 213, 0)'],
+                question: ['x-message-box-question','rgb(38, 153, 23)']
+            },
+            msg = iconCls[iconMsg || 'error'][0],
+            clr = iconCls[iconMsg || 'error'][1],
+            tag = [
+                '<div>',
+                    Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
+                    Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px; padding-left: 10px;">{0}</div>',text),
+                '</div>'
+            ];
+
+        Ext.toast({
+            html: tag,
+            minWidth: 300,
+            closable: false,
+            slideInDuration: 400,
+            align: orientation|| 't'
+        });
     }
 
 });

@@ -1140,6 +1140,7 @@ $include-iadmin-view-equipment-equipmentcycle: dynamic(false);;
 $include-iadmin-view-equipment-equipmentlist: dynamic(false);;
 $include-iadmin-view-equipment-equipmentsearch: dynamic(false);;
 $include-iadmin-view-equipment-equipmentview: dynamic(false);;
+$include-iadmin-view-helper-areas-areassearch: dynamic(false);;
 $include-iadmin-view-helper-areas-cmeareascontroller: dynamic(false);;
 $include-iadmin-view-helper-areas-cmeareasedit: dynamic(false);;
 $include-iadmin-view-helper-areas-cmeareassearch: dynamic(false);;

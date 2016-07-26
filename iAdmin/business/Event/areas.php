@@ -25,6 +25,50 @@ class areas extends \Smart\Data\Event {
      */
     public function preUpdate( \iAdmin\Model\areas &$model ) {
         Session::hasProfile('','');
+
+        if($model->getWorkstation() == 'update') {
+
+            if($this->checUpdatekWorkstation($model)) {
+                throw new \PDOException("Para esta Área já existe uma Estação Configurada!!");
+            }
+
+            $model->set('workstation',strtoupper(md5($model->getName())));
+        }
+
+        if($model->getWorkstation() == 'delete') {
+
+            if($this->checDeletekWorkstation($model)) {
+                throw new \PDOException("Operação solicitada inválida, Estação diferente da atual!");
+            }
+
+            $model->set('workstation','');
+        }
+    }
+
+    public function checDeletekWorkstation($model) {
+        $id = $model->getId();
+
+        $pdo = $this->getProxy()->prepare("select workstation from areas where id = :id");
+        $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+
+        $pdo->execute();
+        $rows = $pdo->fetchAll();
+
+        return (count($rows) == 0);
+    }
+
+    public function checUpdatekWorkstation($model) {
+        $id = $model->getId();
+
+        $pdo = $this->getProxy()->prepare("select workstation from areas where id = :id");
+        $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+
+        $pdo->execute();
+        $rows = $pdo->fetchAll();
+        $data = $rows[0];
+        $workstation = $data['workstation'];
+
+        return (strlen($workstation) != 0);
     }
 
     /**

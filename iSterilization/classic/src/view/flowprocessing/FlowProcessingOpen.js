@@ -64,13 +64,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                             flex: 1,
                             allowBlank: false,
                             useReadColor: true
-                            // fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
+                                showFetch: true,
                                 margin: '0 5 0 0',
                                 fieldLabel: 'Usuário (operador)'
                             }, {
+                                showFetch: true,
                                 margin: '0 5 0 5',
                                 fieldLabel: 'Estação (área CME)'
                             }, {
@@ -94,6 +95,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         },
                         items: [
                             {
+                                showFetch: true,
                                 margin: '0 5 0 0',
                                 fieldLabel: 'Material'
                             }, {
@@ -140,6 +142,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                     }
                                 ]
                             }, {
+                                showFetch: true,
                                 fieldLabel: 'Paciente'
                             }
                         ]
