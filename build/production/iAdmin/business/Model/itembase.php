@@ -57,6 +57,12 @@ class itembase extends \Smart\Data\Model {
     private $dateacquisition;
 
     /**
+     * @Policy {"nullable":true, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $itemgroup;
+
+    /**
      * @Policy {"nullable":true, "length":60}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -217,6 +223,22 @@ class itembase extends \Smart\Data\Model {
      */
     public function setDateacquisition($dateacquisition) {
         $this->dateacquisition = $dateacquisition;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getItemgroup() {
+        return $this->itemgroup;
+    }
+
+    /**
+     * @param type $itemgroup
+     * @return \iAdmin\Model\itembase
+     */
+    public function setItemgroup($itemgroup) {
+        $this->itemgroup = $itemgroup;
         return $this;
     }
 

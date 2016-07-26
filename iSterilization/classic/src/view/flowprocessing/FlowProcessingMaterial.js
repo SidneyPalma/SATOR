@@ -1,5 +1,5 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.processing.FlowProcessingMaterial', {
+Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     extend: 'Ext.grid.Panel',
 
     xtype: 'flowprocessingmaterial',

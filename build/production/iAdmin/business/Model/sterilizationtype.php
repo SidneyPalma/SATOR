@@ -48,6 +48,12 @@ class sterilizationtype extends \Smart\Data\Model {
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
      */
+    private $authenticate;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
+     */
     private $isactive;
 
     /**
@@ -143,6 +149,22 @@ class sterilizationtype extends \Smart\Data\Model {
      */
     public function setDataflowstep($dataflowstep) {
         $this->dataflowstep = $dataflowstep;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getAuthenticate() {
+        return $this->authenticate;
+    }
+
+    /**
+     * @param type $authenticate
+     * @return \iAdmin\Model\sterilizationtype
+     */
+    public function setAuthenticate($authenticate) {
+        $this->authenticate = $authenticate;
         return $this;
     }
 

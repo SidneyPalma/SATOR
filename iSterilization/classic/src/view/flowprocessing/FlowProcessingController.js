@@ -1,27 +1,27 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.traceability.TraceabilityController', {
+Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     extend: 'Smart.app.ViewControllerBase',
 
-    alias: 'controller.traceability',
+    alias: 'controller.flowprocessing',
 
     routes: {
-        'traceabilityview/:id': {
+        'flowprocessingview/:id': {
             action: 'getFlowProcessingId'
         },
-        'traceabilityview': {
+        'flowprocessingview': {
             action: 'getFlowProcessingNew'
         }
     },
 
-    url: '../iSterilization/business/Calls/traceability.php',
+    url: '../iSterilization/business/Calls/flowprocessing.php',
 
-    // fetchField: function (search, button) {
-    //     Ext.getStore('flowprocessing').setParams({
-    //         query: search.getValue()
-    //     }).load();
-    // },
-    //
-    // //routes ===================================>>
+    fetchField: function (search, button) {
+        Ext.getStore('flowprocessing').setParams({
+            query: search.getValue()
+        }).load();
+    },
+
+    //routes ===================================>>
     // getFlowProcessingId: function (id) {
     //     var app = Smart.app.getController('App'),
     //         record = Ext.getStore('flowprocessing').findRecord('id', id);
@@ -37,8 +37,10 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityController', {
 
     onAfterRenderView: function (view) {
         var me = this,
-            datepicker = view.down('datepicker');
+            datepicker = view.down('datepicker'),
+            traceability = view.down('combobox[name=traceability]');
 
+        traceability.setValue(0);
         me.selectDatePicker(datepicker,datepicker.getValue());
     },
 
@@ -49,13 +51,25 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityController', {
 
         labelperiod.setText(me.getDateFormated(date));
     },
-    
+
     selectTraceability: function (combo,record,eOpts) {
         var me = this,
             view = me.getView(),
             traceability = view.down('container[name=traceability]');
 
         traceability.getLayout().setActiveItem(record.get('traceability_type'));
+    },
+
+    flowProcessingOpen: function () {
+        var me = this,
+            view = me.getView();
+        
+        Ext.widget('flowprocessingopen').show();
+    },
+
+    insertView: function () {
+        var me = this,
+            view = me.getView();
     }
 
 });

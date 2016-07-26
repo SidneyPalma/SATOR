@@ -8,8 +8,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItemInsert', {
         'Ext.form.Panel',
         'Ext.window.Window',
         'iAdmin.view.input.InputSearch',
-        'iAdmin.view.box.MaterialBoxController',
-        'iAdmin.view.material.MaterialBoxItemSearch'
+        'iAdmin.view.box.MaterialBoxItemSearch',
+        'iAdmin.view.box.MaterialBoxController'
     ],
 
     width: 350,

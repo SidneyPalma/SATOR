@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.traceability.TraceabilityView', {
+Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
     extend: 'Ext.form.Panel',
 
-    xtype: 'traceabilityview',
+    xtype: 'flowprocessingdash',
 
     requires: [
         'Ext.view.View',
@@ -12,16 +12,16 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityView', {
         'Ext.picker.Date',
         'Ext.button.Segmented',
         'iAdmin.view.users.UsersSearch',
-        'iAdmin.view.material.MaterialSearch',
-        'iAdmin.view.equipment.EquipmentSearch',
-        'iAdmin.view.box.MaterialBoxItemSearch',
+        // 'iAdmin.view.material.MaterialSearch',
+        // 'iAdmin.view.equipment.EquipmentSearch',
+        // 'iAdmin.view.box.MaterialBoxItemSearch',
         // 'iAdmin.view.helper.areas.CMEAreasSearch',
-        'iSterilization.view.traceability.TraceabilityController'
+        'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
     layout: 'border',
 
-    controller: 'traceability',
+    controller: 'flowprocessing',
     cls: 'panel-frame panel-frame-tpTree',
     iconCls: "fa fa-smile-o",
     showSmartAnimate: true,
@@ -58,33 +58,6 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityView', {
 
     buildItems: function () {
         var me = this;
-
-        Ext.define('Image', {
-            extend: 'Ext.data.Model',
-            fields: [
-                { name:'src', type:'string' },
-                { name:'caption', type:'string' }
-            ]
-        });
-
-        Ext.create('Ext.data.Store', {
-            model: 'Image',
-            data: [
-                { src:'http://www.sencha.com/img/20110215-feat-drawing.png', caption:'Drawing & Charts' },
-                { src:'http://www.sencha.com/img/20110215-feat-data.png', caption:'Advanced Data' },
-                { src:'http://www.sencha.com/img/20110215-feat-html5.png', caption:'Overhauled Theme' },
-                { src:'http://www.sencha.com/img/20110215-feat-perf.png', caption:'Performance Tuned' }
-            ]
-        });
-
-        var imageTpl = new Ext.XTemplate(
-            '<tpl for=".">',
-                '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                    '<img src="{src}" />',
-                    '<br/><span>{caption}</span>',
-                '</div>',
-            '</tpl>'
-        );
 
         me.items = [
             {
@@ -126,7 +99,8 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityView', {
                         },
                         items: [
                             {
-                                text: 'Iniciar Leitura'
+                                text: 'Iniciar Nova Leitura',
+                                handler: 'flowProcessingOpen'
                             }
                         ]
                     }, {
@@ -141,20 +115,20 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityView', {
                         },
                         items: [
                             {
-                                fieldLabel: 'Kit',
-                                xtype: 'materialboxitemsearch'
+                                fieldLabel: 'Kit'
+                                // xtype: 'materialboxitemsearch'
                             }, {
-                                fieldLabel: 'Área/Sub-Area',
+                                fieldLabel: 'Área/Sub-Area'
                                 // xtype: 'cmeareassearch'
                             }, {
-                                fieldLabel: 'Material',
-                                xtype: 'materialsearch'
+                                fieldLabel: 'Material'
+                                // xtype: 'materialsearch'
                             }, {
-                                fieldLabel: 'Equipamento',
-                                xtype: 'equipmentsearch'
-                            // }, {
-                            //     fieldLabel: 'Usuário',
-                            //     xtype: 'userssearch'
+                                fieldLabel: 'Equipamento'
+                                // xtype: 'equipmentsearch'
+                                // }, {
+                                //     fieldLabel: 'Usuário',
+                                //     xtype: 'userssearch'
                             }
                         ]
                     }
@@ -180,7 +154,7 @@ Ext.define( 'iSterilization.view.traceability.TraceabilityView', {
                                 text: '...',
                                 name: 'labelperiod'
                             }, {
-                                width: 320,
+                                width: 150,
                                 pageSize: 0,
                                 xtype: 'combobox',
                                 editable: false,

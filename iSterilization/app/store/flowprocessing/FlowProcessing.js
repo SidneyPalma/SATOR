@@ -14,4 +14,11 @@ Ext.define( 'iSterilization.store.flowprocessing.FlowProcessing', {
 
     model: 'iSterilization.model.flowprocessing.FlowProcessing'
 
+    // config: {
+    //     extraParams: {
+    //         action: 'select',
+    //         method: 'selectItem'
+    //     }
+    // }
+
 });
