@@ -122,10 +122,13 @@ Ext.define( 'Smart.ux.login.LoginController', {
     onComeInSendSuccess: function (form, action) {
         var me = this,
             view = me.getView(),
+            workstation = localStorage.getItem('workstation'),
             result = Ext.decode(action.response.responseText),
             rows = result.rows[0];
 
         view.setLoading(false);
+
+        Smart.workstation = workstation ? Ext.decode(workstation) : null;
 
         if(result.modulebuild != Ext.manifest.version) {
             Ext.Msg.show({
@@ -165,7 +168,6 @@ Ext.define( 'Smart.ux.login.LoginController', {
             if(result.isTest == true) {
                 Ext.getBody().getById('marquee').show();
             }
-
         }
     }
 

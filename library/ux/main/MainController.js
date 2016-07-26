@@ -9,6 +9,16 @@ Ext.define( 'Smart.ux.main.MainController', {
 
     url: '',
 
+    init: function () {
+        var me = this;
+
+        if(!Smart.workstation) {
+            Smart.Msg.showToast('Estação de Trabalho Não Configurada!','warning','b');
+        }
+
+        me.callParent();
+    },
+
     //storeField: function ( field, newValue, oldValue, eOpts ) {
     //    var store = Ext.getStore("modulemenudock");
     //

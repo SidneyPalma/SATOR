@@ -27,6 +27,12 @@ class areas extends \Smart\Data\Model {
     private $description;
 
     /**
+     * @Policy {"nullable":false, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $workstation;
+
+    /**
      * @Policy {"nullable":false, "length":1}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"A"}
      */
@@ -101,6 +107,22 @@ class areas extends \Smart\Data\Model {
      */
     public function setDescription($description) {
         $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getWorkstation() {
+        return $this->workstation;
+    }
+
+    /**
+     * @param type $workstation
+     * @return \iAdmin\Model\areas
+     */
+    public function setWorkstation($workstation) {
+        $this->workstation = $workstation;
         return $this;
     }
 

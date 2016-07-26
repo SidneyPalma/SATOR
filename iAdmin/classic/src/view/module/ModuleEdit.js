@@ -17,7 +17,7 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
 
     constrain: true,
 
-    width: 550,
+    width: 600,
     resizable: false,
     showAnimate: true,
     layout: 'anchor',
@@ -25,7 +25,7 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
     cls: 'panel-frame',
     iconCls: "fa fa-pencil",
 
-    title: 'Editar modulo',
+    title: 'Editar módulo',
 
     defaults: {
         anchor: '100%'
@@ -50,17 +50,18 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
 
         me.items = [
             {
-                height: 261,
-                xtype: 'form',
+                xtype: 'panel',
+                name: 'module',
+                disabled: true,
                 bodyPadding: 10,
                 layout: {
-                    type: 'hbox',
-                    align: 'stretch'
+                    type: 'hbox'
                 },
                 items: [
                     {
-                        flex: 3,
-                        xtype: 'panel',
+                        flex: 1,
+                        xtype: 'form',
+                        height: 280,
                         layout: 'anchor',
                         defaults: {
                             anchor: '100%',
@@ -71,12 +72,10 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
                                 xtype: 'hiddenfield',
                                 name: 'id'
                             }, {
-                                xtype: 'label',
-                                cls: 'sub-title-label',
-                                text: 'Módulo'
-                            }, {
-                                xtype: 'container',
+                                xtype: 'fieldcontainer',
                                 layout: 'hbox',
+                                fieldLabel: 'Módulo',
+                                labelCls: 'sub-title-label',
                                 defaults: {
                                     allowBlank: false
                                 },
@@ -98,15 +97,11 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
                                 ]
                             }, {
                                 useMondaFont: true,
-                                xtype: 'textareafield',
+                                xtype: 'textfield',
                                 fieldLabel: 'Observações',
-                                name: 'observation',
-                                fieldStyle: {
-                                    color: '#C02942;',
-                                    fontSize: '14px;'
-                                }
+                                name: 'observation'
                             }, {
-                                xtype: 'container',
+                                xtype: 'fieldcontainer',
                                 layout: 'hbox',
                                 items: [
                                     {
@@ -119,15 +114,32 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
                                         name: 'modulebuild'
                                     }
                                 ]
+                            }, {
+                                xtype: 'container',
+                                layout: 'hbox',
+                                items: [
+                                    {
+                                        flex: 1,
+                                        useReadColor: true,
+                                        xtype: 'textfield',
+                                        name: 'workstation',
+                                        reference: 'workstation',
+                                        fieldLabel: 'Estação de trabalho'
+                                    }, {
+                                        margin: '30 0 0 5',
+                                        xtype: 'button',
+                                        iconCls: "fa fa-laptop",
+                                        handler: 'selectWorkstation'
+                                    }
+                                ]
                             }
                         ]
                     }, {
                         xtype: 'splitter'
                     }, {
-                        flex: 1,
-                        height: 200,
-                        xtype: 'portrait',
-                        tableName: 'module'
+                        width: 200,
+                        height: '100%',
+                        xtype: 'portrait'
                     }
                 ]
             }, {
