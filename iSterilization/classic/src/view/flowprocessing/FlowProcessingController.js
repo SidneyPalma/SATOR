@@ -70,6 +70,31 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     insertView: function () {
         var me = this,
             view = me.getView();
+    },
+
+    onFocusSearch: function () {
+        var me = this,
+            view = me.getView();
+
+        new Ext.util.KeyMap({
+            target: view.getEl(),
+            binding: [
+                {
+                    key: [10,13],
+                    fn: function(){ alert("Return was pressed"); }
+                }, {
+                    key: "SATOR_KEY",
+                    fn: function(){ alert("SATOR_KEY"); }
+                }, {
+                    key: "\t",
+                    ctrl:true,
+                    shift:true,
+                    fn: function(){ alert("tab"); }
+                }
+            ]
+        });
+
+        me.callParent();
     }
 
 });

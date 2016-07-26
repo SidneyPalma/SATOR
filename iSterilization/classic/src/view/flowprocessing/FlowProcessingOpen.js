@@ -54,7 +54,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         labelCls: 'sub-title-label',
-                        fieldLabel: 'Identificação da Leitura',
+                        fieldLabel: 'Identificação',
                         defaultType: 'textfield',
                         defaults: {
                             flex: 1,
@@ -76,37 +76,63 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                             }
                         ]
                     }, {
-                        fieldLabel: 'Leitura Inicial'
-                    }, {
-                        fieldLabel: 'Fluxo com prioridade'
-                    }, {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         labelCls: 'sub-title-label',
-                        fieldLabel: 'Identificação da Cirurgia',
+                        fieldLabel: 'Leitura',
                         defaultType: 'textfield',
                         defaults: {
                             flex: 1,
-                            disabled: true,
                             allowBlank: false,
                             fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
                                 margin: '0 5 0 0',
-                                fieldLabel: 'Local (sala)'
-                            }, {
-                                margin: '0 5 0 5',
-                                fieldLabel: 'Circulante'
+                                fieldLabel: 'Material'
                             }, {
                                 margin: '0 0 0 5',
-                                fieldLabel: 'Instrumentador'
+                                fieldLabel: 'Fluxo com prioridade'
                             }
                         ]
                     }, {
-                        disabled: true,
-                        xtype: 'textfield',
-                        fieldLabel: 'Paciente'
+                        xtype: 'fieldcontainer',
+                        layout: 'anchor',
+                        labelCls: 'sub-title-label',
+                        fieldLabel: 'Cirurgia',
+                        defaultType: 'textfield',
+                        defaults: {
+                            anchor: '100%',
+                            // disabled: true,
+                            allowBlank: false,
+                            fieldCls: 'smart-field-style-action'
+                        },
+                        items: [
+                            {
+                                xtype: 'fieldcontainer',
+                                layout: 'hbox',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    flex: 1,
+                                    allowBlank: false,
+                                    fieldCls: 'smart-field-style-action'
+                                },
+                                items: [
+                                    {
+                                        margin: '0 5 0 0',
+                                        fieldLabel: 'Local (sala)'
+                                    }, {
+                                        margin: '0 5 0 5',
+                                        fieldLabel: 'Circulante'
+                                    }, {
+                                        margin: '0 0 0 5',
+                                        fieldLabel: 'Instrumentador'
+                                    }
+                                ]
+                            }, {
+                                fieldLabel: 'Paciente'
+                            }
+                        ]
                     }
                 ]
             }
