@@ -173,7 +173,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                         width: 40,
                         align: 'center',
                         renderer: function (value, meta, rec) {
-                            return parseInt(rec.get('isactive')) ? '<div style="color: #732f49; font-size: 20px;"><i class="fa fa-check-square-o"></i></div>' : '';
+                            return parseInt(rec.get('isactive')) ? '<div style="color: rgb(145, 145, 145); font-size: 20px;"><i class="fa fa-check-square-o"></i></div>' : '';
                         }
                     }, {
                         sortable: false,
