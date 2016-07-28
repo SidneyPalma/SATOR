@@ -284,9 +284,28 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     insertFlow: function () {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            form = view.down('form'),
+            patient = form.down('searchpatient');
 
-        console.info(view.down('form').getValues());
+        console.info(patient.getRawValue());
+
+        // if(!form.isValid()) {
+        //     return false;
+        // }
+
+        // view.setLoading('Autenticando usuário...');
+        //
+        // form.submit({
+        //     scope: me,
+        //     url: me.url,
+        //     params: {
+        //         action: 'select',
+        //         method: 'insertFlow'
+        //     },
+        //     success: me.onComeInSendSuccess,
+        //     failure: me.onFormSubmitFailure
+        // });
     },
 
     /**
