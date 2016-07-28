@@ -70,7 +70,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                 fieldLabel: 'Identificação',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
-                                        if (e.getKey() === e.ENTER) {
+                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
                                             var win = field.up('window');
                                             win.fireEvent('selectusercode',win,field,eOpts);
                                         }
@@ -83,7 +83,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                 fieldLabel: 'Senha',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
-                                        if (e.getKey() === e.ENTER) {
+                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
                                             var win = field.up('window'),
                                                 button = win.down('button');
                                             button.fireEvent('click', button);
