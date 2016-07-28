@@ -12,8 +12,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
         'iAdmin.view.helper.place.PlaceSearch',
         'iAdmin.view.person.client.ClientSearch',
         'iAdmin.view.helper.flowing.FlowingSearch',
-        'iAdmin.view.helper.instrumentator.InstrumentatorSearch',
+        'iSterilization.view.flowprocessing.SearchPatient',
         'iSterilization.view.flowprocessing.SearchMaterial',
+        'iAdmin.view.helper.instrumentator.InstrumentatorSearch',
         'iSterilization.view.flowprocessing.SearchSterilizationType'
     ],
 
@@ -193,12 +194,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                     }
                                 ]
                             }, {
-                                xtype: 'hiddenfield',
-                                name: 'surgicalwarning'
-                            }, {
-                                showFetch: true,
+                                hideTrigger: true,
                                 fieldLabel: 'Paciente',
-                                name: 'patientname'
+                                name: 'patientname',
+                                xtype: 'searchpatient',
+                                hiddenNameId: 'surgicalwarning'
                             }
                         ]
                     }
