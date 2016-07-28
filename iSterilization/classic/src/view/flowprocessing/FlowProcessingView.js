@@ -6,7 +6,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
 
     requires: [
         'Ext.grid.Panel',
-        'Ext.panel.Panel',
         'Ext.grid.column.*',
         'Smart.form.Portrait',
         'iSterilization.store.flowprocessing.*',
@@ -44,10 +43,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                 iconCls: "fa fa-times"
             }
         ]
-    },
-
-    listeners: {
-        afterrender: 'onFocusSearch'
     },
 
     initComponent: function () {
@@ -142,7 +137,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                         flex: 2,
                                         name: 'search',
                                         showClear: true,
-                                        reference: 'search',
                                         fieldLabel: 'Leitura do Item',
                                         useReadColor: false,
                                         xtype: 'textfield',

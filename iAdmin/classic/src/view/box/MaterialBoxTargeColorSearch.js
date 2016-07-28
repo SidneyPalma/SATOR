@@ -2,7 +2,7 @@
 Ext.define( 'iAdmin.view.box.MaterialBoxTargeColorSearch', {
     extend: 'iAdmin.view.helper.targe.TargeColorSearch',
 
-    xtype: 'materialboxTargecolorsearch',
+    xtype: 'materialboxtargecolorsearch',
 
     requires: [
         'iAdmin.view.helper.targe.TargeColorSearch'

@@ -22,11 +22,11 @@ Ext.define( 'iSterilization.controller.App', {
         'serviceregistrationlist': {
             action: 'setServiceRegistrationList'
         },
-        'flowprocessingview': {
-            action: 'setFlowProcessingList'
-        },
         'flowprocessingdash': {
             action: 'setFlowprocessingDash'
+        },
+        'flowprocessingview': {
+            action: 'setFlowProcessingView'
         }
     },
 
@@ -67,18 +67,18 @@ Ext.define( 'iSterilization.controller.App', {
         me.onMainPageView({ xtype: 'serviceregistrationlist', iconCls: rc.get("iconCls") });
     },
 
-    setFlowProcessingList: function () {
-        var me = this,
-            rc = me.getMainTree().getSelection();
-
-        me.onMainPageView({ xtype: 'flowprocessingview', iconCls: rc.get("iconCls") });
-    },
-
     setFlowprocessingDash: function () {
         var me = this,
             rc = me.getMainTree().getSelection();
 
         me.onMainPageView({ xtype: 'flowprocessingdash', iconCls: rc.get("iconCls") });
+    },
+
+    setFlowProcessingView: function () {
+        var me = this,
+            rc = me.getMainTree().getSelection();
+
+        me.onMainPageView({ xtype: 'flowprocessingview', iconCls: rc.get("iconCls") });
     }
 
     //routes ========================>

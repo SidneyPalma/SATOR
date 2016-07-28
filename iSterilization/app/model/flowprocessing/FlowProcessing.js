@@ -17,19 +17,43 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessing', {
             name: 'sterilizationtypeid',
             type: 'int'
         }, {
-            name: 'materialboxid',
+            name: 'areasid',
             type: 'int'
         }, {
-            name: 'dateof',
-            type: 'auto'
-        }, {
-            name: 'dateto',
-            type: 'auto'
+            name: 'materialid',
+            type: 'int'
         }, {
             name: 'username',
             type: 'auto'
         }, {
             name: 'prioritylevel',
+            type: 'auto'
+        }, {
+            name: 'dateof',
+            type: 'auto'
+        }, {
+            name: 'materialboxid',
+            type: 'int'
+        }, {
+            name: 'dateto',
+            type: 'auto'
+        }, {
+            name: 'placeid',
+            type: 'int'
+        }, {
+            name: 'clientid',
+            type: 'int'
+        }, {
+            name: 'flowingid',
+            type: 'int'
+        }, {
+            name: 'instrumentatorid',
+            type: 'int'
+        }, {
+            name: 'surgicalwarning',
+            type: 'auto'
+        }, {
+            name: 'patientname',
             type: 'auto'
         }
     ]

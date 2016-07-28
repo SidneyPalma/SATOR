@@ -28,12 +28,49 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
     },
 
     fetchField: function (search, button) {
-        Ext.getStore('material').setParams({
-            query: search.getValue()
-        }).load();
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('material'),
+            params = {
+                action: 'select',
+                method: 'selectLike',
+                query: search.getValue()
+            },
+            materialbox = view.down('materialboxsearch');
+
+        if(materialbox.getValue()) {
+            params.method = 'selectBox';
+            params.materialboxid = materialbox.getValue();
+        }
+
+        store.setParams(params).load();
     },
 
     //routes ========================>
+
+    onSelectMaterialBox: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            search = view.down('textfield[name=search]');
+
+        me.fetchField(search);
+
+        // store.clearFilter();
+        // store.filter('materialboxname', combo.getRawValue());
+    },
+
+    showClear: function (field, eOpts) {
+        var me = this,
+            view = me.getView(),
+            search = view.down('textfield[name=search]');
+
+        me.fetchField(search);
+
+        // var store = Ext.getStore('material');
+        //
+        // store.removeFilter('materialboxname');
+        // store.clearFilter();
+    },
 
     getMaterialId: function (id) {
         var app = Smart.app.getController('App'),
