@@ -194,6 +194,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                     }
                                 ]
                             }, {
+                                pageSize: 10,
                                 hideTrigger: true,
                                 fieldLabel: 'Paciente',
                                 name: 'patientname',

@@ -40,9 +40,9 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchPatient', {
     tpl: [
         '<tpl for=".">',
             '<div class="x-boundlist-item">',
-                '<span style="font-size: 17px; display: block;">({id_patient}) {name}</span>',
-                '<span style="font-size: 15px; display: block;">{health_insurance}</span>',
-                '<span style="font-size: 14px; display: block; font-family: Monda;">Aviso Cirúrgico: {id}</span>',
+                '<span style="font-size: 22px; display: block; line-height: 32px;">({id_patient}) {name}</span>',
+                '<span style="font-size: 15px; display: block; line-height: 18px;">{health_insurance}</span>',
+                '<span style="font-size: 18px; display: block; line-height: 26px; border-bottom: 1px solid #d0d0d0;">Aviso Cirúrgico: {id}</span>',
             '</div>',
         '</tpl>'
     ],
