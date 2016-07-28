@@ -38,6 +38,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
 
         me.columns = [
             {
+                width: 150,
+                sortable: false,
+                text: 'Código',
+                dataIndex: 'barcode'
+            }, {
                 flex: 1,
                 sortable: false,
                 text: 'Material',

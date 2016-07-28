@@ -4,6 +4,7 @@ Ext.define( 'Ext.overrides.container.Container', {
 
     xdata: null,
 
+    smartListenKey: false,
     showSmartPanel: false,
     showSmartTheme: false,
     showSmartOpacity: false,

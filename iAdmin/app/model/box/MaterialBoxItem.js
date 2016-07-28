@@ -27,6 +27,9 @@ Ext.define( 'iAdmin.model.box.MaterialBoxItem', {
             name: 'materialname',
             type: 'auto'
         }, {
+            name: 'barcode',
+            type: 'auto'
+        }, {
             name: 'boxitemstatus',
             type: 'auto'
         }, {

@@ -9,6 +9,7 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
         'Ext.form.Panel',
         'Ext.grid.column.*',
         'iAdmin.store.itembase.*',
+        'iAdmin.view.box.MaterialBoxSearch',
         'iAdmin.view.material.MaterialController'
     ],
 
@@ -66,6 +67,11 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                 },
                 columns: [
                     {
+                        width: 150,
+                        sortable: false,
+                        text: 'Código',
+                        dataIndex: 'barcode'
+                    }, {
                         flex: 1,
                         text: 'Nome do Material',
                         dataIndex: 'name'
@@ -112,10 +118,18 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                                 xtype: 'textfield',
                                 name: 'search',
                                 reference: 'search',
-                                showFetch: true
+                                showFetch: true,
+                                margin: '0 10 0 0'
                             }, {
-                                xtype: 'splitter'
+                                width: 250,
+                                showClear: true,
+                                xtype: 'materialboxsearch',
+                                listeners: {
+                                    showclear: 'showClear',
+                                    select: 'onSelectMaterialBox'
+                                }
                             }, {
+                                margin: '0 0 0 10',
                                 xtype: 'button',
                                 iconCls: "fa fa-file-o",
                                 handler: 'insertViewNew',

@@ -7,9 +7,9 @@ Ext.define( 'Smart.util.Resource', {
 
     getFileImage: function (image) {
         var local = {
-            smart: 'resources/images/smart/smart.png',
-            users: 'resources/images/smart/users.png',
-            docto: 'resources/images/smart/docto.png'
+            smart: '/resources/images/smart/smart.png',
+            users: '/resources/images/smart/users.png',
+            docto: '/resources/images/smart/docto.png'
         };
 
         return ( local[image] || local.anest );

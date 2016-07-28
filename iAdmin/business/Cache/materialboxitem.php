@@ -15,6 +15,7 @@ class materialboxitem extends \Smart\Data\Cache {
                 mbi.id,
                 mbi.materialboxid,
                 mbi.materialid,
+                ib.barcode,
                 ib.name as materialname,
                 m.numberproceedings,
                 m.isconsigned,

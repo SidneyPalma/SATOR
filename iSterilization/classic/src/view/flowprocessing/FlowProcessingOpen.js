@@ -12,10 +12,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
         'iAdmin.view.helper.place.PlaceSearch',
         'iAdmin.view.person.client.ClientSearch',
         'iAdmin.view.helper.flowing.FlowingSearch',
-        'iAdmin.view.helper.instrumentator.InstrumentatorSearch'
+        'iAdmin.view.helper.instrumentator.InstrumentatorSearch',
+        'iSterilization.view.flowprocessing.SearchMaterial',
+        'iSterilization.view.flowprocessing.SearchSterilizationType'
     ],
 
-    width: 650,
+    width: 850,
     modal: true,
     resizable: false,
     showAnimate: true,
@@ -40,20 +42,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                 xtype: 'form',
                 bodyPadding: 10,
                 layout: 'anchor',
+                plugins:'formenter',
                 defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
+                    hideTrigger: true,
                     allowBlank: false,
                     fieldCls: 'smart-field-style-action'
                 },
                 items: [
                     {
-                        allowBlank: true,
                         xtype: 'hiddenfield',
-                        name: 'id'
+                        name: 'areasid'
                     }, {
                         xtype: 'hiddenfield',
-                        name: 'sterilizationtypeid'
+                        name: 'prioritylevel'
                     }, {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
@@ -62,24 +65,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         defaultType: 'textfield',
                         defaults: {
                             flex: 1,
+                            hideTrigger: true,
                             allowBlank: false,
-                            useReadColor: true
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
-                                showFetch: true,
                                 margin: '0 5 0 0',
-                                fieldLabel: 'Usuário (operador)'
-                            }, {
-                                showFetch: true,
-                                margin: '0 5 0 5',
+                                name: 'areasname',
+                                useReadColor: true,
                                 fieldLabel: 'Estação (área CME)'
                             }, {
-                                pageSize: 0,
                                 margin: '0 0 0 5',
-                                useReadColor: false,
-                                fieldLabel: 'Origem (cliente)',
-                                xtype: 'clientsearch'
+                                name: 'username',
+                                useReadColor: true,
+                                fieldLabel: 'Usuário (operador)'
                             }
                         ]
                     }, {
@@ -90,21 +90,72 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         defaultType: 'textfield',
                         defaults: {
                             flex: 1,
-                            allowBlank: false
-                            // fieldCls: 'smart-field-style-action'
+                            allowBlank: false,
+                            hideTrigger: true,
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
-                                showFetch: true,
                                 margin: '0 5 0 0',
-                                fieldLabel: 'Material'
+                                fieldLabel: 'Material',
+                                xtype: 'searchmaterial',
+                                hiddenNameId: 'materialid',
+                                name: 'materialname',
+                                listeners: {
+                                    select: 'onSelectMaterial',
+                                    showclear: 'showClearMaterial',
+                                    beforedeselect: 'showClearMaterial'
+                                }
                             }, {
                                 margin: '0 0 0 5',
                                 useReadColor: true,
-                                fieldLabel: 'Fluxo e prioridade'
+                                fieldLabel: 'Fluxo e prioridade',
+                                hiddenNameId: 'sterilizationtypeid',
+                                xtype: 'searchsterilizationtype',
+                                name: 'sterilizationtypename',
+                                listeners: {
+                                    select: 'onSelectSterilization',
+                                    beforequery: 'onBeforeQuerySterilization'
+                                }
                             }
                         ]
                     }, {
+                        xtype: 'fieldcontainer',
+                        layout: 'hbox',
+                        defaultType: 'textfield',
+                        defaults: {
+                            flex: 1,
+                            hideTrigger: true,
+                            allowBlank: false,
+                            fieldCls: 'smart-field-style-action'
+                        },
+                        items: [
+                            {
+                                pageSize: 0,
+                                margin: '0 5 0 0',
+                                fieldLabel: 'Origem (cliente)',
+                                xtype: 'clientsearch',
+                                name: 'clientname',
+                                hiddenNameId: 'clientid',
+                                listeners: {
+                                    select: 'onSelectClient',
+                                    showclear: 'showClearClient',
+                                    beforedeselect: 'showClearClient'
+                                }
+                            }, {
+                                allowBlank: true,
+                                useReadColor: true,
+                                margin: '0 0 0 5',
+                                fieldLabel: 'Local (sala)',
+                                xtype: 'placesearch',
+                                name: 'placename',
+                                hiddenNameId: 'placeid'
+                            }
+                        ]
+                    }, {
+                        hidden: true,
+                        disabled: true,
+                        name: 'localization',
                         xtype: 'fieldcontainer',
                         layout: 'anchor',
                         labelCls: 'sub-title-label',
@@ -112,38 +163,42 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         defaultType: 'textfield',
                         defaults: {
                             anchor: '100%',
-                            // disabled: true,
-                            allowBlank: false
-                            // fieldCls: 'smart-field-style-action'
+                            allowBlank: false,
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
-                                xtype: 'fieldcontainer',
+                                xtype: 'container',
                                 layout: 'hbox',
                                 defaultType: 'textfield',
                                 defaults: {
                                     flex: 1,
-                                    allowBlank: false
-                                    // fieldCls: 'smart-field-style-action'
+                                    hideTrigger: true,
+                                    allowBlank: false,
+                                    fieldCls: 'smart-field-style-action'
                                 },
                                 items: [
                                     {
                                         margin: '0 5 0 0',
-                                        fieldLabel: 'Local (sala)',
-                                        xtype: 'placesearch'
-                                    }, {
-                                        margin: '0 5 0 5',
                                         fieldLabel: 'Circulante',
-                                        xtype: 'flowingsearch'
+                                        xtype: 'flowingsearch',
+                                        name: 'flowingname',
+                                        hiddenNameId: 'flowingid'
                                     }, {
                                         margin: '0 0 0 5',
                                         fieldLabel: 'Instrumentador',
-                                        xtype: 'instrumentatorsearch'
+                                        xtype: 'instrumentatorsearch',
+                                        name: 'instrumentatorname',
+                                        hiddenNameId: 'instrumentatorid'
                                     }
                                 ]
                             }, {
+                                xtype: 'hiddenfield',
+                                name: 'surgicalwarning'
+                            }, {
                                 showFetch: true,
-                                fieldLabel: 'Paciente'
+                                fieldLabel: 'Paciente',
+                                name: 'patientname'
                             }
                         ]
                     }
@@ -161,7 +216,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
             iconCls: "fa fa-upload",
             text: 'Confirmar',
             showSmartTheme: 'red',
-            handler: 'insertView'
+            handler: 'insertFlow'
         }, {
             scale: 'medium',
             text: 'Fechar',

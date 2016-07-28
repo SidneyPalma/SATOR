@@ -5,11 +5,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
     xtype: 'flowprocessingdash',
 
     requires: [
-        'Ext.view.View',
         'Ext.grid.Panel',
-        'Ext.panel.Panel',
         'Ext.grid.column.*',
         'Ext.picker.Date',
+        'Ext.grid.column.*',
         'Ext.button.Segmented',
         'iAdmin.view.users.UsersSearch',
         // 'iAdmin.view.material.MaterialSearch',
@@ -20,6 +19,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
     ],
 
     layout: 'border',
+
+    // layout: {
+    //     type: 'hbox'
+    //     // align: 'stretch'
+    // },
 
     controller: 'flowprocessing',
     cls: 'panel-frame panel-frame-tpTree',
@@ -47,7 +51,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
     },
 
     listeners: {
-        afterrender: 'onAfterRenderView'
+        // keydown: 'onKeyDownDash',
+        afterrender: 'onAfterRenderDash'
     },
 
     initComponent: function () {
@@ -82,7 +87,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                         border: false,
                         cls: 'sator',
                         xtype: 'datepicker',
-                        maxDate: new Date(),
                         listeners: {
                             select: 'selectDatePicker'
                         }
@@ -115,7 +119,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                         },
                         items: [
                             {
-                                fieldLabel: 'Kit'
+                                fieldLabel: 'Kit',
+                                name: 'materialbox'
                                 // xtype: 'materialboxitemsearch'
                             }, {
                                 fieldLabel: 'Área/Sub-Area'
@@ -134,6 +139,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                     }
                 ]
             }, {
+                // flex: 1,
                 region: 'center',
                 xtype: 'container',
                 layout: {
@@ -181,13 +187,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                         name: 'traceability',
                         items: [
                             {
-
+                                xtype: 'panel'
                             }, {
                                 xtype: 'gridpanel',
                                 cls: 'processing-panel-header-flow processing-update-grid',
                                 store: Ext.create('Ext.data.Store', {
-                                    storeId: 'simpsonsStore',
-                                    fields:[ 'name', 'email', 'phone'],
+                                    fields: [ 'name', 'email', 'phone' ],
                                     data: [
                                         { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
                                         { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
