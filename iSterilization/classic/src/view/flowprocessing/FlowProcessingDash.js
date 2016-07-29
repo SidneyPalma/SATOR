@@ -65,6 +65,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
         var me = this;
 
         Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
+        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
 
         me.items = [
             {
@@ -223,6 +224,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                     '</tpl>'
                                                 ],
                                                 listeners: {
+                                                    select: 'onSelectDataView',
+                                                    deselect: 'onDeSelectDataView',
                                                     render: function (view, eOpts) {
                                                         view.tip = Ext.create('Ext.tip.ToolTip', {
                                                             minWidth: 300,
@@ -255,18 +258,38 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                             }, {
                                                 xtype: 'gridpanel',
                                                 cls: 'processing-panel-header-flow processing-update-grid',
-                                                store: Ext.create('Ext.data.Store', {
-                                                    fields: [ 'name', 'email', 'phone' ],
-                                                    data: [
-                                                        { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
-                                                        { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
-                                                        { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
-                                                        { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
-                                                    ]
-                                                }),
+                                                store: 'flowprocessingstep',
                                                 columns: [
-                                                    { text: 'Name', dataIndex: 'name' },
-                                                    { text: 'Email', dataIndex: 'email', flex: 1 }
+                                                    {
+                                                        width: 50,
+                                                        align: 'center',
+                                                        dataIndex: 'steplevel',
+                                                        renderer: function (value,metaData,record) {
+                                                            return Ext.String.leftPad(value, 2, '0');
+                                                        }
+                                                    }, {
+                                                        flex: 1,
+                                                        dataIndex: 'elementname',
+                                                        renderer: function (value,metaData,record) {
+                                                            var result = value,
+                                                                elementtype = record.get('elementtype');
+
+                                                            switch (elementtype) {
+                                                                case "uml.StartState":
+                                                                    result = 'StartState';
+                                                                    metaData.style = 'color: green; font-weight: 700;';
+                                                                    break
+                                                                case "uml.EndState":
+                                                                    result = 'EndState';
+                                                                    metaData.style = 'color: blue; font-weight: 700;';
+                                                                    break
+                                                            }
+
+                                                            return result;
+                                                        }
+                                                    }, {
+                                                        width: 180
+                                                    }
                                                 ]
                                             }
                                         ]

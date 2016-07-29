@@ -203,6 +203,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         });
 
+        Ext.getStore('flowprocessingstep').removeAll();
     },
 
     selectTraceability: function (combo,record,eOpts) {
@@ -358,6 +359,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         search = view.down('textfield[name=search]');
 
         search.focus();
+    },
+
+    onSelectDataView: function (view,record,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        Ext.getStore('flowprocessingstep').setParams({
+            method: 'selectCode',
+            query: record.get('id')
+        }).load();
+    },
+
+    onDeSelectDataView: function (view,record,eOpts) {
+        Ext.getStore('flowprocessingstep').removeAll();
     }
 
 });
