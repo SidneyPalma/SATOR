@@ -17,11 +17,12 @@ class flowprocessing extends \Smart\Data\Event {
      * @param \iSterilization\Model\flowprocessing $model
      */
     public function posInsert( \iSterilization\Model\flowprocessing &$model ) {
-//        $result = $this->setFlowStep($model);
+        $result = (object) $this->setFlowStep($model);
 
-//        if(!$result->success) {
-//            throw new \PDOException($result->text);
-//        }
+
+        if(!$result->success) {
+            throw new \PDOException($result->text);
+        }
     }
 
     public function setFlowStep($model) {
@@ -39,7 +40,7 @@ class flowprocessing extends \Smart\Data\Event {
                 $value = (strlen($value) == 0) ? 'null' : "'$value'";
             }
 
-            return $value;
+            return utf8_decode($value);
         }
 
         try {
@@ -64,22 +65,19 @@ class flowprocessing extends \Smart\Data\Event {
                                     $data,
                                     $id,
                                     $step->steplevel,
-                                    nullIf($step->elementtype),
-                                    nullIf($step->elementname),
-                                    nullIf($step->stepflaglist),
-                                    nullIf($step->stepsettings),
-                                    nullIf($step->steppriority),
-                                    nullIf($step->source),
-                                    nullIf($step->target),
+                                    nullIf(isset($step->elementtype) ? $step->elementtype : ''),
+                                    nullIf(isset($step->elementname) ? $step->elementname : ''),
+                                    nullIf(isset($step->stepflaglist) ? $step->stepflaglist : ''),
+                                    nullIf(isset($step->stepsettings) ? $step->stepsettings : ''),
+                                    nullIf(isset($step->steppriority) ? $step->steppriority : ''),
+                                    nullIf(isset($step->source) ? $step->source : null),
+                                    nullIf(isset($step->target) ? $step->target : null),
                                     nullIf($step->areasid),
                                     nullIf($step->equipmentid)
                             );
             }
 
             $insert = join ("\r\n", $list);
-
-//            print_r($insert);
-//            exit;
 
             $sql = "
                 SET XACT_ABORT ON
