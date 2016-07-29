@@ -36,7 +36,7 @@ class Black extends \PDO {
             $this->setAttribute( \PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC );
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
-            self::_setText('Não foi possível acessar a base de dados!');
+            self::_setText('Não foi possível acessar a base de dados de terceiros!');
             echo self::getResultToJson();
         }
     }
