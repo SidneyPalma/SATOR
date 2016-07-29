@@ -73,6 +73,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             ],
             scope: me
         });
+
     },
 
     flowProcessingOpen: function () {
@@ -192,6 +193,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             labelperiod = view.down('label[name=labelperiod]');
 
         labelperiod.setText(me.getDateFormated(date));
+
+        Ext.getStore('flowprocessing').setParams({
+            method: 'selectFlow',
+            dateof: Ext.util.Format.date(date,'Y-m-d')
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+            }
+        });
+
     },
 
     selectTraceability: function (combo,record,eOpts) {
@@ -210,7 +221,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         flow.setReadColor(false);
         flow.setValue(record.get('sterilizationtypeid'));
         flow.setRawValue(record.get('sterilizationpriority'));
+
         view.down('hiddenfield[name=prioritylevel]').setValue(record.get('prioritylevel'));
+        view.down('hiddenfield[name=materialboxid]').setValue(record.get('materialboxid'));
         view.down('hiddenfield[name=sterilizationtypeid]').setValue(record.get('sterilizationtypeid'));
     },
 
@@ -265,6 +278,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         placesearch.validate();
+        view.down('hiddenfield[name=clienttype]').setValue(clienttype);
+
     },
 
     showClearClient: function (field, eOpts) {
@@ -282,30 +297,53 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         placesearch.validate();
     },
 
+    onSelectPatient: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('hiddenfield[name=healthinsurance]').setValue(record.get('health_insurance'));
+    },
+
     insertFlow: function () {
         var me = this,
             view = me.getView(),
             form = view.down('form'),
-            patient = form.down('searchpatient');
+            data = form.getValues();
 
-        console.info(patient.getRawValue());
+        if(!form.isValid()) {
+            return false;
+        }
 
-        // if(!form.isValid()) {
-        //     return false;
-        // }
+        var patient = form.down('searchpatient').foundRecord();
 
-        // view.setLoading('Autenticando usuário...');
-        //
-        // form.submit({
-        //     scope: me,
-        //     url: me.url,
-        //     params: {
-        //         action: 'select',
-        //         method: 'insertFlow'
-        //     },
-        //     success: me.onComeInSendSuccess,
-        //     failure: me.onFormSubmitFailure
-        // });
+        data.patientname = patient.get('name');
+
+        view.setLoading('Gerando estrutura de leitura de materiais...');
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'insertOpenFlowView',
+                query: Ext.encode(data)
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                view.setLoading(false);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                view.close();
+
+                if(dara.startflow) {
+                    me.redirectTo( 'flowprocessingview/' + result.id);
+                }
+            }
+        });
     },
 
     /**
@@ -316,6 +354,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             view = me.getView(),
             search = view.down('textfield[name=search]');
+
+        search = view.down('textfield[name=search]');
 
         search.focus();
     }

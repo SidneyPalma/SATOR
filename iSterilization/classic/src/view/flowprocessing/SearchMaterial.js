@@ -32,6 +32,9 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             name: 'description',
             type: 'auto'
         }, {
+            name: 'materialboxid',
+            type: 'int'
+        }, {
             name: 'barcode',
             type: 'auto'
         }, {

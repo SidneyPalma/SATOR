@@ -17,8 +17,14 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessing', {
             name: 'sterilizationtypeid',
             type: 'int'
         }, {
+            name: 'sterilizationtypename',
+            type: 'auto'
+        }, {
             name: 'areasid',
             type: 'int'
+        }, {
+            name: 'areasname',
+            type: 'auto'
         }, {
             name: 'materialid',
             type: 'int'
@@ -34,6 +40,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessing', {
         }, {
             name: 'materialboxid',
             type: 'int'
+        }, {
+            name: 'materialboxname',
+            type: 'auto'
         }, {
             name: 'dateto',
             type: 'auto'

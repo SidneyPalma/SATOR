@@ -81,6 +81,7 @@ class flowprocessing extends \Smart\Data\Cache {
                 ib.name,
                 ib.barcode,
                 ib.description,
+                b.materialboxid,
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo,
                 mf.name as manufacturername,
@@ -96,6 +97,13 @@ class flowprocessing extends \Smart\Data\Cache {
                 inner join material m on ( m.id = ib.id )
                 inner join materialtypeflow mtf on ( mtf.materialid = m.id and mtf.prioritylevel = 'N' )
                 inner join sterilizationtype st on ( st.id = mtf.sterilizationtypeid )
+                outer apply (
+					select top 1
+						mbi.materialboxid
+					from
+						materialboxitem mbi
+					where mbi.materialid = ib.id
+				) b
             where ib.barcode = :barcode OR ib.name COLLATE Latin1_General_CI_AI LIKE :name";
 
         try {
@@ -177,6 +185,82 @@ class flowprocessing extends \Smart\Data\Cache {
 
             self::_setRows($rows);
             self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function insertOpenFlowView(array $data) {
+        $query = self::jsonToObject($data['query']);
+
+        $this->getStore()->getModel()->set('areasid',$query->areasid);
+        $this->getStore()->getModel()->set('clientid',$query->clientid);
+        $this->getStore()->getModel()->set('username',$query->username);
+        $this->getStore()->getModel()->set('materialid',$query->materialid);
+        $this->getStore()->getModel()->set('prioritylevel',$query->prioritylevel);
+        $this->getStore()->getModel()->set('sterilizationtypeid',$query->sterilizationtypeid);
+
+        if(isset($query->materialboxid) && strlen($query->materialboxid) != 0) {
+            $this->getStore()->getModel()->set('materialboxid',$query->materialboxid);
+        }
+
+        if($query->clienttype == '004') {
+            $this->getStore()->getModel()->set('placeid',$query->placeid);
+            $this->getStore()->getModel()->set('flowingid',$query->flowingid);
+            $this->getStore()->getModel()->set('patientname',$query->patientname);
+            $this->getStore()->getModel()->set('healthinsurance',$query->healthinsurance);
+            $this->getStore()->getModel()->set('surgicalwarning',$query->surgicalwarning);
+            $this->getStore()->getModel()->set('instrumentatorid',$query->instrumentatorid);
+        }
+
+        $result = $this->getStore()->insert();
+
+        return $result;
+    }
+
+    public function selectFlow(array $data) {
+        $dateof = $data['dateof'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                fp.id, 
+                fp.sterilizationtypeid, 
+                st.name as sterilizationtypename,
+                fp.areasid, 
+                a.name as areasname,
+                fp.materialid, 
+                fp.clientid, 
+                fp.username, 
+                fp.prioritylevel, 
+                fp.dateof, 
+                fp.materialboxid,
+                mb.name as materialboxname,
+                fp.dateto, 
+                fp.placeid, 
+                fp.flowingid, 
+                fp.instrumentatorid, 
+                fp.surgicalwarning, 
+                fp.patientname, 
+                fp.healthinsurance
+            from
+                flowprocessing fp
+                inner join areas a on ( a.id = fp.areasid )
+                left join materialbox mb on ( mb.id = fp.materialboxid )
+                inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
+            where convert(char(10),fp.dateof,126) = :dateof";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":dateof", $dateof, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);

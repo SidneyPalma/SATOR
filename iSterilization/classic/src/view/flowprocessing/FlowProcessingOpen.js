@@ -8,6 +8,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
         'Ext.form.Panel',
         'Smart.plugins.*',
         'Ext.window.Window',
+        'Ext.form.field.Checkbox',
         'Smart.form.field.ComboEnum',
         'iAdmin.view.helper.place.PlaceSearch',
         'iAdmin.view.person.client.ClientSearch',
@@ -57,30 +58,53 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         name: 'areasid'
                     }, {
                         xtype: 'hiddenfield',
+                        name: 'clienttype'
+                    }, {
+                        xtype: 'hiddenfield',
                         name: 'prioritylevel'
                     }, {
+                        xtype: 'hiddenfield',
+                        name: 'materialboxid'
+                    }, {
+                        allowBlank: true,
+                        xtype: 'hiddenfield',
+                        name: 'healthinsurance'
+                    }, {
                         xtype: 'fieldcontainer',
-                        layout: 'hbox',
+                        layout: 'anchor',
                         labelCls: 'sub-title-label',
                         fieldLabel: 'Identificação',
-                        defaultType: 'textfield',
-                        defaults: {
-                            flex: 1,
-                            hideTrigger: true,
-                            allowBlank: false,
-                            fieldCls: 'smart-field-style-action'
-                        },
                         items: [
                             {
-                                margin: '0 5 0 0',
-                                name: 'areasname',
-                                useReadColor: true,
-                                fieldLabel: 'Estação (área CME)'
+                                anchor: '100%',
+                                checked: true,
+                                xtype: 'checkboxfield',
+                                fieldLabel: 'Iniciar Leitura',
+                                boxLabel  : 'Iniciar leitura após confirmação dos parâmetros',
+                                name      : 'startflow'
                             }, {
-                                margin: '0 0 0 5',
-                                name: 'username',
-                                useReadColor: true,
-                                fieldLabel: 'Usuário (operador)'
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    flex: 1,
+                                    hideTrigger: true,
+                                    allowBlank: false,
+                                    fieldCls: 'smart-field-style-action'
+                                },
+                                items: [
+                                    {
+                                        margin: '0 5 0 0',
+                                        name: 'areasname',
+                                        useReadColor: true,
+                                        fieldLabel: 'Estação (área CME)'
+                                    }, {
+                                        margin: '0 0 0 5',
+                                        name: 'username',
+                                        useReadColor: true,
+                                        fieldLabel: 'Usuário (operador)'
+                                    }
+                                ]
                             }
                         ]
                     }, {
@@ -199,14 +223,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 fieldLabel: 'Paciente',
                                 name: 'patientname',
                                 xtype: 'searchpatient',
-                                hiddenNameId: 'surgicalwarning'
+                                hiddenNameId: 'surgicalwarning',
+                                listeners: {
+                                    select: 'onSelectPatient'
+                                }
                             }
                         ]
                     }
                 ]
             }
         ]
-
     },
 
     buttonAlign: 'center',

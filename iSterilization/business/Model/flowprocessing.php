@@ -99,6 +99,12 @@ class flowprocessing extends \Smart\Data\Model {
     private $patientname;
 
     /**
+     * @Policy {"nullable":true, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $healthinsurance;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -335,6 +341,22 @@ class flowprocessing extends \Smart\Data\Model {
      */
     public function setPatientname($patientname) {
         $this->patientname = $patientname;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getHealthinsurance() {
+        return $this->healthinsurance;
+    }
+
+    /**
+     * @param type $healthinsurance
+     * @return \iSterilization\Model\flowprocessing
+     */
+    public function setHealthinsurance($healthinsurance) {
+        $this->healthinsurance = $healthinsurance;
         return $this;
     }
 
