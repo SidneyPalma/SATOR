@@ -26,19 +26,25 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStep', {
             name: 'elementname',
             type: 'auto'
         }, {
-            name: 'setting',
+            name: 'stepflaglist',
             type: 'auto'
         }, {
-            name: 'source',
-            type: 'int'
-        }, {
-            name: 'target',
-            type: 'int'
+            name: 'stepsettings',
+            type: 'auto'
         }, {
             name: 'areasid',
             type: 'int'
         }, {
             name: 'equipmentid',
+            type: 'int'
+        }, {
+            name: 'steppriority',
+            type: 'int'
+        }, {
+            name: 'source',
+            type: 'int'
+        }, {
+            name: 'target',
             type: 'int'
         }
     ]

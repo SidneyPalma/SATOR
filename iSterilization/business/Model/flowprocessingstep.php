@@ -42,19 +42,13 @@ class flowprocessingstep extends \Smart\Data\Model {
      * @Policy {"nullable":true}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $setting;
+    private $stepflaglist;
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $source;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $target;
+    private $stepsettings;
 
     /**
      * @Policy {"nullable":true}
@@ -67,6 +61,24 @@ class flowprocessingstep extends \Smart\Data\Model {
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $equipmentid;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $steppriority;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $source;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $target;
 
     /**
      * @return type integer
@@ -151,48 +163,32 @@ class flowprocessingstep extends \Smart\Data\Model {
     /**
      * @return type string
      */
-    public function getSetting() {
-        return $this->setting;
+    public function getStepflaglist() {
+        return $this->stepflaglist;
     }
 
     /**
-     * @param type $setting
+     * @param type $stepflaglist
      * @return \iSterilization\Model\flowprocessingstep
      */
-    public function setSetting($setting) {
-        $this->setting = $setting;
+    public function setStepflaglist($stepflaglist) {
+        $this->stepflaglist = $stepflaglist;
         return $this;
     }
 
     /**
-     * @return type integer
+     * @return type string
      */
-    public function getSource() {
-        return $this->source;
+    public function getStepsettings() {
+        return $this->stepsettings;
     }
 
     /**
-     * @param type $source
+     * @param type $stepsettings
      * @return \iSterilization\Model\flowprocessingstep
      */
-    public function setSource($source) {
-        $this->source = $source;
-        return $this;
-    }
-
-    /**
-     * @return type integer
-     */
-    public function getTarget() {
-        return $this->target;
-    }
-
-    /**
-     * @param type $target
-     * @return \iSterilization\Model\flowprocessingstep
-     */
-    public function setTarget($target) {
-        $this->target = $target;
+    public function setStepsettings($stepsettings) {
+        $this->stepsettings = $stepsettings;
         return $this;
     }
 
@@ -225,6 +221,54 @@ class flowprocessingstep extends \Smart\Data\Model {
      */
     public function setEquipmentid($equipmentid) {
         $this->equipmentid = $equipmentid;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getSteppriority() {
+        return $this->steppriority;
+    }
+
+    /**
+     * @param type $steppriority
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setSteppriority($steppriority) {
+        $this->steppriority = $steppriority;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getSource() {
+        return $this->source;
+    }
+
+    /**
+     * @param type $source
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setSource($source) {
+        $this->source = $source;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getTarget() {
+        return $this->target;
+    }
+
+    /**
+     * @param type $target
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setTarget($target) {
+        $this->target = $target;
         return $this;
     }
 
