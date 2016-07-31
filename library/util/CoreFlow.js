@@ -31,56 +31,6 @@ Ext.define( 'Smart.util.CoreFlow', {
         joint.shapes.basic.Step = joint.shapes.basic.Image.extend({
             markup: '<g class="rotatable"><g class="scalable"><image/></g><rect/><text/></g>',
 
-            setAreasId: function (graph) {
-                var basic = ['basic.Area','basic.SubArea'];
-                // var basic = ['basic.Area','basic.SubArea','basic.Equipment'];
-
-                // if(!this.get('isValid')) {
-                if((!this.get('isValid'))||(this.get('type') !== 'basic.Equipment')) {
-                    this.set('areasiddo',0);
-                    this.set('areasidto',0);
-                    return false;
-                }
-
-                var links = graph.getConnectedLinks(this, { inbound : true });
-                var model = graph.getCell(links[0].prop('source/id'));
-                while ( basic.indexOf(model.get('type')) == -1 ) {
-                    links = graph.getConnectedLinks(model, { inbound : true });
-                    model = graph.getCell(links[0].prop('source/id'));
-                }
-                this.set('areasiddo',model.get('typeid'));
-
-                var links = graph.getConnectedLinks(this, { outbound : true });
-                var model = graph.getCell(links[0].prop('target/id'));
-                while ( basic.indexOf(model.get('type')) == -1 ) {
-                    links = graph.getConnectedLinks(model, { outbound : true });
-                    model = graph.getCell(links[0].prop('target/id'));
-                }
-                this.set('areasidto',model.get('typeid'));
-
-                return true;
-            },
-            setStepLevel: function (graph) {
-                var level = 0;
-                var model = this;
-                var sourceLinks = graph.getConnectedLinks(model, { inbound : true });
-                var targetLinks = graph.getConnectedLinks(model, { outbound : true });
-
-                /**
-                 * Define Level of Element
-                 * has inbound,
-                 * is basic.Step
-                 * is basic.Equipment
-                 * finally uml.StartState
-                 */
-                while ( sourceLinks.length != 0 ) {
-                    level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
-                    model = graph.getCell(sourceLinks[0].prop('source/id'));
-                    sourceLinks = graph.getConnectedLinks(model, { inbound : true });
-                }
-
-                this.set('steplevel',(this.get('type') == 'uml.StartState') ? 0 : level);
-            },
             isValid: function (graph) {
                 var exclude = ['uml.StartState','uml.BreakFlow'];
                 var sourceLinks = graph.getConnectedLinks(this, { inbound : true });
@@ -98,7 +48,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                     });
                 }
 
-                this.setStepLevel(graph);
                 this.setValidation(valid);
 
                 return valid;
@@ -270,8 +219,8 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.scope = scope;
         },
 
-        initializeEditor: function(width,height,stencil,scope) {
-            this.initializePaper(width,height,scope);
+        initializeEditor: function(width,height,stencil) {
+            this.initializePaper(width,height);
             this.initializeStencil(width,height,stencil);
             this.initializeSelection();
             this.initializeHaloAndInspector();
@@ -291,8 +240,8 @@ Ext.define( 'Smart.util.CoreFlow', {
                 clr = iconCls[iconMsg || 'error'][1],
                 html = [
                     '<div>',
-                    Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
-                    Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
+                        Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
+                        Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
                     '</div>'
                 ];
 
@@ -306,7 +255,7 @@ Ext.define( 'Smart.util.CoreFlow', {
         },
 
         // Create a graph, paper and wrap the paper in a PaperScroller.
-        initializePaper: function(width,height,scope) {
+        initializePaper: function(width,height) {
             var showToast = this.showToast;
             this.graph = new joint.dia.Graph;
 
@@ -414,18 +363,34 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.$el.find( "svg" ).css( "border", valid ? "1px solid black" : "1px solid red");
                 this.$el.find( "svg" ).css( "background-color", valid ? "white" : "rgba(245, 241, 225, .5)");
 
+                if(valid) {
+                    Ext.each(cells,function(cell){
+                        var level = 0;
+                        var model = cell;
+                        var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
+
+                        while ( sourceLinks.length != 0 ) {
+                            level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
+                            model = this.model.getCell(sourceLinks[0].prop('source/id'));
+                            sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
+                        }
+
+                        cell.set('steplevel',(cell.get('type') == 'uml.StartState') ? 0 : level);
+                    },this);
+                }
+
                 return (valid) ? 1 : 0;
             };
 
             this.paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
                 var cell = cellView.model;
-                if(cellView.model instanceof joint.shapes.bpmn.Annotation) {
+                if(cell instanceof joint.shapes.bpmn.Annotation) {
                     this.scope.fireEvent('annotateshow', this, cellView, evt, x, y, this.scope);
                 }
                 if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(cell.get('type')) != -1) {
                     this.scope.fireEvent('stepdblclick', this, cellView, evt, x, y, this.scope);
                 }
-                if (cellView.model instanceof joint.dia.Link) {
+                if (cell instanceof joint.dia.Link) {
                     this.scope.fireEvent('linkdblclick', this, cellView, evt, x, y, this.scope);
                 }
             }, this);
