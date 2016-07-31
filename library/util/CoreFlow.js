@@ -418,6 +418,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             };
 
             this.paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
+                var cell = cellView.model;
                 if(cellView.model instanceof joint.shapes.bpmn.Annotation) {
                     this.scope.fireEvent('annotateshow', this, cellView, evt, x, y, this.scope);
                 }
