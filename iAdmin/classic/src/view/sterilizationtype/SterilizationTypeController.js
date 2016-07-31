@@ -15,6 +15,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         }
     },
 
+    listeners: {
+        annotateshow: 'onAnnotateShow',
+        linkdblclick: 'onLinkDblClick',
+        stepdblclick: 'onStepDblClick',
+        targetchange: 'onTargetChange',
+        dropcellview: 'onDropCellView'
+    },
+
     fetchField: function (search, button) {
         Ext.getStore('sterilizationtype').setParams({
             query: search.getValue()
@@ -151,8 +159,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             core = Ext.create('Smart.util.CoreFlow', { url: me.url, scope: me });
 
         me.router = new core.router();
-        me.router.setScope(flow);
-        me.router.initializeEditor(flow.getWidth()-350,flow.getHeight(),core.stencil,flow);
+        me.router.setScope(me);
+        // me.router.initializeEditor(flow.getWidth()-350,flow.getHeight(),core.stencil,flow);
+        me.router.initializeEditor(flow.getWidth()-350,flow.getHeight(),core.stencil);
         me.router.graph.rules = me.getCoreFlowRule();
 
         if(view.xdata) {
@@ -214,9 +223,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     },
 
     onAnnotateShow: function (router, cellView, evt, x, y, scope) {
-        var attrs = cellView.model.get('attrs'),
+        var me = this,
+            attrs = cellView.model.get('attrs'),
             win = Ext.widget('coreflownoteview', {cellView: cellView});
-
+        me.router.setScope(me);
         win.show(null,function () {
             this.down('textareafield[name=content]').setValue(cellView.model.get('content'));
         });
@@ -229,7 +239,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             targetId = cellView.model.attributes.target,
             target = cellView.paper.model.getCell(targetId),
             win = Ext.widget('coreflowlinkview', { cellView: cellView });
-
+        me.router.setScope(me);
         win.show(null,function () {
             if(target.get('type') != 'basic.Equipment') {
                 this.down('numberfield[name=steppriority]').hide();
@@ -305,7 +315,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             targetType = target.get('type'),
             sourceType = source.get('type'),
             breakflow = ((targetType == 'basic.Equipment')&&(sourceType == 'uml.BreakFlow'));
-
+        me.router.setScope(me);
         if(targetType == 'basic.Equipment') {
             stepflaglist = target.get('stepflaglist');
             breakflow = (stepflaglist.indexOf('006') != -1);
@@ -326,7 +336,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     },
 
     onDropCellView: function (graph, cell, scope) {
+        var me = this;
 
+        me.router.setScope(me);
     },
 
     onStepDblClick: function (router, cellView, evt, x, y, scope) {
@@ -334,13 +346,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             view = me.getView(),
             stepflaglist = cellView.model.get('stepflaglist'),
             stepsettings = cellView.model.get('stepsettings'),
-            flow = view.down('form[name=sterilizationtypeflow]'),
+            // flow = view.down('form[name=sterilizationtypeflow]'),
             win = Ext.widget('coreflowcellview', {
                 cellView: cellView,
                 outerScope: me
             });
 
-        me.router.setScope(flow);
+        me.router.setScope(me);
 
         win.show(null,function () {
             var filtertype = '';
@@ -398,8 +410,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 win.down('comboenum[name=tagprinterdescription]').setRawValue(settings.tagprinterdescription);
 
                 win.down('hiddenfield[name=inputpresentationid]').setValue(settings.inputpresentationid);
-                win.down('hiddenfield[name=servicetypeequipment]').setValue(settings.servicetypeequipment);
-                win.down('hiddenfield[name=servicetypeareas]').setValue(settings.servicetypeareas);
+                win.down('hiddenfield[name=serviceequipmentid]').setValue(settings.serviceequipmentid);
+                win.down('hiddenfield[name=serviceareasid]').setValue(settings.serviceareasid);
                 win.down('hiddenfield[name=tagprinter]').setValue(settings.tagprinter);
             }
 
@@ -427,8 +439,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             tagprinterdescription: view.down('comboenum[name=tagprinterdescription]').getRawValue(),
 
             inputpresentationid: view.down('hiddenfield[name=inputpresentationid]').getValue(),
-            servicetypeequipment:  view.down('hiddenfield[name=servicetypeequipment]').getValue(),
-            servicetypeareas:  view.down('hiddenfield[name=servicetypeareas]').getValue(),
+            serviceequipmentid:  view.down('hiddenfield[name=serviceequipmentid]').getValue(),
+            serviceareasid:  view.down('hiddenfield[name=serviceareasid]').getValue(),
             tagprinter:  view.down('hiddenfield[name=tagprinter]').getValue()
         };
 

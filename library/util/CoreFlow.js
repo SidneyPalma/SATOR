@@ -6,8 +6,7 @@ Ext.define( 'Smart.util.CoreFlow', {
     ],
 
     config: {
-        url: '',
-        scope: null
+        url: ''
     },
 
     stencil: {},
@@ -270,8 +269,8 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.scope = scope;
         },
 
-        initializeEditor: function(width,height,stencil,scope) {
-            this.initializePaper(width,height,scope);
+        initializeEditor: function(width,height,stencil) {
+            this.initializePaper(width,height);
             this.initializeStencil(width,height,stencil);
             this.initializeSelection();
             this.initializeHaloAndInspector();
@@ -306,7 +305,7 @@ Ext.define( 'Smart.util.CoreFlow', {
         },
 
         // Create a graph, paper and wrap the paper in a PaperScroller.
-        initializePaper: function(width,height,scope) {
+        initializePaper: function(width,height) {
             var showToast = this.showToast;
             this.graph = new joint.dia.Graph;
 

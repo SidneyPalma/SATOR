@@ -163,13 +163,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                     }
                 ],
                 listeners: {
-                    afterlayout: 'onAfterLayout',
-                    graphchanged: 'onGraphChanged',
-                    annotateshow: 'onAnnotateShow',
-                    linkdblclick: 'onLinkDblClick',
-                    stepdblclick: 'onStepDblClick',
-                    targetchange: 'onTargetChange',
-                    dropcellview: 'onDropCellView'
+                    afterlayout: 'onAfterLayout'
+                    // graphchanged: 'onGraphChanged',
+                    // annotateshow: 'onAnnotateShow',
+                    // linkdblclick: 'onLinkDblClick',
+                    // stepdblclick: 'onStepDblClick',
+                    // targetchange: 'onTargetChange',
+                    // dropcellview: 'onDropCellView'
                 }
             }
         ];
