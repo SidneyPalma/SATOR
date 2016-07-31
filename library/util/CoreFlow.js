@@ -6,7 +6,8 @@ Ext.define( 'Smart.util.CoreFlow', {
     ],
 
     config: {
-        url: ''
+        url: '',
+        scope: null
     },
 
     stencil: {},
@@ -30,7 +31,7 @@ Ext.define( 'Smart.util.CoreFlow', {
         joint.shapes.basic.Step = joint.shapes.basic.Image.extend({
             markup: '<g class="rotatable"><g class="scalable"><image/></g><rect/><text/></g>',
 
-			setAreasId: function (graph) {
+            setAreasId: function (graph) {
                 var basic = ['basic.Area','basic.SubArea'];
                 // var basic = ['basic.Area','basic.SubArea','basic.Equipment'];
 
@@ -58,8 +59,8 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.set('areasidto',model.get('typeid'));
 
                 return true;
-			},
-			setStepLevel: function (graph) {
+            },
+            setStepLevel: function (graph) {
                 var level = 0;
                 var model = this;
                 var sourceLinks = graph.getConnectedLinks(model, { inbound : true });
@@ -79,7 +80,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                 }
 
                 this.set('steplevel',(this.get('type') == 'uml.StartState') ? 0 : level);
-			},
+            },
             isValid: function (graph) {
                 var exclude = ['uml.StartState','uml.BreakFlow'];
                 var sourceLinks = graph.getConnectedLinks(this, { inbound : true });
@@ -110,9 +111,9 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             dataRef: me.dataRef,
             defaults: joint.util.deepSupplement({
-				areasiddo: 0,
-				areasidto: 0,
-				steplevel: 0,
+                areasiddo: 0,
+                areasidto: 0,
+                steplevel: 0,
                 isValid: false,
                 type: 'basic.Step',
                 size: { width: 50, height: 50 },
@@ -269,8 +270,8 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.scope = scope;
         },
 
-        initializeEditor: function(width,height,stencil) {
-            this.initializePaper(width,height);
+        initializeEditor: function(width,height,stencil,scope) {
+            this.initializePaper(width,height,scope);
             this.initializeStencil(width,height,stencil);
             this.initializeSelection();
             this.initializeHaloAndInspector();
@@ -290,8 +291,8 @@ Ext.define( 'Smart.util.CoreFlow', {
                 clr = iconCls[iconMsg || 'error'][1],
                 html = [
                     '<div>',
-                        Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
-                        Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
+                    Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
+                    Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
                     '</div>'
                 ];
 
@@ -305,7 +306,7 @@ Ext.define( 'Smart.util.CoreFlow', {
         },
 
         // Create a graph, paper and wrap the paper in a PaperScroller.
-        initializePaper: function(width,height) {
+        initializePaper: function(width,height,scope) {
             var showToast = this.showToast;
             this.graph = new joint.dia.Graph;
 
@@ -417,12 +418,11 @@ Ext.define( 'Smart.util.CoreFlow', {
             };
 
             this.paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
-                var cell = cellView.model;
                 if(cellView.model instanceof joint.shapes.bpmn.Annotation) {
                     this.scope.fireEvent('annotateshow', this, cellView, evt, x, y, this.scope);
                 }
-
                 if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(cell.get('type')) != -1) {
+                // if(cellView.model instanceof joint.shapes.basic.Step) {
                     this.scope.fireEvent('stepdblclick', this, cellView, evt, x, y, this.scope);
                 }
                 if (cellView.model instanceof joint.dia.Link) {
