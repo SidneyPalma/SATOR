@@ -55,7 +55,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowLinkView', {
                             }, {
                                 flex: 1,
                                 minValue: 0,
-                                maxValue: 9,
+                                maxValue: 20,
                                 margin: '0 0 0 10',
                                 xtype: 'numberfield',
                                 name: 'steppriority',

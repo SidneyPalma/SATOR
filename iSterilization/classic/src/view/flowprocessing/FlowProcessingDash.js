@@ -199,6 +199,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                     {
                                         flex: 1,
                                         xtype: 'panel',
+                                        dockedItems: [
+                                            {
+                                                xtype: 'toolbar',
+                                                items: [
+                                                    {
+                                                        margin: '10 0 0 10',
+                                                        xtype: 'label',
+                                                        cls: 'sub-title-label',
+                                                        text: 'Fluxos'
+                                                    }
+                                                ]
+                                            }
+                                        ],
                                         layout: {
                                             type: 'vbox'
                                         },
@@ -217,10 +230,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 itemSelector: 'div.thumb-wrap',
                                                 tpl: [
                                                     '<tpl for=".">',
-                                                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                                                    '<div class="thumb-flow"></div>',
-                                                    '<span><a style="font-size: 14px;">{sterilizationtypename}</a></span>',
-                                                    '</div>',
+                                                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                                            '<div class="thumb-flow">',
+                                                                '<div class="thumb-flow-status"></div>',
+                                                            '</div>',
+                                                            '<span><a style="font-size: 14px;">{sterilizationtypename}</a></span>',
+                                                        '</div>',
                                                     '</tpl>'
                                                 ],
                                                 listeners: {
@@ -254,8 +269,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                             }
                                                         });
                                                     }
-                                                }
+                                                },
+                                                emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum fluxo no período...</h4>'
                                             }, {
+                                                dockedItems: [
+                                                    {
+                                                        xtype: 'toolbar',
+                                                        items: [
+                                                            {
+                                                                margin: '10 0 0 10',
+                                                                xtype: 'label',
+                                                                cls: 'sub-title-label',
+                                                                text: 'Etapas'
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
                                                 xtype: 'gridpanel',
                                                 cls: 'processing-panel-header-flow processing-update-grid',
                                                 store: 'flowprocessingstep',
@@ -288,7 +317,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                             return result;
                                                         }
                                                     }, {
-                                                        width: 180
+                                                        width: 100,
+                                                        dataIndex: 'flowstepstatusdescription',
+                                                        renderer: function (value,metaData,record) {
+                                                            var result = value,
+                                                                elementtype = record.get('elementtype');
+
+                                                            switch (elementtype) {
+                                                                case "uml.StartState":
+                                                                    result = '';
+                                                                    break
+                                                                case "uml.EndState":
+                                                                    result = '';
+                                                                    break
+                                                            }
+
+                                                            return result;
+                                                        }
                                                     }
                                                 ]
                                             }
@@ -297,7 +342,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                         xtype: 'splitter'
                                     }, {
                                         flex: 1,
-                                        xtype: 'panel'
+                                        xtype: 'panel',
+                                        dockedItems: [
+                                            {
+                                                xtype: 'toolbar',
+                                                items: [
+                                                    {
+                                                        margin: '10 0 0 10',
+                                                        xtype: 'label',
+                                                        cls: 'sub-title-label',
+                                                        text: 'Processos'
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }, {

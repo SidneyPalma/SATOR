@@ -22,13 +22,24 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     //routes ===================================>>
-    // getFlowProcessingId: function (id) {
-    //     var app = Smart.app.getController('App'),
-    //         record = Ext.getStore('flowprocessing').findRecord('id', id);
-    //
-    //     app.onMainPageView({xtype: 'flowprocessingview', xdata: record});
-    // },
-    //
+    getFlowProcessingId: function (id) {
+        var me = this,
+            app = Smart.app.getController('App');
+
+        Ext.getStore('flowprocessing').setParams({
+            method: 'selectCode',
+            query: id,
+            rows: Ext.encode({ id: id })
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                var record = records[0];
+                app.onMainPageView({xtype: 'flowprocessingview', xdata: record});
+            }
+        });
+
+    },
+
     // getFlowProcessingNew: function () {
     //     var app = Smart.app.getController('App');
     //     app.onMainPageView({xtype: 'flowprocessingview', xdata: null});
@@ -330,9 +341,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 query: Ext.encode(data)
             },
             callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
                 view.setLoading(false);
+
+                var result = Ext.decode(response.responseText);
 
                 if(!success || !result.success) {
                     return false;
@@ -340,8 +351,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 view.close();
 
-                if(dara.startflow) {
-                    me.redirectTo( 'flowprocessingview/' + result.id);
+                if(parseInt(data.startflow) == 1) {
+                    me.redirectTo( 'flowprocessingview/' + result.rows.id);
                 }
             }
         });

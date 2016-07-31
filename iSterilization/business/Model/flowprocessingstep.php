@@ -81,6 +81,18 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $target;
 
     /**
+     * @Policy {"nullable":true, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $flowstepstatus;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,flowstepstatus"}
+     */
+    private $flowstepstatusdescription;
+
+    /**
      * @return type integer
      */
     public function getId() {

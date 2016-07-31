@@ -24,11 +24,13 @@ class flowprocessingstep extends \Smart\Data\Cache {
                 fps.equipmentid, 
                 fps.steppriority, 
                 fps.source, 
-                fps.target
+                fps.target,
+                fps.flowstepstatus,
+                dbo.getEnum('flowstepstatus',fps.flowstepstatus) as flowstepstatusdescription
             from
                 flowprocessingstep fps
             where fps.flowprocessingid = :flowprocessingid
-            order by fps.steplevel";
+            order by fps.steplevel, fps.steppriority";
 
         try {
             $pdo = $proxy->prepare($sql);

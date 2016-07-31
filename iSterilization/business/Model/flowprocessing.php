@@ -105,6 +105,18 @@ class flowprocessing extends \Smart\Data\Model {
     private $healthinsurance;
 
     /**
+     * @Policy {"nullable":true, "length":1}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $flowstatus;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,flowstatus"}
+     */
+    private $flowstatusdescription;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -357,6 +369,22 @@ class flowprocessing extends \Smart\Data\Model {
      */
     public function setHealthinsurance($healthinsurance) {
         $this->healthinsurance = $healthinsurance;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getFlowstatus() {
+        return $this->flowstatus;
+    }
+
+    /**
+     * @param type $flowstatus
+     * @return \iSterilization\Model\flowprocessing
+     */
+    public function setFlowstatus($flowstatus) {
+        $this->flowstatus = $flowstatus;
         return $this;
     }
 
