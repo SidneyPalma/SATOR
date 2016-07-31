@@ -228,7 +228,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                         },
                                         items: [
                                             {
-                                                flex: 1,
+                                                height: 240,
                                                 xtype: 'dataview',
                                                 trackOver: true,
                                                 autoScroll: true,
@@ -280,6 +280,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 },
                                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum fluxo no período...</h4>'
                                             }, {
+                                                flex: 1,
                                                 dockedItems: [
                                                     {
                                                         xtype: 'toolbar',
