@@ -208,6 +208,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                         xtype: 'label',
                                                         cls: 'sub-title-label',
                                                         text: 'Fluxos'
+                                                    }, {
+                                                        xtype: 'tbfill'
+                                                    }, {
+                                                        width: 150,
+                                                        pageSize: 0,
+                                                        showClear: true,
+                                                        xtype: 'comboenum',
+                                                        name: 'flowstatusdescription'
                                                     }
                                                 ]
                                             }
@@ -281,6 +289,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                                 xtype: 'label',
                                                                 cls: 'sub-title-label',
                                                                 text: 'Etapas'
+                                                            }, {
+                                                                xtype: 'tbfill'
+                                                            }, {
+                                                                width: 150,
+                                                                pageSize: 0,
+                                                                showClear: true,
+                                                                xtype: 'comboenum',
+                                                                name: 'flowstepstatusdescription'
                                                             }
                                                         ]
                                                     }
