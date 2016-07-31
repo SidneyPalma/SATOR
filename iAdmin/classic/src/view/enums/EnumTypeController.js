@@ -55,9 +55,8 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
         });
     },
 
-    insertViewNew: function () {
-        var me = this;
-        me.redirectTo('enumtypeview');
+    insertView: function () {
+        Ext.widget('enumtypelistedit').show();
     },
 
     updateView: function () {
@@ -94,6 +93,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
                 }).load();
 
                 form.down('button[handler=updateView]').setDisabled(parseInt(record.get('reserved')));
+                form.down('button[handler=insertView]').setDisabled(parseInt(record.get('reserved')));
                 form.down('textareafield[name=observation]').setReadColor(parseInt(record.get('reserved')));
             }
         });
@@ -125,6 +125,10 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
 
         me.setModuleData('enumtypelist');
         me.setModuleForm(view.down('form'));
+
+        me._success = function (frm, action) {
+            view.close();
+        };
 
         me.updateRecord();
     }
