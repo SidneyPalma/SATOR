@@ -420,8 +420,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 win.down('comboenum[name=tagprinterdescription]').setRawValue(settings.tagprinterdescription);
 
                 win.down('hiddenfield[name=inputpresentationid]').setValue(settings.inputpresentationid);
-                win.down('hiddenfield[name=servicetypeequipment]').setValue(settings.servicetypeequipment);
-                win.down('hiddenfield[name=servicetypeareas]').setValue(settings.servicetypeareas);
+                win.down('hiddenfield[name=serviceequipmentid]').setValue(settings.serviceequipmentid);
+                win.down('hiddenfield[name=serviceareasid]').setValue(settings.serviceareasid);
                 win.down('hiddenfield[name=tagprinter]').setValue(settings.tagprinter);
             }
 
@@ -449,8 +449,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             tagprinterdescription: view.down('comboenum[name=tagprinterdescription]').getRawValue(),
 
             inputpresentationid: view.down('hiddenfield[name=inputpresentationid]').getValue(),
-            servicetypeequipment:  view.down('hiddenfield[name=servicetypeequipment]').getValue(),
-            servicetypeareas:  view.down('hiddenfield[name=servicetypeareas]').getValue(),
+            serviceequipmentid:  view.down('hiddenfield[name=serviceequipmentid]').getValue(),
+            serviceareasid:  view.down('hiddenfield[name=serviceareasid]').getValue(),
             tagprinter:  view.down('hiddenfield[name=tagprinter]').getValue()
         };
 
