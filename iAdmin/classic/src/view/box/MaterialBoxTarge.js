@@ -9,7 +9,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxTarge', {
         'Ext.grid.column.*',
         'iAdmin.store.box.*',
         'Ext.grid.plugin.CellEditing',
-        'iAdmin.view.helper.targe.TargeColorSearch',
+        'iAdmin.view.box.MaterialBoxTargeColorSearch',
         'iAdmin.view.sterilizationtype.SterilizationTypeSearch'
     ],
 
@@ -59,7 +59,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxTarge', {
                     pageSize: 0,
                     showClear: false,
                     allowBlank: false,
-                    xtype: 'materialboxTargecolorsearch'
+                    xtype: 'materialboxtargecolorsearch'
                 }
             }
         ];
