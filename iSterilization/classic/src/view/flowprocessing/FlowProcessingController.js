@@ -346,6 +346,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var result = Ext.decode(response.responseText);
 
                 if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
                     return false;
                 }
 
