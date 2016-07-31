@@ -249,34 +249,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 listeners: {
                                                     select: 'onSelectDataView',
                                                     deselect: 'onDeSelectDataView',
-                                                    render: function (view, eOpts) {
-                                                        view.tip = Ext.create('Ext.tip.ToolTip', {
-                                                            minWidth: 300,
-                                                            maxWidth: 500,
-                                                            showDelay: 800,
-                                                            dismissDelay: 0,
-                                                            target: view.el,
-                                                            trackMouse: true,
-                                                            delegate: view.itemSelector,
-                                                            renderTo: Ext.getBody(),
-                                                            listeners: {
-                                                                beforeshow: function updateTipBody(tip) {
-                                                                    var rec = view.getRecord(tip.triggerElement),
-                                                                        username = rec.get('username'),
-                                                                        patientname = rec.get('patientname'),
-                                                                        surgicalwarning = rec.get('surgicalwarning'),
-                                                                        dateof = Ext.util.Format.date(rec.get('dateof'),'d/m/Y'),
-                                                                        stringL1 = '<div>Paciente: {0} - {1}</div>',
-                                                                        stringL2 = '<div>Abertura: {0} - {1}</div>';
-
-                                                                    stringL2 = Ext.String.format(stringL2, dateof, username);
-                                                                    stringL1 = Ext.String.format(stringL1, surgicalwarning, patientname);
-
-                                                                    tip.update((patientname) ? (stringL2 + stringL1) : stringL2);
-                                                                }
-                                                            }
-                                                        });
-                                                    }
+                                                    itemdblclick: 'onItemDblClickDataView'
                                                 },
                                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum fluxo no período...</h4>'
                                             }, {

@@ -48,9 +48,10 @@ Ext.define( 'iAdmin.view.box.MaterialBoxTarge', {
                     return value;
                 }
             }, {
-                width: 30,
+                width: 40,
                 renderer: function (value,metaData,record) {
-                    metaData.style = Ext.String.format('background-color: #{0};',record.get('colorschema'));
+                    var fieldColor = '<div style="border-radius: 50%; width: 100%; height: 100%; padding: 10px; background: #{0};"></div>';
+                    return Ext.String.format(fieldColor,record.get('colorschema'));
                 }
             }, {
                 flex: 1,

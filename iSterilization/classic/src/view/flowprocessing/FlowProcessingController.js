@@ -61,12 +61,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onAfterRenderDash: function () {
         var me = this,
+            date = new Date(),
             view = me.getView(),
             datepicker = view.down('datepicker'),
             traceability = view.down('combobox[name=traceability]');
 
         datepicker.focus();
         traceability.setValue(0);
+        datepicker.setValue(date);
         me.selectDatePicker(datepicker,datepicker.getValue());
 
         view.keyMap = new Ext.util.KeyMap({
@@ -84,7 +86,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             ],
             scope: me
         });
-
     },
 
     flowProcessingOpen: function () {
@@ -385,6 +386,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onDeSelectDataView: function (view,record,eOpts) {
         Ext.getStore('flowprocessingstep').removeAll();
+    },
+
+    onItemDblClickDataView: function ( viewView, record, item, index, e, eOpts ) {
+        var me = this;
+        me.redirectTo( 'flowprocessingview/' + record.get('id'));
     }
 
 });
