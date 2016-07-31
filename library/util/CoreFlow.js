@@ -423,7 +423,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                     this.scope.fireEvent('annotateshow', this, cellView, evt, x, y, this.scope);
                 }
                 if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(cell.get('type')) != -1) {
-                // if(cellView.model instanceof joint.shapes.basic.Step) {
                     this.scope.fireEvent('stepdblclick', this, cellView, evt, x, y, this.scope);
                 }
                 if (cellView.model instanceof joint.dia.Link) {
