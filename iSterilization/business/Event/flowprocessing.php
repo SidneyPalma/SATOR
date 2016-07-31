@@ -19,7 +19,6 @@ class flowprocessing extends \Smart\Data\Event {
     public function posInsert( \iSterilization\Model\flowprocessing &$model ) {
         $result = (object) $this->setFlowStep($model);
 
-
         if(!$result->success) {
             throw new \PDOException($result->text);
         }
@@ -35,12 +34,11 @@ class flowprocessing extends \Smart\Data\Event {
             }
 
             if (is_numeric($value)) {
-                $value = (intval($value) == 0) ? 'null' : intval($value);
             } else {
-                $value = (strlen($value) == 0) ? 'null' : "'$value'";
+                $value = utf8_decode((strlen($value) == 0) ? 'null' : "'$value'");
             }
 
-            return utf8_decode($value);
+            return $value;
         }
 
         try {

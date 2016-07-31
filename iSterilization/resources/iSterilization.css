@@ -147,3 +147,12 @@
     background: rgb(250, 249, 173);
     border: 2px solid rgb(199, 244, 100);
 }
+
+.thumb-flow-status {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+
+    background: rgb(251, 228, 0);
+    border: 2px solid rgb(237, 138, 0);
+}
