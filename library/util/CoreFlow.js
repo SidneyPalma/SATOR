@@ -417,11 +417,12 @@ Ext.define( 'Smart.util.CoreFlow', {
             };
 
             this.paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
+                var cell = cellView.model;
                 if(cellView.model instanceof joint.shapes.bpmn.Annotation) {
                     this.scope.fireEvent('annotateshow', this, cellView, evt, x, y, this.scope);
                 }
-                console.info('cell:pointerdblclick', cellView.model);
-                if(cellView.model instanceof joint.shapes.basic.Step) {
+
+                if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(cell.get('type')) != -1) {
                     this.scope.fireEvent('stepdblclick', this, cellView, evt, x, y, this.scope);
                 }
                 if (cellView.model instanceof joint.dia.Link) {
