@@ -631,16 +631,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         });
     },
 
-    updateEdit: function () {
-        var me = this,
-            view = me.getView(),
-            win = Ext.widget('sterilizationtypeedit');
-
-        win.show(null,function () {
-            this.down('form').loadRecord(view.xdata);
-        });
-    },
-
     updateView: function () {
         var me = this,
             view = me.getView().down('form'),
@@ -736,6 +726,16 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             callback: function () {
                 view.setLoading(false);
             }
+        });
+    },
+
+    updateEdit: function () {
+        var me = this,
+            view = me.getView(),
+            win = Ext.widget('sterilizationtypeedit');
+
+        win.show(null,function () {
+            this.down('form').loadRecord(view.xdata);
         });
     },
 
