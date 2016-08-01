@@ -139,7 +139,6 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                                 flex: 1,
                                 iconCls: "fa fa-file-o",
                                 text: 'Novo',
-                                disabled: true,
                                 handler: 'insertView'
                             }
                         ]

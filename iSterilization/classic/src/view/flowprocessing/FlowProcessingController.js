@@ -61,12 +61,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onAfterRenderDash: function () {
         var me = this,
+            date = new Date(),
             view = me.getView(),
             datepicker = view.down('datepicker'),
             traceability = view.down('combobox[name=traceability]');
 
         datepicker.focus();
         traceability.setValue(0);
+        datepicker.setValue(date);
         me.selectDatePicker(datepicker,datepicker.getValue());
 
         view.keyMap = new Ext.util.KeyMap({
@@ -84,7 +86,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             ],
             scope: me
         });
-
     },
 
     flowProcessingOpen: function () {
@@ -346,6 +347,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var result = Ext.decode(response.responseText);
 
                 if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
                     return false;
                 }
 
@@ -384,6 +386,29 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onDeSelectDataView: function (view,record,eOpts) {
         Ext.getStore('flowprocessingstep').removeAll();
+        Ext.getStore('flowprocessingaction').removeAll();
+    },
+
+    onSelectFlowProcessingStep: function (rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            label = view.down('label[name=processlabel]');
+
+        label.setText(record.get('elementname'));
+
+        Ext.getStore('flowprocessingaction').setParams({
+            method: 'selectCode',
+            query: record.get('id')
+        }).load();
+    },
+
+    onDeSelectFlowProcessingStep: function ( rowModel, record, index, eOpts ) {
+        Ext.getStore('flowprocessingaction').removeAll();
+    },
+
+    onItemDblClickDataView: function ( viewView, record, item, index, e, eOpts ) {
+        var me = this;
+        me.redirectTo( 'flowprocessingview/' + record.get('flowprocessingstepid'));
     }
 
 });

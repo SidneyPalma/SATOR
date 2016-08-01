@@ -11,6 +11,18 @@ class flowprocessing extends \Smart\Data\Event {
      */
     public function preInsert( \iSterilization\Model\flowprocessing &$model ) {
         Session::hasProfile('','');
+        $sterilizationtypeid = $model->getSterilizationtypeid();
+
+        $pdo = $this->getProxy()->prepare("select authenticate from sterilizationtype where id = :sterilizationtypeid");
+        $pdo->bindValue(":sterilizationtypeid", $sterilizationtypeid, \PDO::PARAM_INT);
+
+        $pdo->execute();
+        $rows = $pdo->fetchAll();
+        $authenticate = $rows[0]['authenticate'];
+
+        if(intval($authenticate) == 0) {
+            throw new \PDOException('O Fluxo Selecionado para esta Leitura Não Está Autenticado!');
+        }
     }
 
     /**
@@ -84,12 +96,17 @@ class flowprocessing extends \Smart\Data\Event {
                 SET ANSI_WARNINGS ON
 
                 declare
-                    @error_code int = 0,
+                    @error_code int = 0, 
                     @error_text nvarchar(200);
 
                     BEGIN TRY
 
                         BEGIN TRAN setFlowStep;
+
+                        --RAISERROR ('Error raised in TRY block.', -- Message text.
+                        --           16, -- Severity.
+                        --           1 -- State.
+                        --           );
 
                         {$insert}
 

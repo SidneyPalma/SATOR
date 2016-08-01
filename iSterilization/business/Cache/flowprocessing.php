@@ -217,9 +217,77 @@ class flowprocessing extends \Smart\Data\Cache {
             $this->getStore()->getModel()->set('instrumentatorid',$query->instrumentatorid);
         }
 
-        $result = $this->getStore()->insert();
+        $result = self::jsonToObject($this->getStore()->insert());
 
-        return $result;
+        $step = array();
+
+        $step['flowprocessingid'] = $result->rows->id;
+
+        $this->updateStep($step);
+
+        return self::objectToJson($result);
+    }
+
+    public function updateStep(array $step) {
+        $flowprocessingid = $step['flowprocessingid'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            -- Metodo Inicia Leitura
+            select
+                fps.id,  
+                fps.steppriority, 
+                fps.steplevel, 
+                fps.elementtype, 
+                fps.elementname, 
+                fps.stepflaglist, 
+                fps.stepsettings
+            from
+                flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+            where fp.flowstatus = 'R'
+              and fps.flowstepstatus = '000'
+              and fps.elementtype not in ('uml.StartState','uml.EndState')
+              and fps.flowprocessingid = :flowprocessingid 
+            order by fps.steplevel, fps.steppriority";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            $action = new \iSterilization\Coach\flowprocessingaction();
+            $flowstep = new \iSterilization\Coach\flowprocessingstep();
+
+            while(list(, $item) = each($rows)) {
+                extract($item);
+
+                $pos = strpos($stepflaglist, '001');
+
+                if ($pos !== false) {
+                    $action->getStore()->getModel()->set('flowprocessingstepid',$id);
+                    $action->getStore()->getModel()->set('flowstepaction','001');
+                    $action->getStore()->getModel()->set('isactive',1);
+                    $action->getStore()->insert();
+
+                    $this->getStore()->getModel()->set('flowstatus','I');
+                    $this->getStore()->update();
+
+                    $date = date("Y-m-d H:i");
+                    $flowstep->getStore()->getModel()->set('id',$id);
+                    $flowstep->getStore()->getModel()->set('datestart',$date);
+                    $flowstep->getStore()->getModel()->set('flowstepstatus','001');
+                    $flowstep->getStore()->update();
+                    break;
+                }
+            }
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
     }
 
     public function selectFlow(array $data) {

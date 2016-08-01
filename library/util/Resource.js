@@ -6,11 +6,15 @@ Ext.define( 'Smart.util.Resource', {
     alternateClassName: ['Smart.Rss', 'Smart.Resource'],
 
     getFileImage: function (image) {
-        var local = {
-            smart: '/resources/images/smart/smart.png',
-            users: '/resources/images/smart/users.png',
-            docto: '/resources/images/smart/docto.png'
-        };
+        var origin = window.location.origin,
+            pathname = window.location.pathname,
+            pattern = new RegExp(Ext.manifest.name, 'gi'),
+            href = origin + pathname,
+            local = {
+                smart: href + 'resources/images/smart/smart.png',
+                users: href + 'resources/images/smart/users.png',
+                docto: href + 'resources/images/smart/docto.png'
+            };
 
         return ( local[image] || local.anest );
     },

@@ -66,6 +66,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
 
         Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
+        Ext.create('iSterilization.store.flowprocessing.FlowProcessingAction');
 
         me.items = [
             {
@@ -248,35 +249,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 ],
                                                 listeners: {
                                                     select: 'onSelectDataView',
-                                                    deselect: 'onDeSelectDataView',
-                                                    render: function (view, eOpts) {
-                                                        view.tip = Ext.create('Ext.tip.ToolTip', {
-                                                            minWidth: 300,
-                                                            maxWidth: 500,
-                                                            showDelay: 800,
-                                                            dismissDelay: 0,
-                                                            target: view.el,
-                                                            trackMouse: true,
-                                                            delegate: view.itemSelector,
-                                                            renderTo: Ext.getBody(),
-                                                            listeners: {
-                                                                beforeshow: function updateTipBody(tip) {
-                                                                    var rec = view.getRecord(tip.triggerElement),
-                                                                        username = rec.get('username'),
-                                                                        patientname = rec.get('patientname'),
-                                                                        surgicalwarning = rec.get('surgicalwarning'),
-                                                                        dateof = Ext.util.Format.date(rec.get('dateof'),'d/m/Y'),
-                                                                        stringL1 = '<div>Paciente: {0} - {1}</div>',
-                                                                        stringL2 = '<div>Abertura: {0} - {1}</div>';
-
-                                                                    stringL2 = Ext.String.format(stringL2, dateof, username);
-                                                                    stringL1 = Ext.String.format(stringL1, surgicalwarning, patientname);
-
-                                                                    tip.update((patientname) ? (stringL2 + stringL1) : stringL2);
-                                                                }
-                                                            }
-                                                        });
-                                                    }
+                                                    deselect: 'onDeSelectDataView'
+                                                    // itemdblclick: 'onItemDblClickDataView'
                                                 },
                                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum fluxo no período...</h4>'
                                             }, {
@@ -352,7 +326,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                             return result;
                                                         }
                                                     }
-                                                ]
+                                                ],
+                                                listeners: {
+                                                    select: 'onSelectFlowProcessingStep',
+                                                    deselect: 'onDeSelectFlowProcessingStep'
+                                                }
                                             }
                                         ]
                                     }, {
@@ -360,6 +338,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                     }, {
                                         flex: 1,
                                         xtype: 'panel',
+                                        layout: {
+                                            type: 'vbox'
+                                        },
+                                        defaults: {
+                                            width: '100%'
+                                        },
                                         dockedItems: [
                                             {
                                                 xtype: 'toolbar',
@@ -367,10 +351,39 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                     {
                                                         margin: '10 0 0 10',
                                                         xtype: 'label',
+                                                        name: 'processlabel',
                                                         cls: 'sub-title-label',
                                                         text: 'Processos'
                                                     }
                                                 ]
+                                            }
+                                        ],
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                xtype: 'dataview',
+                                                trackOver: true,
+                                                autoScroll: true,
+                                                multiSelect: false,
+                                                name: 'flowprocessingaction',
+                                                store: 'flowprocessingaction',
+                                                itemSelector: 'div.thumb-wrap',
+                                                tpl: [
+                                                    '<tpl for=".">',
+                                                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                                            '<div class="thumb-flow-{flowstepaction}"></div>',
+                                                            '<span>',
+                                                                '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
+                                                            '</span>',
+                                                        '</div>',
+                                                    '</tpl>'
+                                                ],
+                                                listeners: {
+                                                    // select: 'onSelectDataView',
+                                                    // deselect: 'onDeSelectDataView',
+                                                    itemdblclick: 'onItemDblClickDataView'
+                                                },
+                                                emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>'
                                             }
                                         ]
                                     }

@@ -245,9 +245,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         me.router.setScope(flow);
 
         win.show(null,function () {
-            if(target.get('type') != 'basic.Equipment') {
-                this.down('numberfield[name=steppriority]').hide();
-            }
+            // if(target.get('type') != 'basic.Equipment') {
+            //     this.down('numberfield[name=steppriority]').hide();
+            // }
             this.down('textfield[name=label]').setValue(label ? label[0].attrs.text.text : '');
             this.down('checkboxfield[name=dashedline]').setValue(attrs['.connection']['stroke-dasharray'] == "5 2");
             this.down('numberfield[name=steppriority]').setValue(label && (label.length > 1) ? label[1].attrs.text.text : '');
@@ -290,9 +290,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         var target = view.cellView.paper.model.getCell(view.cellView.model.prop('target/id'));
 
-        if(target.get('type') == 'basic.Equipment') {
+        // if(target.get('type') == 'basic.Equipment') {
             target.set('steppriority',values.steppriority);
-        }
+        // }
 
         view.close();
     },

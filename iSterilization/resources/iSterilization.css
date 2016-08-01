@@ -156,3 +156,11 @@
     background: rgb(251, 228, 0);
     border: 2px solid rgb(237, 138, 0);
 }
+
+.thumb-wrap .thumb-flow-001 {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(images/stage/MaterialReader.png);
+}
