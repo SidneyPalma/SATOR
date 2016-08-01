@@ -3,7 +3,7 @@
 namespace iSterilization\Model;
 
 /**
- * 
+ *
  * @Entity {"name":"flowprocessingstep", "logbook":true, "cache":"\\iSterilization\\Cache\\flowprocessingstep", "event":"\\iSterilization\\Event\\flowprocessingstep"}
  */
 class flowprocessingstep extends \Smart\Data\Model {
@@ -21,10 +21,34 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $flowprocessingid;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $steppriority;
+
+    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $steplevel;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $source;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $target;
+
+    /**
+     * @Policy {"nullable":true, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $username;
 
     /**
      * @Policy {"nullable":false, "length":80}
@@ -63,26 +87,8 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $equipmentid;
 
     /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $steppriority;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $source;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $target;
-
-    /**
      * @Policy {"nullable":true, "length":3}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"000"}
      */
     private $flowstepstatus;
 
@@ -91,6 +97,18 @@ class flowprocessingstep extends \Smart\Data\Model {
      * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,flowstepstatus"}
      */
     private $flowstepstatusdescription;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $datestart;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $datefinal;
 
     /**
      * @return type integer
@@ -127,6 +145,22 @@ class flowprocessingstep extends \Smart\Data\Model {
     /**
      * @return type integer
      */
+    public function getSteppriority() {
+        return $this->steppriority;
+    }
+
+    /**
+     * @param type $steppriority
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setSteppriority($steppriority) {
+        $this->steppriority = $steppriority;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
     public function getSteplevel() {
         return $this->steplevel;
     }
@@ -137,6 +171,54 @@ class flowprocessingstep extends \Smart\Data\Model {
      */
     public function setSteplevel($steplevel) {
         $this->steplevel = $steplevel;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getSource() {
+        return $this->source;
+    }
+
+    /**
+     * @param type $source
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setSource($source) {
+        $this->source = $source;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getTarget() {
+        return $this->target;
+    }
+
+    /**
+     * @param type $target
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setTarget($target) {
+        $this->target = $target;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getUsername() {
+        return $this->username;
+    }
+
+    /**
+     * @param type $username
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setUsername($username) {
+        $this->username = $username;
         return $this;
     }
 
@@ -237,50 +319,50 @@ class flowprocessingstep extends \Smart\Data\Model {
     }
 
     /**
-     * @return type integer
+     * @return type string
      */
-    public function getSteppriority() {
-        return $this->steppriority;
+    public function getFlowstepstatus() {
+        return $this->flowstepstatus;
     }
 
     /**
-     * @param type $steppriority
+     * @param type $flowstepstatus
      * @return \iSterilization\Model\flowprocessingstep
      */
-    public function setSteppriority($steppriority) {
-        $this->steppriority = $steppriority;
+    public function setFlowstepstatus($flowstepstatus) {
+        $this->flowstepstatus = $flowstepstatus;
         return $this;
     }
 
     /**
-     * @return type integer
+     * @return type string
      */
-    public function getSource() {
-        return $this->source;
+    public function getDatestart() {
+        return $this->datestart;
     }
 
     /**
-     * @param type $source
+     * @param type $datestart
      * @return \iSterilization\Model\flowprocessingstep
      */
-    public function setSource($source) {
-        $this->source = $source;
+    public function setDatestart($datestart) {
+        $this->datestart = $datestart;
         return $this;
     }
 
     /**
-     * @return type integer
+     * @return type string
      */
-    public function getTarget() {
-        return $this->target;
+    public function getDatefinal() {
+        return $this->datefinal;
     }
 
     /**
-     * @param type $target
+     * @param type $datefinal
      * @return \iSterilization\Model\flowprocessingstep
      */
-    public function setTarget($target) {
-        $this->target = $target;
+    public function setDatefinal($datefinal) {
+        $this->datefinal = $datefinal;
         return $this;
     }
 

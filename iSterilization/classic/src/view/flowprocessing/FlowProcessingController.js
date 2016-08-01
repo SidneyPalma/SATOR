@@ -386,11 +386,29 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onDeSelectDataView: function (view,record,eOpts) {
         Ext.getStore('flowprocessingstep').removeAll();
+        Ext.getStore('flowprocessingaction').removeAll();
+    },
+
+    onSelectFlowProcessingStep: function (rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            label = view.down('label[name=processlabel]');
+
+        label.setText(record.get('elementname'));
+
+        Ext.getStore('flowprocessingaction').setParams({
+            method: 'selectCode',
+            query: record.get('id')
+        }).load();
+    },
+
+    onDeSelectFlowProcessingStep: function ( rowModel, record, index, eOpts ) {
+        Ext.getStore('flowprocessingaction').removeAll();
     },
 
     onItemDblClickDataView: function ( viewView, record, item, index, e, eOpts ) {
         var me = this;
-        me.redirectTo( 'flowprocessingview/' + record.get('id'));
+        me.redirectTo( 'flowprocessingview/' + record.get('flowprocessingstepid'));
     }
 
 });

@@ -66,6 +66,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
 
         Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
+        Ext.create('iSterilization.store.flowprocessing.FlowProcessingAction');
 
         me.items = [
             {
@@ -248,8 +249,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 ],
                                                 listeners: {
                                                     select: 'onSelectDataView',
-                                                    deselect: 'onDeSelectDataView',
-                                                    itemdblclick: 'onItemDblClickDataView'
+                                                    deselect: 'onDeSelectDataView'
+                                                    // itemdblclick: 'onItemDblClickDataView'
                                                 },
                                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum fluxo no período...</h4>'
                                             }, {
@@ -325,7 +326,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                             return result;
                                                         }
                                                     }
-                                                ]
+                                                ],
+                                                listeners: {
+                                                    select: 'onSelectFlowProcessingStep',
+                                                    deselect: 'onDeSelectFlowProcessingStep'
+                                                }
                                             }
                                         ]
                                     }, {
@@ -333,6 +338,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                     }, {
                                         flex: 1,
                                         xtype: 'panel',
+                                        layout: {
+                                            type: 'vbox'
+                                        },
+                                        defaults: {
+                                            width: '100%'
+                                        },
                                         dockedItems: [
                                             {
                                                 xtype: 'toolbar',
@@ -340,10 +351,39 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                     {
                                                         margin: '10 0 0 10',
                                                         xtype: 'label',
+                                                        name: 'processlabel',
                                                         cls: 'sub-title-label',
                                                         text: 'Processos'
                                                     }
                                                 ]
+                                            }
+                                        ],
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                xtype: 'dataview',
+                                                trackOver: true,
+                                                autoScroll: true,
+                                                multiSelect: false,
+                                                name: 'flowprocessingaction',
+                                                store: 'flowprocessingaction',
+                                                itemSelector: 'div.thumb-wrap',
+                                                tpl: [
+                                                    '<tpl for=".">',
+                                                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                                            '<div class="thumb-flow-{flowstepaction}"></div>',
+                                                            '<span>',
+                                                                '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
+                                                            '</span>',
+                                                        '</div>',
+                                                    '</tpl>'
+                                                ],
+                                                listeners: {
+                                                    // select: 'onSelectDataView',
+                                                    // deselect: 'onDeSelectDataView',
+                                                    itemdblclick: 'onItemDblClickDataView'
+                                                },
+                                                emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>'
                                             }
                                         ]
                                     }
