@@ -157,6 +157,12 @@
     border: 2px solid rgb(237, 138, 0);
 }
 
+.thumb-wrap .action:hover span {
+    font-weight: 700;
+    background: rgb(232, 221, 203);
+    border: 2px solid rgb(192, 41, 66);
+}
+
 .thumb-wrap .thumb-flow-001 {
     width: 100%;
     height: 100%;

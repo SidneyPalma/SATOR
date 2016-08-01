@@ -370,7 +370,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 itemSelector: 'div.thumb-wrap',
                                                 tpl: [
                                                     '<tpl for=".">',
-                                                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                                        '<div style="margin-bottom: 10px;" class="thumb-wrap action">',
                                                             '<div class="thumb-flow-{flowstepaction}"></div>',
                                                             '<span>',
                                                                 '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
@@ -389,7 +389,30 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                     }
                                 ]
                             }, {
-
+                                flex: 1,
+                                xtype: 'dataview',
+                                trackOver: true,
+                                autoScroll: true,
+                                multiSelect: false,
+                                name: 'flowprocessingaction',
+                                store: 'flowprocessingaction',
+                                itemSelector: 'div.thumb-wrap',
+                                tpl: [
+                                    '<tpl for=".">',
+                                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                    '<div class="thumb-flow-{flowstepaction}"></div>',
+                                    '<span>',
+                                    '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
+                                    '</span>',
+                                    '</div>',
+                                    '</tpl>'
+                                ],
+                                listeners: {
+                                    // select: 'onSelectDataView',
+                                    // deselect: 'onDeSelectDataView',
+                                    itemdblclick: 'onItemDblClickDataView'
+                                },
+                                emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>'
                             }
                         ]
                     }
