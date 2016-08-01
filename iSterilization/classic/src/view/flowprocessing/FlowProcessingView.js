@@ -45,6 +45,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
         ]
     },
 
+    listeners: {
+        afterrender: 'onAfterRenderView'
+    },
+
     initComponent: function () {
         var me = this;
         me.buildItems();
@@ -92,13 +96,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                     }, {
                                         flex: 1,
                                         fieldLabel: 'Cliente',
-                                        value: 'Centro Cirúrgico'
+                                        name: 'clientname'
                                     }, {
                                         xtype: 'splitter'
                                     }, {
                                         flex: 1,
                                         fieldLabel: 'Fluxo',
-                                        value: 'Vapor Saturado (134°c)'
+                                        name: 'sterilizationtypename'
                                     }
                                 ]
                             }, {
@@ -106,7 +110,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                             }, {
                                 flex: 1,
                                 fieldLabel: 'Prioridade',
-                                value: 'Normal'
+                                name: 'priorityleveldescription'
                             }
                         ]
                     }, {
@@ -147,7 +151,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                     }, {
                                         flex: 1,
                                         fieldLabel: 'Local',
-                                        value: 'Recepção Expurgo'
+                                        name: 'areasname'
                                     }
                                 ]
                             }, {
@@ -156,7 +160,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 margin: '10 0 0 0',
                                 flex: 1,
                                 fieldLabel: 'Equipamento',
-                                value: '. . .'
+                                name: 'equipmentname'
                             }
                         ]
                     }
