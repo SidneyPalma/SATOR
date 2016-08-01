@@ -120,11 +120,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
                         BEGIN TRAN setFlowStep;
 
-                        --RAISERROR ('Error raised in TRY block.', -- Message text.
-                        --           16, -- Severity.
-                        --           1 -- State.
-                        --           );
-
                         {$insert}
 
                         COMMIT TRAN setFlowStep;
@@ -268,9 +263,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     }
 
     /**
-     *
-     * Selects
-     *
+     * Selectss
      */
 
     public function selectUserCode(array $data) {
