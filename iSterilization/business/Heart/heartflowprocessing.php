@@ -1,24 +1,19 @@
 <?php
 
-namespace iSterilization\Event;
+namespace iSterilization\Heart;
 
 use Smart\Utils\Session;
-use iSterilization\Heart\heartflowprocessing;
 
-class flowprocessing extends \Smart\Data\Event {
+class heartflowprocessing extends \Smart\Data\Proxy {
+
 
     /**
      * @param \iSterilization\Model\flowprocessing $model
      */
     public function preInsert( \iSterilization\Model\flowprocessing &$model ) {
-        Session::hasProfile('','');
-
-//        $heart = new heartflowprocessing();
-//        $heart->preInsert($model);
-
         $sterilizationtypeid = $model->getSterilizationtypeid();
 
-        $pdo = $this->getProxy()->prepare("select authenticate from sterilizationtype where id = :sterilizationtypeid");
+        $pdo = $this->prepare("select authenticate from sterilizationtype where id = :sterilizationtypeid");
         $pdo->bindValue(":sterilizationtypeid", $sterilizationtypeid, \PDO::PARAM_INT);
 
         $pdo->execute();
@@ -34,9 +29,6 @@ class flowprocessing extends \Smart\Data\Event {
      * @param \iSterilization\Model\flowprocessing $model
      */
     public function posInsert( \iSterilization\Model\flowprocessing &$model ) {
-//        $heart = new heartflowprocessing();
-//        $heart->posInsert($model);
-
         $result = (object) $this->setFlowStep($model);
 
         if(!$result->success) {
@@ -62,7 +54,7 @@ class flowprocessing extends \Smart\Data\Event {
         }
 
         try {
-            $pdo = $this->getProxy()->prepare("select dataflowstep from sterilizationtype where id = :sterilizationtypeid");
+            $pdo = $this->prepare("select dataflowstep from sterilizationtype where id = :sterilizationtypeid");
             $pdo->bindValue(":sterilizationtypeid", $sterilizationtypeid, \PDO::PARAM_INT);
 
             $pdo->execute();
@@ -80,19 +72,19 @@ class flowprocessing extends \Smart\Data\Event {
                 $data = "insert into flowprocessingstep ("  . trim(implode(', ', $fields)) . ") values ( %d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s );";
 
                 $list[] =   sprintf(
-                                    $data,
-                                    $id,
-                                    $step->steplevel,
-                                    nullIf(isset($step->elementtype) ? $step->elementtype : ''),
-                                    nullIf(isset($step->elementname) ? $step->elementname : ''),
-                                    nullIf(isset($step->stepflaglist) ? $step->stepflaglist : ''),
-                                    nullIf(isset($step->stepsettings) ? $step->stepsettings : ''),
-                                    nullIf(isset($step->steppriority) ? $step->steppriority : ''),
-                                    nullIf(isset($step->source) ? $step->source : null),
-                                    nullIf(isset($step->target) ? $step->target : null),
-                                    nullIf($step->areasid),
-                                    nullIf($step->equipmentid)
-                            );
+                    $data,
+                    $id,
+                    $step->steplevel,
+                    nullIf(isset($step->elementtype) ? $step->elementtype : ''),
+                    nullIf(isset($step->elementname) ? $step->elementname : ''),
+                    nullIf(isset($step->stepflaglist) ? $step->stepflaglist : ''),
+                    nullIf(isset($step->stepsettings) ? $step->stepsettings : ''),
+                    nullIf(isset($step->steppriority) ? $step->steppriority : ''),
+                    nullIf(isset($step->source) ? $step->source : null),
+                    nullIf(isset($step->target) ? $step->target : null),
+                    nullIf($step->areasid),
+                    nullIf($step->equipmentid)
+                );
             }
 
             $insert = join ("\r\n", $list);
@@ -133,7 +125,7 @@ class flowprocessing extends \Smart\Data\Event {
 
                     select @error_code as error_code, @error_text as error_text;";
 
-            $rows = $this->getProxy()->query($sql)->fetchAll();
+            $rows = $this->query($sql)->fetchAll();
 
             $message = $rows[0]['error_text'];
             $success = intval($rows[0]['error_code']) == 0;
@@ -148,33 +140,6 @@ class flowprocessing extends \Smart\Data\Event {
         }
 
         return self::getResult();
-    }
-
-    /**
-     * @param \iSterilization\Model\flowprocessing $model
-     */
-    public function preUpdate( \iSterilization\Model\flowprocessing &$model ) {
-        Session::hasProfile('','');
-    }
-
-    /**
-     * @param \iSterilization\Model\flowprocessing $model
-     */
-    public function posUpdate( \iSterilization\Model\flowprocessing &$model ) {
-    }
-
-    /**
-     * @param \iSterilization\Model\flowprocessing $model
-     */
-    public function preDelete( \iSterilization\Model\flowprocessing &$model ) {
-        Session::hasProfile('','');
-    }
-
-    /**
-     * @param \iSterilization\Model\flowprocessing $model
-     */
-    public function posDelete( \iSterilization\Model\flowprocessing &$model ) {
-
     }
 
 }

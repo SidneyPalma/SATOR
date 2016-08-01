@@ -455,6 +455,31 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.getStore('flowprocessingaction').removeAll();
     },
 
+    onFlowStepSelect: function (view,record,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'selectFlowStep',
+                query: record.get('id')
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                view.down('panel[name=actions]').update(result.rows);
+
+            }
+        });
+    },
+
     onFlowStepAction: function ( viewView, record, item, index, e, eOpts ) {
         var me = this,
             action = record.get('flowstepaction'),
