@@ -181,9 +181,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                         items: [
                             {
                                 flex: 2,
-                                titleAlign: 'center',
-                                iconCls: "fa fa-cubes",
-                                title: 'Materiais',
                                 xtype: 'flowprocessingmaterial'
                             }, {
                                 xtype: 'splitter'
@@ -200,19 +197,29 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 items: [
                                     {
                                         flex: 3,
-                                        titleAlign: 'center',
-                                        title: 'Material selecionado',
-                                        iconCls: "fa fa-exclamation-triangle",
+                                        dockedItems: [
+                                            {
+                                                margin: '0 0 6 0',
+                                                xtype: 'label',
+                                                cls: 'processing-field-font',
+                                                text: 'Imagem'
+                                            }
+                                        ],
                                         xtype: 'portrait',
                                         hideButtons: true
                                     }, {
                                         xtype: 'splitter'
                                     }, {
                                         flex: 2,
-                                        titleAlign: 'center',
-                                        title: 'Avisos',
-                                        xtype: 'panel',
-                                        iconCls: "fa fa-exclamation-triangle"
+                                        dockedItems: [
+                                            {
+                                                margin: '0 0 6 0',
+                                                xtype: 'label',
+                                                cls: 'processing-field-font',
+                                                text: 'Avisos'
+                                            }
+                                        ],
+                                        xtype: 'panel'
                                     }
                                 ]
                             }
@@ -221,9 +228,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                         xtype: 'splitter'
                     }, {
                         flex: 1,
-                        titleAlign: 'center',
-                        iconCls: "fa fa-database",
-                        title: 'Insumos',
                         xtype: 'flowprocessinginput'
                     }
                 ]

@@ -250,7 +250,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 listeners: {
                                                     select: 'onSelectDataView',
                                                     deselect: 'onDeSelectDataView'
-                                                    // itemdblclick: 'onItemDblClickDataView'
+                                                    // itemdblclick: 'onFlowStepAction'
                                                 },
                                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum fluxo no período...</h4>'
                                             }, {
@@ -370,8 +370,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 itemSelector: 'div.thumb-wrap',
                                                 tpl: [
                                                     '<tpl for=".">',
-                                                        '<div style="margin-bottom: 10px;" class="thumb-wrap action">',
-                                                            '<div class="thumb-flow-{flowstepaction}"></div>',
+                                                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                                            '<div class="thumb-action-{flowstepaction}"></div>',
                                                             '<span>',
                                                                 '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
                                                             '</span>',
@@ -410,7 +410,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                 listeners: {
                                     // select: 'onSelectDataView',
                                     // deselect: 'onDeSelectDataView',
-                                    itemdblclick: 'onItemDblClickDataView'
+                                    // itemdblclick: 'onFlowStepAction'
                                 },
                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>'
                             }

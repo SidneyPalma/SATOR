@@ -37,6 +37,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
     //     ]
     // }),
 
+    dockedItems: [
+        {
+            margin: '0 0 6 0',
+            xtype: 'label',
+            cls: 'processing-field-font',
+            text: 'Insumos'
+        }
+    ],
+
     initComponent: function () {
         var me = this;
         //me.buildItems();

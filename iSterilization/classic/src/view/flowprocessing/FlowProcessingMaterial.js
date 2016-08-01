@@ -27,6 +27,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
         me.callParent();
     },
 
+    dockedItems: [
+        {
+            margin: '0 0 6 0',
+            xtype: 'label',
+            cls: 'processing-field-font',
+            text: 'Materiais'
+        }
+    ],
+
     buildItems: function () {
         var me = this;
 
