@@ -55,6 +55,55 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
+    onSelectAction : function () {
+        var me = this,
+            store = Ext.getStore('flowprocessingaction');
+
+        if(!Smart.workstation) {
+            return false;
+        }
+
+        Ext.Ajax.request({
+            scope: me,
+            url: store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'selectArea',
+                query: Smart.workstation.areasid
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                store.removeAll();
+
+                if(result.rows) {
+                    store.loadData(result.rows);
+                }
+            }
+        });
+    },
+
+    onAfterRenderStep: function () {
+        var me = this,
+            view = me.getView();
+
+        if(!Smart.workstation) {
+            Smart.Msg.showToast('Estação de Trabalho Não Configurada!','error');
+            return false;
+        }
+
+        view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
+
+        Ext.getStore('flowprocessingaction').setParams({
+            method: 'selectArea',
+            query: Smart.workstation.areasid
+        }).load();
+    },
+
     /**
      * Controles para Rastreabilidade
      */
@@ -406,9 +455,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.getStore('flowprocessingaction').removeAll();
     },
 
-    onItemDblClickDataView: function ( viewView, record, item, index, e, eOpts ) {
-        var me = this;
-        me.redirectTo( 'flowprocessingview/' + record.get('flowprocessingstepid'));
+    onFlowStepAction: function ( viewView, record, item, index, e, eOpts ) {
+        var me = this,
+            action = record.get('flowstepaction'),
+            stepid = record.get('flowprocessingstepid');
+
+        switch(action) {
+            case '001':
+                    me.redirectTo( 'flowprocessingview/' + stepid);
+                break;
+        }
     }
 
 });

@@ -38,4 +38,37 @@ class flowprocessingaction extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectArea(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                fpsa.id,
+                fps.elementname,
+                fpsa.flowstepaction,
+                fpsa.flowprocessingstepid,
+                dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription
+            from 
+                flowprocessingaction fpsa
+                inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
+            where fps.areasid = :areasid";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":areasid", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }
