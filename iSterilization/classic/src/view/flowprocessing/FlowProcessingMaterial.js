@@ -14,7 +14,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     store: 'flowprocessingmaterial',
 
     listeners: {
-        select: 'onSelectMaterial'
+        select: 'onSelectMaterialFlowStepAction'
     },
 
     initComponent: function () {
