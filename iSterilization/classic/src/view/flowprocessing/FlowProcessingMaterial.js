@@ -26,9 +26,29 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     dockedItems: [
         {
             margin: '0 0 6 0',
-            xtype: 'label',
-            cls: 'processing-field-font',
-            text: 'Materiais'
+            anchor: '100%',
+            xtype: 'container',
+            items: [
+                {
+                    flex: 1,
+                    xtype: 'label',
+                    cls: 'processing-field-font',
+                    text: 'Materiais',
+                    name: 'materialboxname'
+                }, {
+                    width: 80,
+                    height: 26,
+                    xtype: 'container',
+                    html: [
+                        '<div style="float: right;">',
+                            '<div style="width: 20px; background: #713800; height: 26px; float: right;"></div>',
+                            '<div style="width: 20px; background: #42A0FF; height: 26px; float: right;"></div>',
+                            '<div style="width: 20px; background: #FF0000; height: 26px; float: right;"></div>',
+                            '<div style="width: 20px; background: #C8BFE7; height: 26px; float: right;"></div>',
+                        '</div>'
+                    ]
+                }
+            ]
         }
     ],
 

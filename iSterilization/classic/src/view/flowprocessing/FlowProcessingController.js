@@ -438,6 +438,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             view = me.getView(),
             data = view.xdata,
+            text = 'Material ({0})',
             search = view.down('textfield[name=search]');
 
         search.focus(false,200);
@@ -452,6 +453,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('textfield[name=equipmentname]').setValue(data.rows[0].equipmentname);
         view.down('textfield[name=sterilizationtypename]').setValue(data.rows[0].sterilizationtypename);
         view.down('textfield[name=priorityleveldescription]').setValue(data.rows[0].priorityleveldescription);
+        view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.rows[0].materialboxname));
     },
 
     onSelectDataView: function (view,record,eOpts) {

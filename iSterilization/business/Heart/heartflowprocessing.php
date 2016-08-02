@@ -415,14 +415,30 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 ib.name as equipmentname,
                 st.name as sterilizationtypename,
                 c.name as clientname,
+                mb.name as materialboxname,
                 dbo.getEnum('prioritylevel',fp.prioritylevel) as priorityleveldescription,
-                fps.flowstepstatus
+                fps.flowstepstatus,
+                colorschema = (
+                    select stuff
+                        (
+                            (
+                                select top 4
+                                    ',#' + tc.colorschema
+                                from
+                                    materialboxtarge mbt
+                                    inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                where mbt.materialboxid = fp.materialboxid
+                                for xml path ('')
+                            ) ,1,1,''
+                        )                
+                )
             from
                 flowprocessingaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 left join areas a on ( a.id = fps.areasid )
                 left join itembase ib on ( ib.id = fps.equipmentid )
+                left join materialbox mb on ( mb.id = fp.materialboxid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 inner join client c on ( c.id = fp.clientid )
             where fpsa.id = :id";
