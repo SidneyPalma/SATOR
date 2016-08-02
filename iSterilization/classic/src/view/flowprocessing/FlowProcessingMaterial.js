@@ -41,12 +41,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     height: 26,
                     xtype: 'container',
                     name: 'colorschema'
-                    // html: [
-                    //     '<div style="width: 20px; background: #713800; height: 26px; float: right;"></div>',
-                    //     '<div style="width: 20px; background: #42A0FF; height: 26px; float: right;"></div>',
-                    //     '<div style="width: 20px; background: #FF0000; height: 26px; float: right;"></div>',
-                    //     '<div style="width: 20px; background: #C8BFE7; height: 26px; float: right;"></div>'
-                    // ]
                 }
             ]
         }
