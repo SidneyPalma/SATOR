@@ -89,6 +89,15 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 ]
             }
         ]
-    }
+    },
+
+    dockedItems: [
+        {
+            xtype: 'pagingtoolbar',
+            store: 'materialboxitem',
+            dock: 'bottom',
+            displayInfo: true
+        }
+    ]
 
 });
