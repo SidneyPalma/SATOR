@@ -39,6 +39,10 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepMaterial', {
             type: 'auto',
             serializeType: 'date'
         }, {
+            name: 'dateto',
+            type: 'auto',
+            serializeType: 'date'
+        }, {
             name: 'filedata',
             type: 'auto',
             convert: function (value,record) {

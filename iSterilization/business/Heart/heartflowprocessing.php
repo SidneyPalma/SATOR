@@ -307,16 +307,17 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             
                     update
                         flowprocessingstepmaterial
-                        set unconformities = '010'
+                        set unconformities = '010',
+                            dateto = getDate()
                     where materialid = @materialid
                       and flowprocessingstepid = @flowprocessingstepid;
                 end
                 else
                 begin
                     insert into
-                        flowprocessingstepmaterial ( flowprocessingstepid, materialid, unconformities ) 
+                        flowprocessingstepmaterial ( flowprocessingstepid, materialid, unconformities, dateto ) 
                     values
-                        ( @flowprocessingstepid, @materialid, '010' )
+                        ( @flowprocessingstepid, @materialid, '010', getDate() )
                 end";
 
         try {

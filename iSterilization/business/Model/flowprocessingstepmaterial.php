@@ -51,6 +51,12 @@ class flowprocessingstepmaterial extends \Smart\Data\Model {
     private $dateof;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"date", "policy":true, "logallow":true, "default":""}
+     */
+    private $dateto;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -130,4 +136,19 @@ class flowprocessingstepmaterial extends \Smart\Data\Model {
         return $this;
     }
 
+    /**
+     * @return type date
+     */
+    public function getDateto() {
+        return $this->dateto;
+    }
+
+    /**
+     * @param type $dateto
+     * @return \iSterilization\Model\flowprocessingstepmaterial
+     */
+    public function setDateto($dateto) {
+        $this->dateto = $dateto;
+        return $this;
+    }
 }
