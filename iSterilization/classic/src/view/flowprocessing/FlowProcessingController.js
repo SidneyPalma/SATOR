@@ -523,7 +523,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    onSelectMaterial: function ( rowModel, record, index, eOpts) {
+    onSelectMaterialFlowStepAction: function ( rowModel, record, index, eOpts) {
         var me = this,
             view = me.getView(),
             portrait = view.down('portrait');
