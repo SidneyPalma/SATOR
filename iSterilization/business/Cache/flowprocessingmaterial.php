@@ -18,6 +18,7 @@ class flowprocessingmaterial extends \Smart\Data\Cache {
                 ib.barcode,
                 ib.name as materialname,
                 fpm.unconformities, 
+                p.name as proprietaryname,
                 dbo.getEnum('unconformities',fpm.unconformities) as unconformitiesdescription,
                 fpm.dateof,
                 dbo.binary2base64(ib.filedata) as filedata,
@@ -25,6 +26,7 @@ class flowprocessingmaterial extends \Smart\Data\Cache {
             from
                 flowprocessingmaterial fpm
                 inner join itembase ib on ( ib.id = fpm.materialid )
+                inner join proprietary p on ( p.id = ib.proprietaryid ) 
             where fpm.flowprocessingstepid = :flowprocessingstepid";
 
         try {

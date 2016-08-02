@@ -23,6 +23,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingMaterial', {
             name: 'materialname',
             type: 'auto'
         }, {
+            name: 'proprietaryname',
+            type: 'auto'
+        }, {
             name: 'barcode',
             type: 'auto'
         }, {
