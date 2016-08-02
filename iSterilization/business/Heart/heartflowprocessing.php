@@ -116,26 +116,26 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     @error_code int = 0, 
                     @error_text nvarchar(200);
 
-                    BEGIN TRY
+                BEGIN TRY
 
-                        BEGIN TRAN setFlowStep;
+                    BEGIN TRAN setFlowStep;
 
-                        {$insert}
+                    {$insert}
 
-                        COMMIT TRAN setFlowStep;
+                    COMMIT TRAN setFlowStep;
 
-                        set @error_code = 0;
-                        set @error_text = 'Atualizacoes realizadas com sucesso!';
+                    set @error_code = 0;
+                    set @error_text = 'Atualizacoes realizadas com sucesso!';
 
-                    END TRY
+                END TRY
 
-                    BEGIN CATCH
-                        ROLLBACK TRAN setFlowStep;
-                        set @error_code = error_number();
-                        set @error_text = ' # ' +error_message() + ', ' + cast(error_line() as varchar);
-                    END CATCH
+                BEGIN CATCH
+                    ROLLBACK TRAN setFlowStep;
+                    set @error_code = error_number();
+                    set @error_text = ' # ' +error_message() + ', ' + cast(error_line() as varchar);
+                END CATCH
 
-                    select @error_code as error_code, @error_text as error_text;";
+                select @error_code as error_code, @error_text as error_text;";
 
             $rows = $this->query($sql)->fetchAll();
 
@@ -237,20 +237,29 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $pos = strpos($stepflaglist, '001');
 
                 if ($pos !== false) {
+
+                    // insert flowprocessingstepaction
                     $action->getStore()->getModel()->set('flowprocessingstepid',$id);
                     $action->getStore()->getModel()->set('flowstepaction','001');
                     $action->getStore()->getModel()->set('isactive',1);
                     $action->getStore()->insert();
 
+                    // update flowprocessing
                     $flow->getStore()->getModel()->set('id',$flowprocessingid);
                     $flow->getStore()->getModel()->set('flowstatus','I');
                     $flow->getStore()->update();
 
+                    // update flowprocessingstep
                     $date = date("Y-m-d H:i");
                     $flowstep->getStore()->getModel()->set('id',$id);
                     $flowstep->getStore()->getModel()->set('datestart',$date);
                     $flowstep->getStore()->getModel()->set('flowstepstatus','001');
                     $flowstep->getStore()->update();
+
+                    $data = array();
+                    $data['id'] = $id;
+                    // insert flowprocessingmaterial
+                    $this->newFlowItem($data);
                     break;
                 }
             }
@@ -262,8 +271,72 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function newFlowItem(array $data) {
+        $id = $data['id'];
+
+        $sql = "
+            declare
+                @materialid int,
+                @materialboxid int,
+                @flowprocessingstepid int = :id;
+            
+                select
+                    @materialid = fp.materialid,
+                    @materialboxid = fp.materialboxid
+                from
+                    flowprocessing fp
+                    inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+                where fps.id = @flowprocessingstepid;
+            
+                set @materialid = coalesce(@materialid,0);
+                set @materialboxid = coalesce(@materialboxid,0);
+            
+                if(@materialboxid != 0)
+                begin
+                    insert into
+                        flowprocessingmaterial ( flowprocessingstepid, materialid, unconformities ) 
+                    select
+                        fps.id as flowprocessingstepid,
+                        mbi.materialid,
+                        '001' as unconformities
+                    from
+                        flowprocessing fp
+                        inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+                        left join materialboxitem mbi on ( mbi.materialboxid = fp.materialboxid )
+                    where fps.id = @flowprocessingstepid;
+            
+                    update
+                        flowprocessingmaterial
+                        set unconformities = '010'
+                    where materialid = @materialid
+                      and flowprocessingstepid = @flowprocessingstepid;
+                end
+                else
+                begin
+                    insert into
+                        flowprocessingmaterial ( flowprocessingstepid, materialid, unconformities ) 
+                    values
+                        ( @flowprocessingstepid, @materialid, '010' )
+                end";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResult();
+    }
+
     /**
-     * Selectss
+     * Select
      */
 
     public function selectUserCode(array $data) {

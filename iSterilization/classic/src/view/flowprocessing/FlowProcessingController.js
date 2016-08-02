@@ -442,6 +442,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         search.focus(false,200);
 
+        Ext.getStore('flowprocessingmaterial').setParams({
+            method: 'selectCode',
+            query: data.rows[0].id
+        }).load();
+
         view.down('textfield[name=areasname]').setValue(data.rows[0].areasname);
         view.down('textfield[name=clientname]').setValue(data.rows[0].clientname);
         view.down('textfield[name=equipmentname]').setValue(data.rows[0].equipmentname);

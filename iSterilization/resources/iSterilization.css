@@ -169,3 +169,21 @@
     background-repeat: no-repeat;
     background-image: url(images/stage/MaterialReader.png);
 }
+
+.unconformities {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.legend001 { background: rgb(251, 228, 0); }
+.legend002 { }
+.legend003 { }
+.legend004 { }
+.legend005 { }
+.legend006 { }
+.legend007 { }
+.legend008 { }
+.legend009 { }
+.legend010 { background: rgb(105, 210, 231); }
