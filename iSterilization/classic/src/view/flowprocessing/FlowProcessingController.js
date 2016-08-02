@@ -13,7 +13,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    url: '../iSterilization/business/Calls/flowprocessing.php',
+    // url: '../iSterilization/business/Calls/flowprocessing.php',
+    url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
     fetchField: function (search, button) {
         Ext.getStore('flowprocessing').setParams({
@@ -26,17 +27,37 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             app = Smart.app.getController('App');
 
-        Ext.getStore('flowprocessing').setParams({
-            method: 'selectCode',
-            query: id,
-            rows: Ext.encode({ id: id })
-        }).load({
+        Ext.Ajax.request({
             scope: me,
-            callback: function(records, operation, success) {
-                var record = records[0];
-                app.onMainPageView({xtype: 'flowprocessingview', xdata: record});
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'selectFlowDash',
+                query: id
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                app.onMainPageView({xtype: 'flowprocessingview', xdata: result});
             }
         });
+
+
+        // Ext.getStore('flowprocessing').setParams({
+        //     method: 'selectCode',
+        //     query: id,
+        //     rows: Ext.encode({ id: id })
+        // }).load({
+        //     scope: me,
+        //     callback: function(records, operation, success) {
+        //         var record = records[0];
+        //         app.onMainPageView({xtype: 'flowprocessingview', xdata: record});
+        //     }
+        // });
 
     },
 
@@ -256,7 +277,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         labelperiod.setText(me.getDateFormated(date));
 
         Ext.getStore('flowprocessing').setParams({
-            method: 'selectFlow',
+            method: 'selectDashFlow',
             dateof: Ext.util.Format.date(date,'Y-m-d')
         }).load({
             scope: me,
@@ -387,7 +408,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             url: me.url,
             params: {
                 action: 'select',
-                method: 'insertOpenFlowView',
+                method: 'newFlowView',
                 query: Ext.encode(data)
             },
             callback: function (options, success, response) {
@@ -416,11 +437,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onAfterRenderView: function () {
         var me = this,
             view = me.getView(),
+            data = view.xdata,
             search = view.down('textfield[name=search]');
 
-        search = view.down('textfield[name=search]');
+        search.focus(false,200);
 
-        search.focus();
+        Ext.getStore('flowprocessingmaterial').setParams({
+            method: 'selectCode',
+            query: data.rows[0].id
+        }).load();
+
+        view.down('textfield[name=areasname]').setValue(data.rows[0].areasname);
+        view.down('textfield[name=clientname]').setValue(data.rows[0].clientname);
+        view.down('textfield[name=equipmentname]').setValue(data.rows[0].equipmentname);
+        view.down('textfield[name=sterilizationtypename]').setValue(data.rows[0].sterilizationtypename);
+        view.down('textfield[name=priorityleveldescription]').setValue(data.rows[0].priorityleveldescription);
     },
 
     onSelectDataView: function (view,record,eOpts) {
@@ -455,41 +486,49 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.getStore('flowprocessingaction').removeAll();
     },
 
-    onFlowStepSelect: function (view,record,eOpts) {
-        var me = this,
-            view = me.getView();
-
-        Ext.Ajax.request({
-            scope: me,
-            url: me.url,
-            params: {
-                action: 'select',
-                method: 'selectFlowStep',
-                query: record.get('id')
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-
-                view.down('panel[name=actions]').update(result.rows);
-
-            }
-        });
-    },
+    // onFlowStepSelect: function (view,record,eOpts) {
+    //     var me = this,
+    //         view = me.getView();
+    //
+    //     Ext.Ajax.request({
+    //         scope: me,
+    //         url: me.url,
+    //         params: {
+    //             action: 'select',
+    //             method: 'selectFlowStep',
+    //             query: record.get('id')
+    //         },
+    //         callback: function (options, success, response) {
+    //             var result = Ext.decode(response.responseText);
+    //
+    //             if(!success || !result.success) {
+    //                 return false;
+    //             }
+    //
+    //             view.down('panel[name=actions]').update(result.rows);
+    //
+    //         }
+    //     });
+    // },
 
     onFlowStepAction: function ( viewView, record, item, index, e, eOpts ) {
         var me = this,
-            action = record.get('flowstepaction'),
-            stepid = record.get('flowprocessingstepid');
+            stepid = record.get('id'),
+            action = record.get('flowstepaction');
 
         switch(action) {
             case '001':
                     me.redirectTo( 'flowprocessingview/' + stepid);
                 break;
         }
+    },
+
+    onSelectMaterial: function ( rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            portrait = view.down('portrait');
+
+        portrait.beFileData(record.get('filetype'));
     }
 
 });

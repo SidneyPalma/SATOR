@@ -71,4 +71,48 @@ class flowprocessingaction extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectStep(array $data) {
+        $query = $data['query'];
+
+        $sql = "
+            select
+                fps.id,
+                fps.datestart,
+                fps.elementname,
+                fps.elementtype,
+                fps.stepflaglist,
+                fps.stepsettings,
+                fps.steppriority,
+                a.name as areasname,
+                c.name as clientname,
+                ib.name as equipmentname,
+                st.name as sterilizationtypename,
+                dbo.getEnum('prioritylevel',fp.prioritylevel) as priorityleveldescription,
+                fps.flowstepstatus
+            from
+                flowprocessingaction fpsa
+                inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                left join areas a on ( a.id = fps.areasid )
+                left join itembase ib on ( ib.id = fps.equipmentid )
+                inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
+                inner join client c on ( c.id = fp.clientid )
+            where fpsa.id = :actionid";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":actionid", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }
