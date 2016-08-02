@@ -4,12 +4,12 @@ namespace iSterilization\Coach;
 
 use Smart\Utils\Session;
 
-class flowprocessingaction extends \Smart\Setup\Setup {
+class flowprocessingstepmaterial extends \Smart\Setup\Setup {
 
     /**
-     * @var \iSterilization\Model\flowprocessingaction $model
+     * @var \iSterilization\Model\flowprocessingstepmaterial $model
      */
-    public $model = '\iSterilization\Model\flowprocessingaction';
+    public $model = '\iSterilization\Model\flowprocessingstepmaterial';
 
     public function select() {
         try {

@@ -4,9 +4,9 @@ namespace iSterilization\Model;
 
 /**
  * 
- * @Entity {"name":"flowprocessingaction", "logbook":true, "cache":"\\iSterilization\\Cache\\flowprocessingaction", "event":"\\iSterilization\\Event\\flowprocessingaction"}
+ * @Entity {"name":"flowprocessingstepaction", "logbook":true, "cache":"\\iSterilization\\Cache\\flowprocessingstepaction", "event":"\\iSterilization\\Event\\flowprocessingstepaction"}
  */
-class flowprocessingaction extends \Smart\Data\Model {
+class flowprocessingstepaction extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
@@ -41,7 +41,7 @@ class flowprocessingaction extends \Smart\Data\Model {
 
     /**
      * @param type $id
-     * @return \iSterilization\Model\flowprocessingaction
+     * @return \iSterilization\Model\flowprocessingstepaction
      */
     public function setId($id) {
         $this->id = $id;
@@ -57,7 +57,7 @@ class flowprocessingaction extends \Smart\Data\Model {
 
     /**
      * @param type $flowprocessingstepid
-     * @return \iSterilization\Model\flowprocessingaction
+     * @return \iSterilization\Model\flowprocessingstepaction
      */
     public function setFlowprocessingstepid($flowprocessingstepid) {
         $this->flowprocessingstepid = $flowprocessingstepid;
@@ -73,7 +73,7 @@ class flowprocessingaction extends \Smart\Data\Model {
 
     /**
      * @param type $flowstepaction
-     * @return \iSterilization\Model\flowprocessingaction
+     * @return \iSterilization\Model\flowprocessingstepaction
      */
     public function setFlowstepaction($flowstepaction) {
         $this->flowstepaction = $flowstepaction;
@@ -89,7 +89,7 @@ class flowprocessingaction extends \Smart\Data\Model {
 
     /**
      * @param type $isactive
-     * @return \iSterilization\Model\flowprocessingaction
+     * @return \iSterilization\Model\flowprocessingstepaction
      */
     public function setIsactive($isactive) {
         $this->isactive = $isactive;

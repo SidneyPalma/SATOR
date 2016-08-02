@@ -2,9 +2,9 @@
 
 namespace iSterilization\Cache;
 
-use iSterilization\Model\flowprocessingmaterial as Model;
+use iSterilization\Model\flowprocessingstepmaterial as Model;
 
-class flowprocessingmaterial extends \Smart\Data\Cache {
+class flowprocessingstepmaterial extends \Smart\Data\Cache {
 
     public function selectCode(array $data) {
         $query = $data['query'];
@@ -24,7 +24,7 @@ class flowprocessingmaterial extends \Smart\Data\Cache {
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo
             from
-                flowprocessingmaterial fpm
+                flowprocessingstepmaterial fpm
                 inner join itembase ib on ( ib.id = fpm.materialid )
                 inner join proprietary p on ( p.id = ib.proprietaryid ) 
             where fpm.flowprocessingstepid = :flowprocessingstepid";

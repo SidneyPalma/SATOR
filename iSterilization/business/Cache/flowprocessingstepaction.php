@@ -2,9 +2,9 @@
 
 namespace iSterilization\Cache;
 
-use iSterilization\Model\flowprocessingaction as Model;
+use iSterilization\Model\flowprocessingstepaction as Model;
 
-class flowprocessingaction extends \Smart\Data\Cache {
+class flowprocessingstepaction extends \Smart\Data\Cache {
 
     public function selectCode(array $data) {
         $query = $data['query'];
@@ -17,7 +17,7 @@ class flowprocessingaction extends \Smart\Data\Cache {
                 fpsa.flowprocessingstepid,
                 dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription
             from 
-                flowprocessingaction fpsa
+                flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
             where fpsa.flowprocessingstepid = :flowprocessingstepid";
 
@@ -51,7 +51,7 @@ class flowprocessingaction extends \Smart\Data\Cache {
                 fpsa.flowprocessingstepid,
                 dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription
             from 
-                flowprocessingaction fpsa
+                flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
             where fps.areasid = :areasid";
 
@@ -91,7 +91,7 @@ class flowprocessingaction extends \Smart\Data\Cache {
                 dbo.getEnum('prioritylevel',fp.prioritylevel) as priorityleveldescription,
                 fps.flowstepstatus
             from
-                flowprocessingaction fpsa
+                flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 left join areas a on ( a.id = fps.areasid )

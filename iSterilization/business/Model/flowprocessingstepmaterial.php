@@ -4,9 +4,9 @@ namespace iSterilization\Model;
 
 /**
  * 
- * @Entity {"name":"flowprocessingmaterial", "logbook":true, "cache":"\\iSterilization\\Cache\\flowprocessingmaterial", "event":"\\iSterilization\\Event\\flowprocessingmaterial"}
+ * @Entity {"name":"flowprocessingstepmaterial", "logbook":true, "cache":"\\iSterilization\\Cache\\flowprocessingstepmaterial", "event":"\\iSterilization\\Event\\flowprocessingstepmaterial"}
  */
-class flowprocessingmaterial extends \Smart\Data\Model {
+class flowprocessingstepmaterial extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
@@ -59,7 +59,7 @@ class flowprocessingmaterial extends \Smart\Data\Model {
 
     /**
      * @param type $id
-     * @return \iSterilization\Model\flowprocessingmaterial
+     * @return \iSterilization\Model\flowprocessingstepmaterial
      */
     public function setId($id) {
         $this->id = $id;
@@ -75,7 +75,7 @@ class flowprocessingmaterial extends \Smart\Data\Model {
 
     /**
      * @param type $flowprocessingstepid
-     * @return \iSterilization\Model\flowprocessingmaterial
+     * @return \iSterilization\Model\flowprocessingstepmaterial
      */
     public function setFlowprocessingstepid($flowprocessingstepid) {
         $this->flowprocessingstepid = $flowprocessingstepid;
@@ -91,7 +91,7 @@ class flowprocessingmaterial extends \Smart\Data\Model {
 
     /**
      * @param type $materialid
-     * @return \iSterilization\Model\flowprocessingmaterial
+     * @return \iSterilization\Model\flowprocessingstepmaterial
      */
     public function setMaterialid($materialid) {
         $this->materialid = $materialid;
@@ -107,7 +107,7 @@ class flowprocessingmaterial extends \Smart\Data\Model {
 
     /**
      * @param type $unconformities
-     * @return \iSterilization\Model\flowprocessingmaterial
+     * @return \iSterilization\Model\flowprocessingstepmaterial
      */
     public function setUnconformities($unconformities) {
         $this->unconformities = $unconformities;
@@ -123,7 +123,7 @@ class flowprocessingmaterial extends \Smart\Data\Model {
 
     /**
      * @param type $dateof
-     * @return \iSterilization\Model\flowprocessingmaterial
+     * @return \iSterilization\Model\flowprocessingstepmaterial
      */
     public function setDateof($dateof) {
         $this->dateof = $dateof;

@@ -1,5 +1,5 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingMaterial', {
+Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepMaterial', {
     extend: 'Ext.data.Model',
 
     requires: [

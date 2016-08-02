@@ -228,7 +228,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $rows = $pdo->fetchAll();
 
             $flow = new \iSterilization\Coach\flowprocessing();
-            $action = new \iSterilization\Coach\flowprocessingaction();
+            $action = new \iSterilization\Coach\flowprocessingstepaction();
             $flowstep = new \iSterilization\Coach\flowprocessingstep();
 
             while(list(, $item) = each($rows)) {
@@ -258,7 +258,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
                     $data = array();
                     $data['id'] = $id;
-                    // insert flowprocessingmaterial
+                    // insert flowprocessingstepmaterial
                     $this->newFlowItem($data);
                     break;
                 }
@@ -294,7 +294,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 if(@materialboxid != 0)
                 begin
                     insert into
-                        flowprocessingmaterial ( flowprocessingstepid, materialid, unconformities ) 
+                        flowprocessingstepmaterial ( flowprocessingstepid, materialid, unconformities ) 
                     select
                         fps.id as flowprocessingstepid,
                         mbi.materialid,
@@ -306,7 +306,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     where fps.id = @flowprocessingstepid;
             
                     update
-                        flowprocessingmaterial
+                        flowprocessingstepmaterial
                         set unconformities = '010'
                     where materialid = @materialid
                       and flowprocessingstepid = @flowprocessingstepid;
@@ -314,7 +314,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 else
                 begin
                     insert into
-                        flowprocessingmaterial ( flowprocessingstepid, materialid, unconformities ) 
+                        flowprocessingstepmaterial ( flowprocessingstepid, materialid, unconformities ) 
                     values
                         ( @flowprocessingstepid, @materialid, '010' )
                 end";
@@ -433,7 +433,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         )                
                 )
             from
-                flowprocessingaction fpsa
+                flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 left join areas a on ( a.id = fps.areasid )
