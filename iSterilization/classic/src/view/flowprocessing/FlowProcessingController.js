@@ -497,30 +497,47 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.getStore('flowprocessingaction').removeAll();
     },
 
-    // onFlowStepSelect: function (view,record,eOpts) {
-    //     var me = this,
-    //         view = me.getView();
-    //
-    //     Ext.Ajax.request({
-    //         scope: me,
-    //         url: me.url,
-    //         params: {
-    //             action: 'select',
-    //             method: 'selectFlowStep',
-    //             query: record.get('id')
-    //         },
-    //         callback: function (options, success, response) {
-    //             var result = Ext.decode(response.responseText);
-    //
-    //             if(!success || !result.success) {
-    //                 return false;
-    //             }
-    //
-    //             view.down('panel[name=actions]').update(result.rows);
-    //
-    //         }
-    //     });
-    // },
+    onFlowStepSelect: function (view,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('flowprocessing'),
+            propertygrid = view.down('propertygrid');
+
+        store.setParams({
+            method: 'selectDashStep',
+            query: record.get('flowprocessingid')
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                var source = {},
+                    record = records[0],
+                    fields = [
+                        'patientname',
+                        'materialboxname',
+                        'surgicalwarning',
+                        'healthinsurance',
+                        'sterilizationtypename'
+                    ];
+
+                Ext.each(fields,function(item) {
+                    source[item] = record.get(item);
+                });
+
+                propertygrid.setSource(source);
+                propertygrid.getColumns()[0].hide();
+            }
+        });
+    },
+
+    onFlowStepDeSelect: function () {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('flowprocessing'),
+            propertygrid = view.down('propertygrid');
+
+        store.removeAll();
+        propertygrid.setSource({});
+    },
 
     onFlowStepAction: function ( viewView, record, item, index, e, eOpts ) {
         var me = this,

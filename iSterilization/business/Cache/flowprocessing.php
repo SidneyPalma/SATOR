@@ -180,4 +180,52 @@ class flowprocessing extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectDashStep(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                --fp.id, 
+                --fp.sterilizationtypeid, 
+                st.name as sterilizationtypename,
+                --fp.areasid, 
+                --a.name as areasname,
+                --fp.materialid, 
+                --fp.clientid, 
+                --fp.username, 
+                fp.prioritylevel, 
+                --fp.dateof, 
+                --fp.materialboxid,
+                mb.name as materialboxname,
+                --fp.dateto, 
+                --fp.placeid, 
+                --fp.flowingid, 
+                --fp.instrumentatorid, 
+                fp.surgicalwarning, 
+                fp.patientname, 
+                fp.healthinsurance
+            from
+                flowprocessing fp
+                inner join areas a on ( a.id = fp.areasid )
+                left join materialbox mb on ( mb.id = fp.materialboxid )
+                inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
+            where fp.id = :id";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }

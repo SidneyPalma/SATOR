@@ -187,3 +187,18 @@
 .legend008 { }
 .legend009 { }
 .legend010 { background: rgb(99, 98, 248); }
+
+.flowprocessingstep .x-grid-item {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+     background-color: transparent !important;
+}
+
+.flowprocessingstep .x-grid-item:hover {
+    color: rgb(251, 228, 0);
+}
+
+.flowprocessingstep .x-grid-empty {
+    display: none;
+}

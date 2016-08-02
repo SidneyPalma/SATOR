@@ -47,6 +47,7 @@ class flowprocessingaction extends \Smart\Data\Cache {
                 fpsa.id,
                 fps.elementname,
                 fpsa.flowstepaction,
+                fps.flowprocessingid,
                 fpsa.flowprocessingstepid,
                 dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription
             from 
