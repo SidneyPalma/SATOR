@@ -89,8 +89,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 items: [
                                     {
                                         flex: 1,
-                                        fieldLabel: 'Operador',
-                                        value: 'sator.etimba'
+                                        fieldLabel: 'Operador'
                                     }, {
                                         xtype: 'splitter'
                                     }, {
