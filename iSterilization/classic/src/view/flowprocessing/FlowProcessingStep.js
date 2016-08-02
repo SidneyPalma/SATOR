@@ -149,4 +149,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         ];
     }
 
+    // TODO: Criar Icone para Consultar Material, Criar Protocolo para Consultar Material
+
 });
