@@ -82,7 +82,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                             return !( rowIndex == c-1 && c != 0 );
                         }
                     }, {
-
                         handler: 'deleteLayout',
                         iconCls: "delete-icon fa fa-minus-circle action-delete-color-font"
                     }
