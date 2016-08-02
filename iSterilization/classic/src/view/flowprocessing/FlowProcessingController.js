@@ -433,13 +433,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Processamento e Leitura
      */
-
     onAfterRenderView: function () {
         var me = this,
+            list = '',
             view = me.getView(),
             data = view.xdata,
             text = 'Material ({0})',
-            search = view.down('textfield[name=search]');
+            search = view.down('textfield[name=search]'),
+            colorschema = data.rows[0].colorschema.split(","),
+            schema = "<div style='width: 20px; background: {0}; height: 26px; float: right;'></div>";
 
         search.focus(false,200);
 
@@ -448,6 +450,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             query: data.rows[0].id
         }).load();
 
+        if(colorschema) {
+            Ext.each(colorschema,function(item) {
+                list += Ext.String.format(schema,item);
+            });
+        }
+
+        view.down('container[name=colorschema]').update(list);
         view.down('textfield[name=areasname]').setValue(data.rows[0].areasname);
         view.down('textfield[name=clientname]').setValue(data.rows[0].clientname);
         view.down('textfield[name=equipmentname]').setValue(data.rows[0].equipmentname);
