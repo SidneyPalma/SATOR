@@ -13,6 +13,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
 
     store: 'flowprocessingmaterial',
 
+    listeners: {
+        select: 'onSelectMaterial'
+    },
+
     initComponent: function () {
         var me = this;
         me.buildItems();

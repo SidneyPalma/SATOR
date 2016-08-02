@@ -521,6 +521,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     me.redirectTo( 'flowprocessingview/' + stepid);
                 break;
         }
+    },
+
+    onSelectMaterial: function ( rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            portrait = view.down('portrait');
+
+        portrait.beFileData(record.get('filetype'));
     }
 
 });
