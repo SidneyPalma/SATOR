@@ -41,6 +41,23 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     //routes ========================>
 
+    onShowClearTargeColor: function (field) {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('materialboxtarge'),
+            store = grid.getStore(),
+            sm = grid.getSelectionModel(),
+            sl = sm.getSelection(),
+            rc = sl[0];
+
+        store.remove(rc);
+        store.sync({
+            callback: function (records) {
+                store.load();
+            }
+        });
+    },
+
     insertLayout: function (view, rowIndex, colIndex, item, e, record, row) {
         var me = this,
             view = me.getView();

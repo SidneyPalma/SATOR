@@ -58,9 +58,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxTarge', {
                 dataIndex: 'targecolorname',
                 editor: {
                     pageSize: 0,
-                    showClear: false,
                     allowBlank: false,
-                    xtype: 'materialboxtargecolorsearch'
+                    xtype: 'materialboxtargecolorsearch',
+                    listeners: {
+                        showclear: 'onShowClearTargeColor'
+                    }
                 }
             }
         ];
