@@ -78,7 +78,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onSelectAction : function () {
         var me = this,
-            store = Ext.getStore('flowprocessingaction');
+            store = Ext.getStore('flowprocessingstepaction');
 
         if(!Smart.workstation) {
             return false;
@@ -119,7 +119,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
 
-        Ext.getStore('flowprocessingaction').setParams({
+        Ext.getStore('flowprocessingstepaction').setParams({
             method: 'selectArea',
             query: Smart.workstation.areasid
         }).load();
@@ -477,7 +477,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onDeSelectDataView: function (view,record,eOpts) {
         Ext.getStore('flowprocessingstep').removeAll();
-        Ext.getStore('flowprocessingaction').removeAll();
+        Ext.getStore('flowprocessingstepaction').removeAll();
     },
 
     onSelectFlowProcessingStep: function (rowModel, record, index, eOpts) {
@@ -487,14 +487,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         label.setText(record.get('elementname'));
 
-        Ext.getStore('flowprocessingaction').setParams({
+        Ext.getStore('flowprocessingstepaction').setParams({
             method: 'selectCode',
             query: record.get('id')
         }).load();
     },
 
     onDeSelectFlowProcessingStep: function ( rowModel, record, index, eOpts ) {
-        Ext.getStore('flowprocessingaction').removeAll();
+        Ext.getStore('flowprocessingstepaction').removeAll();
     },
 
     onFlowStepSelect: function (view,record,eOpts) {
