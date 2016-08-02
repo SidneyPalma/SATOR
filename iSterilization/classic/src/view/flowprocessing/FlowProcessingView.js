@@ -135,7 +135,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 flex: 1,
                                 name: 'search',
                                 showClear: true,
-                                fieldLabel: 'Leitura do Item',
+                                fieldLabel: 'Leitura',
                                 useReadColor: false,
                                 cls: 'processing-field',
                                 labelCls: 'processing-field-font'
