@@ -136,7 +136,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         Ext.event.Event.PAGE_UP
                     ],
                     fn: function(){
-                        me.flowProcessingOpen('flowopen');
+                        me.flowProcessingOpen({},{},'flowopen');
                     }
                 }
             ],
@@ -144,7 +144,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    flowProcessingOpen: function (flowtype) {
+    flowProcessingOpen: function (button,e,flowtype) {
         var me = this,
             view = me.getView();
 
@@ -159,9 +159,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         Ext.widget('flowprocessinguser').show(null,function () {
-            this.xdata = md;
+            this.xdata = md ? md : null;
             this.down('form').reset();
-            this.flowtype = flowtype;
+            this.flowtype = flowtype ? flowtype : 'flowopen';
             this.down('textfield[name=usercode]').focus(false,200);
         });
     },
@@ -237,7 +237,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 Smart.Msg.showToast('Estação de Trabalho Não Configurada, Operação Não pode ser Realizada!','error');
                 return false;
             }
-
+console.info(view.flowtype);
             switch(view.flowtype) {
                 case 'flowopen': // Abrir Novo Processamento/Leitura
                     me.onFireTypeOpenFlow(rows,{});
@@ -638,7 +638,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         switch(action) {
             case '001':
                     if(!userid) {
-                        me.flowProcessingOpen('flowuser');
+                        me.flowProcessingOpen({},{},'flowuser');
                     } else {
                         me.redirectTo( 'flowprocessingview/' + stepid);
                     }
