@@ -113,6 +113,16 @@
     /*font-size: 19px;*/
 /*}*/
 
+.portrait-label {
+    margin: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 18px;
+    position: relative;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
 /*
     dataview
 */

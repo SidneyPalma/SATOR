@@ -543,8 +543,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
                     });
                     md.add(rc);
-                    md.sync();
-                    md.sort([{property : 'id', direction: 'DESC'}]);
+                    md.sync({
+                        callback: function () {
+                            md.sort([{property : 'id', direction: 'DESC'}]);
+                        }
+                    });
                 }
             }
         }
@@ -647,6 +650,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             portrait = view.down('portrait');
 
         portrait.beFileData(record.get('filetype'));
+        portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
     }
 
 });
