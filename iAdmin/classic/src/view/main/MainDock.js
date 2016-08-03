@@ -22,7 +22,7 @@ Ext.define( 'iAdmin.view.main.MainDock', {
 
     items: [
         {
-			xtype: 'tabpanel',
+			xtype: 'panel',
 			items: [
 				{
 					iconCls: "fa fa-bars",
@@ -73,6 +73,7 @@ Ext.define( 'iAdmin.view.main.MainDock', {
 									]
 								}, {
 									cls: 'search',
+									name: 'search',
 									xtype: 'textfield',
 									showClear: true,
 									emptyText: 'Pesquisar',
@@ -83,9 +84,9 @@ Ext.define( 'iAdmin.view.main.MainDock', {
 							]
 						}
 					]
-				}, {
-					title: 'Notas',
-					iconCls: "fa fa-comments"
+				// }, {
+				// 	title: 'Notas',
+				// 	iconCls: "fa fa-comments"
 				}
 			]
         }

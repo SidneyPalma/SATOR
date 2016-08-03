@@ -419,9 +419,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     insertFlow: function () {
         var me = this,
+            date = new Date(),
             view = me.getView(),
             form = view.down('form'),
-            data = form.getValues();
+            data = form.getValues(),
+            datepicker = view.down('datepicker');
 
         if(!form.isValid()) {
             return false;
@@ -452,6 +454,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
 
                 view.close();
+
+                datepicker.focus();
+                datepicker.setValue(date);
+                me.selectDatePicker(datepicker,datepicker.getValue());
             }
         });
     },

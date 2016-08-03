@@ -77,7 +77,9 @@ Ext.define( 'Smart.ux.main.MainController', {
 		if(!Ext.WindowMgr.get('maindock')) {
             var height = view.down('container[name=centerarea]').getHeight();
             view.maindock = Ext.widget('maindock', { xview: view, id: 'maindock', height: height });
-            view.maindock.show();
+            view.maindock.show(null,function () {
+                this.down('textfield[name=search]').focus(false,200);
+            });
         } else {
             view.maindock.hide();
         }
