@@ -416,6 +416,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 ib.name as equipmentname,
                 st.name as sterilizationtypename,
                 c.name as clientname,
+                fp.materialboxid,
                 mb.name as materialboxname,
                 dbo.getEnum('prioritylevel',fp.prioritylevel) as priorityleveldescription,
                 fps.flowstepstatus,

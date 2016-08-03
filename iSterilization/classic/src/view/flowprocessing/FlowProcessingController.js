@@ -436,6 +436,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             query: data.rows[0].id
         }).load();
 
+        Ext.getStore('flowprocessingstepmessage').setParams({
+            method: 'selectCode',
+            query: data.rows[0].id
+        }).load();
+
         if(colorschema) {
             Ext.each(colorschema,function(item) {
                 list += Ext.String.format(schema,item);
@@ -449,12 +454,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('textfield[name=sterilizationtypename]').setValue(data.rows[0].sterilizationtypename);
         view.down('textfield[name=priorityleveldescription]').setValue(data.rows[0].priorityleveldescription);
         view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.rows[0].materialboxname));
+        view.down('hiddenfield[name=materialboxid]').setValue(data.rows[0].materialboxid);
+        view.down('hiddenfield[name=id]').setValue(data.rows[0].id);
     },
 
     onChangedMaterial: function (store, eOpts) {
         var me = this,
             count = 0,
-            total = 0,
             score = '{0}/{1}';
 
         store.each(function (item) {
@@ -468,20 +474,36 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             value = field.getValue(),
             store = Ext.getStore('flowprocessingstepmaterial'),
-            sm = me.getView().down('flowprocessingmaterial').getSelectionModel();
+            sm = me.getView().down('flowprocessingmaterial').getSelectionModel(),
+            materialboxid = me.getView().down('hiddenfield[name=materialboxid]').getValue();
 
         if(value && value.length != 0) {
             var data = store.findRecord('barcode',value);
+
+            field.reset();
 
             if(data) {
                 data.set('unconformities','010');
                 store.sync({
                     callback: function () {
                         data.commit();
-                        field.reset();
                         sm.select(data);
                     }
                 });
+            } else {
+                if(materialboxid && materialboxid.length != 0) {
+                    Smart.Msg.showToast('O Material nao faz parte do Kit Selecionado!','error');
+                    var md = Ext.getStore('flowprocessingstepmessage'),
+                        rc = Ext.create(md.getProxy().getModel().getName());
+                    
+                    rc.set({
+                        readercode: '002',
+                        readertext: 'O Material nao faz parte do Kit Selecionado!',
+                        flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
+                    });
+                    md.add(rc);
+                    md.sync();
+                }
             }
         }
     },

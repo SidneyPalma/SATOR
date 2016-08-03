@@ -65,6 +65,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                 showSmartTransparent: true,
                 items: [
                     {
+                        xtype: 'hiddenfield',
+                        name: 'id'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'materialboxid'
+                    }, {
                         margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
@@ -235,15 +241,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 xtype: 'splitter'
                             }, {
                                 flex: 2,
-                                dockedItems: [
-                                    {
-                                        margin: '0 0 6 0',
-                                        xtype: 'label',
-                                        cls: 'processing-field-font',
-                                        text: 'Avisos'
-                                    }
-                                ],
-                                xtype: 'panel'
+                                xtype: 'flowprocessingmessage'
                             }
                         ]
                     }
