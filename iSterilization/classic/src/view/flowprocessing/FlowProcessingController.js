@@ -452,10 +452,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
 
                 view.close();
-
-                // if(parseInt(data.startflow) == 1) {
-                //     me.redirectTo( 'flowprocessingview/' + result.rows.id);
-                // }
             }
         });
     },
