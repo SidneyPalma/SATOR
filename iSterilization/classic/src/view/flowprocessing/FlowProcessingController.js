@@ -7,9 +7,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     routes: {
         'flowprocessingview/:id': {
             action: 'getFlowProcessingId'
-        },
-        'flowprocessingview': {
-            action: 'getFlowProcessingNew'
         }
     },
 
@@ -22,10 +19,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
-
-    onQuxLoad: function (a) {
-        console.info(a);
-    },
 
     fetchField: function (search, button) {
         Ext.getStore('flowprocessing').setParams({
@@ -56,26 +49,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 app.onMainPageView({xtype: 'flowprocessingview', xdata: result});
             }
         });
-
-
-        // Ext.getStore('flowprocessing').setParams({
-        //     method: 'selectCode',
-        //     query: id,
-        //     rows: Ext.encode({ id: id })
-        // }).load({
-        //     scope: me,
-        //     callback: function(records, operation, success) {
-        //         var record = records[0];
-        //         app.onMainPageView({xtype: 'flowprocessingview', xdata: record});
-        //     }
-        // });
-
     },
 
-    // getFlowProcessingNew: function () {
-    //     var app = Smart.app.getController('App');
-    //     app.onMainPageView({xtype: 'flowprocessingview', xdata: null});
-    // }
     //routes ===================================>>
 
     onKeyDownDash: function (view, e, eOpts) {
