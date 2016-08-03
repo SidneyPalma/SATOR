@@ -69,7 +69,7 @@ class Coach {
             $results = $this->store->insert();
         }
 
-        return $results;
+        return self::jsonToObject($results)->success ? $this->store->select() : $results;
     }
 
     public function upload() {

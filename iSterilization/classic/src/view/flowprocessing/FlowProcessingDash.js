@@ -66,7 +66,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
 
         Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingAction');
+        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepAction');
 
         me.items = [
             {
@@ -365,8 +365,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                 trackOver: true,
                                                 autoScroll: true,
                                                 multiSelect: false,
-                                                name: 'flowprocessingaction',
-                                                store: 'flowprocessingaction',
+                                                name: 'flowprocessingstepaction',
+                                                store: 'flowprocessingstepaction',
                                                 itemSelector: 'div.thumb-wrap',
                                                 tpl: [
                                                     '<tpl for=".">',
@@ -394,8 +394,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                 trackOver: true,
                                 autoScroll: true,
                                 multiSelect: false,
-                                name: 'flowprocessingaction',
-                                store: 'flowprocessingaction',
+                                name: 'flowprocessingstepaction',
+                                store: 'flowprocessingstepaction',
                                 itemSelector: 'div.thumb-wrap',
                                 tpl: [
                                     '<tpl for=".">',

@@ -77,7 +77,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
         Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingAction');
+        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepAction');
 
         me.items = [
             {
@@ -97,30 +97,58 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
             }, {
                 region: 'center',
                 margin: '5 0 0 0',
-                xtype: 'dataview',
-                trackOver: true,
-                autoScroll: true,
-                multiSelect: false,
-                name: 'flowprocessingaction',
-                store: 'flowprocessingaction',
-                itemSelector: 'div.thumb-wrap',
-                tpl: [
-                    '<tpl for=".">',
-                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                },
+                items: [
+                    {
+                        flex: 3,
+                        xtype: 'dataview',
+                        trackOver: true,
+                        autoScroll: true,
+                        multiSelect: false,
+                        name: 'flowprocessingstepaction',
+                        store: 'flowprocessingstepaction',
+                        itemSelector: 'div.thumb-wrap',
+                        tpl: [
+                            '<tpl for=".">',
+                            '<div style="margin-bottom: 10px;" class="thumb-wrap">',
                             '<div class="thumb-action-{flowstepaction}"></div>',
                             '<span>',
-                                '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
+                            '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
                             '</span>',
-                        '</div>',
-                    '</tpl>'
-                ],
-                listeners: {
-                    // select: 'onFlowStepSelect',
-                    itemdblclick: 'onFlowStepAction'
-                },
-                emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>',
+                            '</div>',
+                            '</tpl>'
+                        ],
+                        listeners: {
+                            select: 'onFlowStepSelect',
+                            deselect: 'onFlowStepDeSelect',
+                            itemdblclick: 'onFlowStepAction'
+                        },
+                        emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>',
+                    }, {
+                        xtype: 'splitter'
+                    }, {
+                        flex: 2,
+                        source: {},
+                        autoHeight: true,
+                        columnLines: false,
+                        xtype: 'propertygrid',
+                        defaults: { readOnly: true },
+                        disableSelection: true,
+                        cls: 'flowprocessingstep',
+                        frame: false,
+                        border: false,
+                        bodyStyle: 'background:transparent;',
+                        listeners: { 'beforeedit': function (e) { return false; } }
+                    }
+                ]
             }
         ];
     }
+
+    // TODO: Criar Icone para Consultar Material, Criar Protocolo para Consultar Material
 
 });

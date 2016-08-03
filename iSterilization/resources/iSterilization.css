@@ -178,12 +178,27 @@
 }
 
 .legend001 { background: rgb(251, 228, 0); }
-.legend002 { }
-.legend003 { }
-.legend004 { }
-.legend005 { }
-.legend006 { }
-.legend007 { }
-.legend008 { }
-.legend009 { }
+.legend002 { background: rgb(189, 21, 80); }
+.legend003 { background: rgb(189, 21, 80); }
+.legend004 { background: rgb(189, 21, 80); }
+.legend005 { background: rgb(189, 21, 80); }
+.legend006 { background: rgb(189, 21, 80); }
+.legend007 { background: rgb(189, 21, 80); }
+.legend008 { background: rgb(189, 21, 80); }
+.legend009 { background: rgb(189, 21, 80); }
 .legend010 { background: rgb(99, 98, 248); }
+
+.flowprocessingstep .x-grid-item {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+     background-color: transparent !important;
+}
+
+.flowprocessingstep .x-grid-item:hover {
+    color: rgb(251, 228, 0);
+}
+
+.flowprocessingstep .x-grid-empty {
+    display: none;
+}

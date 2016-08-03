@@ -11,6 +11,7 @@ Ext.define( 'Ext.overrides.form.field.Base', {
     useMondaFont: false,
     useReadColor: false,
     setTextAlign: false,
+    useUpperCase: false,
 
     initComponent: function () {
         var me = this;
@@ -34,6 +35,13 @@ Ext.define( 'Ext.overrides.form.field.Base', {
 
         if(me.setTextAlign) {
             me.inputEl.setStyle('text-align', me.setTextAlign);
+        }
+
+        if(me.useUpperCase) {
+            field.el.applyStyles({textTransform: "uppercase"});
+            field.mon(field.el,'keyup',function() {
+                this.setValue(this.getValue().toUpperCase());
+            },field);
         }
     },
 

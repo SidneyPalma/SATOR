@@ -46,7 +46,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
     },
 
     listeners: {
-        afterrender: 'onAfterRenderView'
+        afterrender: 'onAfterRenderView',
+        startreader: 'onStartReaderView'
     },
 
     initComponent: function () {
@@ -64,6 +65,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                 showSmartTransparent: true,
                 items: [
                     {
+                        xtype: 'hiddenfield',
+                        name: 'id'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'materialboxid'
+                    }, {
                         margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
@@ -82,7 +89,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 items: [
                                     {
                                         flex: 1,
-                                        fieldLabel: 'Operador'
+                                        fieldLabel: 'Operador',
+                                        name: 'username'
                                     }, {
                                         xtype: 'splitter'
                                     }, {
@@ -135,10 +143,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 flex: 1,
                                 name: 'search',
                                 showClear: true,
-                                fieldLabel: 'Leitura do Item',
+                                useUpperCase: true,
                                 useReadColor: false,
+                                fieldLabel: 'Leitura',
                                 cls: 'processing-field',
-                                labelCls: 'processing-field-font'
+                                labelCls: 'processing-field-font',
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                                            var view = field.up('flowprocessingview');
+                                            view.fireEvent('startreader', field, e, eOpts);
+                                            e.stopEvent();
+                                        }
+                                    }
+                                }
                             }, {
                                 xtype: 'splitter'
                             }, {
@@ -224,15 +242,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 xtype: 'splitter'
                             }, {
                                 flex: 2,
-                                dockedItems: [
-                                    {
-                                        margin: '0 0 6 0',
-                                        xtype: 'label',
-                                        cls: 'processing-field-font',
-                                        text: 'Avisos'
-                                    }
-                                ],
-                                xtype: 'panel'
+                                xtype: 'flowprocessingmessage'
                             }
                         ]
                     }

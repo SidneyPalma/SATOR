@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
 
     cls: 'processing-panel-header-flow processing-update-grid',
 
-    store: 'flowprocessingmaterial',
+    store: 'flowprocessingstepmaterial',
 
     listeners: {
         select: 'onSelectMaterialFlowStepAction'
@@ -38,6 +38,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     name: 'materialboxname'
                 }, {
                     width: 80,
+                    xtype: 'label',
+                    cls: 'processing-field-font',
+                    text: '(00/00)',
+                    name: 'materialaccount'
+                }, {
+                    width: 80,
                     height: 26,
                     xtype: 'container',
                     name: 'colorschema'
@@ -49,7 +55,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingMaterial');
+        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepMaterial');
 
         me.columns = [
             {

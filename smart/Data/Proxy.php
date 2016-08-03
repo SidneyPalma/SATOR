@@ -214,6 +214,12 @@ class Proxy extends \PDO {
                             $commit->bindValue(":$field", $entity->$method(), $this->getParams($column["type"]));
                         }
                         break;
+                    case self::DML_SELECT:
+                        if($field == 'id') {
+                            $method = "get" . strtoupper($field[0]) . substr($field, 1);
+                            $commit->bindValue(":$field", $entity->$method(), $this->getParams($column["type"]));
+                        }
+                        break;
                     default:
                         if($column['type'] != 'formula') {
                             $method = "get" . strtoupper($field[0]) . substr($field, 1);

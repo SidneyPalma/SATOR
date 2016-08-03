@@ -228,8 +228,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $rows = $pdo->fetchAll();
 
             $flow = new \iSterilization\Coach\flowprocessing();
-            $action = new \iSterilization\Coach\flowprocessingaction();
-            $flowstep = new \iSterilization\Coach\flowprocessingstep();
+            $step = new \iSterilization\Coach\flowprocessingstep();
+            $action = new \iSterilization\Coach\flowprocessingstepaction();
 
             while(list(, $item) = each($rows)) {
                 extract($item);
@@ -251,14 +251,14 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
                     // update flowprocessingstep
                     $date = date("Y-m-d H:i");
-                    $flowstep->getStore()->getModel()->set('id',$id);
-                    $flowstep->getStore()->getModel()->set('datestart',$date);
-                    $flowstep->getStore()->getModel()->set('flowstepstatus','001');
-                    $flowstep->getStore()->update();
+                    $step->getStore()->getModel()->set('id',$id);
+                    $step->getStore()->getModel()->set('datestart',$date);
+                    $step->getStore()->getModel()->set('flowstepstatus','001');
+                    $step->getStore()->update();
 
                     $data = array();
                     $data['id'] = $id;
-                    // insert flowprocessingmaterial
+                    // insert flowprocessingstepmaterial
                     $this->newFlowItem($data);
                     break;
                 }
@@ -294,7 +294,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 if(@materialboxid != 0)
                 begin
                     insert into
-                        flowprocessingmaterial ( flowprocessingstepid, materialid, unconformities ) 
+                        flowprocessingstepmaterial ( flowprocessingstepid, materialid, unconformities ) 
                     select
                         fps.id as flowprocessingstepid,
                         mbi.materialid,
@@ -302,21 +302,22 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     from
                         flowprocessing fp
                         inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
-                        left join materialboxitem mbi on ( mbi.materialboxid = fp.materialboxid )
+                        inner join materialboxitem mbi on ( mbi.materialboxid = fp.materialboxid )
                     where fps.id = @flowprocessingstepid;
             
                     update
-                        flowprocessingmaterial
-                        set unconformities = '010'
+                        flowprocessingstepmaterial
+                        set unconformities = '010',
+                            dateto = getDate()
                     where materialid = @materialid
                       and flowprocessingstepid = @flowprocessingstepid;
                 end
                 else
                 begin
                     insert into
-                        flowprocessingmaterial ( flowprocessingstepid, materialid, unconformities ) 
+                        flowprocessingstepmaterial ( flowprocessingstepid, materialid, unconformities, dateto ) 
                     values
-                        ( @flowprocessingstepid, @materialid, '010' )
+                        ( @flowprocessingstepid, @materialid, '010', getDate() )
                 end";
 
         try {
@@ -333,6 +334,20 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         }
 
         return self::getResult();
+    }
+
+    public function updateUserStep(array $data) {
+        $username = $data['username'];
+        $flowprocessingstepid = $data['flowprocessingstepid'];
+        $step = new \iSterilization\Coach\flowprocessingstep();
+
+        $date = date("Y-m-d H:i");
+        $step->getStore()->getModel()->set('id',$flowprocessingstepid);
+        $step->getStore()->getModel()->set('username',$username);
+        $step->getStore()->getModel()->set('datestart',$date);
+        $result = $step->getStore()->update();
+
+        return $result;
     }
 
     /**
@@ -405,6 +420,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $sql = "
             select
                 fps.id,
+                fps.username,
                 fps.datestart,
                 fps.elementname,
                 fps.elementtype,
@@ -415,6 +431,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 ib.name as equipmentname,
                 st.name as sterilizationtypename,
                 c.name as clientname,
+                fp.materialboxid,
                 mb.name as materialboxname,
                 dbo.getEnum('prioritylevel',fp.prioritylevel) as priorityleveldescription,
                 fps.flowstepstatus,
@@ -433,7 +450,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         )                
                 )
             from
-                flowprocessingaction fpsa
+                flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 left join areas a on ( a.id = fps.areasid )
