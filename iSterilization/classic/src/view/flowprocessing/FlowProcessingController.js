@@ -13,8 +13,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    // url: '../iSterilization/business/Calls/flowprocessing.php',
+    listen: {
+        store: {
+            '#flowprocessingstepmaterial': {
+                datachanged: 'onChangedMaterial'
+            }
+        }
+    },
+
     url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+
+    onQuxLoad: function (a) {
+        console.info(a);
+    },
 
     fetchField: function (search, button) {
         Ext.getStore('flowprocessing').setParams({
@@ -423,9 +434,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 view.close();
 
-                if(parseInt(data.startflow) == 1) {
-                    me.redirectTo( 'flowprocessingview/' + result.rows.id);
-                }
+                // if(parseInt(data.startflow) == 1) {
+                //     me.redirectTo( 'flowprocessingview/' + result.rows.id);
+                // }
             }
         });
     },
@@ -463,6 +474,41 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('textfield[name=sterilizationtypename]').setValue(data.rows[0].sterilizationtypename);
         view.down('textfield[name=priorityleveldescription]').setValue(data.rows[0].priorityleveldescription);
         view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.rows[0].materialboxname));
+    },
+
+    onChangedMaterial: function (store, eOpts) {
+        var me = this,
+            count = 0,
+            total = 0,
+            score = '{0}/{1}';
+
+        store.each(function (item) {
+            count += item.get('unconformities') == '010' ? 1 : 0;
+        });
+
+        me.getView().down('label[name=materialaccount]').setText(Ext.String.format(score,count,store.getCount()));
+    },
+
+    onStartReaderView: function (field, e, eOpts) {
+        var me = this,
+            value = field.getValue(),
+            store = Ext.getStore('flowprocessingstepmaterial'),
+            sm = me.getView().down('flowprocessingmaterial').getSelectionModel();
+
+        if(value && value.length != 0) {
+            var data = store.findRecord('barcode',value);
+
+            if(data) {
+                data.set('unconformities','010');
+                store.sync({
+                    callback: function () {
+                        data.commit();
+                        field.reset();
+                        sm.select(data);
+                    }
+                });
+            }
+        }
     },
 
     onSelectDataView: function (view,record,eOpts) {

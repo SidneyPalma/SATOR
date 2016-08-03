@@ -21,6 +21,7 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
                 p.name as proprietaryname,
                 dbo.getEnum('unconformities',fpm.unconformities) as unconformitiesdescription,
                 fpm.dateof,
+                fpm.dateto,
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo
             from

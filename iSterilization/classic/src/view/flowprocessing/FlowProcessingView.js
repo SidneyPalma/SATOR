@@ -46,7 +46,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
     },
 
     listeners: {
-        afterrender: 'onAfterRenderView'
+        afterrender: 'onAfterRenderView',
+        startreader: 'onStartReaderView'
     },
 
     initComponent: function () {
@@ -135,10 +136,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 flex: 1,
                                 name: 'search',
                                 showClear: true,
-                                fieldLabel: 'Leitura',
+                                useUpperCase: true,
                                 useReadColor: false,
+                                fieldLabel: 'Leitura',
                                 cls: 'processing-field',
-                                labelCls: 'processing-field-font'
+                                labelCls: 'processing-field-font',
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                                            var view = field.up('flowprocessingview');
+                                            view.fireEvent('startreader', field, e, eOpts);
+                                            e.stopEvent();
+                                        }
+                                    }
+                                }
                             }, {
                                 xtype: 'splitter'
                             }, {

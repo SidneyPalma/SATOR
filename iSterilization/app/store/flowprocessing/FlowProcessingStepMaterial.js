@@ -16,6 +16,7 @@ Ext.define( 'iSterilization.store.flowprocessing.FlowProcessingStepMaterial', {
 
     config: {
         extraParams: {
+            params: [],
             action: 'select',
             method: 'selectCode'
         }
