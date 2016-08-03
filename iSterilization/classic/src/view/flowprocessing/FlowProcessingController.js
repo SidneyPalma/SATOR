@@ -485,6 +485,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.clearFilter();
     },
 
+    onSelectFlowStepStatus: function (combo,record,eOpts) {
+        var store = Ext.getStore('flowprocessingstep');
+
+        store.clearFilter();
+        store.filter('flowstepstatus', combo.getValue());
+    },
+
+    showClearFlowStepStatus: function (field, eOpts) {
+        var store = Ext.getStore('flowprocessingstep');
+
+        store.removeFilter('flowstepstatus');
+        store.clearFilter();
+    },
+
     /**
      * Controles para Processamento e Leitura
      */

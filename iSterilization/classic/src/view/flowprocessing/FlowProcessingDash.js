@@ -277,8 +277,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                                 xtype: 'comboenum',
                                                                 name: 'flowstepstatusdescription',
                                                                 listeners: {
-                                                                    // select: 'onSelectFlowStatus',
-                                                                    // showclear: 'showClearFlowStatus'
+                                                                    select: 'onSelectFlowStepStatus',
+                                                                    showclear: 'showClearFlowStepStatus'
                                                                 }
                                                             }
                                                         ]
