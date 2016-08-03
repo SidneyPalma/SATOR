@@ -108,7 +108,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                         items: [
                             {
                                 text: 'Iniciar Nova Leitura',
-                                handler: 'flowProcessingOpen'
+                                handler: 'flowProcessingRead'
                             }
                         ]
                     }, {

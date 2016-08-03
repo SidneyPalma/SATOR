@@ -136,7 +136,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         Ext.event.Event.PAGE_UP
                     ],
                     fn: function(){
-                        me.flowProcessingOpen({},{},'flowopen');
+                        me.flowProcessingRead();
                     }
                 }
             ],
@@ -144,7 +144,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    flowProcessingOpen: function (button,e,flowtype) {
+    flowProcessingRead: function () {
+        var me = this;
+
+        me.onAfterRenderDash();
+        me.flowProcessingOpen('flowopen')
+    },
+
+    flowProcessingOpen: function (flowtype) {
         var me = this,
             view = me.getView();
 
@@ -422,8 +429,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             date = new Date(),
             view = me.getView(),
             form = view.down('form'),
-            data = form.getValues(),
-            datepicker = view.down('datepicker');
+            data = form.getValues();
 
         if(!form.isValid()) {
             return false;
@@ -455,9 +461,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 view.close();
 
-                datepicker.focus();
-                datepicker.setValue(date);
-                me.selectDatePicker(datepicker,datepicker.getValue());
+                Ext.getStore('flowprocessing').setParams({
+                    method: 'selectDashFlow',
+                    dateof: Ext.util.Format.date(date,'Y-m-d')
+                }).load();
+
+                Ext.getStore('flowprocessingstep').removeAll();
             }
         });
     },
@@ -642,7 +651,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         switch(action) {
             case '001':
                     if(!userid) {
-                        me.flowProcessingOpen({},{},'flowuser');
+                        me.flowProcessingOpen('flowuser');
                     } else {
                         me.redirectTo( 'flowprocessingview/' + stepid);
                     }
