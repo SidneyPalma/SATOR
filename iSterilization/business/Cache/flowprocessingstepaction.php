@@ -12,6 +12,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 
         $sql = "
             select
+                fps.username,
                 fps.elementname,
                 fpsa.flowstepaction,
                 fpsa.flowprocessingstepid,
@@ -45,6 +46,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         $sql = "
             select
                 fpsa.id,
+                fps.username,
                 fps.elementname,
                 fpsa.flowstepaction,
                 fps.flowprocessingid,
@@ -78,6 +80,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         $sql = "
             select
                 fps.id,
+                fps.username,
                 fps.datestart,
                 fps.elementname,
                 fps.elementtype,

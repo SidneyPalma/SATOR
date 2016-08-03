@@ -42,20 +42,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
                             'x-message-box-info','x-message-box-error',
                             'x-message-box-warning','x-message-box-question'
                         ],
-                        iconMsg = '<div class="{0}" style="float: left; width: 30px; height: 30px; font-size: 28px; color: {1};"></div>';
+                        iconMsg = '<div class="{0}" style="float: left; width: 26px; font-size: 24px; color: {1};"></div>';
 
                     switch(record.get('readercode')) {
                         case '001':
-                            iconTxt = Ext.String.format(iconMsg,iconCls[0],'blue');
+                            iconTxt = Ext.String.format(iconMsg,iconCls[0],'rgb(99, 98, 248)');
                             break;
                         case '002':
-                            iconTxt = Ext.String.format(iconMsg,iconCls[1],'red');
+                            iconTxt = Ext.String.format(iconMsg,iconCls[1],'rgb(189, 21, 80);');
                             break;
                         case '003':
-                            iconTxt = Ext.String.format(iconMsg,iconCls[2],'yellow');
+                            iconTxt = Ext.String.format(iconMsg,iconCls[2],'rgb(248, 202, 0);');
                             break;
                         default:
-                            iconTxt = Ext.String.format(iconMsg,iconCls[3],'green');
+                            iconTxt = Ext.String.format(iconMsg,iconCls[3],'rgb(138, 155, 15);');
                     }
 
                     return iconTxt;

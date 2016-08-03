@@ -16,10 +16,12 @@ class flowprocessingstepmessage extends \Smart\Data\Cache {
                 fpm.flowprocessingstepid,
                 fpm.readertext,
                 fpm.readerdate,
-                fpm.readercode
+                fpm.readercode,
+                fpm.readerdate
             from
                 flowprocessingstepmessage fpm
-            where fpm.flowprocessingstepid = :flowprocessingstepid";
+            where fpm.flowprocessingstepid = :flowprocessingstepid
+            order by fpm.id desc";
 
         try {
             $pdo = $proxy->prepare($sql);

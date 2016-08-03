@@ -25,6 +25,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepAction', {
         }, {
             name: 'isactive',
             type: 'boolean'
+        }, {
+            name: 'username',
+            type: 'auto'
         }
     ]
 

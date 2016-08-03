@@ -228,8 +228,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $rows = $pdo->fetchAll();
 
             $flow = new \iSterilization\Coach\flowprocessing();
+            $step = new \iSterilization\Coach\flowprocessingstep();
             $action = new \iSterilization\Coach\flowprocessingstepaction();
-            $flowstep = new \iSterilization\Coach\flowprocessingstep();
 
             while(list(, $item) = each($rows)) {
                 extract($item);
@@ -251,10 +251,10 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
                     // update flowprocessingstep
                     $date = date("Y-m-d H:i");
-                    $flowstep->getStore()->getModel()->set('id',$id);
-                    $flowstep->getStore()->getModel()->set('datestart',$date);
-                    $flowstep->getStore()->getModel()->set('flowstepstatus','001');
-                    $flowstep->getStore()->update();
+                    $step->getStore()->getModel()->set('id',$id);
+                    $step->getStore()->getModel()->set('datestart',$date);
+                    $step->getStore()->getModel()->set('flowstepstatus','001');
+                    $step->getStore()->update();
 
                     $data = array();
                     $data['id'] = $id;
@@ -336,6 +336,20 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResult();
     }
 
+    public function updateUserStep(array $data) {
+        $username = $data['username'];
+        $flowprocessingstepid = $data['flowprocessingstepid'];
+        $step = new \iSterilization\Coach\flowprocessingstep();
+
+        $date = date("Y-m-d H:i");
+        $step->getStore()->getModel()->set('id',$flowprocessingstepid);
+        $step->getStore()->getModel()->set('username',$username);
+        $step->getStore()->getModel()->set('datestart',$date);
+        $result = $step->getStore()->update();
+
+        return $result;
+    }
+
     /**
      * Select
      */
@@ -406,6 +420,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $sql = "
             select
                 fps.id,
+                fps.username,
                 fps.datestart,
                 fps.elementname,
                 fps.elementtype,
