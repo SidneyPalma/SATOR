@@ -302,7 +302,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     from
                         flowprocessing fp
                         inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
-                        inner join materialboxitem mbi on ( mbi.materialboxid = fp.materialboxid )
+                        inner join materialboxitem mbi on ( mbi.materialboxid = fp.materialboxid and mbi.boxitemstatus = 'A' )
                     where fps.id = @flowprocessingstepid;
             
                     update

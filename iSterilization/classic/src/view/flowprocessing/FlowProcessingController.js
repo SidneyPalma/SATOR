@@ -199,7 +199,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     selectUserFlow: function () {
         var me = this,
-            method = '',
             view = me.getView(),
             form = view.down('form');
 
@@ -237,7 +236,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 Smart.Msg.showToast('Estação de Trabalho Não Configurada, Operação Não pode ser Realizada!','error');
                 return false;
             }
-console.info(view.flowtype);
+
             switch(view.flowtype) {
                 case 'flowopen': // Abrir Novo Processamento/Leitura
                     me.onFireTypeOpenFlow(rows,{});
@@ -420,9 +419,11 @@ console.info(view.flowtype);
 
     insertFlow: function () {
         var me = this,
+            date = new Date(),
             view = me.getView(),
             form = view.down('form'),
-            data = form.getValues();
+            data = form.getValues(),
+            datepicker = view.down('datepicker');
 
         if(!form.isValid()) {
             return false;
@@ -454,9 +455,9 @@ console.info(view.flowtype);
 
                 view.close();
 
-                // if(parseInt(data.startflow) == 1) {
-                //     me.redirectTo( 'flowprocessingview/' + result.rows.id);
-                // }
+                datepicker.focus();
+                datepicker.setValue(date);
+                me.selectDatePicker(datepicker,datepicker.getValue());
             }
         });
     },
@@ -548,8 +549,11 @@ console.info(view.flowtype);
                         flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
                     });
                     md.add(rc);
-                    md.sync();
-                    md.sort([{property : 'id', direction: 'DESC'}]);
+                    md.sync({
+                        callback: function () {
+                            md.sort([{property : 'id', direction: 'DESC'}]);
+                        }
+                    });
                 }
             }
         }
@@ -652,6 +656,7 @@ console.info(view.flowtype);
             portrait = view.down('portrait');
 
         portrait.beFileData(record.get('filetype'));
+        portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
     }
 
 });

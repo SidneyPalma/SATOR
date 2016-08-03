@@ -38,7 +38,7 @@ Ext.define( 'Ext.overrides.form.field.Base', {
         }
 
         if(me.useUpperCase) {
-            field.el.applyStyles({textTransform: "uppercase"});
+            // field.el.applyStyles({textTransform: "uppercase"});
             field.mon(field.el,'keyup',function() {
                 this.setValue(this.getValue().toUpperCase());
             },field);

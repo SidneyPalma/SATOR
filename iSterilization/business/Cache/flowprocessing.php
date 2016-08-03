@@ -42,7 +42,11 @@ class flowprocessing extends \Smart\Data\Cache {
 						materialboxitem mbi
 					where mbi.materialid = ib.id
 				) b
-            where ib.barcode = :barcode OR ib.name COLLATE Latin1_General_CI_AI LIKE :name";
+            where ib.isactive = 1
+              and (
+                    ib.barcode = :barcode OR
+                    ib.name COLLATE Latin1_General_CI_AI LIKE :name
+              )";
 
         try {
             $pdo = $proxy->prepare($sql);
