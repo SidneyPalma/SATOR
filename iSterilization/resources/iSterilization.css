@@ -180,6 +180,22 @@
     background-image: url(images/stage/MaterialReader.png);
 }
 
+.thumb-wrap .thumb-task-001 {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(images/stage/ConferMaterial.png);
+}
+
+.thumb-wrap .thumb-task-002 {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(images/stage/ConferInput.png);
+}
+
 .unconformities {
     width: 100%;
     height: 100%;

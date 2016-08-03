@@ -502,6 +502,77 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Processamento e Leitura
      */
+    onStartReaderView: function (field, e, eOpts) {
+        var me = this,
+            value = field.getValue(),
+            store = Ext.getStore('flowprocessingstepmaterial'),
+            sm = me.getView().down('flowprocessingmaterial').getSelectionModel(),
+            materialboxid = me.getView().down('hiddenfield[name=materialboxid]').getValue();
+
+        if(value && value.length != 0) {
+            var data = store.findRecord('barcode',value);
+
+            field.reset();
+
+            if(data) {
+                data.set('unconformities','010');
+                store.sync({
+                    callback: function () {
+                        data.commit();
+                        sm.select(data);
+                    }
+                });
+            } else {
+                if(materialboxid && materialboxid.length != 0) {
+                    Smart.Msg.showToast('O Material nao faz parte do Kit Selecionado!','error');
+                    var md = Ext.getStore('flowprocessingstepmessage'),
+                        rc = Ext.create(md.getProxy().getModel().getName());
+
+                    rc.set({
+                        readercode: '001',
+                        readertext: 'O Material nao faz parte do Kit Selecionado!',
+                        flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
+                    });
+                    md.add(rc);
+                    md.sync({
+                        callback: function () {
+                            md.sort([{property : 'id', direction: 'DESC'}]);
+                        }
+                    });
+                }
+            }
+        }
+    },
+    /**
+     * Leitura de Materias
+     *  - Kit
+     *      Material Status 'A'
+     *      Material no Kit
+     *      Material no Status '001'
+     *
+     *  - Avulso
+     *      Material IsActive = 1
+     *      Material no Status '001'
+     *      Material fora de Kit
+     *
+     *  - Outras Leituras
+     *      Protocolos
+     *          -   Consultar Material
+     *          -   Encerrar Leitura
+     *          -   Ler Insumos
+     *          -   Cancelar Leitura Relizadas
+     *          -   Cancelar Ultima Leitura
+     *          -   Imprimir Etiquetas
+     *          -   Solictar Quebra de Fluxo
+     *          -   SIM
+     *          -   NÂO
+     *          -
+     */
+
+    /**
+     * Controles para Processamento e Leitura
+     */
+
     onAfterRenderView: function () {
         var me = this,
             list = '',
@@ -552,48 +623,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
 
         me.getView().down('label[name=materialaccount]').setText(Ext.String.format(score,count,store.getCount()));
-    },
-
-    onStartReaderView: function (field, e, eOpts) {
-        var me = this,
-            value = field.getValue(),
-            store = Ext.getStore('flowprocessingstepmaterial'),
-            sm = me.getView().down('flowprocessingmaterial').getSelectionModel(),
-            materialboxid = me.getView().down('hiddenfield[name=materialboxid]').getValue();
-
-        if(value && value.length != 0) {
-            var data = store.findRecord('barcode',value);
-
-            field.reset();
-
-            if(data) {
-                data.set('unconformities','010');
-                store.sync({
-                    callback: function () {
-                        data.commit();
-                        sm.select(data);
-                    }
-                });
-            } else {
-                if(materialboxid && materialboxid.length != 0) {
-                    Smart.Msg.showToast('O Material nao faz parte do Kit Selecionado!','error');
-                    var md = Ext.getStore('flowprocessingstepmessage'),
-                        rc = Ext.create(md.getProxy().getModel().getName());
-                    
-                    rc.set({
-                        readercode: '001',
-                        readertext: 'O Material nao faz parte do Kit Selecionado!',
-                        flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
-                    });
-                    md.add(rc);
-                    md.sync({
-                        callback: function () {
-                            md.sort([{property : 'id', direction: 'DESC'}]);
-                        }
-                    });
-                }
-            }
-        }
     },
 
     onSelectDataView: function (view,record,eOpts) {

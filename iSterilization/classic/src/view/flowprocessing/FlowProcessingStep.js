@@ -114,12 +114,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                         itemSelector: 'div.thumb-wrap',
                         tpl: [
                             '<tpl for=".">',
-                            '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                            '<div class="thumb-action-{flowstepaction}"></div>',
-                            '<span>',
-                            '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
-                            '</span>',
-                            '</div>',
+                                '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                    '<div class="thumb-action-{flowstepaction}"></div>',
+                                    '<span>',
+                                        '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
+                                    '</span>',
+                                '</div>',
                             '</tpl>'
                         ],
                         listeners: {
@@ -144,6 +144,32 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                         bodyStyle: 'background:transparent;',
                         listeners: { 'beforeedit': function (e) { return false; } }
                     }
+                ]
+            }, {
+                height: 150,
+                region: 'south',
+                xtype: 'dataview',
+                trackOver: true,
+                autoScroll: true,
+                multiSelect: false,
+                name: 'flowprocessingsteptask',
+                store: {
+                    fields: [ 'taskcode', 'taskname' ],
+                    data: [
+                        { taskcode: '001', taskname: 'Consultar Material' },
+                        { taskcode: '002', taskname: 'Consultar Insumos' }
+                    ]
+                },
+                itemSelector: 'div.thumb-wrap',
+                tpl: [
+                    '<tpl for=".">',
+                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                            '<div class="thumb-task-{taskcode}"></div>',
+                            '<span>',
+                                '<a style="font-size: 14px;">{taskname}</a>',
+                            '</span>',
+                        '</div>',
+                    '</tpl>'
                 ]
             }
         ];

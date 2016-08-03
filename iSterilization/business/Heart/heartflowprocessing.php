@@ -354,6 +354,36 @@ class heartflowprocessing extends \Smart\Data\Proxy {
      * Select
      */
 
+    public function selectTaskName(array $data) {
+        $query = $data['query'];
+
+        $sql = "
+            select
+                u.id,
+                u.username,
+                u.fullname,
+                u.isactive
+            from
+                users u
+            where u.username = :usercode";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":usercode", $query, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectUserCode(array $data) {
         $query = $data['query'];
 
