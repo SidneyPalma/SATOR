@@ -199,7 +199,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     selectUserFlow: function () {
         var me = this,
-            method = '',
             view = me.getView(),
             form = view.down('form');
 
@@ -237,7 +236,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 Smart.Msg.showToast('Estação de Trabalho Não Configurada, Operação Não pode ser Realizada!','error');
                 return false;
             }
-console.info(view.flowtype);
+
             switch(view.flowtype) {
                 case 'flowopen': // Abrir Novo Processamento/Leitura
                     me.onFireTypeOpenFlow(rows,{});
