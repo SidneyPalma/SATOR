@@ -152,6 +152,7 @@ class flowprocessing extends \Smart\Data\Cache {
                 fp.username, 
                 fp.prioritylevel, 
                 fp.dateof, 
+                fp.flowstatus,
                 fp.materialboxid,
                 mb.name as materialboxname,
                 fp.dateto, 

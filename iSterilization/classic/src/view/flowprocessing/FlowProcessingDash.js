@@ -108,7 +108,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                         items: [
                             {
                                 text: 'Iniciar Nova Leitura',
-                                handler: 'flowProcessingOpen'
+                                handler: 'flowProcessingRead'
                             }
                         ]
                     }, {
@@ -216,7 +216,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                         pageSize: 0,
                                                         showClear: true,
                                                         xtype: 'comboenum',
-                                                        name: 'flowstatusdescription'
+                                                        name: 'flowstatusdescription',
+                                                        listeners: {
+                                                            select: 'onSelectFlowStatus',
+                                                            showclear: 'showClearFlowStatus'
+                                                        }
                                                     }
                                                 ]
                                             }
@@ -271,7 +275,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                                                                 pageSize: 0,
                                                                 showClear: true,
                                                                 xtype: 'comboenum',
-                                                                name: 'flowstepstatusdescription'
+                                                                name: 'flowstepstatusdescription',
+                                                                listeners: {
+                                                                    select: 'onSelectFlowStepStatus',
+                                                                    showclear: 'showClearFlowStepStatus'
+                                                                }
                                                             }
                                                         ]
                                                     }

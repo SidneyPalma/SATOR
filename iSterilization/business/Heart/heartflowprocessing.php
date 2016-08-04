@@ -354,6 +354,36 @@ class heartflowprocessing extends \Smart\Data\Proxy {
      * Select
      */
 
+    public function selectTaskName(array $data) {
+        $query = $data['query'];
+
+        $sql = "
+            select
+                u.id,
+                u.username,
+                u.fullname,
+                u.isactive
+            from
+                users u
+            where u.username = :usercode";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":usercode", $query, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectUserCode(array $data) {
         $query = $data['query'];
 
@@ -463,6 +493,61 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         try {
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectFlowItem(array $data) {
+        $query = $data['query'];
+
+        $sql = "
+            select
+                ib.id,
+                ib.name as materialname,
+                ib.barcode,
+                ib.description,
+                b.materialboxid,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo,
+                mf.name as manufacturername,
+                -- tipo de fluxo e prioridade
+                mtf.sterilizationtypeid,
+                st.name as sterilizationtypename,
+                mtf.prioritylevel,
+                dbo.getEnum('prioritylevel',mtf.prioritylevel) as priorityleveldescription,
+                st.name +' ('+ dbo.getEnum('prioritylevel',mtf.prioritylevel) +')' as sterilizationpriority
+            from
+                itembase ib
+                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+                inner join material m on ( m.id = ib.id )
+                inner join materialtypeflow mtf on ( mtf.materialid = m.id and mtf.prioritylevel = 'N' )
+                inner join sterilizationtype st on ( st.id = mtf.sterilizationtypeid )
+                outer apply (
+					select top 1
+						mbi.materialboxid
+					from
+						materialboxitem mbi
+					where mbi.materialid = ib.id
+				) b
+            where ib.isactive = 1
+              and (
+                    ib.barcode = :barcode OR
+                    ib.name COLLATE Latin1_General_CI_AI LIKE :name
+              )";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_INT);
+            $pdo->bindValue(":name", "{$query}%", \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
