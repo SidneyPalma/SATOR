@@ -78,7 +78,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                 search.focus(false,200);
             });
         } else {
-            search.hide();
+            if(search.getValue().length != 0) {
+                search.reset();
+            } else search.hide();
         }
     },
 
