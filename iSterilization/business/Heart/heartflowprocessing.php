@@ -155,8 +155,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     }
 
     public function newFlowView(array $data) {
-        $coach = new \iSterilization\Coach\flowprocessing();
         $query = self::jsonToObject($data['query']);
+
+        $coach = new \iSterilization\Coach\flowprocessing();
 
         $coach->getStore()->getModel()->set('areasid',$query->areasid);
         $coach->getStore()->getModel()->set('clientid',$query->clientid);
