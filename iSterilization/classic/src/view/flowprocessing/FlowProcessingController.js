@@ -558,13 +558,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Consultar Material
      *          -   Encerrar Leitura
      *          -   Ler Insumos
-     *          -   Cancelar Leitura Relizadas
+     *          -   Cancelar Leituras Relizadas
      *          -   Cancelar Ultima Leitura
      *          -   Imprimir Etiquetas
      *          -   Solictar Quebra de Fluxo
-     *          -   SIM Usa EPI
-     *          -   NÂO Usa EPI
-     *          -   Pesquisar Manual por Material
+     *          -   Relatar uso de EPI
+     *              -   SIM Usa EPI
+     *              -   NÂO Usa EPI
+     *          -
      */
 
     /**

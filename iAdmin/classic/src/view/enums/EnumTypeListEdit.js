@@ -46,6 +46,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeListEdit', {
                         defaultType: 'textfield',
                         defaults: {
                             anchor: '100%',
+                            allowBlank: false,
                             useLabelBold: true
                         },
                         items: [
@@ -77,6 +78,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeListEdit', {
                                     }, {
                                         flex: 1,
                                         minValue: 0,
+                                        allowBlank: false,
                                         fieldLabel: 'Ordenar',
                                         xtype: 'numberfield',
                                         name: 'orderby'
