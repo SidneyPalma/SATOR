@@ -107,6 +107,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                                         // E
                                         pageSize: 0,
                                         showClear: true,
+                                        multiSelect: true,
                                         name: 'serviceequipment',
                                         hiddenNameId: 'serviceequipmentid',
                                         fieldLabel: 'Teste Indicador Obrigatório',
@@ -118,6 +119,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                                         // E
                                         pageSize: 0,
                                         showClear: true,
+                                        multiSelect: true,
                                         name: 'serviceareas',
                                         hiddenNameId: 'serviceareasid',
                                         fieldLabel: 'Registrar Temperatura/Umidade da Área do Equipamento',

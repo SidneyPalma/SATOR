@@ -114,7 +114,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Rastreabilidade
      */
-
     onAfterRenderDash: function () {
         var me = this,
             date = new Date(),
@@ -399,7 +398,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         placesearch.validate();
         view.down('hiddenfield[name=clienttype]').setValue(clienttype);
-
     },
 
     showClearClient: function (field, eOpts) {
@@ -560,13 +558,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Consultar Material
      *          -   Encerrar Leitura
      *          -   Ler Insumos
-     *          -   Cancelar Leitura Relizadas
+     *          -   Cancelar Leituras Relizadas
      *          -   Cancelar Ultima Leitura
      *          -   Imprimir Etiquetas
      *          -   Solictar Quebra de Fluxo
-     *          -   SIM
-     *          -   NÂO
-     *          -   Pesquisar Manual por Material
+     *          -   Relatar uso de EPI
+     *              -   SIM Usa EPI
+     *              -   NÂO Usa EPI
+     *          -
      */
 
     /**
