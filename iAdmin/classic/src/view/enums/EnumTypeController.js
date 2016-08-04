@@ -56,7 +56,13 @@ Ext.define( 'iAdmin.view.enums.EnumTypeController', {
     },
 
     insertView: function () {
-        Ext.widget('enumtypelistedit').show();
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('enumtypelistedit').show(null,function () {
+            this.xdata = view.xdata;
+            this.down('hiddenfield[name=enumtypeid]').setValue(view.xdata.get('id'));
+        });
     },
 
     updateView: function () {

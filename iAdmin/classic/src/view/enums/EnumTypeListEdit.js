@@ -56,7 +56,8 @@ Ext.define( 'iAdmin.view.enums.EnumTypeListEdit', {
                                 name: 'enumtypeid',
                                 xtype: 'hiddenfield'
                             }, {
-                                anchor: '30%',
+                                anchor: '50%',
+                                maxLength: 5,
                                 fieldLabel: 'Código',
                                 name: 'code'
                             }, {
