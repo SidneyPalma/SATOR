@@ -399,7 +399,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         placesearch.validate();
         view.down('hiddenfield[name=clienttype]').setValue(clienttype);
-
     },
 
     showClearClient: function (field, eOpts) {
