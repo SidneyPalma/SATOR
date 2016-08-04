@@ -723,6 +723,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         portrait.beFileData(record.get('filetype'));
         portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
+    },
+
+    onFlowTaskAction: function () {
+        var me = this,
+            url = 'business/Calls/Quick/FlowProtocol.php?id=1';
+
+        window.open(url);
     }
 
 });

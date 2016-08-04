@@ -3,11 +3,15 @@
 namespace Smart\Utils;
 
 use \fpdf\FPDF;
+use Smart\Data\Proxy;
+use Smart\Setup\Start;
 use Smart\Utils\Session;
-use Smart\Common\Traits as Traits;
+use Smart\Common\Traits;
 
 class Report extends FPDF {
-    use Traits\TresultSet;
+    use \TresultSet;
+
+    private $proxy;
 
     protected $translate = array(
         'monthly'=>array(
@@ -53,7 +57,16 @@ class Report extends FPDF {
     }
 
     public function preConstruct() {
+        $pwd = Start::getPassWord();
+        $usr = Start::getUserName();
+        $dns = Start::getConnnect();
 
+        $link = array($dns, $usr, $pwd);
+        $this->proxy = new Proxy($link);
+    }
+
+    public function getProxy () {
+        return $this->proxy;
     }
 
     public function posConstruct() {

@@ -2,215 +2,87 @@
 
 namespace iSterilization\Quick;
 
-use Smart\Data\Proxy;
-use Smart\Setup\Start;
 use Smart\Utils\Report;
 use Smart\Utils\Session;
+use Endroid\QrCode\QrCode;
 
-class ServiceRegistration extends Report {
-
-    private $proxy;
+class flowprotocol extends Report {
 
     public function preConstruct() {
-        $this->post = (object) self::decodeUTF8($_REQUEST);
-
-        $id = $this->post->id;
-
-        $sizeColumns = array(20,20,20,20,15,15);
-        $this->sizeColumns = $this->scaleCalc(array_sum($sizeColumns),intval($this->getInternalW()),$sizeColumns);
-        $this->squareWidth = intval($this->getInternalW() / 12);
-
-        $this->proxy = new Proxy(array(Start::getConnnect(), Start::getUserName(), Start::getPassWord()));
+        parent::preConstruct();
 
         $sql = "
             select
-                sr.resultvalue,
-                coalesce(sr.resultfield,ib.resultfield) as resultfield
+                etl.code,
+                etl.description
             from
-                serviceregistration sr
-                left join itembase ib on ( ib.id = sr.itembaseid )
-            where sr.id = :id
-              and coalesce(sr.resultfield,ib.resultfield) is not null";
+                enumtype et
+                inner join enumtypelist etl on ( etl.enumtypeid = et.id )
+            where et.name = 'flowprotocol'
+                and etl.isactive = 1
+            order by etl.orderby";
 
-        $pdo = $this->proxy->prepare($sql);
-        $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
-
-        $pdo->execute();
-        $this->rows = $pdo->fetchAll();
-
-        $this->setResultValue();
-    }
-
-    public function setResultValue () {
-
-        $rows = $this->rows;
-
-        if(count($rows) != 0) {
-            $resultvalue = $rows[0]['resultvalue'];
-            $resultfield = $rows[0]['resultfield'];
-
-            $i = 0;
-            $json = self::jsonToArray($resultvalue);
-            $base = self::jsonToArray($resultfield);
-
-            foreach ($base as $item) {
-                $list[$i]['id'] = $i+1;
-                $defaultValue = $item['defaultValue'];
-                $value = isset($json[$i]['value']) ? $json[$i]['value'] : '';
-
-                $defaultValue = strlen($value) != 0 ? $value : $defaultValue;
-
-                $list[$i]['datavalue'] = $defaultValue;
-                $list[$i]['fieldname'] = $item['name'];
-                $list[$i]['fieldtext'] = $item['displayName'];
-                $list[$i]['reference'] = $item["referenceValue"];
-                $list[$i]['formfield'] = self::arrayToJson($item);
-                $list[$i]['showorder'] = str_pad($item['showOrder'],2,'0',STR_PAD_LEFT);
-                $i++;
-            }
-
-            $rows = self::sorterArray($list,'showorder');
-        }
-
-        $this->rows = $rows;
-
-        return $rows;
+        $this->rows = $this->getProxy()->query($sql)->fetchAll();
     }
 
     public function posConstruct() {
-        $this->AliasNbPages();
-        $this->AddFont('LucidaSans-Typewriter','','LTYPE.php');
-        $this->setAllMarginPage(12);
-        $this->AddPage();
-        $this->Detail();
-        $this->Output("ServiceRegistration.pdf", "I");
-    }
-
-    public function setAllMarginPage($margin) {
-        $this->SetMargins($margin,$margin + 2);
-        $this->SetAutoPageBreak(false,$margin);
+        parent::posConstruct();
     }
 
     public function Header() {
-        $id = $this->post->id;
-        $this->squareWidth = intval($this->getInternalW() / 6);
+        $this->squareWidth = $this->getInternalW();
+        $sizeColumns = array(intval($this->squareWidth / 2),intval($this->squareWidth / 2));
+        $this->sizeColumns = $this->scaleCalc(array_sum($sizeColumns),intval($this->squareWidth),$sizeColumns);
 
-        $sql = "
-            SELECT
-                ib.id,
-                ib.name as itembasename,
-                ib.barcode,
-                ib.itembasetype,
-                dbo.getEnum('servicetype',sr.servicetype) as servicetypedescription,
-                dbo.getEnum('itembasetype',ib.itembasetype) as itembasetypedescription,
-                ib.registrationanvisa,
-                mf.name as manufacturername,
-                e.cmeareasid,
-                e.cmeareasname
-            FROM
-                serviceregistration sr
-                inner join itembase ib on ( ib.id = sr.itembaseid )
-                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
-                outer apply (
-                    select
-                        e.cmeareasid,
-                        a.name as cmeareasname
-                    from
-                        equipment e
-                        inner join areas a on ( a.id = e.cmeareasid )
-                    where e.id = ib.id
-                ) e
-            WHERE sr.id = :id";
+        $sw = intval($this->squareWidth / 10);
+        $module = current(explode( '\\', __NAMESPACE__ ));
+        $this->setLogoTipo($module,12,13,15,15);
 
-        $pdo = $this->proxy->prepare($sql);
-        $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
-
-        $pdo->execute();
-        $rows = $pdo->fetchAll();
-
-        $cmeareasname = $rows[0]['cmeareasname'];
-//        $movimentdate = $rows[0]['movimentdate'];
-        $itembasename = $rows[0]['itembasename'];
-        $manufacturername = $rows[0]['manufacturername'];
-        $registrationanvisa = $rows[0]['registrationanvisa'];
-        $servicetypedescription = $rows[0]['servicetypedescription'];
-        $itembasetypedescription = $rows[0]['itembasetypedescription'];
-
-//        $date = new \DateTime($movimentdate);
-        $id = str_pad($id, 6, '0', STR_PAD_LEFT);
-
-        $this->configStyleHeader(14);
-        $this->Cell($this->getInternalW(),6, utf8_decode("Registro de Serviços N# $id"),0,1,'C',false);
-        $this->configStyleHeader(10);
-        //$this->Cell($this->getInternalW(),6, 'Data: '. $date->format('d/m/Y'),0,1,'C',false);
-
-        $this->SetLineWidth(.2);
-        $this->Cell($this->getInternalW(),3, '','B',1,'C');
+        $this->SetFont('Arial', '', 16);
+        $this->Cell($sw * 1.0,4, '',0,0,'L');
+        $this->Cell($sw * 9.0,4, utf8_decode($module),0,1,'L');
+        $this->SetFont('Arial', '', 12);
+        $this->Cell($sw * 1.0,7, '',0,0,'L');
+        $this->Cell($sw * 9.0,7, utf8_decode("Mensagens de Leitura"),0,1,'L');
         $this->Ln(4);
 
-        $this->SetFont('Arial', '', 10);
-        $this->Cell($this->squareWidth,5,'Nome do Item:',0,0,'L',0);
-        $this->configStyleHeader(10);
-        $this->Cell($this->squareWidth*4,5,"$itembasename - $manufacturername",0,1,'L',0);
-
-        $this->SetFont('Arial', '', 10);
-        $this->Cell($this->squareWidth,5,utf8_decode('Item/Serviço:'),0,0,'L',0);
-        $this->configStyleHeader(10);
-        $this->Cell($this->squareWidth*4,5,"$itembasetypedescription - $servicetypedescription",0,1,'L',0);
-
-        $this->SetFont('Arial', '', 10);
-        $this->Cell($this->squareWidth,5,'CMEArea:',0,0,'L',0);
-        $this->configStyleHeader(10);
-        $this->Cell($this->squareWidth*4,5,$cmeareasname,0,1,'L',0);
-        $this->Ln(1);
-    }
-
-    public function getHeaderColumns() {
-        $sw = $this->squareWidth;
-
-        $this->SetFont('Arial', '', 9);
-        $this->SetFillColor(245, 242, 198);
-
-        $this->Cell($sw * 1.0,7,'Campo','B',0,'L',1);
-        $this->Cell($sw * 2.0,7,'Resultado','B',0,'L',1);
-        $this->Cell($sw * 3.0,7,'Valor Referencia','B',1,'L',1);
+        $this->SetLineWidth(.2);
+        $this->Cell($this->squareWidth,3, '','T',1,'C');
     }
 
     public function Detail() {
-        $sw = $this->squareWidth;
+        $posY = 50;
+        $tempDir = __DIR__;
+        $qrCode = new QrCode();
+        $colorFore = array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0);
+        $colorBack = array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0);
 
         $lineColor = 1;
 
-        $this->getHeaderColumns();
+        //$this->getHeaderColumns();
 
         while(list(, $item) = each($this->rows)) {
             extract($item);
 
-            //Control line color
-            $lineColor = ($lineColor == 0) ? 1 : 0;
+            $qrFile = "{$tempDir}{$code}.png";
 
-            //Config Style Details
-            $this->configStyleDetail();
-            $this->SetFont('LucidaSans-Typewriter', '', 8);
+            $qrCode->setText($code)
+                ->setSize(70)
+                ->setPadding(10)
+                ->setErrorCorrection('high')
+                ->setForegroundColor($colorFore)
+                ->setBackgroundColor($colorBack)
+                ->setImageType(QrCode::IMAGE_TYPE_PNG);
 
-            //Print Datas
-            $this->Cell($sw * 1.0,5,"$showorder. $fieldtext",0,0,'L',$lineColor);
-            $this->Cell($sw * 2.0,5,$datavalue,0,0,'L',$lineColor);
-            $this->Cell($sw * 3.0,5,$reference,0,1,'L',$lineColor);
+            $qrCode->render($qrFile);
+            $this->Image($qrFile,50,$posY);
+            unlink($qrFile);
+            $posY += 30;
         }
-
-        $this->SetLineWidth(.2);
-        $this->Cell($this->getInternalW(),3, '','T',1,'C');
-
-        $this->Ln(20);
-        $this->SetFont('Arial', '', 7);
-        $this->Cell($sw * 2.0,4, utf8_decode("Lançado por"),'T',0,'C');
-        $this->Cell($sw * 2.0,3, '',0,0,'C');
-        $this->Cell($sw * 2.0,4, utf8_decode("Encerrado por"),'T',1,'C');
     }
 
     public function Footer() {
-        $this->loadFooter($this->getInternalW(),false);
+        $this->loadFooter($this->getInternalW(),true);
     }
 
 }
