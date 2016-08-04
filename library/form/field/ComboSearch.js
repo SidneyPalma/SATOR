@@ -1,10 +1,12 @@
 //@charset UTF-8
 Ext.define( 'Smart.form.field.ComboSearch', {
+    // extend: 'Ext.form.field.Tag',
     extend: 'Ext.form.field.ComboBox',
 
     alias: 'widget.combosearch',
 
     requires: [
+        'Ext.form.field.Tag',
         'Smart.data.StoreBase'
     ],
 

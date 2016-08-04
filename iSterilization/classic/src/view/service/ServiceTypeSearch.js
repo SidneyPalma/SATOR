@@ -10,6 +10,7 @@ Ext.define( 'iSterilization.view.service.ServiceTypeSearch', {
 
     pageSize: 0,
     editable: false,
+    multiSelect: true,
 
     valueField: 'servicetype',
     displayField: 'servicetypedescription',
