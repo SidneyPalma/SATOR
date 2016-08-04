@@ -9,7 +9,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    layout: 'border',
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
 
     defaults: {
         width: '100%'
@@ -53,9 +56,30 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
     selectStep: function() {
         var me = this;
+
         me.timeoutID = window.setInterval(function () {
             me.fireEvent('selectaction',me);
         }, me.timeoutInterval);
+
+        Ext.create('Ext.util.KeyNav', Ext.getDoc(), {
+            scope: me,
+            esc: function () {
+                me.searchToogle();
+            }
+        });
+    },
+
+    searchToogle: function () {
+        var me = this,
+            search = me.down('textfield[name=search]');
+
+        if(!search.isVisible()) {
+            search.show(false,function () {
+                search.focus(false,200);
+            });
+        } else {
+            search.hide();
+        }
     },
 
     deselectStep: function () {
@@ -81,7 +105,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
         me.items = [
             {
-                region: 'north',
                 xtype: 'container',
                 margin: '10 0 0 0',
                 layout: 'anchor',
@@ -95,7 +118,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                     }
                 ]
             }, {
-                region: 'center',
+                flex: 1,
                 margin: '5 0 0 0',
                 xtype: 'container',
                 layout: {
@@ -105,29 +128,76 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                 items: [
                     {
                         flex: 3,
-                        xtype: 'dataview',
-                        trackOver: true,
-                        autoScroll: true,
-                        multiSelect: false,
-                        name: 'flowprocessingstepaction',
-                        store: 'flowprocessingstepaction',
-                        itemSelector: 'div.thumb-wrap',
-                        tpl: [
-                            '<tpl for=".">',
-                                '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                        xtype: 'container',
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [
+                            {
+                                flex: 1,
+                                xtype: 'dataview',
+                                trackOver: true,
+                                autoScroll: true,
+                                multiSelect: false,
+                                name: 'flowprocessingstepaction',
+                                store: 'flowprocessingstepaction',
+                                itemSelector: 'div.thumb-wrap',
+                                tpl: [
+                                    '<tpl for=".">',
+                                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
                                     '<div class="thumb-action-{flowstepaction}"></div>',
                                     '<span>',
-                                        '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
+                                    '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
                                     '</span>',
-                                '</div>',
-                            '</tpl>'
-                        ],
-                        listeners: {
-                            select: 'onFlowStepSelect',
-                            deselect: 'onFlowStepDeSelect',
-                            itemdblclick: 'onFlowStepAction'
-                        },
-                        emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>',
+                                    '</div>',
+                                    '</tpl>'
+                                ],
+                                listeners: {
+                                    select: 'onFlowStepSelect',
+                                    deselect: 'onFlowStepDeSelect',
+                                    itemdblclick: 'onFlowStepAction'
+                                },
+                                emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>',
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                hidden: true,
+                                name: 'search',
+                                showClear: true,
+                                xtype: 'textfield',
+                                useUpperCase: true,
+                                useReadColor: false,
+                                fieldLabel: 'Consultar',
+                                cls: 'processing-field',
+                                labelCls: 'processing-field-font'
+                            }, {
+                                height: 150,
+                                xtype: 'dataview',
+                                trackOver: true,
+                                autoScroll: true,
+                                multiSelect: false,
+                                name: 'flowprocessingsteptask',
+                                store: {
+                                    fields: [ 'taskcode', 'taskname' ],
+                                    data: [
+                                        { taskcode: '001', taskname: 'Consultar Material' },
+                                        { taskcode: '002', taskname: 'Consultar Insumos' }
+                                    ]
+                                },
+                                itemSelector: 'div.thumb-wrap',
+                                tpl: [
+                                    '<tpl for=".">',
+                                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                    '<div class="thumb-task-{taskcode}"></div>',
+                                    '<span>',
+                                    '<a style="font-size: 14px;">{taskname}</a>',
+                                    '</span>',
+                                    '</div>',
+                                    '</tpl>'
+                                ]
+                            }
+                        ]
                     }, {
                         xtype: 'splitter'
                     }, {
@@ -142,39 +212,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                         frame: false,
                         border: false,
                         bodyStyle: 'background:transparent;',
-                        listeners: { 'beforeedit': function (e) { return false; } }
+                        listeners: {
+                            'beforeedit': function (e) { return false; },
+                            'itemkeydown': function ( tableView, td, cellIndex, record, e, eOpts ) {
+                                if(e.keyCode == 27) {
+                                    tableView.up('flowprocessingstep').searchToogle();
+                                }
+                            }
+                        }
                     }
-                ]
-            }, {
-                height: 150,
-                region: 'south',
-                xtype: 'dataview',
-                trackOver: true,
-                autoScroll: true,
-                multiSelect: false,
-                name: 'flowprocessingsteptask',
-                store: {
-                    fields: [ 'taskcode', 'taskname' ],
-                    data: [
-                        { taskcode: '001', taskname: 'Consultar Material' },
-                        { taskcode: '002', taskname: 'Consultar Insumos' }
-                    ]
-                },
-                itemSelector: 'div.thumb-wrap',
-                tpl: [
-                    '<tpl for=".">',
-                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                            '<div class="thumb-task-{taskcode}"></div>',
-                            '<span>',
-                                '<a style="font-size: 14px;">{taskname}</a>',
-                            '</span>',
-                        '</div>',
-                    '</tpl>'
                 ]
             }
         ];
     }
-
-    // TODO: Criar Icone para Consultar Material, Criar Protocolo para Consultar Material
 
 });

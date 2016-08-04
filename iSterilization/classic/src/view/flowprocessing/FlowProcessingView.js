@@ -146,10 +146,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 useUpperCase: true,
                                 useReadColor: false,
                                 fieldLabel: 'Leitura',
+                                // xtype: 'readerflowprocessing',
                                 cls: 'processing-field',
                                 labelCls: 'processing-field-font',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
+                                        if(e.ESC) {
+                                            field.reset();
+                                        }
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
                                             var view = field.up('flowprocessingview');
                                             view.fireEvent('startreader', field, e, eOpts);

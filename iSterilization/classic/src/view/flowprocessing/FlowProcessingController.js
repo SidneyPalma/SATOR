@@ -127,21 +127,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         datepicker.setValue(date);
         me.selectDatePicker(datepicker,datepicker.getValue());
 
-        view.keyMap = new Ext.util.KeyMap({
-            target: view.getEl(),
-            binding: [
-                {
-                    key: [
-                        Ext.event.Event.HOME,
-                        Ext.event.Event.PAGE_UP
-                    ],
-                    fn: function(){
-                        me.flowProcessingRead();
-                    }
-                }
-            ],
-            scope: me
-        });
+        // view.keyMap = new Ext.util.KeyMap({
+        //     target: view.getEl(),
+        //     binding: [
+        //         {
+        //             key: [
+        //                 Ext.event.Event.HOME,
+        //                 Ext.event.Event.PAGE_UP
+        //             ],
+        //             fn: function(){
+        //                 me.flowProcessingRead();
+        //             }
+        //         }
+        //     ],
+        //     scope: me
+        // });
     },
 
     flowProcessingRead: function () {
@@ -566,7 +566,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Solictar Quebra de Fluxo
      *          -   SIM
      *          -   NÂO
-     *          -
+     *          -   Pesquisar Manual por Material
      */
 
     /**
@@ -579,6 +579,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             data = view.xdata,
             text = 'Material ({0})',
+            // search = view.down('readerflowprocessing'),
             search = view.down('textfield[name=search]'),
             colorschema = data.rows[0].colorschema.split(","),
             schema = "<div style='width: 20px; background: {0}; height: 26px; float: right;'></div>";
