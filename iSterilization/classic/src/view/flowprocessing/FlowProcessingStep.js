@@ -162,8 +162,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 },
                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>',
                             }, {
-                                xtype: 'splitter'
-                            }, {
                                 hidden: true,
                                 name: 'search',
                                 showClear: true,
@@ -200,6 +198,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 ]
                             }
                         ]
+                    }, {
+                        xtype: 'splitter'
                     }, {
                         flex: 2,
                         source: {},
