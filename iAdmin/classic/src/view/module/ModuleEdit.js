@@ -50,7 +50,7 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
 
         me.items = [
             {
-                xtype: 'panel',
+                xtype: 'form',
                 name: 'module',
                 disabled: true,
                 bodyPadding: 10,
@@ -139,7 +139,8 @@ Ext.define( 'iAdmin.view.module.ModuleEdit', {
                     }, {
                         width: 200,
                         height: '100%',
-                        xtype: 'portrait'
+                        xtype: 'portrait',
+                        tableName: 'module'
                     }
                 ]
             }, {

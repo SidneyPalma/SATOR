@@ -210,6 +210,12 @@ Ext.define( 'iAdmin.view.module.ModuleController', {
         me.setModuleData('module');
         me.setModuleForm(view.down('form'));
 
+        me._success = function (form, action) {
+            view.down('modulesearch').reset();
+            delete view.down('modulesearch').lastQuery;
+            view.down('modulesearch').store.removeAll();
+        };
+
         me.updateModule();
     },
 
