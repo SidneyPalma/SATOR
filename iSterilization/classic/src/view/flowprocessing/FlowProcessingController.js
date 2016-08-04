@@ -114,7 +114,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Rastreabilidade
      */
-
     onAfterRenderDash: function () {
         var me = this,
             date = new Date(),
