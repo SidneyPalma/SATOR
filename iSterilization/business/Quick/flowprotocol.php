@@ -41,30 +41,44 @@ class flowprotocol extends Report {
         $this->SetFont('Arial', '', 16);
         $this->Cell($sw * 1.0,4, '',0,0,'L');
         $this->Cell($sw * 9.0,4, utf8_decode($module),0,1,'L');
-        $this->SetFont('Arial', '', 12);
+        $this->SetFont('Arial', '', 10);
         $this->Cell($sw * 1.0,7, '',0,0,'L');
-        $this->Cell($sw * 9.0,7, utf8_decode("Mensagens de Leitura"),0,1,'L');
+        $this->Cell($sw * 9.0,7, utf8_decode("CME - Protocolos Operacionais"),0,1,'L');
         $this->Ln(4);
 
         $this->SetLineWidth(.2);
         $this->Cell($this->squareWidth,3, '','T',1,'C');
+        $this->configStyleHeader(14);
+        $this->Cell($this->getInternalW(),6, utf8_decode("Mensagens de Leitura"),0,1,'C',false);
     }
 
     public function Detail() {
-        $posY = 50;
-        $tempDir = __DIR__;
+        $qrTemp = __DIR__;
         $qrCode = new QrCode();
+        $sw = intval($this->squareWidth / 2);
         $colorFore = array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0);
         $colorBack = array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0);
 
-        $lineColor = 1;
+        $next = 0;
+        $true = 0;
+        $posY = 55;
+        $posX = intval($sw/2);
 
-        //$this->getHeaderColumns();
+        $this->Ln(5);
+        $this->configStyleHeader(10);
 
         while(list(, $item) = each($this->rows)) {
             extract($item);
 
-            $qrFile = "{$tempDir}{$code}.png";
+            $next++;
+            $true = !($next % 2) ? 1 : 0;
+
+            $this->Cell($sw * 1.0,10,$description,'B',$true,'C',1);
+            if($true == 1) {
+                $this->Cell($sw * 2.0,30,'',0,$true,'L',0);
+            }
+
+            $qrFile = "{$qrTemp}{$code}.png";
 
             $qrCode->setText($code)
                 ->setSize(70)
@@ -72,12 +86,15 @@ class flowprotocol extends Report {
                 ->setErrorCorrection('high')
                 ->setForegroundColor($colorFore)
                 ->setBackgroundColor($colorBack)
-                ->setImageType(QrCode::IMAGE_TYPE_PNG);
+                ->setImageType(QrCode::IMAGE_TYPE_PNG)
+                ->render($qrFile);
 
-            $qrCode->render($qrFile);
-            $this->Image($qrFile,50,$posY);
+            $posX = ($true == 1) ? (intval($sw/2)+$sw) : $posX;
+
+            $this->Image($qrFile,$posX,$posY);
+            $posX = intval($sw/2);
+            $posY += ($true == 1) ? 40 : 0;
             unlink($qrFile);
-            $posY += 30;
         }
     }
 
