@@ -198,7 +198,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 ],
                                 listeners: {
                                     itemdblclick: 'onFlowTaskAction'
-                                },
+                                }
                             }
                         ]
                     }, {

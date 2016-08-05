@@ -2,25 +2,22 @@
 
 namespace iSterilization\Quick;
 
-use Smart\Data\Proxy;
-use Smart\Setup\Start;
 use Smart\Utils\Report;
 use Smart\Utils\Session;
 
-class ServiceRegistration extends Report {
-
-    private $proxy;
+class serviceregistration extends Report {
 
     public function preConstruct() {
+
+        parent::preConstruct();
+
         $this->post = (object) self::decodeUTF8($_REQUEST);
 
         $id = $this->post->id;
 
         $sizeColumns = array(20,20,20,20,15,15);
-        $this->sizeColumns = $this->scaleCalc(array_sum($sizeColumns),intval($this->getInternalW()),$sizeColumns);
         $this->squareWidth = intval($this->getInternalW() / 12);
-
-        $this->proxy = new Proxy(array(Start::getConnnect(), Start::getUserName(), Start::getPassWord()));
+        $this->sizeColumns = $this->scaleCalc(array_sum($sizeColumns),intval($this->getInternalW()),$sizeColumns);
 
         $sql = "
             select
@@ -32,7 +29,7 @@ class ServiceRegistration extends Report {
             where sr.id = :id
               and coalesce(sr.resultfield,ib.resultfield) is not null";
 
-        $pdo = $this->proxy->prepare($sql);
+        $pdo = $this->getProxy()->prepare($sql);
         $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
 
         $pdo->execute();
@@ -78,17 +75,18 @@ class ServiceRegistration extends Report {
     }
 
     public function posConstruct() {
-        $this->AliasNbPages();
-        $this->AddFont('LucidaSans-Typewriter','','LTYPE.php');
-        $this->setAllMarginPage(12);
-        $this->AddPage();
-        $this->Detail();
-        $this->Output("ServiceRegistration.pdf", "I");
+        parent::posConstruct();
     }
 
-    public function setAllMarginPage($margin) {
-        $this->SetMargins($margin,$margin + 2);
-        $this->SetAutoPageBreak(false,$margin);
+    public function getHeaderColumns() {
+        $sw = $this->squareWidth;
+
+        $this->SetFont('Arial', '', 9);
+        $this->SetFillColor(245, 242, 198);
+
+        $this->Cell($sw * 1.0,7,'Campo','B',0,'L',1);
+        $this->Cell($sw * 2.0,7,'Resultado','B',0,'L',1);
+        $this->Cell($sw * 3.0,7,'Valor Referencia','B',1,'L',1);
     }
 
     public function Header() {
@@ -122,7 +120,7 @@ class ServiceRegistration extends Report {
                 ) e
             WHERE sr.id = :id";
 
-        $pdo = $this->proxy->prepare($sql);
+        $pdo = $this->getProxy()->prepare($sql);
         $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
 
         $pdo->execute();
@@ -163,17 +161,6 @@ class ServiceRegistration extends Report {
         $this->configStyleHeader(10);
         $this->Cell($this->squareWidth*4,5,$cmeareasname,0,1,'L',0);
         $this->Ln(1);
-    }
-
-    public function getHeaderColumns() {
-        $sw = $this->squareWidth;
-
-        $this->SetFont('Arial', '', 9);
-        $this->SetFillColor(245, 242, 198);
-
-        $this->Cell($sw * 1.0,7,'Campo','B',0,'L',1);
-        $this->Cell($sw * 2.0,7,'Resultado','B',0,'L',1);
-        $this->Cell($sw * 3.0,7,'Valor Referencia','B',1,'L',1);
     }
 
     public function Detail() {

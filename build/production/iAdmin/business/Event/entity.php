@@ -17,7 +17,7 @@ class entity extends \Smart\Data\Event {
      * @param \iAdmin\Model\entity $model
      */
     public function posInsert( \iAdmin\Model\entity &$model ) {
-
+        $this->getProxy()->setUpload($model);
     }
 
     /**
@@ -31,7 +31,7 @@ class entity extends \Smart\Data\Event {
      * @param \iAdmin\Model\entity $model
      */
     public function posUpdate( \iAdmin\Model\entity &$model ) {
-
+        $this->getProxy()->setUpload($model);
     }
 
     /**

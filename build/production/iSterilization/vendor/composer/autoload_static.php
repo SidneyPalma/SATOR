@@ -13,7 +13,12 @@ class ComposerStaticInit84c15ea3fd6adda2f7afc0069d7abf92
         ),
         'S' => 
         array (
+            'Symfony\\Component\\OptionsResolver\\' => 34,
             'Smart\\' => 6,
+        ),
+        'E' => 
+        array (
+            'Endroid\\QrCode\\' => 15,
         ),
     );
 
@@ -22,9 +27,17 @@ class ComposerStaticInit84c15ea3fd6adda2f7afc0069d7abf92
         array (
             0 => __DIR__ . '/../..' . '/business',
         ),
+        'Symfony\\Component\\OptionsResolver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/options-resolver',
+        ),
         'Smart\\' => 
         array (
             0 => __DIR__ . '/../..' . '/../smart',
+        ),
+        'Endroid\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/qrcode/src',
         ),
     );
 
@@ -47,6 +60,15 @@ class ComposerStaticInit84c15ea3fd6adda2f7afc0069d7abf92
 
     public static $classMap = array (
         'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
+        'Endroid\\QrCode\\Exceptions\\DataDoesntExistsException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exceptions/DataDoesntExistsException.php',
+        'Endroid\\QrCode\\Exceptions\\FreeTypeLibraryMissingException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exceptions/FreeTypeLibraryMissingException.php',
+        'Endroid\\QrCode\\Exceptions\\ImageFunctionFailedException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exceptions/ImageFunctionFailedException.php',
+        'Endroid\\QrCode\\Exceptions\\ImageFunctionUnknownException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exceptions/ImageFunctionUnknownException.php',
+        'Endroid\\QrCode\\Exceptions\\ImageSizeTooLargeException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exceptions/ImageSizeTooLargeException.php',
+        'Endroid\\QrCode\\Exceptions\\ImageTypeInvalidException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exceptions/ImageTypeInvalidException.php',
+        'Endroid\\QrCode\\Exceptions\\VersionTooLargeException' => __DIR__ . '/..' . '/endroid/qrcode/src/Exceptions/VersionTooLargeException.php',
+        'Endroid\\QrCode\\Factory\\QrCodeFactory' => __DIR__ . '/..' . '/endroid/qrcode/src/Factory/QrCodeFactory.php',
+        'Endroid\\QrCode\\QrCode' => __DIR__ . '/..' . '/endroid/qrcode/src/QrCode.php',
         'PHPExcel' => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes/PHPExcel.php',
         'PHPExcel_Autoloader' => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes/PHPExcel/Autoloader.php',
         'PHPExcel_Best_Fit' => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes/PHPExcel/Shared/trend/bestFitClass.php',
@@ -275,26 +297,45 @@ class ComposerStaticInit84c15ea3fd6adda2f7afc0069d7abf92
         'Smart\\Utils\\Session' => __DIR__ . '/../..' . '/../smart/Utils/Session.php',
         'Smart\\Utils\\Submit' => __DIR__ . '/../..' . '/../smart/Utils/Submit.php',
         'Smart\\Utils\\Version' => __DIR__ . '/../..' . '/../smart/Utils/Version.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\AccessException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/AccessException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/ExceptionInterface.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/InvalidArgumentException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\InvalidOptionsException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/InvalidOptionsException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\MissingOptionsException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/MissingOptionsException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\NoSuchOptionException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/NoSuchOptionException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\OptionDefinitionException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/OptionDefinitionException.php',
+        'Symfony\\Component\\OptionsResolver\\Exception\\UndefinedOptionsException' => __DIR__ . '/..' . '/symfony/options-resolver/Exception/UndefinedOptionsException.php',
+        'Symfony\\Component\\OptionsResolver\\Options' => __DIR__ . '/..' . '/symfony/options-resolver/Options.php',
+        'Symfony\\Component\\OptionsResolver\\OptionsResolver' => __DIR__ . '/..' . '/symfony/options-resolver/OptionsResolver.php',
         'fpdf\\FPDF' => __DIR__ . '/..' . '/itbz/fpdf/src/fpdf/FPDF.php',
         'fpdf\\FPDF_EXTENDED' => __DIR__ . '/..' . '/itbz/fpdf/src/fpdf/FPDF/EXTENDED.php',
         'iSterilization\\Cache\\flowprocessing' => __DIR__ . '/../..' . '/business/Cache/flowprocessing.php',
-        'iSterilization\\Cache\\flowprocessingaction' => __DIR__ . '/../..' . '/business/Cache/flowprocessingaction.php',
         'iSterilization\\Cache\\flowprocessingstep' => __DIR__ . '/../..' . '/business/Cache/flowprocessingstep.php',
+        'iSterilization\\Cache\\flowprocessingstepaction' => __DIR__ . '/../..' . '/business/Cache/flowprocessingstepaction.php',
+        'iSterilization\\Cache\\flowprocessingstepmaterial' => __DIR__ . '/../..' . '/business/Cache/flowprocessingstepmaterial.php',
+        'iSterilization\\Cache\\flowprocessingstepmessage' => __DIR__ . '/../..' . '/business/Cache/flowprocessingstepmessage.php',
         'iSterilization\\Cache\\serviceregistration' => __DIR__ . '/../..' . '/business/Cache/serviceregistration.php',
         'iSterilization\\Coach\\flowprocessing' => __DIR__ . '/../..' . '/business/Coach/flowprocessing.php',
-        'iSterilization\\Coach\\flowprocessingaction' => __DIR__ . '/../..' . '/business/Coach/flowprocessingaction.php',
         'iSterilization\\Coach\\flowprocessingstep' => __DIR__ . '/../..' . '/business/Coach/flowprocessingstep.php',
+        'iSterilization\\Coach\\flowprocessingstepaction' => __DIR__ . '/../..' . '/business/Coach/flowprocessingstepaction.php',
+        'iSterilization\\Coach\\flowprocessingstepmaterial' => __DIR__ . '/../..' . '/business/Coach/flowprocessingstepmaterial.php',
+        'iSterilization\\Coach\\flowprocessingstepmessage' => __DIR__ . '/../..' . '/business/Coach/flowprocessingstepmessage.php',
         'iSterilization\\Coach\\serviceregistration' => __DIR__ . '/../..' . '/business/Coach/serviceregistration.php',
         'iSterilization\\Event\\flowprocessing' => __DIR__ . '/../..' . '/business/Event/flowprocessing.php',
-        'iSterilization\\Event\\flowprocessingaction' => __DIR__ . '/../..' . '/business/Event/flowprocessingaction.php',
         'iSterilization\\Event\\flowprocessingstep' => __DIR__ . '/../..' . '/business/Event/flowprocessingstep.php',
+        'iSterilization\\Event\\flowprocessingstepaction' => __DIR__ . '/../..' . '/business/Event/flowprocessingstepaction.php',
+        'iSterilization\\Event\\flowprocessingstepmaterial' => __DIR__ . '/../..' . '/business/Event/flowprocessingstepmaterial.php',
+        'iSterilization\\Event\\flowprocessingstepmessage' => __DIR__ . '/../..' . '/business/Event/flowprocessingstepmessage.php',
         'iSterilization\\Event\\serviceregistration' => __DIR__ . '/../..' . '/business/Event/serviceregistration.php',
         'iSterilization\\Heart\\heartflowprocessing' => __DIR__ . '/../..' . '/business/Heart/heartflowprocessing.php',
         'iSterilization\\Model\\flowprocessing' => __DIR__ . '/../..' . '/business/Model/flowprocessing.php',
-        'iSterilization\\Model\\flowprocessingaction' => __DIR__ . '/../..' . '/business/Model/flowprocessingaction.php',
         'iSterilization\\Model\\flowprocessingstep' => __DIR__ . '/../..' . '/business/Model/flowprocessingstep.php',
+        'iSterilization\\Model\\flowprocessingstepaction' => __DIR__ . '/../..' . '/business/Model/flowprocessingstepaction.php',
+        'iSterilization\\Model\\flowprocessingstepmaterial' => __DIR__ . '/../..' . '/business/Model/flowprocessingstepmaterial.php',
+        'iSterilization\\Model\\flowprocessingstepmessage' => __DIR__ . '/../..' . '/business/Model/flowprocessingstepmessage.php',
         'iSterilization\\Model\\serviceregistration' => __DIR__ . '/../..' . '/business/Model/serviceregistration.php',
-        'iSterilization\\Quick\\ServiceRegistration' => __DIR__ . '/../..' . '/business/Quick/ServiceRegistration.php',
+        'iSterilization\\Quick\\flowprotocol' => __DIR__ . '/../..' . '/business/Quick/flowprotocol.php',
+        'iSterilization\\Quick\\serviceregistration' => __DIR__ . '/../..' . '/business/Quick/serviceregistration.php',
         'ntlm_sasl_client_class' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
         'phpmailerException' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
     );
