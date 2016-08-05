@@ -4,6 +4,21 @@ Ext.define( 'iAdmin.view.person.entity.EntityController', {
 
     alias: 'controller.entity',
 
+    config: {
+        control: {
+            'entityedit portrait filefield': {
+                loadend: 'onLoadEnd'
+            }
+        }
+    },
+
+    onLoadEnd: function (field,file) {
+        var me = this,
+            view = me.getView(),
+            portrait = view.down('portrait');
+        field.doFileData(portrait);
+    },
+
 	onViewShow: function (panel, eOpts) {
 		var me = this,
 			view = me.getView(),
@@ -16,7 +31,9 @@ Ext.define( 'iAdmin.view.person.entity.EntityController', {
 		var me = this,
 			view = me.getView();
 
-		view.down('form').loadRecord(record);		
+		view.down('form').loadRecord(record);
+        view.down('portrait').setUrl(me.url);
+        view.down('portrait').beFileData(record.get('filetype'));
 	},
 	
     updateView: function () {
@@ -26,7 +43,7 @@ Ext.define( 'iAdmin.view.person.entity.EntityController', {
         me.setModuleData('entity');
         me.setModuleForm(view.down('form'));
 
-        me.updateRecord();
+        me.updateModule();
     },
 
     insertView: function () {

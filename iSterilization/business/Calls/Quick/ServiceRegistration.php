@@ -2,4 +2,4 @@
 
 require_once '../../../vendor/autoload.php';
 
-new \iSterilization\Quick\ServiceRegistration();
+new \iSterilization\Quick\serviceregistration();

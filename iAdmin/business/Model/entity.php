@@ -51,6 +51,18 @@ class entity extends \Smart\Data\Model {
     private $cnesnumber;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"binary2base64,filedata"}
+     */
+    private $filedata;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $fileinfo;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -143,6 +155,38 @@ class entity extends \Smart\Data\Model {
      */
     public function setCnesnumber($cnesnumber) {
         $this->cnesnumber = $cnesnumber;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getFiledata() {
+        return $this->filedata;
+    }
+
+    /**
+     * @param type $filedata
+     * @return \iAdmin\Model\entity
+     */
+    public function setFiledata($filedata) {
+        $this->filedata = $filedata;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getFileinfo() {
+        return $this->fileinfo;
+    }
+
+    /**
+     * @param type $fileinfo
+     * @return \iAdmin\Model\entity
+     */
+    public function setFileinfo($fileinfo) {
+        $this->fileinfo = $fileinfo;
         return $this;
     }
 
