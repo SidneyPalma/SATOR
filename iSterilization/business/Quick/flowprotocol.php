@@ -25,10 +25,6 @@ class flowprotocol extends Report {
         $this->rows = $this->getProxy()->query($sql)->fetchAll();
     }
 
-    public function posConstruct() {
-        parent::posConstruct();
-    }
-
     public function Header() {
         $this->squareWidth = $this->getInternalW();
         $sizeColumns = array(intval($this->squareWidth / 2),intval($this->squareWidth / 2));
@@ -36,19 +32,22 @@ class flowprotocol extends Report {
 
         $sw = intval($this->squareWidth / 10);
         $module = current(explode( '\\', __NAMESPACE__ ));
-        $this->setLogoTipo($module,12,13,15,15);
+        $this->setLogoMark(12,13,15,15);
+        $this->setLogoTipo($module,($this->squareWidth - 2),13,15,15);
 
         $this->SetFont('Arial', '', 16);
         $this->Cell($sw * 1.0,4, '',0,0,'L');
-        $this->Cell($sw * 9.0,4, utf8_decode($module),0,1,'L');
+        $this->Cell($sw * 9.0,4, $this->getEntity()->name,0,1,'L');
         $this->SetFont('Arial', '', 10);
         $this->Cell($sw * 1.0,7, '',0,0,'L');
         $this->Cell($sw * 9.0,7, utf8_decode("CME - Protocolos Operacionais"),0,1,'L');
-        $this->Ln(4);
+        $this->SetFont('Arial', '', 8);
+        $this->Cell($sw * 1.0,4, '',0,0,'L');
+        $this->Cell($sw * 9.0,4, $this->getEntity()->legalname,0,1,'L');
 
         $this->SetLineWidth(.2);
         $this->Cell($this->squareWidth,3, '','T',1,'C');
-        $this->configStyleHeader(14);
+        $this->configStyleHeader(16);
         $this->Cell($this->getInternalW(),6, utf8_decode("Mensagens de Leitura"),0,1,'C',false);
     }
 
@@ -65,7 +64,7 @@ class flowprotocol extends Report {
         $posX = intval($sw/2);
 
         $this->Ln(5);
-        $this->configStyleHeader(10);
+        $this->configStyleHeader(14);
 
         while(list(, $item) = each($this->rows)) {
             extract($item);
@@ -73,7 +72,8 @@ class flowprotocol extends Report {
             $next++;
             $true = !($next % 2) ? 1 : 0;
 
-            $this->Cell($sw * 1.0,10,$description,'B',$true,'C',1);
+            $this->Cell($sw * 1.0,10,"$description",'B',$true,'C',1);
+
             if($true == 1) {
                 $this->Cell($sw * 2.0,30,'',0,$true,'L',0);
             }
@@ -92,14 +92,10 @@ class flowprotocol extends Report {
             $posX = ($true == 1) ? (intval($sw/2)+$sw) : $posX;
 
             $this->Image($qrFile,$posX,$posY);
-            $posX = intval($sw/2);
             $posY += ($true == 1) ? 40 : 0;
+            $posX = intval($sw/2);
             unlink($qrFile);
         }
-    }
-
-    public function Footer() {
-        $this->loadFooter($this->getInternalW(),true);
     }
 
 }

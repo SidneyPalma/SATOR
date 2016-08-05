@@ -12,6 +12,7 @@ class Report extends FPDF {
     use Traits\TresultSet;
 
     protected $proxy;
+    protected $entity = [];
     protected $margin = 12;
 
     protected $translate = array(
@@ -64,10 +65,40 @@ class Report extends FPDF {
 
         $link = array($dns, $usr, $pwd);
         $this->proxy = new Proxy($link);
+
+        $sql = "
+            select top 1
+                name,
+                legalname,
+                cnpjnumber,
+                cnesnumber,
+                fileinfo,
+                dbo.binary2base64(filedata) as filedata
+            from entity";
+
+        $rows = $this->proxy->query($sql)->fetchAll();
+        $this->entity = (object) $rows[0];
     }
 
     public function getProxy () {
         return $this->proxy;
+    }
+    public function getEntity () {
+        return $this->entity;
+    }
+
+    public function setLogoMark($posX = 20, $posY = 20, $sizeW = 20, $sizeH = 20) {
+
+        $data = $this->entity->filedata;
+        $info = json_decode($this->entity->fileinfo);
+        $name = $info->fileName;
+
+        $file = base64_decode($data);
+
+        if( file_put_contents($name,$file) !== false ) {
+            $this->Image($name,$posX,$posY,$sizeW,$sizeH);
+            unlink($name);
+        }
     }
 
     public function setLogoTipo($module, $posX = 20, $posY = 20, $sizeW = 20, $sizeH = 20) {
@@ -290,6 +321,10 @@ class Report extends FPDF {
             }
         }
         return $l;
+    }
+
+    public function Footer() {
+        $this->loadFooter($this->getInternalW(),true);
     }
 
 }

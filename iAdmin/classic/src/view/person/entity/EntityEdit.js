@@ -7,6 +7,7 @@ Ext.define( 'iAdmin.view.person.entity.EntityEdit', {
     requires: [
         'Ext.form.Panel',
         'Ext.window.Window',
+        'Smart.form.Portrait',
         'Ext.button.Segmented',
         'Smart.form.field.ComboEnum',
 		'iAdmin.model.person.Entity',
@@ -59,16 +60,41 @@ Ext.define( 'iAdmin.view.person.entity.EntityEdit', {
                         cls: 'sub-title-label',
                         text: 'Entidade'
                     }, {
-                        name: 'name',
-                        fieldLabel: 'Nome'
-                    }, {
-                        name: 'legalname',
-                        fieldLabel: 'Razão Social'
-                    }, {
-                        fieldLabel: 'Responsável CME',
-                        xtype: 'collaboratorsearch',
-                        hiddenNameId: 'collaboratorid',
-                        name: 'collaboratorname'
+                        xtype: 'container',
+                        layout: 'hbox',
+                        items: [
+                            {
+                                flex: 1,
+                                xtype: 'container',
+                                layout: 'anchor',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    anchor: '100%',
+                                    allowBlank: false
+                                },
+                                items: [
+                                    {
+                                        name: 'name',
+                                        fieldLabel: 'Nome'
+                                    }, {
+                                        name: 'legalname',
+                                        fieldLabel: 'Razão Social'
+                                    }, {
+                                        fieldLabel: 'Responsável CME',
+                                        xtype: 'collaboratorsearch',
+                                        hiddenNameId: 'collaboratorid',
+                                        name: 'collaboratorname'
+                                    }
+                                ]
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                width: 150,
+                                height: '100%',
+                                xtype: 'portrait',
+                                tableName: 'entity'
+                            }
+                        ]
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
@@ -119,6 +145,7 @@ Ext.define( 'iAdmin.view.person.entity.EntityEdit', {
                             iconCls: "fa fa-upload",
                             handler: 'updateView'
                         }, {
+                            hidden: true,
                             iconCls: "fa fa-file",
                             handler: 'insertView'
                         }
