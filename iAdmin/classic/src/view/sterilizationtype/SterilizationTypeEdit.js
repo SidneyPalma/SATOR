@@ -14,6 +14,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
     constrain: true,
 
     width: 450,
+    modal: true,
     resizable: false,
     showAnimate: true,
     layout: 'fit',
@@ -58,6 +59,24 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                         name: 'isactive',
                         xtype: 'checkboxfield',
                         boxLabel: 'Ativo'
+                    }, {
+                        height: 350,
+                        xtype: 'tabpanel',
+                        items: [
+                            {
+                                title: 'Excessões',
+                                xtype: 'form',
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '100%'
+                                },
+                                items: [
+                                    {
+
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
