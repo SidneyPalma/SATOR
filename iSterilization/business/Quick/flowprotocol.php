@@ -83,6 +83,8 @@ class flowprotocol extends Report {
             $qrCode->setText($code)
                 ->setSize(70)
                 ->setPadding(10)
+				->setLabel($code)
+				->setLabelFontSize(10)
                 ->setErrorCorrection('high')
                 ->setForegroundColor($colorFore)
                 ->setBackgroundColor($colorBack)

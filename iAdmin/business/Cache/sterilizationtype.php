@@ -114,7 +114,6 @@ class sterilizationtype extends \Smart\Data\Cache {
     }
 
     public function selectFlag(array $data) {
-//        $flags = $this->recordFlag($data);
         $proxy = $this->getStore()->getProxy();
         $filtertype = $data['filtertype'];
 
@@ -135,15 +134,6 @@ class sterilizationtype extends \Smart\Data\Cache {
         try {
 
             $rows = $proxy->query($sql)->fetchAll();
-//            $i = 0;
-//            if(count($flags) != 0) {
-//                foreach($rows as $data) {
-//                    if(in_array($data['code'], $flags)) {
-//                        $rows[$i]['isactive'] = 1;
-//                    }
-//                    $i++;
-//                }
-//            }
 
             self::_setRows($rows);
         } catch ( \PDOException $e ) {
