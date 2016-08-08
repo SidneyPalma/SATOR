@@ -397,8 +397,6 @@ Ext.define( 'Smart.util.CoreFlow', {
 
                         cell.set('steplevel',(cell.get('type') == 'uml.StartState') ? 0 : level);
                     },this);
-                } else {
-
                 }
 
                 return (valid) ? 1 : 0;
