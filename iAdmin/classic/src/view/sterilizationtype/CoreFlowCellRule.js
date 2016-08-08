@@ -169,7 +169,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellRule', {
             text: 'Fechar',
             showSmartTheme: 'red',
             handler: function (btn) {
-                btn.up('window').close();
+                btn.windowClose();
             }
         }
     ]
