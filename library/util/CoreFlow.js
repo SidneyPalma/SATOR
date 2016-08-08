@@ -323,6 +323,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                 var error = [];
                 var valid = false;
                 var cells = this.model.getElements();
+                var areas = ['basic.Area','basic.SubArea'];
 
                 Ext.each(cells,function(item){
                     if(item instanceof joint.shapes.basic.Step) {
@@ -338,31 +339,48 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.$el.find( "svg" ).css( "border", valid ? "1px solid black" : "1px solid red");
                 this.$el.find( "svg" ).css( "background-color", valid ? "white" : "rgba(245, 241, 225, .5)");
 
-                // var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
-                //
-                // Ext.each(sourceLinks,function(link){
-                //     link.attr('.marker-target/fill', '#4b4a67');
-                //     link.attr('.marker-target/stroke', '#4b4a67');
-                //     link.attr('.marker-target/d', 'M 10 0 L 0 5 L 10 10 z');
-                //     link.attr('.marker-target/transform', 'scale(1)');
-                // });
+                Ext.each(cells,function(cell){
+                    var sourceLinks = this.model.getConnectedLinks(cell, { inbound : true });
+                    var targetLinks = this.model.getConnectedLinks(cell, { outbound : true });
+                    Ext.each(targetLinks,function(link){
+                        link.attr('.marker-target/fill', '#4b4a67');
+                        link.attr('.marker-target/stroke', '#4b4a67');
+                        link.attr('.marker-target/d', 'M 10 0 L 0 5 L 10 10 z');
+                        link.attr('.marker-target/transform', 'scale(1)');
+                    },this);
+
+                    Ext.each(sourceLinks,function(link){
+                        link.attr('.marker-target/fill', '#4b4a67');
+                        link.attr('.marker-target/stroke', '#4b4a67');
+                        link.attr('.marker-target/d', 'M 10 0 L 0 5 L 10 10 z');
+                        link.attr('.marker-target/transform', 'scale(1)');
+                    },this);
+
+                },this);
 
                 if(valid) {
                     Ext.each(cells,function(cell){
                         var level = 0;
                         var model = cell;
+                        // var exceptionby = model.get('exceptionby');
+                        // var isNumber = Ext.isNumber(exceptionby) && (parseInt(exceptionby) != 0);
                         var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
                         var targetLinks = this.model.getConnectedLinks(model, { outbound : true });
 
                         model.set('exceptiondo', ( targetLinks.length >= 2 ) ? 1 : 0);
 
+                        // if(isNumber) {
+                        //     Ext.each(sourceLinks,function(link){
+                        //         link.attr('.marker-target/fill', '#E8DDCB');
+                        //         link.attr('.marker-target/stroke', '#C02942');
+                        //         link.attr('.marker-target/stroke-width', '2');
+                        //         link.attr('.marker-target/stroke-dasharray', '4 3');
+                        //         link.attr('.marker-target/transform', 'scale(1.5)');
+                        //         link.attr('.marker-target/d', 'M33 0 a 11 11 0 1 0 0.0001 0z');
+                        //     },this);
+                        // }
+
                         while ( sourceLinks.length != 0 ) {
-
-                            sourceLinks[0].attr('.marker-target/fill', '#4b4a67');
-                            sourceLinks[0].attr('.marker-target/stroke', '#4b4a67');
-                            sourceLinks[0].attr('.marker-target/d', 'M 10 0 L 0 5 L 10 10 z');
-                            sourceLinks[0].attr('.marker-target/transform', 'scale(1)');
-
                             if(model.get('exceptiondo') == 1) {
                                 sourceLinks[0].attr('.marker-target/fill', '#F8CA00');
                                 sourceLinks[0].attr('.marker-target/stroke', '#E97F02');
@@ -379,6 +397,8 @@ Ext.define( 'Smart.util.CoreFlow', {
 
                         cell.set('steplevel',(cell.get('type') == 'uml.StartState') ? 0 : level);
                     },this);
+                } else {
+
                 }
 
                 return (valid) ? 1 : 0;
