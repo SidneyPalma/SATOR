@@ -335,7 +335,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             breakflow = (stepflaglist.indexOf('006') != -1);
         }
 
-        me.connection(link,breakflow);
+        // me.connection(link,breakflow);
 
         if(breakflow) {
             stepflaglist = stepflaglist.replace('006', '000');
@@ -463,10 +463,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         view.cellView.model.set('stepflaglist',Ext.encode(data));
         view.cellView.model.set('stepsettings',Ext.encode(list));
 
-        me.connection(links);
+        // me.connection(links);
 
         if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
-            me.connection(links,true);
+            // me.connection(links,true);
         }
 
         view.outerScope.updateFlow();
@@ -608,6 +608,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             link.attr('.marker-target/fill', '#4b4a67');
             link.attr('.marker-target/stroke', '#4b4a67');
             link.attr('.marker-target/d', 'M 10 0 L 0 5 L 10 10 z');
+            link.attr('.marker-target/transform', 'scale(1)');
 
             if(breakFlow) {
                 link.attr('.marker-target/fill', '#F8CA00');
@@ -616,8 +617,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 link.attr('.marker-target/stroke-dasharray', '4 3');
                 link.attr('.marker-target/transform', 'scale(1.5)');
                 link.attr('.marker-target/d', 'M33 0 a 11 11 0 1 0 0.0001 0z');
-            } else {
-                link.attr('.marker-target/transform', 'scale(1)');
             }
 
         });
