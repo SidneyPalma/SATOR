@@ -13,9 +13,9 @@ Ext.define( 'Ext.overrides.form.field.Text', {
                     hidden: true,
                     cls: Ext.baseCSSPrefix + 'form-clear-trigger',
                     handler: function (field) {
+                        field.fireEvent('showclear',field,{});
                         field.reset();
                         field.setRawValue('');
-                        field.fireEvent('showclear',field,{});
                         if (field.hiddenNameId) {
                             field.up('component').down('hiddenfield[name=' + field.hiddenNameId + ']').reset();
                         }

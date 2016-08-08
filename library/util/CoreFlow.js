@@ -229,30 +229,30 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.initializeCommandManager();
         },
 
-        showToast: function (text,iconMsg) {
-            var iconCls = {
-                    question: ['x-message-box-question','rgb(38, 153, 23)'],
-                    warning: ['x-message-box-warning','rgb(237, 213, 0)'],
-                    error: ['x-message-box-error','rgb(192, 41, 66)'],
-                    info: ['x-message-box-info','rgb(15, 58, 208)']
-                },
-                msg = iconCls[iconMsg || 'error'][0],
-                clr = iconCls[iconMsg || 'error'][1],
-                html = [
-                    '<div>',
-                        Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
-                        Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
-                    '</div>'
-                ];
-
-            Ext.toast({
-                html: html,
-                align: 't',
-                minWidth: 400,
-                closable: false,
-                slideInDuration: 400
-            });
-        },
+        // showToast: function (text,iconMsg) {
+        //     var iconCls = {
+        //             question: ['x-message-box-question','rgb(38, 153, 23)'],
+        //             warning: ['x-message-box-warning','rgb(237, 213, 0)'],
+        //             error: ['x-message-box-error','rgb(192, 41, 66)'],
+        //             info: ['x-message-box-info','rgb(15, 58, 208)']
+        //         },
+        //         msg = iconCls[iconMsg || 'error'][0],
+        //         clr = iconCls[iconMsg || 'error'][1],
+        //         html = [
+        //             '<div>',
+        //                 Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
+        //                 Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
+        //             '</div>'
+        //         ];
+        //
+        //     Ext.toast({
+        //         html: html,
+        //         align: 't',
+        //         minWidth: 400,
+        //         closable: false,
+        //         slideInDuration: 400
+        //     });
+        // },
 
         // Create a graph, paper and wrap the paper in a PaperScroller.
         initializePaper: function(width,height) {
@@ -368,6 +368,9 @@ Ext.define( 'Smart.util.CoreFlow', {
                         var level = 0;
                         var model = cell;
                         var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
+                        var targetLinks = this.model.getConnectedLinks(model, { outbound : true });
+
+                        model.set('exceptiondo', ( targetLinks.length >= 2 ) ? 1 : 0);
 
                         while ( sourceLinks.length != 0 ) {
                             level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
@@ -465,7 +468,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                  */
                 if (sourceRules.source) {
                     if (!sourceRules.source[targetType]) {
-                        showToast('Tipo errado de elemento, esta associação não é permitida!','warning');
+                        Smart.Msg.showToast('Tipo errado de elemento, esta associação não é permitida!','warning');
                         return false;
                     }
                 } else {
@@ -479,7 +482,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                  * multiplicity
                  */
                 if ( (sourceValid || targetValid) && annotations ) {
-                    showToast('Esta categoria de conexões multiplas não é permitida!','warning');
+                    Smart.Msg.showToast('Esta categoria de conexões multiplas não é permitida!','warning');
                     return false;
                 }
 
@@ -494,7 +497,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     sourceActive += (graph.getCell(id).get('type') == targetType) ? 1 : 0;
                 });
                 if (sourceActive > sourceRules.source[targetType]) {
-                    showToast('O número de conexões entre a origem --> destino já chegou ao limite!','info');
+                    Smart.Msg.showToast('O número de conexões entre a origem --> destino já chegou ao limite!','info');
                     return false;
                 }
 
@@ -509,7 +512,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     targetActive += (graph.getCell(id).get('type') == sourceType) ? 1 : 0;
                 });
                 if (targetActive > targetRules.target[sourceType]) {
-                    showToast('O número de conexões entre a destino --> origem já chegou ao limite!','info');
+                    Smart.Msg.showToast('O número de conexões entre a destino --> origem já chegou ao limite!','info');
                     return false;
                 }
 
@@ -867,7 +870,7 @@ Ext.define( 'Smart.util.CoreFlow', {
         },
 
         initializeValidator: function() {
-            var showToast = this.showToast;
+            // var showToast = this.showToast;
             var rules = ['uml.StartState','uml.EndState'];
 
 
