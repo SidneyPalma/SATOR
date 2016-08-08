@@ -439,16 +439,12 @@ Ext.define( 'Smart.util.CoreFlow', {
                  *  basic.Area is (target) from {basic.Area,...} ( links inbound to basic.Area  )
                  */
                 var rules = graph.rules;
-                console.info(rules);
-                // console.warn(target);
-                // console.info(source);
+
                 var targetType = target.get('type'); // Area
                 var sourceType = source.get('type'); // Equipament
 
                 var targetRules = rules[targetType];
                 var sourceRules = rules[sourceType];
-                console.info('sourceRules',sourceRules);
-                console.warn('targetRules',targetRules);
 
                 var targetLinks = graph.getConnectedLinks(target, { inbound : true });
                 var sourceLinks = graph.getConnectedLinks(source, { outbound : true });
@@ -470,8 +466,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                     return false;
                 }
 
-
-                console.warn(sourceValid,targetValid,annotations );
                 /**
                  * multiplicity
                  */
