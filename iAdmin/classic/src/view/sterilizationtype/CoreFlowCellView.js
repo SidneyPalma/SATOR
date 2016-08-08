@@ -155,6 +155,36 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
                                         dataIndex: 'description'
                                     }
                                 ]
+                            }, {
+                                title: 'Exceções',
+                                xtype: 'form',
+                                name: 'settings',
+                                layout: 'fit',
+                                defaults: {
+                                    anchor: '100%'
+                                },
+                                items: [
+                                    {
+                                        xtype: 'container',
+                                        layout: {
+                                            type: 'vbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                boxLabel: 'Definir fluxo alternativo',
+                                                xtype: 'checkboxfield',
+                                                name: 'flowalternative'
+                                            }, {
+                                                flex: 1,
+                                                boxLabel: 'Autorizar quebra de fluxo',
+                                                xtype: 'checkboxfield',
+                                                name: 'flowbreak'
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -175,7 +205,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
             text: 'Fechar',
             showSmartTheme: 'red',
             handler: function (btn) {
-                btn.up('window').close();
+                btn.windowClose();
             }
         }
     ]

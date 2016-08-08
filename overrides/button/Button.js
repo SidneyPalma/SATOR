@@ -14,6 +14,15 @@ Ext.define( 'Ext.overrides.button.Button', {
         }
         
         me.callParent();
+    },
+
+    windowClose: function () {
+        var me = this,
+            window = me.up('window');
+
+        if(window) {
+            window.close();
+        }
     }
 
 });

@@ -61,12 +61,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
             me.fireEvent('selectaction',me);
         }, me.timeoutInterval);
 
-        // Ext.create('Ext.util.KeyNav', Ext.getDoc(), {
-        //     scope: me,
-        //     esc: function () {
-        //         me.searchToogle();
-        //     }
-        // });
+        Ext.create('Ext.util.KeyNav', Ext.getDoc(), {
+            scope: me,
+            esc: function () {
+                if(me.isVisible()) {
+                    me.searchToogle();
+                }
+            }
+        });
     },
 
     searchToogle: function () {
@@ -198,7 +200,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 ],
                                 listeners: {
                                     itemdblclick: 'onFlowTaskAction'
-                                },
+                                }
                             }
                         ]
                     }, {

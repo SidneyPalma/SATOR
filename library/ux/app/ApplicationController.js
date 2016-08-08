@@ -19,6 +19,9 @@ Ext.define( 'Smart.ux.app.ApplicationController', {
             }, {
                 ref: 'MainPage',
                 selector: 'app-main panel[name=centerpage]'
+            }, {
+                ref: 'MainArea',
+                selector: 'app-main container[name=centerarea]'
             }
         ]);
 

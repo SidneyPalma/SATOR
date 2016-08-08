@@ -7,5 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'iSterilization\\' => array($baseDir . '/business'),
+    'Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
     'Smart\\' => array($baseDir . '/../smart'),
+    'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
 );
