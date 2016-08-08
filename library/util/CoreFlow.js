@@ -229,31 +229,6 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.initializeCommandManager();
         },
 
-        // showToast: function (text,iconMsg) {
-        //     var iconCls = {
-        //             question: ['x-message-box-question','rgb(38, 153, 23)'],
-        //             warning: ['x-message-box-warning','rgb(237, 213, 0)'],
-        //             error: ['x-message-box-error','rgb(192, 41, 66)'],
-        //             info: ['x-message-box-info','rgb(15, 58, 208)']
-        //         },
-        //         msg = iconCls[iconMsg || 'error'][0],
-        //         clr = iconCls[iconMsg || 'error'][1],
-        //         html = [
-        //             '<div>',
-        //                 Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
-        //                 Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
-        //             '</div>'
-        //         ];
-        //
-        //     Ext.toast({
-        //         html: html,
-        //         align: 't',
-        //         minWidth: 400,
-        //         closable: false,
-        //         slideInDuration: 400
-        //     });
-        // },
-
         // Create a graph, paper and wrap the paper in a PaperScroller.
         initializePaper: function(width,height) {
             var showToast = this.showToast;

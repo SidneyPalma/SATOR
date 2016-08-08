@@ -610,11 +610,16 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             link.attr('.marker-target/d', 'M 10 0 L 0 5 L 10 10 z');
 
             if(breakFlow) {
-                link.attr('.marker-target/fill', 'rgb(231, 76, 60)');
-                link.attr('.marker-target/stroke', 'rgb(231, 76, 60)');
-                link.attr('.marker-target/transform', 'scale(1)');
+                link.attr('.marker-target/fill', '#F8CA00');
+                link.attr('.marker-target/stroke', '#E97F02');
+                link.attr('.marker-target/stroke-width', '2');
+                link.attr('.marker-target/stroke-dasharray', '4 3');
+                link.attr('.marker-target/transform', 'scale(1.5)');
                 link.attr('.marker-target/d', 'M33 0 a 11 11 0 1 0 0.0001 0z');
+            } else {
+                link.attr('.marker-target/transform', 'scale(1)');
             }
+
         });
 
     },
