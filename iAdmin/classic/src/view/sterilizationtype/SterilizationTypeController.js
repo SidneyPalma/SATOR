@@ -667,7 +667,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     }
                 });
             }
-        }
+        };
 
         me.updateModule();
     },
