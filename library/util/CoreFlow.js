@@ -345,8 +345,9 @@ Ext.define( 'Smart.util.CoreFlow', {
                         model.set('exceptiondo', exceptiondo ? 1 : 0);
 
                         Ext.each(sourceLinks,function(link) {
-                            link.attr('.marker-target/fill', read ? (exceptionby ? '#EDD500' : '#7A7EE9') : '#4b4a67');
-                            link.attr('.marker-target/stroke', read ? (exceptionby ? '#EDD500' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/fill', read ? (exceptionby ? '#BDFC00' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/stroke', read ? (exceptionby ? '#17998A' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/stroke-width', read ? (exceptionby ? '4' : '1') : '1');
                             link.attr('.marker-target/d', read ? 'M33 0 a 11 11 0 1 0 0.0001 0z' : 'M 10 0 L 0 5 L 10 10 z');
                             link.attr('.marker-target/transform', 'scale(1)');
                         },this);
