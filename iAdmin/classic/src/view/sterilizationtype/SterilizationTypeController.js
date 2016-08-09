@@ -824,6 +824,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 }
             },this);
 
+            // if(!cell) {
+            //     return false;
+            // }
+
             var links = graph.getConnectedLinks(cell, { outbound : true });
 
             Ext.each(links, function(link) {

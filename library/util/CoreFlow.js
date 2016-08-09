@@ -229,7 +229,6 @@ Ext.define( 'Smart.util.CoreFlow', {
 
         // Create a graph, paper and wrap the paper in a PaperScroller.
         initializePaper: function(width,height) {
-            var showToast = this.showToast;
             this.graph = new joint.dia.Graph;
 
             this.graph.rules = {};
@@ -328,8 +327,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                     var model = item;
                     var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
                     var targetLinks = this.model.getConnectedLinks(model, { outbound : true });
-                    var exceptionby = model.get('exceptionby');
-                    var exceptiondo = ( targetLinks.length >= 2 );
 
                     if(model instanceof joint.shapes.basic.Step) {
                         if(!model.get('isValid')) {
@@ -341,14 +338,15 @@ Ext.define( 'Smart.util.CoreFlow', {
 
                     if(areas.indexOf(model.get('type')) != -1) {
                         var flag = model.get('stepflaglist');
+                        var exceptionby = model.get('exceptionby');
+                        var exceptiondo = ( targetLinks.length >= 2 );
                         var read = (flag && ((flag.indexOf('001') != -1) || (flag.indexOf('019') != -1)));
 
                         model.set('exceptiondo', exceptiondo ? 1 : 0);
-                        var isNumber = Ext.isNumber(exceptionby) && (parseInt(exceptionby) != 0);
 
                         Ext.each(sourceLinks,function(link) {
-                            link.attr('.marker-target/fill', read ? (isNumber ? '#EDD500' : '#7A7EE9') : '#4b4a67');
-                            link.attr('.marker-target/stroke', read ? (isNumber ? '#EDD500' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/fill', read ? (exceptionby ? '#EDD500' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/stroke', read ? (exceptionby ? '#EDD500' : '#7A7EE9') : '#4b4a67');
                             link.attr('.marker-target/d', read ? 'M33 0 a 11 11 0 1 0 0.0001 0z' : 'M 10 0 L 0 5 L 10 10 z');
                             link.attr('.marker-target/transform', 'scale(1)');
                         },this);
@@ -452,7 +450,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                         return false;
                     }
                 } else {
-                    showToast('Não há uma regra que se aplique, esta associação não é permitida!','warning');
+                    Smart.Msg.showToast('Não há uma regra que se aplique, esta associação não é permitida!','warning');
                     return false;
                 }
 
@@ -475,7 +473,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     sourceActive += (graph.getCell(id).get('type') == targetType) ? 1 : 0;
                 });
                 if (sourceActive > sourceRules.source[targetType]) {
-                    Smart.Msg.showToast('O número de conexões entre a origem --> destino já chegou ao limite!','info');
+                    Smart.Msg.showToast('O número de conexões entre a origem/destino já chegou ao limite!','info');
                     return false;
                 }
 
@@ -490,7 +488,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     targetActive += (graph.getCell(id).get('type') == sourceType) ? 1 : 0;
                 });
                 if (targetActive > targetRules.target[sourceType]) {
-                    Smart.Msg.showToast('O número de conexões entre a destino --> origem já chegou ao limite!','info');
+                    Smart.Msg.showToast('O número de conexões entre a destino/origem já chegou ao limite!','info');
                     return false;
                 }
 
@@ -848,9 +846,7 @@ Ext.define( 'Smart.util.CoreFlow', {
         },
 
         initializeValidator: function() {
-            // var showToast = this.showToast;
             var rules = ['uml.StartState','uml.EndState'];
-
 
             // This is just for demo purposes. Every application has its own validation rules or no validation
             // rules at all.
@@ -859,7 +855,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.validator.validate('remove',
                 function(err, command, next) {
                     if (rules.indexOf(command.data.type) != -1) {
-                        showToast('Os elementos inicial e final não podem ser removidos!');
+                        Smart.Msg.showToast('Os elementos inicial e final não podem ser removidos!');
                         return next(command.data.type + ' cannot be removed.');
                     }
                     return next();
