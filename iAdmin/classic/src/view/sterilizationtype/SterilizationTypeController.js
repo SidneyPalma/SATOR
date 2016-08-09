@@ -333,7 +333,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         if(targetType == 'basic.Equipment') {
             stepflaglist = target.get('stepflaglist');
-            breakflow = (stepflaglist.indexOf('006') != -1);
+            breakflow = stepflaglist ? (stepflaglist.indexOf('006') != -1) : false;
         }
 
         // me.connection(link,breakflow);
