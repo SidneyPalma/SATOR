@@ -785,6 +785,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         });
     },
 
+    printerFlow: function () {
+        var me = this,
+            view = me.getView(),
+            url = 'business/Calls/Quick/ExceptionByFlow.php?id=1';
+
+        window.open(url);
+    },
+
     onSelectReadArea: function (combo, record, eOpts) {
         var me = this,
             area = [],

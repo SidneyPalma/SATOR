@@ -129,6 +129,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                         showSmartTheme: 'red',
                                         handler: 'updateEdit'
                                     }, {
+                                        iconCls: "fa fa-print",
+                                        showSmartTheme: 'red',
+                                        handler: 'printerFlow'
+                                    }, {
                                         iconCls: "fa fa-reply",
                                         handler: 'commandManagerUndo'
                                     }, {

@@ -5,6 +5,7 @@
   ],
 
   "require": {
+    "endroid/qrcode": "^1.7",
     "itbz/fpdf": "dev-master",
     "phpoffice/phpexcel": "dev-master",
     "phpmailer/phpmailer": "dev-master"
