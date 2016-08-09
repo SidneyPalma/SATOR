@@ -696,6 +696,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             "steplevel": item.get('steplevel'),
             "elementtype": item.get('type'),
             "elementname": item.get('name'),
+            "barcode": item.get('barcode'),
             "stepflaglist": item.get('stepflaglist'),
             "stepsettings": item.get('stepsettings'),
             "steppriority": item.get('steppriority') || 0,
