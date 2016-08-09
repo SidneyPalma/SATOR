@@ -60,8 +60,6 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             dataRef: me.dataRef,
             defaults: joint.util.deepSupplement({
-                // areasiddo: 0,
-                // areasidto: 0,
                 steplevel: 0,
                 isValid: false,
                 type: 'basic.Step',
@@ -147,9 +145,9 @@ Ext.define( 'Smart.util.CoreFlow', {
             });
             item.set('name',data.name);
             item.set('typeid',data.id);
+            item.set('barcode',data.barcode);
             item.set('isactive',data.isactive);
             item.set('description',data.description);
-            // item.set('isstartstate',data.isstartstate);
             list.push(item);
         });
         me.stencil.shapes.area = list;
@@ -167,6 +165,7 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             item.set('name',data.name);
             item.set('typeid',data.id);
+            item.set('barcode',data.barcode);
             item.set('isactive',data.isactive);
             item.set('description',data.description);
             list.push(item);
@@ -190,9 +189,8 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             item.set('name',data.name);
             item.set('typeid',data.id);
-            // item.set('steppriority',0);
+            item.set('barcode',data.barcode);
             item.set('isactive',data.isactive);
-            // item.set('stepflaglist',Ext.encode([]));
             item.set('description',data.description);
             list.push(item);
         });

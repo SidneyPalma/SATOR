@@ -788,9 +788,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     printerFlow: function () {
         var me = this,
             view = me.getView(),
-            url = 'business/Calls/Quick/ExceptionByFlow.php?id=1';
+            url = 'business/Calls/Quick/ExceptionByFlow.php?id={0}';
 
-        window.open(url);
+        window.open(Ext.String.format(url,view.xdata.get('id')));
     },
 
     onSelectReadArea: function (combo, record, eOpts) {
