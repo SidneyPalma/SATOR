@@ -60,8 +60,8 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             dataRef: me.dataRef,
             defaults: joint.util.deepSupplement({
-                areasiddo: 0,
-                areasidto: 0,
+                // areasiddo: 0,
+                // areasidto: 0,
                 steplevel: 0,
                 isValid: false,
                 type: 'basic.Step',
@@ -149,7 +149,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             item.set('typeid',data.id);
             item.set('isactive',data.isactive);
             item.set('description',data.description);
-            item.set('isstartstate',data.isstartstate);
+            // item.set('isstartstate',data.isstartstate);
             list.push(item);
         });
         me.stencil.shapes.area = list;
@@ -190,9 +190,9 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             item.set('name',data.name);
             item.set('typeid',data.id);
-            item.set('steppriority',0);
+            // item.set('steppriority',0);
             item.set('isactive',data.isactive);
-            item.set('stepflaglist',Ext.encode([]));
+            // item.set('stepflaglist',Ext.encode([]));
             item.set('description',data.description);
             list.push(item);
         });
@@ -330,6 +330,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     var model = item;
                     var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
                     var targetLinks = this.model.getConnectedLinks(model, { outbound : true });
+                    var exceptionby = model.get('exceptionby');
                     var exceptiondo = ( targetLinks.length >= 2 );
 
                     if(model instanceof joint.shapes.basic.Step) {
@@ -345,15 +346,16 @@ Ext.define( 'Smart.util.CoreFlow', {
                         var read = (flag && ((flag.indexOf('001') != -1) || (flag.indexOf('019') != -1)));
 
                         model.set('exceptiondo', exceptiondo ? 1 : 0);
+                        var isNumber = Ext.isNumber(exceptionby) && (parseInt(exceptionby) != 0);
 
-                        Ext.each(sourceLinks,function(link){
-                            link.attr('.marker-target/fill', read ? '#7A7EE9' : '#4b4a67');
-                            link.attr('.marker-target/stroke', read ? '#7A7EE9' : '#4b4a67');
+                        Ext.each(sourceLinks,function(link) {
+                            link.attr('.marker-target/fill', read ? (isNumber ? '#BDFC00' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/stroke', read ? (isNumber ? '#BDFC00' : '#7A7EE9') : '#4b4a67');
                             link.attr('.marker-target/d', read ? 'M33 0 a 11 11 0 1 0 0.0001 0z' : 'M 10 0 L 0 5 L 10 10 z');
                             link.attr('.marker-target/transform', 'scale(1)');
                         },this);
 
-                        Ext.each(targetLinks,function(link){
+                        Ext.each(targetLinks,function(link) {
                             link.attr('.marker-target/fill', exceptiondo ? '#E10706' : '#4b4a67');
                             link.attr('.marker-target/stroke', exceptiondo ? '#E10706' : '#4b4a67');
                             link.attr('.marker-target/d', exceptiondo ? 'M33 0 a 11 11 0 1 0 0.0001 0z' : 'M 10 0 L 0 5 L 10 10 z');
@@ -393,16 +395,6 @@ Ext.define( 'Smart.util.CoreFlow', {
             }, this);
 
             this.paper.on('cell:pointerclick', function(cellView, evt, x, y) {
-                var cell = cellView.model;
-
-                // var sourceLinks = this.graph.getConnectedLinks(cell, { inbound : true });
-                // var targetLinks = this.graph.getConnectedLinks(cell, { outbound : true });
-                //
-                // var source = this.graph.getCell(sourceLinks[0].prop('source/id'));
-                // var target = this.graph.getCell(targetLinks[0].prop('target/id'));
-                //
-                // console.info(source,target);
-
             }, this);
 
             this.paper.on('cell:pointerup', function(cellView) {
