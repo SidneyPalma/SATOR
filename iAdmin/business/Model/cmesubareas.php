@@ -22,7 +22,7 @@ class cmesubareas extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,cmeareasid"}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,cmeareasid,areas"}
      */
     private $cmeareasname;
 

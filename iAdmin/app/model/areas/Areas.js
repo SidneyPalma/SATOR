@@ -20,6 +20,9 @@ Ext.define( 'iAdmin.model.areas.Areas', {
             name: 'description',
             type: 'auto'
         }, {
+            name: 'barcode',
+            type: 'auto'
+        }, {
             name: 'workstation',
             type: 'auto'
         }, {
