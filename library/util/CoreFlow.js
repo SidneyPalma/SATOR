@@ -349,8 +349,8 @@ Ext.define( 'Smart.util.CoreFlow', {
                         var isNumber = Ext.isNumber(exceptionby) && (parseInt(exceptionby) != 0);
 
                         Ext.each(sourceLinks,function(link) {
-                            link.attr('.marker-target/fill', read ? (isNumber ? '#BDFC00' : '#7A7EE9') : '#4b4a67');
-                            link.attr('.marker-target/stroke', read ? (isNumber ? '#BDFC00' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/fill', read ? (isNumber ? '#EDD500' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/stroke', read ? (isNumber ? '#EDD500' : '#7A7EE9') : '#4b4a67');
                             link.attr('.marker-target/d', read ? 'M33 0 a 11 11 0 1 0 0.0001 0z' : 'M 10 0 L 0 5 L 10 10 z');
                             link.attr('.marker-target/transform', 'scale(1)');
                         },this);
