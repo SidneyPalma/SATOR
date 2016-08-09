@@ -466,9 +466,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         // me.connection(links);
 
-        if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
-            // me.connection(links,true);
-        }
+        // if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
+        //     // me.connection(links,true);
+        // }
 
         view.outerScope.updateFlow();
 
@@ -667,7 +667,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     }
                 });
             }
-        }
+        };
 
         me.updateModule();
     },
