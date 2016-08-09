@@ -151,6 +151,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     onAfterLayout: function () {
         var me = this,
             view = me.getView(),
+            data = view.xdata,
             flow = view.down('form[name=sterilizationtypeflow]'),
             span = Ext.getBody().getById('paper-container-span'),
             core = Ext.create('Smart.util.CoreFlow', { url: me.url, scope: me });
@@ -165,7 +166,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 d = view.xdata.get('dataflowrule');
 
             me.router.graph.rules = d ? Ext.decode(d) : me.router.graph.rules;
-            span.update(view.xdata.get('name'));
+            span.update(Ext.String.format('{0} v.{1}',data.get('name'),data.get('version')));
 
             if(g) {
                 me.router.graph.fromJSON(Ext.decode(g));
@@ -711,7 +712,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         var me = this,
             dataflowstep = [],
             view = me.getView(),
-            cells = me.router.graph.getElements();
+            cells = me.router.graph.getElements(),
+            span = Ext.getBody().getById('paper-container-span');
 
         view.setLoading('Salvando alterações...');
 
@@ -728,13 +730,19 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 action: 'update',
                 rows: Ext.encode({
                     id: view.xdata.get('id'),
+                    version: view.xdata.get('version'),
                     dataflowstep: Ext.encode(dataflowstep),
                     authenticate: me.router.paper.authenticate(),
                     graphpaper: Ext.encode(me.router.graph.toJSON())
                 })
             },
-            callback: function () {
+            callback: function (options, success, response) {
                 view.setLoading(false);
+                if(success) {
+                    var data = Ext.decode(response.responseText);
+                    view.xdata.set('version',data.rows[0].version);
+                    span.update(Ext.String.format('{0} v.{1}',data.rows[0].name,data.rows[0].version));
+                }
             }
         });
     },

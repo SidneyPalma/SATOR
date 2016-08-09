@@ -30,6 +30,12 @@ class sterilizationtype extends \Smart\Data\Event {
      */
     public function preUpdate( \iAdmin\Model\sterilizationtype &$model ) {
 		Session::hasProfile('6C3C7DCD-D33A-4434-81D9-767287F88344','4BF2F3C8-BFC0-4DD8-A491-B2C4C3673C69');
+        $version = $model->getVersion();
+
+        if(is_numeric($version)) {
+            $version = intval($version)+1;
+            $model->set('version',$version);
+        }
     }
 
     /**

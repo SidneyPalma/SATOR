@@ -40,7 +40,9 @@ Ext.define( 'iAdmin.model.sterilizationtype.SterilizationType', {
             critical: true
         }, {
             name: 'version',
-            type: 'int'
+            type: 'int',
+            persist: true,
+            critical: true
         }
     ]
 
