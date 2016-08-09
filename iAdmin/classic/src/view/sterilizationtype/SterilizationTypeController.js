@@ -765,6 +765,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         });
 
+        readarea = (readarea.length != 0) ? Smart.Rss.sortArrayBy(readarea, "steplevel") : readarea;
+
         Ext.widget('sterilizationtypeedit', {
             graph: graph,
             outerScope: me,
