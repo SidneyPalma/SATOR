@@ -73,16 +73,22 @@ Ext.define( 'iAdmin.view.helper.areas.CMESubAreasEdit', {
                     }, {
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
+                        defaultType: 'textfield',
                         items: [
                             {
                                 flex: 3,
                                 fieldLabel: 'Descrição no Fluxo',
-                                xtype: 'textfield',
                                 name: 'sterilizationname'
                             }, {
                                 xtype: 'splitter'
                             }, {
-                                flex: 1,
+                                flex: 2,
+                                fieldLabel: 'Código de Barra',
+                                name: 'barcode'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 2,
                                 hideTrigger: true,
                                 xtype: 'numberfield',
                                 fieldLabel: 'Ordenar por',

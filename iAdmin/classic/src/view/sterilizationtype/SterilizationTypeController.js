@@ -151,6 +151,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
     onAfterLayout: function () {
         var me = this,
             view = me.getView(),
+            data = view.xdata,
             flow = view.down('form[name=sterilizationtypeflow]'),
             span = Ext.getBody().getById('paper-container-span'),
             core = Ext.create('Smart.util.CoreFlow', { url: me.url, scope: me });
@@ -165,7 +166,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 d = view.xdata.get('dataflowrule');
 
             me.router.graph.rules = d ? Ext.decode(d) : me.router.graph.rules;
-            span.update(view.xdata.get('name'));
+            span.update(Ext.String.format('{0} v.{1}',data.get('name'),data.get('version')));
 
             if(g) {
                 me.router.graph.fromJSON(Ext.decode(g));
@@ -335,7 +336,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             breakflow = (stepflaglist.indexOf('006') != -1);
         }
 
-        me.connection(link,breakflow);
+        // me.connection(link,breakflow);
 
         if(breakflow) {
             stepflaglist = stepflaglist.replace('006', '000');
@@ -463,10 +464,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         view.cellView.model.set('stepflaglist',Ext.encode(data));
         view.cellView.model.set('stepsettings',Ext.encode(list));
 
-        me.connection(links);
+        // me.connection(links);
 
         if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
-            me.connection(links,true);
+            // me.connection(links,true);
         }
 
         view.outerScope.updateFlow();
@@ -608,13 +609,17 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             link.attr('.marker-target/fill', '#4b4a67');
             link.attr('.marker-target/stroke', '#4b4a67');
             link.attr('.marker-target/d', 'M 10 0 L 0 5 L 10 10 z');
+            link.attr('.marker-target/transform', 'scale(1)');
 
             if(breakFlow) {
-                link.attr('.marker-target/fill', 'rgb(231, 76, 60)');
-                link.attr('.marker-target/stroke', 'rgb(231, 76, 60)');
-                link.attr('.marker-target/transform', 'scale(1)');
+                link.attr('.marker-target/fill', '#F8CA00');
+                link.attr('.marker-target/stroke', '#E97F02');
+                link.attr('.marker-target/stroke-width', '2');
+                link.attr('.marker-target/stroke-dasharray', '4 3');
+                link.attr('.marker-target/transform', 'scale(1.5)');
                 link.attr('.marker-target/d', 'M33 0 a 11 11 0 1 0 0.0001 0z');
             }
+
         });
 
     },
@@ -691,6 +696,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             "steplevel": item.get('steplevel'),
             "elementtype": item.get('type'),
             "elementname": item.get('name'),
+            "barcode": item.get('barcode'),
             "stepflaglist": item.get('stepflaglist'),
             "stepsettings": item.get('stepsettings'),
             "steppriority": item.get('steppriority') || 0,
@@ -707,7 +713,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         var me = this,
             dataflowstep = [],
             view = me.getView(),
-            cells = me.router.graph.getElements();
+            cells = me.router.graph.getElements(),
+            span = Ext.getBody().getById('paper-container-span');
 
         view.setLoading('Salvando alterações...');
 
@@ -724,13 +731,19 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 action: 'update',
                 rows: Ext.encode({
                     id: view.xdata.get('id'),
+                    version: view.xdata.get('version'),
                     dataflowstep: Ext.encode(dataflowstep),
                     authenticate: me.router.paper.authenticate(),
                     graphpaper: Ext.encode(me.router.graph.toJSON())
                 })
             },
-            callback: function () {
+            callback: function (options, success, response) {
                 view.setLoading(false);
+                if(success) {
+                    var data = Ext.decode(response.responseText);
+                    view.xdata.set('version',data.rows[0].version);
+                    span.update(Ext.String.format('{0} v.{1}',data.rows[0].name,data.rows[0].version));
+                }
             }
         });
     },
@@ -761,6 +774,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         });
 
+        readarea = (readarea.length != 0) ? Smart.Rss.sortArrayBy(readarea, "steplevel") : readarea;
+
         Ext.widget('sterilizationtypeedit', {
             graph: graph,
             outerScope: me,
@@ -769,6 +784,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             this.down('form').loadRecord(view.xdata);
             this.down('form[name=stepflaglist]').reset();
         });
+    },
+
+    printerFlow: function () {
+        var me = this,
+            view = me.getView(),
+            url = 'business/Calls/Quick/ExceptionByFlow.php?id={0}';
+
+        window.open(Ext.String.format(url,view.xdata.get('id')));
     },
 
     onSelectReadArea: function (combo, record, eOpts) {
@@ -800,6 +823,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     cell = item;
                 }
             },this);
+
+            // if(!cell) {
+            //     return false;
+            // }
 
             var links = graph.getConnectedLinks(cell, { outbound : true });
 

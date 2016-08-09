@@ -60,8 +60,6 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             dataRef: me.dataRef,
             defaults: joint.util.deepSupplement({
-                areasiddo: 0,
-                areasidto: 0,
                 steplevel: 0,
                 isValid: false,
                 type: 'basic.Step',
@@ -147,9 +145,9 @@ Ext.define( 'Smart.util.CoreFlow', {
             });
             item.set('name',data.name);
             item.set('typeid',data.id);
+            item.set('barcode',data.barcode);
             item.set('isactive',data.isactive);
             item.set('description',data.description);
-            item.set('isstartstate',data.isstartstate);
             list.push(item);
         });
         me.stencil.shapes.area = list;
@@ -167,6 +165,7 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             item.set('name',data.name);
             item.set('typeid',data.id);
+            item.set('barcode',data.barcode);
             item.set('isactive',data.isactive);
             item.set('description',data.description);
             list.push(item);
@@ -190,9 +189,8 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             item.set('name',data.name);
             item.set('typeid',data.id);
-            item.set('steppriority',0);
+            item.set('barcode',data.barcode);
             item.set('isactive',data.isactive);
-            item.set('stepflaglist',Ext.encode([]));
             item.set('description',data.description);
             list.push(item);
         });
@@ -229,34 +227,8 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.initializeCommandManager();
         },
 
-        // showToast: function (text,iconMsg) {
-        //     var iconCls = {
-        //             question: ['x-message-box-question','rgb(38, 153, 23)'],
-        //             warning: ['x-message-box-warning','rgb(237, 213, 0)'],
-        //             error: ['x-message-box-error','rgb(192, 41, 66)'],
-        //             info: ['x-message-box-info','rgb(15, 58, 208)']
-        //         },
-        //         msg = iconCls[iconMsg || 'error'][0],
-        //         clr = iconCls[iconMsg || 'error'][1],
-        //         html = [
-        //             '<div>',
-        //                 Ext.String.format('<div class="{0}" style="float: left; width: 28px; font-size: 28px; color: {1}"></div>',msg,clr),
-        //                 Ext.String.format('<div style="float: right; font-size: 18px; line-height: 28px;">{0}</div>',text),
-        //             '</div>'
-        //         ];
-        //
-        //     Ext.toast({
-        //         html: html,
-        //         align: 't',
-        //         minWidth: 400,
-        //         closable: false,
-        //         slideInDuration: 400
-        //     });
-        // },
-
         // Create a graph, paper and wrap the paper in a PaperScroller.
         initializePaper: function(width,height) {
-            var showToast = this.showToast;
             this.graph = new joint.dia.Graph;
 
             this.graph.rules = {};
@@ -348,39 +320,60 @@ Ext.define( 'Smart.util.CoreFlow', {
                 var error = [];
                 var valid = false;
                 var cells = this.model.getElements();
+                var areas = ['basic.Area','basic.SubArea'];
 
-                Ext.each(cells,function(item){
-                    if(item instanceof joint.shapes.basic.Step) {
-                        if(!item.get('isValid')) {
-                            error.push(item);
+                Ext.each(cells,function(item) {
+                    var level = 0;
+                    var model = item;
+                    var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
+                    var targetLinks = this.model.getConnectedLinks(model, { outbound : true });
+
+                    if(model instanceof joint.shapes.basic.Step) {
+                        if(!model.get('isValid')) {
+                            error.push(model);
                         }
                     }
-                    equip += (item.get('type') == 'basic.Equipment') ? 1 : 0;
+
+                    equip += (model.get('type') == 'basic.Equipment') ? 1 : 0;
+
+                    if(areas.indexOf(model.get('type')) != -1) {
+                        var flag = model.get('stepflaglist');
+                        var exceptionby = model.get('exceptionby');
+                        var exceptiondo = ( targetLinks.length >= 2 );
+                        var read = (flag && ((flag.indexOf('001') != -1) || (flag.indexOf('019') != -1)));
+
+                        model.set('exceptiondo', exceptiondo ? 1 : 0);
+
+                        Ext.each(sourceLinks,function(link) {
+                            link.attr('.marker-target/fill', read ? (exceptionby ? '#BDFC00' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/stroke', read ? (exceptionby ? '#17998A' : '#7A7EE9') : '#4b4a67');
+                            link.attr('.marker-target/stroke-width', read ? (exceptionby ? '4' : '1') : '1');
+                            link.attr('.marker-target/d', read ? 'M33 0 a 11 11 0 1 0 0.0001 0z' : 'M 10 0 L 0 5 L 10 10 z');
+                            link.attr('.marker-target/transform', 'scale(1)');
+                        },this);
+
+                        Ext.each(targetLinks,function(link) {
+                            link.attr('.marker-target/fill', exceptiondo ? '#E10706' : '#4b4a67');
+                            link.attr('.marker-target/stroke', exceptiondo ? '#E10706' : '#4b4a67');
+                            link.attr('.marker-target/d', exceptiondo ? 'M33 0 a 11 11 0 1 0 0.0001 0z' : 'M 10 0 L 0 5 L 10 10 z');
+                            link.attr('.marker-target/transform', 'scale(1)');
+                        },this);
+                    }
+
+                    while ( sourceLinks.length != 0 ) {
+                        level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
+                        model = this.model.getCell(sourceLinks[0].prop('source/id'));
+                        sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
+                    }
+
+                    item.set('steplevel',(item.get('type') == 'uml.StartState') ? 0 : level);
+
                 },this);
 
                 valid = ((equip != 0)&&(error.length == 0));
 
                 this.$el.find( "svg" ).css( "border", valid ? "1px solid black" : "1px solid red");
                 this.$el.find( "svg" ).css( "background-color", valid ? "white" : "rgba(245, 241, 225, .5)");
-
-                if(valid) {
-                    Ext.each(cells,function(cell){
-                        var level = 0;
-                        var model = cell;
-                        var sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
-                        var targetLinks = this.model.getConnectedLinks(model, { outbound : true });
-
-                        model.set('exceptiondo', ( targetLinks.length >= 2 ) ? 1 : 0);
-
-                        while ( sourceLinks.length != 0 ) {
-                            level += (model.get('type') != 'uml.BreakFlow') ? 1 : 0;
-                            model = this.model.getCell(sourceLinks[0].prop('source/id'));
-                            sourceLinks = this.model.getConnectedLinks(model, { inbound : true });
-                        }
-
-                        cell.set('steplevel',(cell.get('type') == 'uml.StartState') ? 0 : level);
-                    },this);
-                }
 
                 return (valid) ? 1 : 0;
             };
@@ -399,16 +392,6 @@ Ext.define( 'Smart.util.CoreFlow', {
             }, this);
 
             this.paper.on('cell:pointerclick', function(cellView, evt, x, y) {
-                var cell = cellView.model;
-
-                // var sourceLinks = this.graph.getConnectedLinks(cell, { inbound : true });
-                // var targetLinks = this.graph.getConnectedLinks(cell, { outbound : true });
-                //
-                // var source = this.graph.getCell(sourceLinks[0].prop('source/id'));
-                // var target = this.graph.getCell(targetLinks[0].prop('target/id'));
-                //
-                // console.info(source,target);
-
             }, this);
 
             this.paper.on('cell:pointerup', function(cellView) {
@@ -445,16 +428,12 @@ Ext.define( 'Smart.util.CoreFlow', {
                  *  basic.Area is (target) from {basic.Area,...} ( links inbound to basic.Area  )
                  */
                 var rules = graph.rules;
-                console.info(rules);
-                // console.warn(target);
-                // console.info(source);
+
                 var targetType = target.get('type'); // Area
                 var sourceType = source.get('type'); // Equipament
 
                 var targetRules = rules[targetType];
                 var sourceRules = rules[sourceType];
-                console.info('sourceRules',sourceRules);
-                console.warn('targetRules',targetRules);
 
                 var targetLinks = graph.getConnectedLinks(target, { inbound : true });
                 var sourceLinks = graph.getConnectedLinks(source, { outbound : true });
@@ -472,12 +451,10 @@ Ext.define( 'Smart.util.CoreFlow', {
                         return false;
                     }
                 } else {
-                    showToast('Não há uma regra que se aplique, esta associação não é permitida!','warning');
+                    Smart.Msg.showToast('Não há uma regra que se aplique, esta associação não é permitida!','warning');
                     return false;
                 }
 
-
-                console.warn(sourceValid,targetValid,annotations );
                 /**
                  * multiplicity
                  */
@@ -497,7 +474,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     sourceActive += (graph.getCell(id).get('type') == targetType) ? 1 : 0;
                 });
                 if (sourceActive > sourceRules.source[targetType]) {
-                    Smart.Msg.showToast('O número de conexões entre a origem --> destino já chegou ao limite!','info');
+                    Smart.Msg.showToast('O número de conexões entre a origem/destino já chegou ao limite!','info');
                     return false;
                 }
 
@@ -512,7 +489,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     targetActive += (graph.getCell(id).get('type') == sourceType) ? 1 : 0;
                 });
                 if (targetActive > targetRules.target[sourceType]) {
-                    Smart.Msg.showToast('O número de conexões entre a destino --> origem já chegou ao limite!','info');
+                    Smart.Msg.showToast('O número de conexões entre a destino/origem já chegou ao limite!','info');
                     return false;
                 }
 
@@ -870,9 +847,7 @@ Ext.define( 'Smart.util.CoreFlow', {
         },
 
         initializeValidator: function() {
-            // var showToast = this.showToast;
             var rules = ['uml.StartState','uml.EndState'];
-
 
             // This is just for demo purposes. Every application has its own validation rules or no validation
             // rules at all.
@@ -881,7 +856,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.validator.validate('remove',
                 function(err, command, next) {
                     if (rules.indexOf(command.data.type) != -1) {
-                        showToast('Os elementos inicial e final não podem ser removidos!');
+                        Smart.Msg.showToast('Os elementos inicial e final não podem ser removidos!');
                         return next(command.data.type + ' cannot be removed.');
                     }
                     return next();

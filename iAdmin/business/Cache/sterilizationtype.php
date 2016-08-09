@@ -63,6 +63,7 @@ class sterilizationtype extends \Smart\Data\Cache {
                 $sql = "
                     SELECT
                       a.id,
+                      a.barcode,
                       a.sterilizationname as name,
                       a.description,
                       a.isactive,
@@ -76,6 +77,7 @@ class sterilizationtype extends \Smart\Data\Cache {
                 $sql = "
                     SELECT
                       a.id,
+                      a.barcode,
                       a.sterilizationname as name,
                       a.description,
                       a.isactive
@@ -88,6 +90,7 @@ class sterilizationtype extends \Smart\Data\Cache {
                 $sql = "
                     SELECT
                         e.id,
+                        ib.barcode,
                         e.sterilizationname as name,
                         ib.description,
                         dbo.binary2base64(ib.filedata) as filedata,
