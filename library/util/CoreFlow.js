@@ -390,7 +390,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                         source.isValid(this.graph);
                     }
 
-
                     if(!hasValidLink(linked) || !connectivity(source,target,this.graph)) {
                         linked.remove();
                     } else {
@@ -482,7 +481,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                 }
 
                 return true;
-
             };
 
             this.paperScroller = new joint.ui.PaperScroller({
