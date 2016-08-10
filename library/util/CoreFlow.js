@@ -644,7 +644,7 @@ Ext.define( 'Smart.util.CoreFlow', {
 
             KeyboardJS.on('delete, backspace', _.bind(function(evt, keys) {
 
-                return false;
+                //return false;
 
                 if (!$.contains(evt.target, this.paper.el)) {
                     // remove selected elements from the paper only if the target is the paper
