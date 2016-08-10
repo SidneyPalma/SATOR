@@ -120,8 +120,6 @@ Ext.define( 'Ext.overrides.app.BaseController', {
             return false;
         }
 
-        // idValue = (idValue.indexOf('SMART_') == -1) ? idValue : '';
-
         fm.setLoading('Salvando alterações...');
 
         if(idValue) {
