@@ -53,19 +53,37 @@ class exceptionbyflow extends Report {
         $this->Cell($this->getInternalW(),6, "$name v.$version",0,1,'C',false);
     }
 
-    public function Detail() {
-        $data = [];
+    public function QrCode($qrCode,$qrStep) {
         $qrTemp = __DIR__;
-        $qrCode = new QrCode();
-        $sw = intval($this->squareWidth / 2);
+        $tpStep = self::arrayToOject($qrStep);
         $colorFore = array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0);
         $colorBack = array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0);
+
+        $qrFile = "{$qrTemp}{$tpStep->text}.png";
+
+        $qrCode
+            ->setText($tpStep->text)
+            ->setSize(60)
+            ->setPadding(10)
+//            ->setLabel($tpStep->mark)
+//            ->setLabelFontSize(10)
+            ->setErrorCorrection('high')
+            ->setForegroundColor($colorFore)
+            ->setBackgroundColor($colorBack)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG)
+            ->render($qrFile);
+
+        $this->Image($qrFile,$tpStep->posX,$tpStep->posY);
+        unlink($qrFile);
+    }
+
+    public function Detail() {
+        $qrStep = [];
+        $qrCode = new QrCode();
+        $sw = intval($this->squareWidth / 2);
         $flow = self::encodeUTF8(self::jsonToArray($this->rows->dataflowstep));
 
-        $next = 0;
-        $true = 0;
-        $posY = 55;
-        $posX = intval($sw/2);
+        $posX = intval($sw/2) + (2.3);
 
         $this->Ln(5);
         $this->configStyleHeader(14);
@@ -80,70 +98,25 @@ class exceptionbyflow extends Report {
         }
 
         foreach ($list as $item) {
-            $next++;
-            $true = !($next % 2) ? 1 : 0;
-
+            $step = self::arrayToOject($item['step']);
             $elementname = utf8_decode($item['elementname']);
 
-            $this->Cell($sw * 1.0,10,$elementname,'B',$true,'C',1);
+            $this->configStyleHeader(12);
+            $this->Cell($sw * 1.0,10,$elementname,'B',1,'C',1);
 
-            if($true == 1) {
-                $this->Cell($sw * 2.0,30,'',0,$true,'L',0);
+            foreach ($step as $field => $value) {
+                $this->Ln(1);
+                $qrStep['posX'] = $posX;
+                $qrStep['posY'] = $this->y;
+                $qrStep['text'] = $value->barcode;
+                $qrStep['mark'] = $value->elementname;
+
+                $this->QrCode($qrCode,$qrStep);
+                $this->Cell($sw * 1.0,20,'',0,1,'C',0);
+                $this->SetFont('Arial', '', 10);
+                $this->Cell($sw * 1.0,7,utf8_decode($value->elementname),0,1,'C',0);
             }
-
-//            $qrFile = "{$qrTemp}{$code}.png";
-//
-//            $qrCode->setText($code)
-//                ->setSize(70)
-//                ->setPadding(10)
-//                ->setLabel($code)
-//                ->setLabelFontSize(10)
-//                ->setErrorCorrection('high')
-//                ->setForegroundColor($colorFore)
-//                ->setBackgroundColor($colorBack)
-//                ->setImageType(QrCode::IMAGE_TYPE_PNG)
-//                ->render($qrFile);
-//
-//            $posX = ($true == 1) ? (intval($sw/2)+$sw) : $posX;
-//
-//            $this->Image($qrFile,$posX,$posY);
-//            $posY += ($true == 1) ? 40 : 0;
-//            $posX = intval($sw/2);
-//            unlink($qrFile);
         }
-
-//        while(list(, $item) = each($this->rows)) {
-//            extract($item);
-//
-//            $next++;
-//            $true = !($next % 2) ? 1 : 0;
-//
-//            $this->Cell($sw * 1.0,10,$description,'B',$true,'C',1);
-//
-//            if($true == 1) {
-//                $this->Cell($sw * 2.0,30,'',0,$true,'L',0);
-//            }
-//
-//            $qrFile = "{$qrTemp}{$code}.png";
-//
-//            $qrCode->setText($code)
-//                ->setSize(70)
-//                ->setPadding(10)
-//                ->setLabel($code)
-//                ->setLabelFontSize(10)
-//                ->setErrorCorrection('high')
-//                ->setForegroundColor($colorFore)
-//                ->setBackgroundColor($colorBack)
-//                ->setImageType(QrCode::IMAGE_TYPE_PNG)
-//                ->render($qrFile);
-//
-//            $posX = ($true == 1) ? (intval($sw/2)+$sw) : $posX;
-//
-//            $this->Image($qrFile,$posX,$posY);
-//            $posY += ($true == 1) ? 40 : 0;
-//            $posX = intval($sw/2);
-//            unlink($qrFile);
-//        }
     }
 
 }
