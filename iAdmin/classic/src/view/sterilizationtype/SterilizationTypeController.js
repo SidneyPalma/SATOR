@@ -203,16 +203,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     onGraphChanged: function (graph, scope) {
         var me = this,
-            view = me.getView(),
-            items = graph.getElements(),
-            flow = view.down('form[name=sterilizationtypeflow]'),
+            cells = graph.getElements(),
+            basic = ['basic.Area','basic.SubArea','basic.Equipment'],
             containerSpan = Ext.getBody().getById('paper-container-span');
 
-        me.router.setScope(flow);
-
-        Ext.each(items,function(item){
-            if(item instanceof joint.shapes.basic.Step) {
-                item.isValid(graph);
+        Ext.each(cells,function(cell){
+            if(basic.indexOf(cell.get('type')) != -1) {
+                cell.isValid(graph);
             }
         });
 

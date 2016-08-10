@@ -32,30 +32,19 @@ Ext.define( 'Smart.util.CoreFlow', {
             markup: '<g class="rotatable"><g class="scalable"><image/></g><rect/><text/></g>',
 
             isValid: function (graph) {
-                var exclude = ['uml.StartState','uml.BreakFlow'];
                 var sourceLinks = graph.getConnectedLinks(this, { inbound : true });
                 var targetLinks = graph.getConnectedLinks(this, { outbound : true });
-                var valid = (sourceLinks.length != 0) && (targetLinks.length != 0);
+                var isValid = (sourceLinks.length != 0) && (targetLinks.length != 0);
 
-                if(valid) {
-                    valid = false;
-                    Ext.each(sourceLinks,function(link) {
-                        var source = graph.getCell(link.prop('source/id'));
-                        var sourceType = source.get('type');
-                        if((source instanceof joint.shapes.basic.Step)||(exclude.indexOf(sourceType) != -1)) {
-                            valid = true;
-                        }
-                    });
+                try {
+                    this.set('isValid',isValid);
+                    this.attr('rect/fill', (isValid ? 'transparent' : '#FAE43C'));
+                    this.attr('rect/stroke', (isValid ? 'transparent' : '#C2345C'));
+                }
+                catch(err) {
                 }
 
-                this.setValidation(valid);
-
-                return valid;
-            },
-            setValidation: function (validation) {
-                this.set('isValid',validation);
-                this.attr('rect/fill', (validation ? 'transparent' : '#FAE43C'));
-                this.attr('rect/stroke', (validation ? 'transparent' : '#C2345C'));
+                return isValid;
             },
 
             dataRef: me.dataRef,
@@ -255,9 +244,9 @@ Ext.define( 'Smart.util.CoreFlow', {
                 }
             },this);
 
-            // this.graph.on('remove', function(cell) {
-            //     this.scope.fireEvent('graphchanged', this.graph, this.scope);
-            // },this);
+            this.graph.on('remove', function(cell) {
+                this.scope.fireEvent('graphchanged', this.graph, this.scope);
+            },this);
 
             this.graph.on('add', function(cell) {
                 var numberCells = 1;
@@ -298,12 +287,6 @@ Ext.define( 'Smart.util.CoreFlow', {
 
                 this.scope.fireEvent('dropcellview', this.graph, cell, this.scope);
             }, this);
-
-            // this.graph.on('remove', function(cell) {
-            //     Ext.defer(function(){
-            //         this.scope.fireEvent('graphchanged', this.graph, this.scope);
-            //     }, 1000, this);
-            // }, this);
 
             this.paper = new joint.dia.Paper({
                 width:  width,
