@@ -103,7 +103,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     onAfterRenderView: function (view) {
         var xdata = view.xdata;
-        
+
         if(!xdata) return false;
 
         view.loadRecord(xdata);
@@ -203,16 +203,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     onGraphChanged: function (graph, scope) {
         var me = this,
-            view = me.getView(),
-            items = graph.getElements(),
-            flow = view.down('form[name=sterilizationtypeflow]'),
+            cells = graph.getElements(),
+            basic = ['basic.Area','basic.SubArea','basic.Equipment'],
             containerSpan = Ext.getBody().getById('paper-container-span');
 
-        me.router.setScope(flow);
-
-        Ext.each(items,function(item){
-            if(item instanceof joint.shapes.basic.Step) {
-                item.isValid(graph);
+        Ext.each(cells,function(cell){
+            if(basic.indexOf(cell.get('type')) != -1) {
+                cell.isValid(graph);
             }
         });
 
@@ -298,7 +295,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         var target = view.cellView.paper.model.getCell(view.cellView.model.prop('target/id'));
 
         // if(target.get('type') == 'basic.Equipment') {
-            target.set('steppriority',values.steppriority);
+        target.set('steppriority',values.steppriority);
         // }
 
         view.close();
@@ -333,7 +330,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         if(targetType == 'basic.Equipment') {
             stepflaglist = target.get('stepflaglist');
-            breakflow = stepflaglist ? (stepflaglist.indexOf('006') != -1) : false;
+            breakflow = stepflaglist ? (stepflaglist.indexOf('006') != -1) : null;
         }
 
         // me.connection(link,breakflow);
@@ -466,9 +463,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         // me.connection(links);
 
-        // if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
-        //     // me.connection(links,true);
-        // }
+        if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
+            // me.connection(links,true);
+        }
 
         view.outerScope.updateFlow();
 
@@ -667,7 +664,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     }
                 });
             }
-        };
+        }
 
         me.updateModule();
     },

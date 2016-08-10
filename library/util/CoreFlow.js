@@ -32,30 +32,19 @@ Ext.define( 'Smart.util.CoreFlow', {
             markup: '<g class="rotatable"><g class="scalable"><image/></g><rect/><text/></g>',
 
             isValid: function (graph) {
-                var exclude = ['uml.StartState','uml.BreakFlow'];
                 var sourceLinks = graph.getConnectedLinks(this, { inbound : true });
                 var targetLinks = graph.getConnectedLinks(this, { outbound : true });
-                var valid = (sourceLinks.length != 0) && (targetLinks.length != 0);
+                var isValid = (sourceLinks.length != 0) && (targetLinks.length != 0);
 
-                if(valid) {
-                    valid = false;
-                    Ext.each(sourceLinks,function(link) {
-                        var source = graph.getCell(link.prop('source/id'));
-                        var sourceType = source.get('type');
-                        if((source instanceof joint.shapes.basic.Step)||(exclude.indexOf(sourceType) != -1)) {
-                            valid = true;
-                        }
-                    });
+                try {
+                    this.set('isValid',isValid);
+                    this.attr('rect/fill', (isValid ? 'transparent' : '#FAE43C'));
+                    this.attr('rect/stroke', (isValid ? 'transparent' : '#C2345C'));
+                }
+                catch(err) {
                 }
 
-                this.setValidation(valid);
-
-                return valid;
-            },
-            setValidation: function (validation) {
-                this.set('isValid',validation);
-                this.attr('rect/fill', (validation ? 'transparent' : '#FAE43C'));
-                this.attr('rect/stroke', (validation ? 'transparent' : '#C2345C'));
+                return isValid;
             },
 
             dataRef: me.dataRef,
@@ -78,9 +67,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             defaults: joint.util.deepSupplement({type: 'basic.SubArea'},joint.shapes.basic.Step.prototype.defaults)
         });
         joint.shapes.basic.Equipment = joint.shapes.basic.Step.extend({
-            defaults: joint.util.deepSupplement({
-                type: 'basic.Equipment'
-            },joint.shapes.basic.Step.prototype.defaults)
+            defaults: joint.util.deepSupplement({type: 'basic.Equipment'},joint.shapes.basic.Step.prototype.defaults)
         });
         joint.shapes.uml.BreakFlow = joint.shapes.uml.EndState.extend({
             defaults: joint.util.deepSupplement({type: 'uml.BreakFlow'},joint.shapes.uml.EndState.prototype.defaults)
@@ -299,12 +286,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.scope.fireEvent('dropcellview', this.graph, cell, this.scope);
             }, this);
 
-            this.graph.on('remove', function(cell) {
-                Ext.defer(function(){
-                    this.scope.fireEvent('graphchanged', this.graph, this.scope);
-                }, 1000, this);
-            }, this);
-
             this.paper = new joint.dia.Paper({
                 width:  width,
                 height: height,
@@ -339,7 +320,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     if(areas.indexOf(model.get('type')) != -1) {
                         var flag = model.get('stepflaglist');
                         var exceptionby = model.get('exceptionby');
-                        var exceptiondo = ( targetLinks.length >= 2 );
+                        var exceptiondo = (targetLinks.length >= 2);
                         var read = (flag && ((flag.indexOf('001') != -1) || (flag.indexOf('019') != -1)));
 
                         model.set('exceptiondo', exceptiondo ? 1 : 0);
@@ -405,10 +386,16 @@ Ext.define( 'Smart.util.CoreFlow', {
                     var source = this.graph.getCell(linked.prop('source/id'));
                     var target = this.graph.getCell(linked.prop('target/id'));
 
+                    if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(source.get('type')) != -1) {
+                        source.isValid(this.graph);
+                    }
+
                     if(!hasValidLink(linked) || !connectivity(source,target,this.graph)) {
                         linked.remove();
                     } else {
-                        target.isValid(this.graph);
+                        if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(target.get('type')) != -1) {
+                            target.isValid(this.graph);
+                        }
                     }
 
                 }, this);
@@ -494,7 +481,6 @@ Ext.define( 'Smart.util.CoreFlow', {
                 }
 
                 return true;
-
             };
 
             this.paperScroller = new joint.ui.PaperScroller({
