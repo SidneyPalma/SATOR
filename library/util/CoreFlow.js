@@ -256,7 +256,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             },this);
 
             this.graph.on('remove', function(cell) {
-                this.scope.fireEvent('graphchanged', this.graph, this.scope);
+                //this.scope.fireEvent('graphchanged', this.graph, this.scope);
             },this);
 
             this.graph.on('add', function(cell) {
@@ -643,6 +643,8 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.paper.el.oncontextmenu = function(evt) { evt.preventDefault(); };
 
             KeyboardJS.on('delete, backspace', _.bind(function(evt, keys) {
+
+                return false;
 
                 if (!$.contains(evt.target, this.paper.el)) {
                     // remove selected elements from the paper only if the target is the paper

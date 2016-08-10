@@ -212,7 +212,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         Ext.each(items,function(item){
             if(item instanceof joint.shapes.basic.Step) {
-                item.isValid(graph);
+                if(item.hasOwnProperty('isValid')) {
+                    item.isValid(graph);
+                }
             }
         });
 
