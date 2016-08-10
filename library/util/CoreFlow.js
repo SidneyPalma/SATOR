@@ -67,9 +67,7 @@ Ext.define( 'Smart.util.CoreFlow', {
             defaults: joint.util.deepSupplement({type: 'basic.SubArea'},joint.shapes.basic.Step.prototype.defaults)
         });
         joint.shapes.basic.Equipment = joint.shapes.basic.Step.extend({
-            defaults: joint.util.deepSupplement({
-                type: 'basic.Equipment'
-            },joint.shapes.basic.Step.prototype.defaults)
+            defaults: joint.util.deepSupplement({type: 'basic.Equipment'},joint.shapes.basic.Step.prototype.defaults)
         });
         joint.shapes.uml.BreakFlow = joint.shapes.uml.EndState.extend({
             defaults: joint.util.deepSupplement({type: 'uml.BreakFlow'},joint.shapes.uml.EndState.prototype.defaults)
