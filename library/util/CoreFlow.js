@@ -320,7 +320,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                     if(areas.indexOf(model.get('type')) != -1) {
                         var flag = model.get('stepflaglist');
                         var exceptionby = model.get('exceptionby');
-                        var exceptiondo = ( targetLinks.length >= 2 );
+                        var exceptiondo = (targetLinks.length >= 2);
                         var read = (flag && ((flag.indexOf('001') != -1) || (flag.indexOf('019') != -1)));
 
                         model.set('exceptiondo', exceptiondo ? 1 : 0);
