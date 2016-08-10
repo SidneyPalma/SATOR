@@ -26,7 +26,7 @@ Ext.define( 'iAdmin.view.person.entity.EntityController', {
 
 		view.down('form').loadRecord(record);
 	},
-	
+
 	onSelectRecord: function (combo, record, eOpts) {
 		var me = this,
 			view = me.getView();

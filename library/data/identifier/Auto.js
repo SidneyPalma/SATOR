@@ -10,8 +10,8 @@ Ext.define( 'Smart.data.identifier.Auto', {
 
     config: {
         id: 'auto',
-        prefix: 'SMART_',
-        seed: 0
+        prefix: null,
+        seed: null
     }
 
 });

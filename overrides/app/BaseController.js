@@ -60,7 +60,18 @@ Ext.define( 'Ext.overrides.app.BaseController', {
             url: url || md.getUrl() || me.url,
             params: Ext.Object.merge(defaultParams,params),
             success: function(form, action) {
-                record.commit();
+                var result = action.result ? action.result : null;
+
+                if(result && result.crud == 'delete') {
+                    fm.reset();
+                }
+
+                if(result && result.crud == 'insert') {
+                    record.set(result.rows[0]);
+                    record.commit();
+                    fm.loadRecord(record);
+                }
+
                 fm.setLoading(false);
                 me._success(form, action);
                 me._success = Ext.emptyFn;
