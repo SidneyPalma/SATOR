@@ -255,6 +255,10 @@ Ext.define( 'Smart.util.CoreFlow', {
                 }
             },this);
 
+            this.graph.on('remove', function(cell) {
+                this.scope.fireEvent('graphchanged', this.graph, this.scope);
+            },this);
+
             this.graph.on('add', function(cell) {
                 var numberCells = 1;
                 var numberItems = this.graph.getElements();
@@ -295,15 +299,11 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.scope.fireEvent('dropcellview', this.graph, cell, this.scope);
             }, this);
 
-            // this.graph.on('remove', function(cell) {
-            //     this.scope.fireEvent('graphchanged', this.graph, this.scope);
-            // },this);
-
-            // this.graph.on('remove', function(cell) {
-            //     Ext.defer(function(){
-            //         this.scope.fireEvent('graphchanged', this.graph, this.scope);
-            //     }, 1000, this);
-            // }, this);
+            this.graph.on('remove', function(cell) {
+                Ext.defer(function(){
+                    this.scope.fireEvent('graphchanged', this.graph, this.scope);
+                }, 1000, this);
+            }, this);
 
             this.paper = new joint.dia.Paper({
                 width:  width,
@@ -643,8 +643,6 @@ Ext.define( 'Smart.util.CoreFlow', {
             this.paper.el.oncontextmenu = function(evt) { evt.preventDefault(); };
 
             KeyboardJS.on('delete, backspace', _.bind(function(evt, keys) {
-
-                //return false;
 
                 if (!$.contains(evt.target, this.paper.el)) {
                     // remove selected elements from the paper only if the target is the paper
