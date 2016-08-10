@@ -103,7 +103,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     onAfterRenderView: function (view) {
         var xdata = view.xdata;
-        
+
         if(!xdata) return false;
 
         view.loadRecord(xdata);
@@ -212,9 +212,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         Ext.each(items,function(item){
             if(item instanceof joint.shapes.basic.Step) {
-                if(item.hasOwnProperty('isValid')) {
-                    item.isValid(graph);
-                }
+                item.isValid(graph);
             }
         });
 
@@ -300,7 +298,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         var target = view.cellView.paper.model.getCell(view.cellView.model.prop('target/id'));
 
         // if(target.get('type') == 'basic.Equipment') {
-            target.set('steppriority',values.steppriority);
+        target.set('steppriority',values.steppriority);
         // }
 
         view.close();
@@ -335,7 +333,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         if(targetType == 'basic.Equipment') {
             stepflaglist = target.get('stepflaglist');
-            breakflow = stepflaglist ? (stepflaglist.indexOf('006') != -1) : false;
+            breakflow = breakflow ? (stepflaglist.indexOf('006') != -1) : null;
         }
 
         // me.connection(link,breakflow);
@@ -468,9 +466,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         // me.connection(links);
 
-        // if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
-        //     // me.connection(links,true);
-        // }
+        if(view.cellView.model.get('stepflaglist').indexOf("006") != -1 ) {
+            // me.connection(links,true);
+        }
 
         view.outerScope.updateFlow();
 
@@ -669,7 +667,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     }
                 });
             }
-        };
+        }
 
         me.updateModule();
     },

@@ -255,9 +255,9 @@ Ext.define( 'Smart.util.CoreFlow', {
                 }
             },this);
 
-            this.graph.on('remove', function(cell) {
-                this.scope.fireEvent('graphchanged', this.graph, this.scope);
-            },this);
+            // this.graph.on('remove', function(cell) {
+            //     this.scope.fireEvent('graphchanged', this.graph, this.scope);
+            // },this);
 
             this.graph.on('add', function(cell) {
                 var numberCells = 1;
@@ -299,11 +299,11 @@ Ext.define( 'Smart.util.CoreFlow', {
                 this.scope.fireEvent('dropcellview', this.graph, cell, this.scope);
             }, this);
 
-            this.graph.on('remove', function(cell) {
-                Ext.defer(function(){
-                    this.scope.fireEvent('graphchanged', this.graph, this.scope);
-                }, 1000, this);
-            }, this);
+            // this.graph.on('remove', function(cell) {
+            //     Ext.defer(function(){
+            //         this.scope.fireEvent('graphchanged', this.graph, this.scope);
+            //     }, 1000, this);
+            // }, this);
 
             this.paper = new joint.dia.Paper({
                 width:  width,
@@ -405,10 +405,17 @@ Ext.define( 'Smart.util.CoreFlow', {
                     var source = this.graph.getCell(linked.prop('source/id'));
                     var target = this.graph.getCell(linked.prop('target/id'));
 
+                    if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(source.get('type')) != -1) {
+                        source.isValid(this.graph);
+                    }
+
+
                     if(!hasValidLink(linked) || !connectivity(source,target,this.graph)) {
                         linked.remove();
                     } else {
-                        target.isValid(this.graph);
+                        if(['basic.Area','basic.SubArea','basic.Equipment'].indexOf(target.get('type')) != -1) {
+                            target.isValid(this.graph);
+                        }
                     }
 
                 }, this);
