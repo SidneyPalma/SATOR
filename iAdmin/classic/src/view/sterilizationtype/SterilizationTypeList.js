@@ -60,7 +60,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeList', {
                 store: 'sterilizationtype',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
                 listeners: {
                     itemdblclick: 'onViewEdit'
                 },
@@ -74,24 +74,25 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeList', {
                         text: 'Descrição',
                         dataIndex: 'description'
                     }, {
-                        readOnly: true,
-                        text: 'Ativo',
-                        dataIndex: 'isactive',
-                        align: 'center',
                         width: 100,
-                        xtype: 'checkcolumn'
+                        text: 'Ativo',
+                        align: 'center',
+                        xtype: 'actioncolumn',
+                        items: [
+                            {
+                                getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    return parseInt(record.get('isactive')) == 1 ? "fa fa-check-circle action-checked-color-font" : '';
+                                }
+                            }
+                        ]
                     }, {
                         width: 90,
                         text: 'Ações',
                         align: 'center',
                         xtype: 'actioncolumn',
-                        items: [
-                            {
-                                handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
-                                tooltip: 'Editar cadastro!'
-                            }
-                        ]
+                        handler: 'onViewEdit',
+                        iconCls: "fa fa-info-circle action-select-color-font",
+                        tooltip: 'Editar cadastro!'
                     }
                 ],
                 dockedItems: [

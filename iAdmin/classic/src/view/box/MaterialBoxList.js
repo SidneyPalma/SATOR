@@ -60,7 +60,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                 store: 'materialbox',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
                 listeners: {
                     itemdblclick: 'onViewEdit'
                 },
@@ -86,13 +86,9 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         text: 'Ações',
                         align: 'center',
                         xtype: 'actioncolumn',
-                        items: [
-                            {
-                                handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
-                                tooltip: 'Editar cadastro!'
-                            }
-                        ]
+                        handler: 'onViewEdit',
+                        tooltip: 'Editar cadastro!',
+                        iconCls: "fa fa-info-circle action-select-color-font"
                     }
                 ],
                 dockedItems: [

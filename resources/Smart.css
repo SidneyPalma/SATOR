@@ -30,7 +30,6 @@
 }
 
 
-
 .main-field .x-form-text {
     color: rgb(64, 70, 75);
     background: transparent !important;
@@ -348,7 +347,7 @@
 
 .search-grid .x-grid-cell-inner {
     font-size: 14px;
-    line-height: 40px;
+    line-height: 30px;
 }
 
 .search-grid .x-grid-body {
@@ -431,112 +430,6 @@
     background-color: transparent !important;
 }
 
-.action-update-color:hover:before {
-    /*background-color: rgb(233, 127, 2) !important;*/
-    /*border-color: rgb(233, 127, 2) !important;*/
-
-    border-color: rgb(89, 79, 79) !important;
-    background-color: rgb(22, 224, 56) !important;
-
-    top: -7px;
-    left: -7px;
-    box-shadow: 0 0 0 4px rgba(216, 140, 28, .4);
-    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
-    -webkit-transform: scale(.8);
-    -moz-transition: -moz-transform 0.5s, opacity 0.5s;
-    -moz-transform: scale(.8);
-    -ms-transform: scale(.8);
-    transition: transform 0.5s, opacity 0.5s;
-    transform: scale(.8);
-    opacity: 1;
-}
-
-.action-update-color:before {
-    color: white !important;
-    border-radius: 50% !important;
-    padding: 3px 4px 3px 4px !important;
-    background-color: rgb(248, 202, 0) !important;
-}
-
-.action-update-color-font {
-    color: white !important;
-    color: rgb(248, 202, 0) !important;
-}
-
-.action-update-color-font:hover {
-    cursor: pointer;
-    color: rgb(89, 79, 79) !important;
-}
-
-.action-delete-color {
-    color: white !important;
-}
-
-.action-delete-color:before {
-    border-radius: 50% !important;
-    padding: 3px 4px 3px 4px !important;
-    background-color: rgb(245, 105, 145) !important;
-}
-
-.action-delete-color:hover:before {
-    border-color: rgb(89, 79, 79) !important;
-    background-color: rgb(89, 79, 79) !important;
-
-    top: -7px;
-    left: -7px;
-    box-shadow: 0 0 0 4px rgba(216, 140, 28, .4);
-    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
-    -webkit-transform: scale(.8);
-    -moz-transition: -moz-transform 0.5s, opacity 0.5s;
-    -moz-transform: scale(.8);
-    -ms-transform: scale(.8);
-    transition: transform 0.5s, opacity 0.5s;
-    transform: scale(.8);
-    opacity: 1;
-}
-
-.action-delete-color-font {
-    color: rgb(245, 105, 145) !important;
-}
-
-.action-delete-color-font:hover {
-    cursor: pointer;
-    color: red !important;
-}
-
-.action-insert-color {
-    color: white !important;
-}
-
-.action-insert-color:before {
-    border-radius: 50% !important;
-    padding: 3px 4px 3px 4px !important;
-    background-color: rgb(22, 224, 56) !important;
-}
-
-.action-insert-color-font {
-    color: rgb(22, 224, 56) !important;
-}
-
-.action-insert-color-font:hover {
-    cursor: pointer;
-    color: rgb(0, 133, 24) !important;
-}
-
-.action-select-color {
-    color: white !important;
-}
-
-.action-select-color:before {
-    border-radius: 50% !important;
-    padding: 3px 4px 3px 4px !important;
-    background-color: rgb(138, 155, 15) !important;
-}
-
-.action-select-color-font {
-    color: rgb(138, 155, 15) !important;
-}
-
 .search .x-form-text-default {
     font-size: 20px;
     font-family: "Open Sans" !important;
@@ -588,6 +481,7 @@
     -moz-transition: background-color 350ms;
     transition: background-color 350ms;
 }
+
 .marquee a {
     color: white;
     font-size: 16px;
@@ -711,4 +605,111 @@
     100%{
         -webkit-transform:translateY(100%);
     }
+}
+
+/*
+    action icon style collumn gridpanel
+*/
+
+.action-select-color-font {
+    color: rgb(253, 220, 42) !important;
+}
+
+.action-select-color-font:hover {
+    color: rgb(113, 75, 38) !important;
+
+    top: -7px;
+    left: -7px;
+    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
+    -webkit-transform: scale(1.2);
+    -moz-transition: -moz-transform 0.5s, opacity 0.5s;
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transition: transform 0.5s, opacity 0.5s;
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.action-insert-color-font {
+    cursor: pointer;
+    color: rgb(121, 189, 154) !important;
+}
+
+.action-insert-color-font:hover {
+    color: rgb(11, 72, 107) !important;
+
+    top: -7px;
+    left: -7px;
+    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
+    -webkit-transform: scale(1.2);
+    -moz-transition: -moz-transform 0.5s, opacity 0.5s;
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transition: transform 0.5s, opacity 0.5s;
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.action-update-color-font {
+    cursor: pointer;
+    color: rgb(233, 127, 2) !important;
+}
+
+.action-update-color-font:hover {
+    color: rgb(47, 141, 30) !important;
+
+    top: -7px;
+    left: -7px;
+    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
+    -webkit-transform: scale(1.2);
+    -moz-transition: -moz-transform 0.5s, opacity 0.5s;
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transition: transform 0.5s, opacity 0.5s;
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.action-delete-color-font {
+    cursor: pointer;
+    color: rgba(194, 52, 92, .7) !important;
+}
+
+.action-delete-color-font:hover {
+    color: rgb(255, 31, 31) !important;
+
+    top: -7px;
+    left: -7px;
+    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
+    -webkit-transform: scale(1.2);
+    -moz-transition: -moz-transform 0.5s, opacity 0.5s;
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transition: transform 0.5s, opacity 0.5s;
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.action-checked-color-font {
+    color: rgb(255, 177, 68) !important;
+}
+
+.action-checked-color-font:hover {
+    color: rgb(141, 30, 11) !important;
+}
+
+.update-grid .x-action-col-icon {
+    font-size: 24px !important;
+}
+
+.search-grid .x-action-col-icon {
+    font-size: 24px !important;
+}
+
+.search-grid .icon-s24 {
+    font-size: 24px !important;
+}
+
+.update-grid .icon-s24 {
+    font-size: 24px !important;
 }
