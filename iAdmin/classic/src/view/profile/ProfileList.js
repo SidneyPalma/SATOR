@@ -61,7 +61,7 @@ Ext.define( 'iAdmin.view.profile.ProfileList', {
                 store: 'profile',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
                 listeners: {
                     itemdblclick: 'onViewEdit'
                 },
@@ -71,28 +71,33 @@ Ext.define( 'iAdmin.view.profile.ProfileList', {
                         text: 'Nome do Perfil',
                         dataIndex: 'name'
                     }, {
-                        readOnly: true,
-                        text: 'Ativo',
-                        dataIndex: 'isactive',
-                        align: 'center',
                         width: 100,
-                        xtype: 'checkcolumn'
+                        text: 'Ativo',
+                        align: 'center',
+                        xtype: 'actioncolumn',
+                        items: [
+                            {
+                                getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    return parseInt(record.get('isactive')) == 1 ? "fa fa-check-circle action-checked-color-font" : '';
+                                }
+                            }
+                        ]
                     }, {
-                        width: 110,
+                        width: 100,
                         text: 'Ações',
                         align: 'center',
                         xtype: 'actioncolumn',
                         items: [
                             {
                                 handler: 'onProfileUpdate',
-                                iconCls: "fa fa-pencil action-update-color",
+                                iconCls: "fa fa-info-circle action-select-color-font",
                                 tooltip: 'Editar cadastro de Perfis!'
                             }, {
                                 disabled: true,
                                 xtype: 'splitter'
                             }, {
                                 handler: 'onProfileUpdateMenuTree',
-                                iconCls: "fa fa-bars action-select-color",
+                                iconCls: "fa fa-share-alt action-update-color-font",
                                 tooltip: 'Editar menus do perfil!'
                             }
                         ]

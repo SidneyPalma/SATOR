@@ -59,7 +59,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeList', {
                 store: 'enumtype',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
                 listeners: {
                     itemdblclick: 'onViewEdit'
                 },
@@ -73,18 +73,24 @@ Ext.define( 'iAdmin.view.enums.EnumTypeList', {
                         dataIndex: 'name',
                         width: 250
                     }, {
-                        width: 40,
+                        width: 100,
                         align: 'center',
-                        renderer: function (value, meta, rec) {
-                            return parseInt(rec.get('reserved')) ? '<div style="color: red; font-size: 20px;"><i class="fa fa-lock"></i></div>' : '';
-                        }
-                    }, {
-                        xtype:'actioncolumn',
-                        width: 50,
-                        align: 'center',
-                        handler: 'onViewEdit',
-                        iconCls: "fa fa-pencil action-update-color",
-                        tooltip: 'Editar cadastro de enumeradores!'
+                        xtype: 'actioncolumn',
+                        items: [
+                            {
+                                width: 40,
+                                getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    return parseInt(record.get('reserved')) == 1 ? "fa fa-cog action-checked-color-font" : '';
+                                }
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                width: 40,
+                                handler: 'onViewEdit',
+                                tooltip: 'Editar cadastro de enumeradores!',
+                                iconCls: "fa fa-info-circle action-select-color-font"
+                            }
+                        ]
                     }
                 ],
                 dockedItems: [

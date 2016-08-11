@@ -63,9 +63,14 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 sortable: false,
                 align: 'center',
                 text: 'Consignado',
-                renderer: function (value, meta, rec) {
-                    return parseInt(rec.get('isconsigned')) ? '<div class="icon-s24"><i class="fa fa-check-circle action-checked-color-font"></i></div>' : '';
-                }
+                xtype: 'actioncolumn',
+                items: [
+                    {
+                        getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                            return parseInt(record.get('isconsigned')) == 1 ? "fa fa-check-circle action-checked-color-font" : '';
+                        }
+                    }
+                ]
             }, {
                 align: 'center',
                 width: 100,
@@ -77,7 +82,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                         handler: 'insertLayout',
                         getClass: function(value, metaData, record, rowIndex, colIndex, store) {
                             var c = store.getCount();
-                            return ( rowIndex == c-1 && c != 0 ) ? "insert-icon fa fa-plus-circle action-insert-color-font" : "";
+                            return ( rowIndex == c-1 && c != 0 ) ? "fa fa-plus-circle action-insert-color-font" : "";
                         },
                         isDisabled: function(view, rowIndex, colIndex, item, record) {
                             var c = view.store.getCount();
@@ -89,7 +94,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                         width: 40,
                         align: 'center',
                         handler: 'deleteLayout',
-                        iconCls: "delete-icon fa fa-minus-circle action-delete-color-font"
+                        iconCls: "fa fa-minus-circle action-delete-color-font"
                     }
                 ]
             }
