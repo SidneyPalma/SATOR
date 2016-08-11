@@ -9,9 +9,15 @@ Ext.define( 'Smart.data.identifier.Auto', {
     ],
 
     config: {
+        seed: 0,
         id: 'auto',
-        seed: null,
-        prefix: null
+        prefix: 'SMART_'
     }
+
+    // config: {
+    //     id: 'auto',
+    //     seed: null,
+    //     prefix: null
+    // }
 
 });

@@ -21,7 +21,8 @@ class equipmentcycle extends \Smart\Data\Cache {
                 case coalesce(ec.id,0) when 0 then 0 else 1 end as isactive
             FROM
                 cycle c
-                left join equipmentcycle ec on ( ec.cycleid = c.id and ec.equipmentid = :id )";
+                left join equipmentcycle ec on ( ec.cycleid = c.id and ec.equipmentid = :id )
+            order by c.name";
 
         try {
             $pdo = $proxy->prepare($sql);
