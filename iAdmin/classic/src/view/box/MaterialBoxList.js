@@ -89,8 +89,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         items: [
                             {
                                 handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
-                                tooltip: 'Editar cadastro!'
+                                tooltip: 'Editar cadastro!',
+                                iconCls: "update-icon fa fa-info-circle action-update-color-font"
                             }
                         ]
                     }
