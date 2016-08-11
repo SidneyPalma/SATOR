@@ -126,7 +126,7 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                                 showFetch: true,
                                 margin: '0 10 0 0'
                             }, {
-                                width: 250,
+                                width: 350,
                                 showClear: true,
                                 xtype: 'materialboxsearch',
                                 listeners: {
