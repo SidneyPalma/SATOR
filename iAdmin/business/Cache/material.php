@@ -13,7 +13,7 @@ class material extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            SELECT
+            SELECT top $limit  
                 ib.name,
                 ib.description,
                 ib.barcode,

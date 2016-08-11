@@ -60,8 +60,18 @@ Ext.define( 'Ext.overrides.app.BaseController', {
             url: url || md.getUrl() || me.url,
             params: Ext.Object.merge(defaultParams,params),
             success: function(form, action) {
-                record.commit();
                 fm.setLoading(false);
+
+                if(action.result && action.result.crud == 'delete') {
+                    fm.reset();
+                }
+
+                if(action.result && action.result.crud == 'insert') {
+                    record.set(action.result.rows[0]);
+                    record.commit();
+                    fm.loadRecord(record);
+                }
+
                 me._success(form, action);
                 me._success = Ext.emptyFn;
             },
@@ -109,8 +119,6 @@ Ext.define( 'Ext.overrides.app.BaseController', {
 
             return false;
         }
-
-        idValue = (idValue.indexOf('SMART_') == -1) ? idValue : '';
 
         fm.setLoading('Salvando alterações...');
 
