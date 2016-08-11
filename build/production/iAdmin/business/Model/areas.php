@@ -27,6 +27,12 @@ class areas extends \Smart\Data\Model {
     private $description;
 
     /**
+     * @Policy {"nullable":false, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $barcode;
+
+    /**
      * @Policy {"nullable":false, "length":80}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -107,6 +113,22 @@ class areas extends \Smart\Data\Model {
      */
     public function setDescription($description) {
         $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getBarcode() {
+        return $this->barcode;
+    }
+
+    /**
+     * @param type $barcode
+     * @return \iAdmin\Model\areas
+     */
+    public function setBarcode($barcode) {
+        $this->barcode = $barcode;
         return $this;
     }
 

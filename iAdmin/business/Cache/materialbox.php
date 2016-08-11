@@ -13,7 +13,7 @@ class materialbox extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-			select top $limit
+			select
 			  mb.*,
 			  dbo.getEnum('statusbox',mb.statusbox) as statusboxdescription,
 			  materialboxitems = (
