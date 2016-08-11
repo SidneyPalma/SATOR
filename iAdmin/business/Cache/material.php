@@ -11,9 +11,10 @@ class material extends \Smart\Data\Cache {
         $start = $data['start'];
         $limit = $data['limit'];
         $proxy = $this->getStore()->getProxy();
+        $total = isset($data['totalresults']) ? $data['totalresults'] : 10;
 
         $sql = "
-            SELECT top $limit  
+            SELECT top $total  
                 ib.name,
                 ib.description,
                 ib.barcode,

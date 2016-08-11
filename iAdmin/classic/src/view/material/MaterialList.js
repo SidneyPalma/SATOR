@@ -145,7 +145,24 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         xtype: 'pagingtoolbar',
                         store: 'material',
                         dock: 'bottom',
-                        displayInfo: true
+                        displayInfo: true,
+                        items: [
+                            '->',
+                            {
+                                value: 10,
+                                width: 150,
+                                minValue: 10,
+                                maxValue: 300,
+                                hideTrigger: true,
+                                labelAlign: 'left',
+                                name: 'totalresults',
+                                xtype: 'numberfield',
+                                fieldLabel: 'Resultados',
+                                listeners: {
+                                    specialkey: 'totalResultsSearch'
+                                }
+                            }
+                        ]
                     }
                 ]
             }
