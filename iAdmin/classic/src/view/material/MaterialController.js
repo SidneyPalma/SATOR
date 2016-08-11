@@ -27,6 +27,36 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         }
     },
 
+    listen: {
+        store: {
+            '#material': {
+                beforeload: 'onBeforeLoadMaterial'
+            }
+        }
+    },
+
+    onBeforeLoadMaterial: function (store , operation , eOpts) {
+        var me = this,
+            view = me.getView(),
+            totalresults = view.down('numberfield[name=totalresults]');
+
+        if(totalresults) {
+            Ext.getStore('material').setParams({totalresults: totalresults.getValue()});
+        }
+    },
+
+    totalResultsSearch: function (field, e, eOpts) {
+        var value = field.getValue();
+
+        if(!value || value.length == 0 ) {
+            return false;
+        }
+
+        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+            Ext.getStore('material').load();
+        }
+    },
+
     fetchField: function (search, button) {
         var me = this,
             view = me.getView(),
