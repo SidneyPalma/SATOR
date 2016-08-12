@@ -60,7 +60,7 @@ Ext.define( 'iAdmin.view.users.UsersList', {
                 store: 'users',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
                 listeners: {
                     itemdblclick: 'onViewEdit'
                 },
@@ -87,7 +87,7 @@ Ext.define( 'iAdmin.view.users.UsersList', {
                         xtype:'actioncolumn',
                         width: 40,
                         align: 'center',
-                        iconCls: "fa fa-pencil action-update-color",
+                        iconCls: "fa fa-info-circle action-select-color-font",
                         tooltip: 'Editar cadastro de usuários!',
                         handler: 'onViewEdit'
                     }

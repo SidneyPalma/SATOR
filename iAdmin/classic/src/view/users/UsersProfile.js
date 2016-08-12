@@ -14,6 +14,8 @@ Ext.define( 'iAdmin.view.users.UsersProfile', {
     hideHeaders: false,
     multiSelect: false,
     headerBorders: false,
+    cls: 'update-grid',
+
 
     selType: 'cellmodel',
     plugins: {
@@ -52,10 +54,10 @@ Ext.define( 'iAdmin.view.users.UsersProfile', {
                     setTextAlign: 'center'
                 }
             }, {
-                text: 'Ações',
                 width: 90,
-                xtype: 'actioncolumn',
+                text: 'Ações',
                 align: 'center',
+                xtype: 'actioncolumn',
                 handler: 'onActionDeleteProfile',
                 isDisabled: function (view, rowIdx, colIdx, item, record) {
                     return !record.data.expireto;
@@ -69,7 +71,7 @@ Ext.define( 'iAdmin.view.users.UsersProfile', {
                 },
                 getClass: function(v, meta, rec) {
                     if (rec.data.expireto) {
-                        return "fa fa-ban action-delete-color";
+                        return "fa fa-check-circle action-checked-color-font";
                     } else {
                         return "";
                     }
