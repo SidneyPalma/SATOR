@@ -37,9 +37,6 @@ Ext.define( 'Ext.overrides.app.BaseController', {
 
         fm.setLoading('Salvando alterações...');
 
-        // idValue = (idValue.indexOf('SMART_') == -1) ? idValue : '';
-        // values[idName] = idValue;
-
         if(idValue && record) {
             record.set(values);
             if( !record.modified || record.modified == {} ) {
@@ -56,7 +53,7 @@ Ext.define( 'Ext.overrides.app.BaseController', {
             fm.setLoading(false);
             return false;
         }
-        
+
         return fm.submit({
             scope: me,
             submitEmptyText: false,
