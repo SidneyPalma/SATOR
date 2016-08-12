@@ -44,7 +44,7 @@ Ext.define( 'iAdmin.view.users.UsersProfile', {
                 text: 'Expira em',
                 dataIndex: 'expireto',
                 align: 'center',
-                width: 100,
+                width: 120,
                 xtype: 'datecolumn',
                 editor: {
                     allowBlank: false,
@@ -54,7 +54,7 @@ Ext.define( 'iAdmin.view.users.UsersProfile', {
                     setTextAlign: 'center'
                 }
             }, {
-                width: 90,
+                width: 100,
                 text: 'Ações',
                 align: 'center',
                 xtype: 'actioncolumn',
@@ -71,7 +71,7 @@ Ext.define( 'iAdmin.view.users.UsersProfile', {
                 },
                 getClass: function(v, meta, rec) {
                     if (rec.data.expireto) {
-                        return "fa fa-check-circle action-checked-color-font";
+                        return "fa fa-minus-circle action-delete-color-font";
                     } else {
                         return "";
                     }

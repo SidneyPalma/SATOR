@@ -74,6 +74,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
             }, {
                 align: 'center',
                 width: 100,
+                text: 'Ações',
                 xtype: 'actioncolumn',
                 items: [
                     {

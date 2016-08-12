@@ -21,10 +21,19 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
     //routes ========================>
 
     getMovimentId: function (id) {
-        var app = Smart.app.getController('App'),
-            record = Ext.getStore('moviment').findRecord('id',id);
+        var me = this,
+            app = Smart.app.getController('App');
 
-        app.onMainPageView({xtype: 'movimentview', xdata: record});
+        Ext.getStore('moviment').setParams({
+            method: 'selectCode',
+            rows: Ext.encode({ id: id })
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                var record = records[0];
+                app.onMainPageView({xtype: 'movimentview', xdata: record});
+            }
+        });
     },
 
     //routes ========================>
@@ -346,17 +355,8 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
 
         me._success = function (form, action) {
             if(action.result.crud == 'insert') {
-                Ext.getStore('moviment').setParams({
-                    method: 'selectCode',
-                    rows: Ext.encode({ id: action.result.rows.id })
-                }).load({
-                    scope: me,
-                    callback: function(records, operation, success) {
-                        me.getView().close();
-                        var record = records[0];
-                        me.redirectTo( 'movimentview/' + record.get('id'));
-                    }
-                });
+                me.getView().close();
+                me.redirectTo( 'movimentview/' + action.result.rows[0].id);
             }
         }
 

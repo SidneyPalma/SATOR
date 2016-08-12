@@ -81,7 +81,7 @@ Ext.define( 'iAdmin.view.users.UsersList', {
                         text: 'Nasceu',
                         dataIndex: 'birthdate',
                         align: 'center',
-                        width: 100,
+                        width: 150,
                         xtype: 'datecolumn'
                     }, {
                         xtype:'actioncolumn',

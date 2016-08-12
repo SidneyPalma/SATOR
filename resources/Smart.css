@@ -612,11 +612,11 @@
 */
 
 .action-select-color-font {
-    color: rgb(253, 220, 42) !important;
+    color: rgb(0, 227, 0) !important;
 }
 
 .action-select-color-font:hover {
-    color: rgb(113, 75, 38) !important;
+    color: rgb(25, 125, 25) !important;
 
     top: -7px;
     left: -7px;
