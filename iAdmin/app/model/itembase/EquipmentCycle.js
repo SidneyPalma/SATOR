@@ -12,6 +12,7 @@ Ext.define( 'iAdmin.model.itembase.EquipmentCycle', {
         {
             name: 'id',
             type: 'int',
+            persist: false,
             serializeType: 'auto'
         }, {
             name: 'equipmentid',
