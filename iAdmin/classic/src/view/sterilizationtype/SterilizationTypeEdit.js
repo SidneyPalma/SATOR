@@ -14,7 +14,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
 
     constrain: true,
 
-    width: 450,
+    width: 550,
     modal: true,
     resizable: false,
     showAnimate: true,
@@ -92,18 +92,23 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                         },
                         items: [
                             {
+                                xtype: 'hiddenfield',
+                                name: 'typeid'
+                            }, {
                                 xtype: 'fieldcontainer',
-                                layout: 'anchor',
+                                layout: 'hbox',
                                 fieldLabel: 'Tratamento de excessões',
                                 labelCls: 'sub-title-label',
                                 defaultType: 'textfield',
                                 defaults: {
+                                    flex: 1,
                                     anchor: '100%',
                                     fieldStyle: { fontSize: '16px;' }
                                 },
                                 items: [
                                     {
                                         pageSize: 0,
+                                        margin: '0 5 0 0',
                                         xtype: 'combobox',
                                         editable: false,
                                         showClear: true,
@@ -120,30 +125,70 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                             showclear: 'onShowClearReadArea'
                                         }
                                     }, {
-                                        xtype: 'hiddenfield',
-                                        name: 'typeid'
-                                    }, {
+                                        xtype: 'pickerfield',
+                                        margin: '0 0 0 5',
                                         useReadColor: true,
                                         name: 'elementname',
-                                        fieldLabel: 'Área com exceções'
-                                    }, {
-                                        xtype: 'checkboxgroup',
-                                        columns: 2,
-                                        vertical: true,
-                                        fieldLabel: 'Tipos de exceções',
-                                        labelCls: 'sub-title-label',
-                                        items: [
-                                            { boxLabel: 'Altera', name: 'flowchoice', inputValue: '1' },
-                                            { boxLabel: 'Quebra', name: 'flowbreach', inputValue: '1' }
-                                        ],
+                                        fieldLabel: 'Áreas com exceções',
+                                        triggerCls: Ext.baseCSSPrefix + 'form-time-trigger',
+                                        createPicker: function() {
+                                            var me = this,
+                                                picker = new Ext.panel.Panel({
+                                                    pickerField: me,
+                                                    floating: true,
+                                                    hidden: true,
+                                                    ownerCt: this.ownerCt,
+                                                    layout: 'fit',
+                                                    //renderTo: document.body,
+                                                    height: 200,
+                                                    items: [
+                                                        {
+                                                            xtype: 'gridpanel',
+                                                            store: Ext.create('Ext.data.Store'),
+                                                            columns: [
+                                                                { text: 'Name', dataIndex: 'name', flex: 1 }
+                                                            ]
+                                                        }
+                                                    ],
+
+                                                    buttonAlign: 'center',
+
+                                                    buttons: [
+                                                        {
+                                                            text: 'Confirmar',
+                                                            showSmartTheme: 'red',
+                                                            handler: function (btn) {
+                                                                btn.up('panel').hide();
+                                                            }
+                                                        }
+                                                    ]
+                                                });
+
+                                            return picker;
+                                        },
                                         listeners: {
-                                            change: 'onCheckBoxGroupChange'
+                                            expand: 'onExpandelEmentName'
                                         }
                                     }
                                 ]
                             }, {
-                                height: 110,
+                                xtype: 'checkboxgroup',
+                                columns: 2,
+                                vertical: true,
+                                fieldLabel: 'Tipos de exceções',
+                                labelCls: 'sub-title-label',
+                                items: [
+                                    { boxLabel: 'Altera', name: 'flowchoice', inputValue: '1' },
+                                    { boxLabel: 'Quebra', name: 'flowbreach', inputValue: '1' }
+                                ],
+                                listeners: {
+                                    change: 'onCheckBoxGroupChange'
+                                }
+                            }, {
+                                height: 210,
                                 xtype: 'gridpanel',
+                                hideHeaders: false,
+                                headerBorders: false,
                                 store: Ext.create('Ext.data.Store'),
                                 cls: 'update-grid',
                                 selType: 'cellmodel',
@@ -154,13 +199,15 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 columns: [
                                     {
                                         flex: 1,
+                                        text: 'Descrição',
                                         dataIndex: 'elementname',
                                         renderer: function (value,metadata,record) {
                                             metadata.style = 'color: blue;';
                                             return value;
                                         }
                                     }, {
-                                        width: 50,
+                                        width: 100,
+                                        text: 'Ordem',
                                         dataIndex: 'steppriority',
                                         editor: {
                                             xtype: 'numberfield',
@@ -169,6 +216,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                         }
                                     }, {
                                         width: 120,
+                                        text: 'Tipo',
                                         dataIndex: 'typelessname',
                                         editor: {
                                             pageSize: 0,

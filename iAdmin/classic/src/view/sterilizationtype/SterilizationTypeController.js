@@ -794,6 +794,15 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         window.open(Ext.String.format(url,view.xdata.get('id')));
     },
 
+    printerFlowItem: function(grid, rowIndex, colIndex) {
+        var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex),
+            url = 'business/Calls/Quick/ExceptionByFlow.php?id={0}';
+
+        window.open(Ext.String.format(url,record.get('id')));
+    },
+
     onSelectReadArea: function (combo, record, eOpts) {
         var me = this,
             area = [],
@@ -807,7 +816,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             steplevel = parseInt(record.get('steplevel')),
             exceptionby = parseInt(record.get('exceptionby')),
             typeid = view.down('hiddenfield[name=typeid]'),
-            elementname = view.down('textfield[name=elementname]'),
+            elementname = view.down('pickerfield[name=elementname]'),
             checkboxgroup = view.down('checkboxgroup');
 
         typeid.reset();
@@ -823,10 +832,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     cell = item;
                 }
             },this);
-
-            // if(!cell) {
-            //     return false;
-            // }
 
             var links = graph.getConnectedLinks(cell, { outbound : true });
 
@@ -845,6 +850,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             });
 
             typeid.setValue(cell.get('id'));
+            elementname.setReadColor(false);
             elementname.setValue(cell.get('name'));
 
             checkboxgroup.setValue({
@@ -901,6 +907,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             var read = Smart.Rss.sortArrayBy(area, "steplevel")[0],
                 cell = graph.getCell(read.id),
                 links = graph.getConnectedLinks(cell, { outbound : true });
+            
+            view.elementname = area;
 
             Ext.each(links, function(link) {
                 var item = graph.getCell(link.prop('target/id')),
@@ -924,6 +932,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 flowbreach: cell.get('flowbreach')
             });
         }
+    },
+
+    onExpandelEmentName: function (field,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        console.info(view.elementname);
     },
 
     onShowClearReadArea: function (field) {

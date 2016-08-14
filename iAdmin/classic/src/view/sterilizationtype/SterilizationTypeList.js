@@ -75,24 +75,44 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeList', {
                         dataIndex: 'description'
                     }, {
                         width: 100,
-                        text: 'Ativo',
+                        text: 'Versão',
+                        dataIndex: 'version'
+                    }, {
+                        width: 100,
+                        text: 'Status',
                         align: 'center',
                         xtype: 'actioncolumn',
                         items: [
                             {
+                                getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    return parseInt(record.get('authenticate')) == 1 ? "fa fa-gavel action-checked-color-font" : '';
+                                }
+                            }, {
+                                xtype: 'splitter'
+                            }, {
                                 getClass: function(value, metaData, record, rowIndex, colIndex, store) {
                                     return parseInt(record.get('isactive')) == 1 ? "fa fa-check-circle action-checked-color-font" : '';
                                 }
                             }
                         ]
                     }, {
-                        width: 90,
+                        width: 100,
                         text: 'Ações',
                         align: 'center',
                         xtype: 'actioncolumn',
-                        handler: 'onViewEdit',
-                        iconCls: "fa fa-info-circle action-select-color-font",
-                        tooltip: 'Editar cadastro!'
+                        items: [
+                            {
+                                handler: 'printerFlowItem',
+                                iconCls: "fa fa-print action-insert-color-font",
+                                tooltip: 'Imprimir exceções!'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                handler: 'onViewEdit',
+                                iconCls: "fa fa-info-circle action-select-color-font",
+                                tooltip: 'Editar cadastro!'
+                            }
+                        ]
                     }
                 ],
                 dockedItems: [

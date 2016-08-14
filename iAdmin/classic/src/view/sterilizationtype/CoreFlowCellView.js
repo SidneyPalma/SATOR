@@ -14,7 +14,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.CoreFlowCellView', {
         'iAdmin.view.sterilizationtype.SterilizationTypeController'
     ],
 
-    width: 450,
+    width: 550,
     modal: true,
     resizable: false,
     showAnimate: true,
