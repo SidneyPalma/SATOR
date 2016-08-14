@@ -144,6 +144,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                             }, {
                                 height: 110,
                                 xtype: 'gridpanel',
+                                hideHeaders: false,
                                 store: Ext.create('Ext.data.Store'),
                                 cls: 'update-grid',
                                 selType: 'cellmodel',
