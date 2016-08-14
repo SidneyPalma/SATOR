@@ -324,6 +324,12 @@
     color: #ffffff;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
+
+    width: 50%;
+    text-align: center;
+    position: relative;
+    left: 25% !important;
+    margin-right: -50% !important;
 }
 
 .smart-btn-insert-record:hover {
@@ -333,5 +339,4 @@
     background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
     background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
     background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
-    text-decoration: none;
 }

@@ -147,7 +147,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
             },{
                 flex: 3,
                 region: 'center',
-                cls: 'list-grid',
+                cls: 'update-grid',
                 hideHeaders: false,
                 headerBorders: false,
                 xtype: 'gridpanel',
@@ -171,9 +171,14 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                     }, {
                         width: 40,
                         align: 'center',
-                        renderer: function (value, meta, rec) {
-                            return parseInt(rec.get('isactive')) ? '<div style="color: rgb(145, 145, 145); font-size: 20px;"><i class="fa fa-check-square-o"></i></div>' : '';
-                        }
+                        xtype: 'actioncolumn',
+                        items: [
+                            {
+                                getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    return parseInt(record.get('isactive')) == 1 ? "fa fa-check-circle action-checked-color-font" : '';
+                                }
+                            }
+                        ]
                     }, {
                         sortable: false,
                         text: 'Ações',
@@ -184,7 +189,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                             {
                                 handler: 'onActionUpdate',
                                 isDisabled: isDisabled,
-                                iconCls: "fa fa-pencil action-update-color",
+                                iconCls: "fa fa-info-circle action-select-color-font",
                                 tooltip: 'Editar cadastro!'
                             }, {
                                 disabled: true,
@@ -192,7 +197,7 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                             }, {
                                 handler: 'onActionDelete',
                                 isDisabled: isDisabled,
-                                iconCls: "fa fa-ban action-delete-color",
+                                iconCls: "fa fa-minus-circle action-delete-color-font",
                                 tooltip: 'Remover cadastro!'
                             }
                         ]

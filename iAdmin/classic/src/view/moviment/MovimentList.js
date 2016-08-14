@@ -109,8 +109,9 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                         text: 'Usuário',
                         dataIndex: 'username'
                     }, {
-                        width: 80,
+                        width: 100,
                         align: 'center',
+                        text: 'Ações',
                         xtype: 'actioncolumn',
                         items: [
                             {
@@ -121,7 +122,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                                 },
                                 getClass: function(v, meta, rec) {
                                     var movimentstatus = rec.data.movimentstatus;
-                                    return movimentstatus == 'F' ? "fa fa-check-circle-o action-select-color" : "";
+                                    return movimentstatus == 'F' ? "fa fa-info-circle action-select-color-font" : "";
                                 },
                                 isDisabled: function (view, rowIdx, colIdx, item, rec) {
                                     return rec.data.movimentstatus != 'F';
@@ -132,7 +133,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                                 xtype: 'splitter'
                             }, {
                                 handler: 'onViewEdit',
-                                iconCls: "fa fa-pencil action-update-color",
+                                iconCls: "fa fa-info-circle action-select-color-font",
                                 tooltip: 'Editar cadastro!'
                             }
                         ]

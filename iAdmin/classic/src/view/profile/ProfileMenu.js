@@ -72,7 +72,7 @@ Ext.define( 'iAdmin.view.profile.ProfileMenu', {
                 },
                 getClass: function(v, meta, rec) {
                     if ((rec.data.description) && (rec.data.leaf)) {
-                        return "fa fa-ban action-delete-color";
+                        return "fa fa-minus-circle action-delete-color-font";
                     } else {
                         return "";
                     }

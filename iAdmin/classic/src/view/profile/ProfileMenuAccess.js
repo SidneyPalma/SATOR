@@ -11,7 +11,7 @@ Ext.define( 'iAdmin.view.profile.ProfileMenuAccess', {
         'Ext.grid.plugin.CellEditing'
     ],
 
-    width: 650,
+    width: 850,
     modal: true,
     header: false,
     resizable: false,
@@ -107,7 +107,7 @@ Ext.define( 'iAdmin.view.profile.ProfileMenuAccess', {
                         },
                         getClass: function(v, meta, rec) {
                             if (!isNaN(rec.data.id)) {
-                                return "fa fa-ban action-delete-color";
+                                return "fa fa-minus-circle action-delete-color-font";
                             } else {
                                 return "";
                             }

@@ -34,6 +34,14 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
     buildItems: function () {
         var me = this;
 
+        me.typeless = Ext.create('Ext.data.Store', {
+            fields: [ 'typelesscode', 'typelessname' ],
+            data: [
+                { typelesscode: 'Q', typelessname: 'Quebra' },
+                { typelesscode: 'A', typelessname: 'Altera' }
+            ]
+        });
+
         me.items = [
             {
                 xtype: 'form',
@@ -99,7 +107,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                         xtype: 'combobox',
                                         editable: false,
                                         showClear: true,
-                                        fieldLabel: 'Áreas com Leitura',
+                                        fieldLabel: 'Áreas com leituras',
                                         name: 'readarea',
                                         valueField: 'id',
                                         displayField: 'name',
@@ -117,14 +125,16 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                     }, {
                                         useReadColor: true,
                                         name: 'elementname',
-                                        fieldLabel: 'Área com Exceções'
+                                        fieldLabel: 'Área com exceções'
                                     }, {
                                         xtype: 'checkboxgroup',
                                         columns: 2,
                                         vertical: true,
+                                        fieldLabel: 'Tipos de exceções',
+                                        labelCls: 'sub-title-label',
                                         items: [
-                                            { boxLabel: 'Fluxo alternativo', name: 'flowchoice', inputValue: '1' },
-                                            { boxLabel: 'Quebra de fluxo', name: 'flowbreach', inputValue: '1' }
+                                            { boxLabel: 'Altera', name: 'flowchoice', inputValue: '1' },
+                                            { boxLabel: 'Quebra', name: 'flowbreach', inputValue: '1' }
                                         ],
                                         listeners: {
                                             change: 'onCheckBoxGroupChange'
@@ -143,19 +153,35 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 },
                                 columns: [
                                     {
-                                        dataIndex: 'elementname',
                                         flex: 1,
+                                        dataIndex: 'elementname',
                                         renderer: function (value,metadata,record) {
                                             metadata.style = 'color: blue;';
                                             return value;
                                         }
                                     }, {
+                                        width: 50,
                                         dataIndex: 'steppriority',
-                                        width: 100,
                                         editor: {
                                             xtype: 'numberfield',
                                             hideTrigger: true,
                                             minValue: 1
+                                        }
+                                    }, {
+                                        width: 120,
+                                        dataIndex: 'typelessname',
+                                        editor: {
+                                            pageSize: 0,
+                                            // showClear: true,
+                                            editable: false,
+                                            hideTrigger: true,
+                                            xtype: 'combobox',
+                                            store: me.typeless,
+                                            valueField: 'typelesscode',
+                                            displayField: 'typelessname'
+                                            // listeners: {
+                                            //     showclear: 'onShowClearReadArea'
+                                            // }
                                         }
                                     }
                                 ],

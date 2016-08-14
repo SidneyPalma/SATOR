@@ -188,13 +188,11 @@ Ext.define( 'iAdmin.view.users.UsersView', {
                     {
                         tabIndex: 0,
                         xtype: 'usersmenu',
-                        cls: 'list-grid',
                         iconCls: "fa fa-list-ol",
                         title: 'Menus de Acesso'
                     }, {
                         tabIndex: 1,
                         xtype: 'usersprofile',
-                        cls: 'list-grid',
                         iconCls: "fa fa-th-list",
                         title: 'Grupo de Acesso'
                     }

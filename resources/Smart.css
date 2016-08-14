@@ -612,22 +612,22 @@
 */
 
 .action-select-color-font {
-    color: rgb(253, 220, 42) !important;
+    color: rgb(0, 227, 0) !important;
 }
 
 .action-select-color-font:hover {
-    color: rgb(113, 75, 38) !important;
+    color: rgb(25, 125, 25) !important;
 
     top: -7px;
     left: -7px;
+    opacity: 1;
     -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
-    -webkit-transform: scale(1.2);
     -moz-transition: -moz-transform 0.5s, opacity 0.5s;
+    transition: transform 0.5s, opacity 0.5s;
+    -webkit-transform: scale(1.2);
     -moz-transform: scale(1.2);
     -ms-transform: scale(1.2);
-    transition: transform 0.5s, opacity 0.5s;
     transform: scale(1.2);
-    opacity: 1;
 }
 
 .action-insert-color-font {

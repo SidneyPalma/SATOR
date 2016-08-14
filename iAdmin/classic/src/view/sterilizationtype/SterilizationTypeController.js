@@ -764,7 +764,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                         typeid: item.get('typeid'),
                         name: item.get('name'),
                         steplevel: item.get('steplevel'),
-                        exceptionby: item.get('exceptionby')
+                        exceptionby: item.get('exceptionby'),
+                        steppriority: item.get('steppriority'),
+                        typelesscode: item.get('typelesscode'),
+                        typelessname: item.get('typelessname')
                     });
                 }
             }
@@ -833,7 +836,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                         id: item.get('id'),
                         areasid: item.get('typeid'),
                         elementname: item.get('name'),
-                        steppriority: item.get('steppriority')
+                        steppriority: item.get('steppriority'),
+                        typelesscode: item.get('typelesscode'),
+                        typelessname: item.get('typelessname')
                     });
 
                 store.add(data);
@@ -903,7 +908,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                         id: item.get('id'),
                         areasid: item.get('typeid'),
                         elementname: item.get('name'),
-                        steppriority: item.get('steppriority')
+                        steppriority: item.get('steppriority'),
+                        typelesscode: item.get('typelesscode'),
+                        typelessname: item.get('typelessname')
                     });
 
                 store.add(data);
@@ -949,15 +956,48 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             cell = graph.getCell(record.get('id'));
 
         if(cell) {
-            cell.set('steppriority',record.get('steppriority'));
+            switch (context.colIdx) {
+                case 1:
+                    cell.set('steppriority',context.value);
+                    break;
+                case 2:
+                    var select = view.typeless.findRecord('typelesscode',context.value);
+                    cell.set('typelesscode',select.get('typelesscode'));
+                    cell.set('typelessname',select.get('typelessname'));
+                    record.set('typelesscode',select.get('typelesscode'));
+                    record.set('typelessname',select.get('typelessname'));
+                    break;
+            }
             record.commit();
         }
     },
 
+    onShowClearReadArea: function (field,eOpts) {
+        var me = this,
+            view = me.getView(),
+            graph = view.graph,
+            grid = view.down('gridpanel'),
+            sm = grid.getSelectionModel(),
+            select = sm.getSelection()[0],
+            cell = graph.getCell(select.get('id'));
+
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão da seleção?',
+            function (choice) {
+                if (choice === 'yes') {
+                    cell.set('typelesscode','');
+                    cell.set('typelessname','');
+                    select.set('typelesscode','');
+                    select.set('typelessname','');
+                }
+            }
+        );
+    },
+    
     onCheckBoxGroupChange: function (field,newValue,OldValue,eOpts) {
         var me = this,
             view = me.getView(),
             graph = view.graph,
+            grid = view.down('gridpanel'),
             checkboxgroup = view.down('checkboxgroup'),
             typeid = view.down('hiddenfield[name=typeid]'),
             readarea = view.down('combobox[name=readarea]'),

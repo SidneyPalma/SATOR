@@ -89,7 +89,7 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseLayout', {
                 text: 'Valor Referencia',
                 dataIndex: 'reference'
             }, {
-                width: 70,
+                width: 120,
                 sortable: false,
                 align: 'center',
                 xtype: 'actioncolumn',
@@ -105,12 +105,16 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseLayout', {
                             return !( rowIndex == c-1 && c != 0 );
                         }
                     }, {
+                        xtype: 'splitter'
+                    }, {
                         handler: 'updateLayout',
                         iconCls: "update-icon fa fa-check-circle action-update-color-font",
                         isDisabled: function(view, rowIndex, colIndex, item, record) {
                             var datafield = record.get('datafield');
                             return (datafield == '');
                         }
+                    }, {
+                        xtype: 'splitter'
                     }, {
                         handler: 'deleteLayout',
                         iconCls: "delete-icon fa fa-minus-circle action-delete-color-font",

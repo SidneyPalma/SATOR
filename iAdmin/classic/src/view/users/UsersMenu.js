@@ -18,6 +18,7 @@ Ext.define( 'iAdmin.view.users.UsersMenu', {
     singleExpand: true,
     headerBorders: false,
     reserveScrollbar: false,
+    cls: 'update-grid',
 
     initComponent: function () {
         var me = this;
@@ -42,18 +43,18 @@ Ext.define( 'iAdmin.view.users.UsersMenu', {
                 xtype: 'treecolumn',
                 text: 'Descrição do menu'
             }, {
-                width: 70,
+                width: 120,
                 sortable: false,
                 dataIndex: 'menutype'
             }, {
-                width: 80,
+                width: 100,
                 align: 'right',
                 sortable: false,
                 dataIndex: 'orderby',
                 renderer: Smart.maskRenderer('0.00',true)
             }, {
                 text: 'Ações',
-                width: 90,
+                width: 100,
                 sortable: false,
                 xtype: 'actioncolumn',
                 align: 'center',
@@ -70,7 +71,7 @@ Ext.define( 'iAdmin.view.users.UsersMenu', {
                         },
                         getClass: function(v, meta, rec) {
                             if (rec.data.leaf) {
-                                return "fa fa-pencil action-update-color";
+                                return "fa fa-info-circle action-select-color-font";
                             } else {
                                 return "";
                             }
@@ -90,7 +91,7 @@ Ext.define( 'iAdmin.view.users.UsersMenu', {
                         },
                         getClass: function(v, meta, rec) {
                             if (rec.data.usersmenuid) {
-                                return "fa fa-ban action-delete-color";
+                                return "fa fa-minus-circle action-delete-color-font";
                             } else {
                                 return "";
                             }
