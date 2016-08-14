@@ -75,11 +75,21 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeList', {
                         dataIndex: 'description'
                     }, {
                         width: 100,
-                        text: 'Ativo',
+                        text: 'Versão',
+                        dataIndex: 'version'
+                    }, {
+                        width: 100,
+                        text: 'Status',
                         align: 'center',
                         xtype: 'actioncolumn',
                         items: [
                             {
+                                getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    return parseInt(record.get('authenticate')) == 1 ? "fa fa-gavel action-checked-color-font" : '';
+                                }
+                            }, {
+                                xtype: 'splitter'
+                            }, {
                                 getClass: function(value, metaData, record, rowIndex, colIndex, store) {
                                     return parseInt(record.get('isactive')) == 1 ? "fa fa-check-circle action-checked-color-font" : '';
                                 }
