@@ -96,13 +96,23 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeList', {
                             }
                         ]
                     }, {
-                        width: 90,
+                        width: 100,
                         text: 'Ações',
                         align: 'center',
                         xtype: 'actioncolumn',
-                        handler: 'onViewEdit',
-                        iconCls: "fa fa-info-circle action-select-color-font",
-                        tooltip: 'Editar cadastro!'
+                        items: [
+                            {
+                                handler: 'printerFlowItem',
+                                iconCls: "fa fa-print action-insert-color-font",
+                                tooltip: 'Imprimir exceções!'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                handler: 'onViewEdit',
+                                iconCls: "fa fa-info-circle action-select-color-font",
+                                tooltip: 'Editar cadastro!'
+                            }
+                        ]
                     }
                 ],
                 dockedItems: [

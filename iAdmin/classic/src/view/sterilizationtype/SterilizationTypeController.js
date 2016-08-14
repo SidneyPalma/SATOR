@@ -794,6 +794,15 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         window.open(Ext.String.format(url,view.xdata.get('id')));
     },
 
+    printerFlowItem: function(grid, rowIndex, colIndex) {
+        var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex),
+            url = 'business/Calls/Quick/ExceptionByFlow.php?id={0}';
+
+        window.open(Ext.String.format(url,record.get('id')));
+    },
+
     onSelectReadArea: function (combo, record, eOpts) {
         var me = this,
             area = [],

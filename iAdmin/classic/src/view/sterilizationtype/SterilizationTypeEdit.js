@@ -14,7 +14,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
 
     constrain: true,
 
-    width: 450,
+    width: 550,
     modal: true,
     resizable: false,
     showAnimate: true,
@@ -92,18 +92,23 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                         },
                         items: [
                             {
+                                xtype: 'hiddenfield',
+                                name: 'typeid'
+                            }, {
                                 xtype: 'fieldcontainer',
-                                layout: 'anchor',
+                                layout: 'hbox',
                                 fieldLabel: 'Tratamento de excessões',
                                 labelCls: 'sub-title-label',
                                 defaultType: 'textfield',
                                 defaults: {
+                                    flex: 1,
                                     anchor: '100%',
                                     fieldStyle: { fontSize: '16px;' }
                                 },
                                 items: [
                                     {
                                         pageSize: 0,
+                                        margin: '0 5 0 0',
                                         xtype: 'combobox',
                                         editable: false,
                                         showClear: true,
@@ -120,31 +125,29 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                             showclear: 'onShowClearReadArea'
                                         }
                                     }, {
-                                        xtype: 'hiddenfield',
-                                        name: 'typeid'
-                                    }, {
+                                        margin: '0 0 0 5',
                                         useReadColor: true,
                                         name: 'elementname',
                                         fieldLabel: 'Área com exceções'
-                                    }, {
-                                        xtype: 'checkboxgroup',
-                                        columns: 2,
-                                        vertical: true,
-                                        fieldLabel: 'Tipos de exceções',
-                                        labelCls: 'sub-title-label',
-                                        items: [
-                                            { boxLabel: 'Altera', name: 'flowchoice', inputValue: '1' },
-                                            { boxLabel: 'Quebra', name: 'flowbreach', inputValue: '1' }
-                                        ],
-                                        listeners: {
-                                            change: 'onCheckBoxGroupChange'
-                                        }
                                     }
                                 ]
                             }, {
-                                height: 110,
+                                xtype: 'checkboxgroup',
+                                columns: 2,
+                                vertical: true,
+                                fieldLabel: 'Tipos de exceções',
+                                labelCls: 'sub-title-label',
+                                items: [
+                                    { boxLabel: 'Altera', name: 'flowchoice', inputValue: '1' },
+                                    { boxLabel: 'Quebra', name: 'flowbreach', inputValue: '1' }
+                                ],
+                                listeners: {
+                                    change: 'onCheckBoxGroupChange'
+                                }
+                            }, {
+                                height: 210,
                                 xtype: 'gridpanel',
-                                hideHeaders: false,
+                                // hideHeaders: false,
                                 store: Ext.create('Ext.data.Store'),
                                 cls: 'update-grid',
                                 selType: 'cellmodel',
