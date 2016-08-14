@@ -652,11 +652,11 @@
 
 .action-update-color-font {
     cursor: pointer;
-    color: rgb(233, 127, 2) !important;
+    color: rgb(255, 31, 31) !important;
 }
 
 .action-update-color-font:hover {
-    color: rgb(47, 141, 30) !important;
+    color: rgb(138, 0, 18) !important;
 
     top: -7px;
     left: -7px;
