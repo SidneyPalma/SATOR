@@ -787,43 +787,52 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     setClearReadArea: function (field, eOpts) {
         var me = this,
+            list = [],
             view = me.getView(),
             graph = view.graph,
-            cells = graph.getElements(),
-            store = view.down('gridpanel').getStore(),
+            form = field.up('form'),
+            store = form.down('gridpanel').getStore(),
             checkboxgroup = view.down('checkboxgroup'),
-            readarea = form.down('hiddenfield[name=readarea]'),
-            elementname = form.down('combobox[name=elementname]');
+            readarea = form.down('combobox[name=readarea]'),
+            elementname = view.down('combobox[name=elementname]');
 
-        Ext.Msg.confirm('Excluir planejamento', 'Confirma a exclusão das configurações planejadas para esta área?',
-            function (choice) {
-                if (choice === 'yes') {
-                    Ext.each(cells, function (cell) {
-                        if (readarea.getValue() == cell.get('masterid')) {
-                            cell.set('masterid', false);
-                            cell.set('exceptionof', '');
-                            cell.set('flowchoice', false);
-                            cell.set('flowbreach', false);
-                        }
-                    });
-                    var area = data = graph.getCell(readarea.getValue());
-                    area.set('exceptionby', false);
-
-                    readarea.reset();
-                    elementname.reset();
-                    elementname.setReadColor(true);
-                    elementname.getStore().removeAll();
-
-                    store.removeAll();
-                    checkboxgroup.reset();
-                }
+        store.each(function (record) {
+            if(record.get('isactive')) {
+                list.push(record.data);
             }
-        );
+        });
+
+        if(list.length == 0) {
+            Smart.Msg.showToast('Não existem planejamentos selecionados para esta área!!','info');
+            return false;
+        }
+
+        Smart.Msg.showToast('Excluindo o planejamento das configurações para esta área!','warning');
+
+        graph.getCell(readarea.getValue()).set('exceptionby', false);
+
+        Ext.each(list, function (item) {
+            var cell = graph.getCell(item.id);
+            cell.set('masterid', false);
+            cell.set('exceptionof', '');
+            cell.set('isactive', false);
+            cell.set('flowchoice', false);
+            cell.set('flowbreach', false);
+        });
+
+        elementname.reset();
+        elementname.setReadColor(true);
+        elementname.getStore().removeAll();
+        view.down('sterilizationtypearea').reset();
+        view.down('gridpanel').getStore().removeAll();
+        view.down('hiddenfield[name=readarea]').reset();
+
+        store.removeAll();
+        checkboxgroup.reset();
     },
 
     onElementNameIsActiveChange: function (checkcolumn, rowIndex, checked, eOpts) {
         var me = this,
-            area = [],
             view = me.getView(),
             graph = view.graph,
             grid = checkcolumn.ownerCt.grid,
@@ -831,6 +840,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             readarea = grid.up('form').down('combobox[name=readarea]'),
             cell = graph.getCell(record.get('id'));
 
+        record.commit();
+        cell.set('isactive', checked);
         cell.set('masterid', (checked ? readarea.getValue() : false));
     },
 
@@ -841,35 +852,26 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             graph = view.graph,
             form = combo.up('form'),
             cells = graph.getElements(),
-            data = graph.getCell(record.get('id')),
             areas = ['basic.Area', 'basic.SubArea'],
             store = form.down('gridpanel').getStore(),
-            steplevel = parseInt(record.get('steplevel')),
-            getIsActive = function (data, value) {
-                var exceptionby = data.get('exceptionby');
-                var list = exceptionby ? Ext.decode(exceptionby) : null;
-                var data = list ? Smart.Rss.findArrayBy(list, 'id', value) : null;
-
-                return data ? data.isactive : false;
-            };
+            steplevel = parseInt(record.get('steplevel'));
 
         store.removeAll();
 
-        //Carregando seguintes que tem exceções
         Ext.each(cells, function(item) {
             var exceptiondo = item.get('exceptiondo');
             var isAreas = areas.indexOf(item.get('type')) != -1;
             var isBigger = steplevel <= parseInt(item.get('steplevel'));
             var isNumber = (Ext.isNumber(exceptiondo) && (parseInt(exceptiondo) == 1));
-            var isMaster = (item.get('masterid') == record.get('id') || !item.get('masterid'));
+            var isMaster = (item.get('masterid') == record.get('id') || !item.get('isactive'));
 
             if (isAreas && isBigger && isNumber && isMaster) {
                 area.push({
                     id: item.get('id'),
                     typeid: item.get('typeid'),
                     elementname: item.get('name'),
-                    steplevel: item.get('steplevel'),
-                    isactive: getIsActive(data,item.get('id'))
+                    isactive: item.get('isactive'),
+                    steplevel: item.get('steplevel')
                 });
             }
 

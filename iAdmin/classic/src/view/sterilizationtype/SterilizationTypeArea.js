@@ -12,12 +12,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeArea', {
 
     editable: false,
 
+    triggerCls: Ext.baseCSSPrefix + 'form-search-trigger',
+
     initComponent: function () {
         var me = this;
-
         me.callParent();
     },
-
+	
     createPicker: function() {
         var me = this,
             picker = new Ext.form.Panel({
@@ -49,7 +50,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeArea', {
                         displayField: 'name',
                         store: { data: [] },
                         listeners: {
-                            select: 'onSelectReadArea'
+                            select: 'onSelectReadArea',
+                            showclear: 'setClearReadArea'
                         }
                     }, {
                         xtype: 'label',
