@@ -764,7 +764,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                         name: item.get('name'),
                         typeid: item.get('typeid'),
                         steplevel: item.get('steplevel'),
-                        exceptionby: item.get('exceptionby'),
                         steppriority: item.get('steppriority'),
                         typelesscode: item.get('typelesscode'),
                         typelessname: item.get('typelessname')
@@ -832,7 +831,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             var isNumber = Ext.isNumber(exceptiondo) && (parseInt(exceptiondo) == 1);
 
             if( isAreas && isBigger && isNumber ) {
-                if(getHasValid(cells,item.get('id'))) {
+                // if(getHasValid(cells,item.get('id'))) {
                     area.push({
                         id: item.get('id'),
                         typeid: item.get('typeid'),
@@ -840,14 +839,12 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                         steplevel: item.get('steplevel'),
                         isactive: getIsActive(data,item.get('id'))
                     });
-                }
+                // }
             }
 
         },this);
 
-        area = Smart.Rss.sortArrayBy(area, "steplevel");
-
-        store.add(area);
+        store.add(Smart.Rss.sortArrayBy(area, "steplevel"));
     },
 
     updateArea: function (btn) {
@@ -1239,8 +1236,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             record = context.record,
             cell = graph.getCell(record.get('id')),
             readarea = view.down('hiddenfield[name=readarea]'),
-            elementname = view.down('combobox[name=elementname]'),
-            data = elementname.foundRecord();
+            elementname = view.down('combobox[name=elementname]');
+            // data = elementname.foundRecord();
 
         if(cell && context.value) {
 
@@ -1252,23 +1249,27 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                     var select = view.typeless.findRecord('typelesscode',context.value);
                     cell.set('typelesscode',select.get('typelesscode'));
                     cell.set('typelessname',select.get('typelessname'));
+
                     record.set('typelesscode',select.get('typelesscode'));
                     record.set('typelessname',select.get('typelessname'));
                     break;
             }
+
+            var read = graph.getCell(readarea.getValue());
+            var area = graph.getCell(elementname.getValue());
+
+            cell.set('exceptionid',elementname.getValue());
 
             record.commit();
 
             grid.getStore().each(function (result) {
                 item.push(result.data);
             });
-            var area = graph.getCell(data.get('id'));
             area.set('exceptionof',Ext.encode(item));
 
             elementname.getStore().each(function (result) {
                 list.push(result.data);
             });
-            var read = graph.getCell(readarea.getValue());
             read.set('exceptionby',Ext.encode(list));
         }
     },
@@ -1286,7 +1287,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             var cell = graph.getCell(record.get('id'));
             cell.set('flowchoice',newValue.flowchoice);
             cell.set('flowbreach',newValue.flowbreach);
-            cell.set('exceptiondo',newValue.flowbreach);
 
             store.each(function (record) {
                 area.push(record.data);
