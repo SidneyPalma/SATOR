@@ -14,6 +14,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeArea', {
 
     initComponent: function () {
         var me = this;
+
         me.callParent();
     },
 

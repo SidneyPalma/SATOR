@@ -108,7 +108,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 items: [
                                     {
                                         margin: '0 5 0 0',
-                                        showClear: true,
                                         fieldLabel: 'Áreas com leituras',
                                         xtype: 'sterilizationtypearea',
                                         listeners: {
