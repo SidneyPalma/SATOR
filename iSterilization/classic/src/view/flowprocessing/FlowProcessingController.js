@@ -99,7 +99,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView();
 
         if(!Smart.workstation) {
-            Smart.Msg.showToast('Estação de Trabalho Não Configurada!','error');
+             
             return false;
         }
 
