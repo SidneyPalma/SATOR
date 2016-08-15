@@ -93,11 +93,11 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                         items: [
                             {
                                 xtype: 'hiddenfield',
-                                name: 'typeid'
+                                name: 'readarea'
                             }, {
                                 xtype: 'fieldcontainer',
                                 layout: 'hbox',
-                                fieldLabel: 'Tratamento de excessões',
+                                fieldLabel: 'Tratamento de exceções',
                                 labelCls: 'sub-title-label',
                                 defaultType: 'textfield',
                                 defaults: {
@@ -107,67 +107,26 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 },
                                 items: [
                                     {
-                                        pageSize: 0,
                                         margin: '0 5 0 0',
-                                        xtype: 'combobox',
-                                        editable: false,
-                                        showClear: true,
                                         fieldLabel: 'Áreas com leituras',
-                                        name: 'readarea',
-                                        valueField: 'id',
-                                        displayField: 'name',
-                                        store: {
-                                            fields: [ 'id', 'typeid', 'name', 'steplevel' ],
-                                            data: me.readarea
-                                        },
+                                        xtype: 'sterilizationtypearea',
                                         listeners: {
-                                            select: 'onSelectReadArea',
-                                            showclear: 'onShowClearReadArea'
+                                            expand: 'onExpandReadArea',
+                                            showclear: 'setClearReadArea'
                                         }
                                     }, {
-                                        xtype: 'pickerfield',
                                         margin: '0 0 0 5',
                                         useReadColor: true,
                                         name: 'elementname',
                                         fieldLabel: 'Áreas com exceções',
-                                        triggerCls: Ext.baseCSSPrefix + 'form-time-trigger',
-                                        createPicker: function() {
-                                            var me = this,
-                                                picker = new Ext.panel.Panel({
-                                                    pickerField: me,
-                                                    floating: true,
-                                                    hidden: true,
-                                                    ownerCt: this.ownerCt,
-                                                    layout: 'fit',
-                                                    //renderTo: document.body,
-                                                    height: 200,
-                                                    items: [
-                                                        {
-                                                            xtype: 'gridpanel',
-                                                            store: Ext.create('Ext.data.Store'),
-                                                            columns: [
-                                                                { text: 'Name', dataIndex: 'name', flex: 1 }
-                                                            ]
-                                                        }
-                                                    ],
-
-                                                    buttonAlign: 'center',
-
-                                                    buttons: [
-                                                        {
-                                                            text: 'Confirmar',
-                                                            showSmartTheme: 'red',
-                                                            handler: function (btn) {
-                                                                btn.up('panel').hide();
-                                                            }
-                                                        }
-                                                    ]
-                                                });
-
-                                            return picker;
-                                        },
+                                        pageSize: 0,
+                                        xtype: 'combobox',
+                                        editable: false,
+                                        valueField: 'id',
+                                        displayField: 'elementname',
+                                        store: { data: [] },
                                         listeners: {
-                                            expand: 'onExpandelEmentName'
+                                            select: 'onSelectElementName'
                                         }
                                     }
                                 ]
@@ -185,7 +144,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                     change: 'onCheckBoxGroupChange'
                                 }
                             }, {
-                                height: 210,
+                                height: 220,
                                 xtype: 'gridpanel',
                                 hideHeaders: false,
                                 headerBorders: false,
@@ -199,6 +158,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 columns: [
                                     {
                                         flex: 1,
+                                        sortable: false,
                                         text: 'Descrição',
                                         dataIndex: 'elementname',
                                         renderer: function (value,metadata,record) {
@@ -208,6 +168,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                     }, {
                                         width: 100,
                                         text: 'Ordem',
+                                        sortable: false,
                                         dataIndex: 'steppriority',
                                         editor: {
                                             xtype: 'numberfield',
@@ -217,6 +178,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                     }, {
                                         width: 120,
                                         text: 'Tipo',
+                                        sortable: false,
                                         dataIndex: 'typelessname',
                                         editor: {
                                             pageSize: 0,
