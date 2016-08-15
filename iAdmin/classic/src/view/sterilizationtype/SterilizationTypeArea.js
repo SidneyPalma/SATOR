@@ -72,7 +72,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeArea', {
                                 width: 50,
                                 align: 'center',
                                 dataIndex: 'isactive',
-                                xtype: 'checkcolumn'
+                                xtype: 'checkcolumn',
+                                listeners: {
+                                    checkchange: 'onElementNameIsActiveChange'
+                                }
                             }
                         ]
                     }

@@ -108,11 +108,12 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 items: [
                                     {
                                         margin: '0 5 0 0',
-                                        // showClear: true,
+                                        showClear: true,
                                         fieldLabel: 'Áreas com leituras',
                                         xtype: 'sterilizationtypearea',
                                         listeners: {
-                                            expand: 'onExpandElementName'
+                                            expand: 'onExpandReadArea',
+                                            showclear: 'setClearReadArea'
                                         }
                                     }, {
                                         margin: '0 0 0 5',
@@ -122,7 +123,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                         pageSize: 0,
                                         xtype: 'combobox',
                                         editable: false,
-                                        // showClear: true,
                                         valueField: 'id',
                                         displayField: 'elementname',
                                         store: { data: [] },
