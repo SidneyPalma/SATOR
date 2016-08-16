@@ -18,8 +18,8 @@ Ext.define( 'Ext.overrides.form.Panel', {
         var params = action.params;
 
         try {
-            var rows = Ext.decode(params.rows);
-            if(rows.id.indexOf('SMART_') != -1) {
+            var rows = params.rows ? Ext.decode(params.rows) : null;
+            if(rows && rows.id.indexOf('SMART_') != -1) {
                 rows.id = (rows.id.indexOf('SMART_') == -1) ? rows.id : '';
                 action.params.rows = Ext.encode(rows);
             }

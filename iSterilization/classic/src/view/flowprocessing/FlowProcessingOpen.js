@@ -21,6 +21,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
 
     width: 850,
     modal: true,
+    header: false,
     resizable: false,
     showAnimate: true,
     layout: 'fit',
@@ -69,6 +70,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         allowBlank: true,
                         xtype: 'hiddenfield',
                         name: 'healthinsurance'
+                    }, {
+                        xtype: 'label',
+                        cls: 'title-label',
+                        text: 'Iniciar Nova Leitura'
                     }, {
                         xtype: 'fieldcontainer',
                         layout: 'anchor',
