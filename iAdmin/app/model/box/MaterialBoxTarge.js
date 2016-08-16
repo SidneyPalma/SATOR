@@ -30,6 +30,11 @@ Ext.define( 'iAdmin.model.box.MaterialBoxTarge', {
             persist: true,
             critical: true
         }, {
+            name: 'targeorderby',
+            type: 'int',
+            persist: true,
+            critical: true
+        }, {
             name: 'targecolorname',
             type: 'auto'
         }, {

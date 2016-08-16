@@ -15,6 +15,7 @@ class materialboxtarge extends \Smart\Data\Cache {
                 mbt.id,
                 mbt.materialboxid,
                 mbt.targecolorid,
+                mbt.targeorderby,
                 tc.name as targecolorname,
                 tc.colorschema
             from
@@ -30,11 +31,33 @@ class materialboxtarge extends \Smart\Data\Cache {
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
-            for ($x = 0; $x <= 3; $x++) {
-                $i = $x+1;
-                $rows[$x]['colorcode'] = $i;
-                $rows[$x]['colorname'] = "Cor#$i";
+            $node = array();
+            $list = array(
+                array("targeorderby"=>'1'),
+                array("targeorderby"=>'2'),
+                array("targeorderby"=>'3'),
+                array("targeorderby"=>'4')
+            );
+
+            foreach ($list as $item) {
+                $find = self::searchArray($rows,"targeorderby",$item["targeorderby"]);
+                if(!$find) {
+                    $pos = count($node);
+                    $node[$pos]['id'] = '';
+                    $node[$pos]['materialboxid'] = intval($query);
+                    $node[$pos]['targecolorid'] = '';
+                    $node[$pos]['targeorderby'] = $item["targeorderby"];
+                    $node[$pos]['targecolorname'] = '';
+                    $node[$pos]['colorschema'] = '';
+                }
+            }
+
+            $rows = self::sorterArray(array_merge($rows,$node),'targeorderby');
+
+            for ($x = 0; $x <= count($list)-1; $x++) {
                 $rows[$x]['materialboxid'] = $query;
+                $rows[$x]['colorcode'] = $rows[$x]['targeorderby'];
+                $rows[$x]['colorname'] = "Cor#" . $rows[$x]['targeorderby'];
             }
 
             self::_setRows($rows);
