@@ -504,12 +504,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 MSG_DUPLICATED: {
                     readercode: '001',
                     readershow: 'error',
-                    readertext: 'O Material seleciona ja foi atualizado!'
+                    readertext: 'O Material selecionado já foi atualizado!'
                 },
                 MSG_UNKNOWN: {
                     readercode: '002',
                     readershow: 'info',
-                    readertext: 'O Material nao faz parte do Kit Selecionado!'
+                    readertext: 'O Material não faz parte do Kit selecionado!'
+                },
+                MSG_PROTOCOL: {
+                    readercode: '003',
+                    readershow: 'question',
+                    readertext: 'MSG_PROTOCOL'
                 }
             },
             msgItem = msgText[msgType];
@@ -532,6 +537,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     /**
      * Controles para Processamento e Leitura
+     *
+     * - Verificar Mensagem [value]
+     *      É protocolo .. seguir protocolo
+     *      Não é protocolo, seguir [Verificar é Kit ?]
+     *
+     *
+     * - Verificar é Kit ?
+     *      Não é Kit,
+     *          Já foi lançado ?
+     *              Sim -> Mensagem de duplicidade
+     *              Não -> Pesquisa e Insert (Depende do Status do Material),
+     *      Sim é Kit,
+     *          Já foi lançado ?
+     *              Sim -> Mensagem de duplicidade
+     *              Não -> Update Status do Item na Lista
      */
     onStartReaderView: function (field, e, eOpts) {
         var me = this,
@@ -540,10 +560,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             sm = me.getView().down('flowprocessingmaterial').getSelectionModel(),
             materialboxid = me.getView().down('hiddenfield[name=materialboxid]').getValue();
 
-        if(value && value.length != 0) {
-            var data = store.findRecord('barcode',value);
+        field.reset();
 
-            field.reset();
+        if(value && value.length != 0) {
+
+            // É protocolo .. seguir protocolo
+            if(value.indexOf('SATOR') != -1) {
+                me.setMessageText('MSG_PROTOCOL');
+                return false;
+            }
+
+            var data = store.findRecord('barcode',value);
 
             if(data) {
 
@@ -562,6 +589,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             } else {
                 if(materialboxid && materialboxid.length != 0) {
                     me.setMessageText('MSG_UNKNOWN');
+                    return false;
                 }
             }
         }

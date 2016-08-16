@@ -232,6 +232,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                                 text: 'Imagem'
                                             }
                                         ],
+                                        // border: true,
                                         hideButtons: true,
                                         xtype: 'portrait',
                                         cls: 'processing-panel-header-flow'
