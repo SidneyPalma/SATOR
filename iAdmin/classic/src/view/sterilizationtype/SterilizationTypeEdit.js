@@ -181,16 +181,12 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                         dataIndex: 'typelessname',
                                         editor: {
                                             pageSize: 0,
-                                            // showClear: true,
                                             editable: false,
                                             hideTrigger: true,
                                             xtype: 'combobox',
                                             store: me.typeless,
                                             valueField: 'typelesscode',
                                             displayField: 'typelessname'
-                                            // listeners: {
-                                            //     showclear: 'onShowClearReadArea'
-                                            // }
                                         }
                                     }
                                 ],
