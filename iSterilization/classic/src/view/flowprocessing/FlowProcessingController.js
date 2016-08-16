@@ -497,6 +497,39 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.clearFilter();
     },
 
+    setMessageText: function (msgType) {
+        var me = this,
+            md = Ext.getStore('flowprocessingstepmessage'),
+            msgText = {
+                MSG_DUPLICATED: {
+                    readercode: '001',
+                    readershow: 'error',
+                    readertext: 'O Material seleciona ja foi atualizado!'
+                },
+                MSG_UNKNOWN: {
+                    readercode: '002',
+                    readershow: 'info',
+                    readertext: 'O Material nao faz parte do Kit Selecionado!'
+                }
+            },
+            msgItem = msgText[msgType];
+
+        Smart.Msg.showToast(msgItem.readertext,msgItem.readershow);
+
+        md.add({
+            readercode: msgItem.readercode,
+            readertext: msgItem.readertext,
+            readershow: msgItem.readershow,
+            flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
+        });
+
+        md.sync({
+            callback: function () {
+                md.sort([{property : 'id', direction: 'DESC'}]);
+            }
+        });
+    },
+
     /**
      * Controles para Processamento e Leitura
      */
@@ -513,6 +546,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             field.reset();
 
             if(data) {
+
+                if(data.get('unconformities') != '001') {
+                    me.setMessageText('MSG_DUPLICATED');
+                    return false;
+                }
+
                 data.set('unconformities','010');
                 store.sync({
                     callback: function () {
@@ -522,21 +561,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
             } else {
                 if(materialboxid && materialboxid.length != 0) {
-                    Smart.Msg.showToast('O Material nao faz parte do Kit Selecionado!','error');
-                    var md = Ext.getStore('flowprocessingstepmessage'),
-                        rc = Ext.create(md.getProxy().getModel().getName());
-
-                    rc.set({
-                        readercode: '001',
-                        readertext: 'O Material nao faz parte do Kit Selecionado!',
-                        flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
-                    });
-                    md.add(rc);
-                    md.sync({
-                        callback: function () {
-                            md.sort([{property : 'id', direction: 'DESC'}]);
-                        }
-                    });
+                    me.setMessageText('MSG_UNKNOWN');
                 }
             }
         }
