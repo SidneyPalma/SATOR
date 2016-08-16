@@ -809,8 +809,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         Smart.Msg.showToast('Excluindo o planejamento das configurações para esta área!','warning');
 
-        graph.getCell(readarea.getValue()).set('exceptionby', false);
-
         Ext.each(list, function (item) {
             var cell = graph.getCell(item.id);
             cell.set('masterid', false);
@@ -819,6 +817,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             cell.set('flowchoice', false);
             cell.set('flowbreach', false);
         });
+
+        graph.getCell(readarea.getValue()).set('exceptionby', false);
 
         elementname.reset();
         elementname.setReadColor(true);
@@ -909,6 +909,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         store.removeAll();
         checkboxgroup.reset();
 
+        view.down('gridpanel').getStore().removeAll();
         view.down('hiddenfield[name=readarea]').setValue(readarea.getValue());
         view.down('sterilizationtypearea').setRawValue(readarea.getRawValue());
 
@@ -921,6 +922,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 data: area
             })
         );
+
+        elementname.setValue(area[0].id);
+        elementname.setRawValue(area[0].elementname);
+        me.onSelectElementName(elementname,elementname.foundRecord());
 
         form.hide();
     },
@@ -939,7 +944,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         Ext.each(links, function(link) {
             var item = graph.getCell(link.prop('target/id'));
-
             list.push({
                 id: item.get('id'),
                 areasid: item.get('typeid'),
