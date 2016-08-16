@@ -470,12 +470,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     select stuff
                         (
                             (
-                                select top 4
+                                select
                                     ',#' + tc.colorschema
                                 from
                                     materialboxtarge mbt
                                     inner join targecolor tc on ( tc.id = mbt.targecolorid )
                                 where mbt.materialboxid = fp.materialboxid
+                                order by mbt.targeorderby desc
                                 for xml path ('')
                             ) ,1,1,''
                         )                

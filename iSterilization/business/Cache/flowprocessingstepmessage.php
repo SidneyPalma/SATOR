@@ -15,7 +15,7 @@ class flowprocessingstepmessage extends \Smart\Data\Cache {
                 fpm.id,
                 fpm.flowprocessingstepid,
                 fpm.readertext,
-                fpm.readerdate,
+                fpm.readershow,
                 fpm.readercode,
                 fpm.readerdate
             from

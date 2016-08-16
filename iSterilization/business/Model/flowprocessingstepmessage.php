@@ -33,6 +33,12 @@ class flowprocessingstepmessage extends \Smart\Data\Model {
     private $readertext;
 
     /**
+     * @Policy {"nullable":false, "length":60}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $readershow;
+
+    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -99,6 +105,22 @@ class flowprocessingstepmessage extends \Smart\Data\Model {
      */
     public function setReadertext($readertext) {
         $this->readertext = $readertext;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getReadershow() {
+        return $this->readershow;
+    }
+
+    /**
+     * @param type $readershow
+     * @return \iSterilization\Model\flowprocessingstepmessage
+     */
+    public function setReadershow($readershow) {
+        $this->readershow = $readershow;
         return $this;
     }
 

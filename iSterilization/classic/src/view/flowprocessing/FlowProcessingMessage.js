@@ -37,29 +37,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
             {
                 width: 40,
                 renderer: function (value,metaData,record) {
-                    var iconTxt = '',
-                        iconCls = [
-                            'x-message-box-info','x-message-box-error',
-                            'x-message-box-warning','x-message-box-question'
-                        ],
+                    var showCls = record.get('readershow'),
+                        iconCls = {
+                            info: ['x-message-box-info','rgb(15, 58, 208)'],
+                            error: ['x-message-box-error','rgb(192, 41, 66)'],
+                            warning: ['x-message-box-warning','rgb(237, 213, 0)'],
+                            question: ['x-message-box-question','rgb(38, 153, 23)']
+                        },
                         iconMsg = '<div class="{0}" style="float: left; width: 26px; font-size: 24px; color: {1};"></div>';
 
-                    switch(record.get('readercode')) {
-                        case '001':
-                            iconTxt = Ext.String.format(iconMsg,iconCls[0],'rgb(99, 98, 248)');
-                            break;
-                        case '002':
-                            iconTxt = Ext.String.format(iconMsg,iconCls[1],'rgb(189, 21, 80);');
-                            break;
-                        case '003':
-                            iconTxt = Ext.String.format(iconMsg,iconCls[2],'rgb(248, 202, 0);');
-                            break;
-                        default:
-                            iconTxt = Ext.String.format(iconMsg,iconCls[3],'rgb(138, 155, 15);');
-                    }
-
-                    return iconTxt;
-
+                    return Ext.String.format(iconMsg,iconCls[showCls][0],iconCls[showCls][1]);
                 }
             }, {
                 dataIndex: 'readertext',

@@ -322,7 +322,7 @@ Ext.define( 'Smart.util.Message', {
             minWidth: 300,
             closable: false,
             slideInDuration: 400,
-            align: orientation|| 't'
+            align: orientation || 't'
         });
     }
 

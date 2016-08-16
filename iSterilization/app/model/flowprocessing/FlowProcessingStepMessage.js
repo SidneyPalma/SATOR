@@ -23,6 +23,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepMessage', {
             name: 'readertext',
             type: 'auto'
         }, {
+            name: 'readershow',
+            type: 'auto'
+        }, {
             name: 'readerdate',
             type: 'auto'
         }

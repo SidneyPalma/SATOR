@@ -151,7 +151,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                 labelCls: 'processing-field-font',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
-                                        if(e.ESC) {
+                                        if ([e.ESC].indexOf(e.getKey()) != -1) {
                                             field.reset();
                                         }
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
