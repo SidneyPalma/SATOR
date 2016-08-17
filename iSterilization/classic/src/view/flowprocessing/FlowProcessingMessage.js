@@ -4,6 +4,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
 
     xtype: 'flowprocessingmessage',
 
+    // border: true,
+
     requires: [
         'Ext.grid.Panel',
         'Ext.grid.column.*'
@@ -49,8 +51,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
                     return Ext.String.format(iconMsg,iconCls[showCls][0],iconCls[showCls][1]);
                 }
             }, {
+                flex: 1,
                 dataIndex: 'readertext',
-                flex: 1
+                renderer: function (value,metaData,record) {
+                    var isMsg = (value.indexOf('MSG_') != -1);
+                    metaData.style = isMsg ? 'font-weight: bold;' : '';
+                    return value;
+                }
+            }, {
+                width: 120,
+                align: 'center',
+                dataIndex: 'readerdate',
+                renderer: function (value) {
+                    return Ext.Date.format(new Date(value), 'H:i d/m');
+                }
             }
         ];
     }

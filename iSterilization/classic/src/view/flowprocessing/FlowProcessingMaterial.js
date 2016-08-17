@@ -9,6 +9,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
         'Ext.grid.column.*'
     ],
 
+    // border: true,
+
     cls: 'processing-panel-header-flow processing-update-grid',
 
     store: 'flowprocessingstepmaterial',

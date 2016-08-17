@@ -9,6 +9,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
         'Ext.grid.column.*'
     ],
 
+    // border: true,
+
     rootVisible: false,
 
     cls: 'processing-panel-header-flow processing-update-grid',
