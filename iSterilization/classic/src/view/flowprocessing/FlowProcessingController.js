@@ -520,6 +520,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     readercode: '004',
                     readershow: 'error',
                     readertext: 'MSG_PROTOCOL_ERROR - O protocolo solicitado não foi reconhecido pelo sistema!'
+                },
+                MSG_PROTOCOL_ERROR: {
+                    readercode: '004',
+                    readershow: 'error',
+                    readertext: 'MSG_PROTOCOL_ERROR - O protocolo solicitado não foi reconhecido pelo sistema!'
                 }
             },
             msgItem = msgText[msgType];
@@ -668,7 +673,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         },me);
 
         if(!data) {
-            // TODO: Não há lançamentos a serem cancelados!
+            // TODO: ShowToast->Não há lançamentos a serem Cancelados!
             return false;
         }
 
