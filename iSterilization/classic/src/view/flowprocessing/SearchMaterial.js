@@ -13,7 +13,8 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
 
     pageSize: 0,
     showClear: true,
-
+    useUpperCase: true,
+    
     url: '../iSterilization/business/Calls/flowprocessing.php',
 
     params: {
