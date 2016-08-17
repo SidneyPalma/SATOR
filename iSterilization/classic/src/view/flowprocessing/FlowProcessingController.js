@@ -667,14 +667,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         },me);
 
-        if(data) {
-            data.set('unconformities','001');
-            store.sync({
-                callback: function () {
-                    data.commit();
-                }
-            });
+        if(!data) {
+            // TODO: Não há lançamentos a serem cancelados!
+            return false;
         }
+
+        data.set('unconformities','001');
+        store.sync({
+            callback: function () {
+                data.commit();
+            }
+        });
     },
 
     manualLancamento: function () {
