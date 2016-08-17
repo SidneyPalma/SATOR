@@ -586,7 +586,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,
                 SATOR_CANCELAR_LEITURAS: me.callSATOR_CANCELAR_LEITURAS,
                 SATOR_LANCAMENTO_MANUAL: me.callSATOR_LANCAMENTO_MANUAL,
-                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL
+                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL,
+                SATOR_CANCELAR_ULTIMA_LEITURA: me.callSATOR_CANCELAR_ULTIMA_LEITURA
             };
 
 	    try {
@@ -655,6 +656,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         console.info(scope);
     },
 
+    callSATOR_CANCELAR_ULTIMA_LEITURA: function (scope) {
+        var me = scope,
+            data = null,
+            store = Ext.getStore('flowprocessingstepmaterial');
+
+        store.each(function (item) {
+            if(item.get('unconformities') != '001'){
+                data = item;
+            }
+        },me);
+
+        if(data) {
+            data.set('unconformities','001');
+            store.sync({
+                callback: function () {
+                    data.commit();
+                }
+            });
+        }
+    },
+
     manualLancamento: function () {
         var me = this,
             view = me.getView(),
@@ -705,6 +727,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 		// Sim -> Mensagem de duplicidade
 		if(data.get('unconformities') != '001') {
 			me.setMessageText('MSG_DUPLICATED');
+            // model.select(data);
 			return false;
 		}
 
