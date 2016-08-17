@@ -14,7 +14,7 @@ class flowprocessing extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            select TOP 10
+            select TOP 5
                 ib.id,
                 ib.name,
                 ib.barcode,
