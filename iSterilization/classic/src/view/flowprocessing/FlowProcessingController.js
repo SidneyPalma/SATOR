@@ -618,9 +618,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_CANCELAR_LEITURAS: function (value) {
         var store = Ext.getStore('flowprocessingstepmaterial');
 
-        store.each(function(record) {
+        store.each(function (record) {
             record.set('unconformities','001');
-            store.sync({ callback: function () { record.commit(); } });
+            store.sync({
+                callback: function () {
+                    record.commit();
+                }
+            });
         });
     },
 
