@@ -4,6 +4,12 @@ Ext.define( 'Ext.overrides.form.field.File', {
 
     file: {},
 
+    // onFileChange: function(button, e, value) {
+    //     var newValue = value.replace(/^c:\\fakepath\\/i, '');
+    //
+    //     return this.callParent([ button, e, newValue ]);
+    // }
+
     getFileName: function () {
         return this.file._name;
     },

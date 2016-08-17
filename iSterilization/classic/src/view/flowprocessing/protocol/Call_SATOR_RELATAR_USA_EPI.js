@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_MANUAL', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_EPI', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_SATOR_LANCAMENTO_MANUAL',
+    xtype: 'call_SATOR_RELATAR_USA_EPI',
 
     requires: [
         'Ext.form.Panel',
@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 550,
+    width: 400,
     modal: true,
     layout: 'fit',
     header: false,
@@ -43,17 +43,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
                 },
                 items: [
                     {
-                        fieldLabel: 'Material',
-                        xtype: 'searchmaterial',
-                        hiddenNameId: 'materialid',
-                        name: 'materialname',
-                        listeners: {
-                            select: function (combo,record,eOpts) {
-                                var me = this,
-                                    button = me.up('window').down('button[name=confirm]');
-                                button.fireEvent('click', button);
-                            }
-                        }
+                        fieldLabel: 'Relatar uso de EPI (Sim/Não)',
+                        xtype: 'textfield',
+                        name: 'userprotected'
                     }
                 ]
             }
@@ -65,11 +57,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
     buttons: [
         {
             scale: 'medium',
-            name: 'confirm',
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'manualLancamento'
+                //click: 'manualLancamento'
             }
         }, {
             scale: 'medium',
