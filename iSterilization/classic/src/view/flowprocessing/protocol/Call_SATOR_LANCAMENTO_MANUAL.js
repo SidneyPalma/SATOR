@@ -20,10 +20,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
 
     controller: 'flowprocessing',
 
-    // listeners: {
-    //     selectusercode: 'onSelectUserCode'
-    // },
-
     initComponent: function () {
         var me = this;
         me.buildItems();
@@ -51,11 +47,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
                         xtype: 'searchmaterial',
                         hiddenNameId: 'materialid',
                         name: 'materialname'
-                        // listeners: {
-                        //     select: 'onSelectMaterial',
-                        //     showclear: 'showClearMaterial',
-                        //     beforedeselect: 'showClearMaterial'
-                        // }
                     }
                 ]
             }
