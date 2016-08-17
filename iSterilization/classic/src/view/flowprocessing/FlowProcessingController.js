@@ -499,7 +499,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     setMessageText: function (msgType,protocol) {
         var me = this,
-            md = Ext.getStore('flowprocessingstepmessage'),
+            store = Ext.getStore('flowprocessingstepmessage'),
             msgText = {
                 MSG_DUPLICATED: {
                     readercode: '001',
@@ -526,16 +526,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         Smart.Msg.showToast(msgItem.readertext,msgItem.readershow);
 
-        md.add({
+        store.add({
             readercode: msgItem.readercode,
             readershow: msgItem.readershow,
             readertext: protocol || msgItem.readertext,
             flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
         });
 
-        md.sync({
+        store.sync({
             callback: function () {
-                md.sort([{property : 'id', direction: 'DESC'}]);
+                store.sort([{property : 'id', direction: 'DESC'}]);
             }
         });
     },
