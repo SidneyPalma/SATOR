@@ -529,7 +529,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $query = $data['query'];
 
         $sql = "
-            select
+            select TOP 10
                 ib.id,
                 ib.name as materialname,
                 ib.barcode,
