@@ -647,6 +647,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         Ext.widget('call_SATOR_LANCAMENTO_MANUAL').show(null,function () {
             this.outherScope = scope;
+            this.masterView = me.getView();
             this.down('searchmaterial').focus(false,200);
         });
     },
@@ -658,9 +659,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     manualLancamento: function () {
         var me = this,
             view = me.getView(),
+            master = view.masterView,
             record = view.down('searchmaterial').foundRecord();
 
         view.close();
+        me.setView(master);
         me.workReadArea(record.get('barcode'));
     },
 
