@@ -586,12 +586,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,
                 SATOR_CANCELAR_LEITURAS: me.callSATOR_CANCELAR_LEITURAS,
                 SATOR_LANCAMENTO_MANUAL: me.callSATOR_LANCAMENTO_MANUAL,
-                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL,
-                SATOR_CANCELAR_ULTIMA_LEITURA: me.callSATOR_CANCELAR_ULTIMA_LEITURA
+                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL
             };
 
 	    try {
-	        call[value](value);
+	        call[value](me);
             me.setMessageText('MSG_PROTOCOL',value);
 	    }
 	    catch (e) {
@@ -599,47 +598,70 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	    }
 	},
 
-    callSATOR_INICIAR_LEITURA: function (value) {
-        console.info(value);
+    callSATOR_INICIAR_LEITURA: function (scope) {
+        var me = scope,
+            view = me.getView();
+        console.info(scope);
     },
 
-    callSATOR_ENCERRAR_LEITURA: function (value) {
-        console.info(value);
+    callSATOR_ENCERRAR_LEITURA: function (scope) {
+        console.info(scope);
     },
 
-    callSATOR_INFORMAR_INSUMOS: function (value) {
-        console.info(value);
+    callSATOR_INFORMAR_INSUMOS: function (scope) {
+        console.info(scope);
     },
 
-    callSATOR_IMPRIMIR_ETIQUETA: function (value) {
-        console.info(value);
+    callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
+        console.info(scope);
     },
 
-    callSATOR_CANCELAR_LEITURAS: function (value) {
-        var store = Ext.getStore('flowprocessingstepmaterial');
+    callSATOR_CANCELAR_LEITURAS: function (scope) {
+        var me = scope,
+            view = me.getView(),
+            store = Ext.getStore('flowprocessingstepmaterial');
 
-        store.each(function (record) {
-            record.set('unconformities','001');
-            store.sync({
-                callback: function () {
-                    record.commit();
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'updatetUnconformities',
+                unconformities: '001',
+                flowprocessingstepid: view.xdata.rows[0].id
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
                 }
-            });
+
+                store.load();
+            }
         });
     },
 
-    callSATOR_LANCAMENTO_MANUAL: function (value) {
+    callSATOR_LANCAMENTO_MANUAL: function (scope) {
+        var me = scope;
+
         Ext.widget('call_SATOR_LANCAMENTO_MANUAL').show(null,function () {
+            this.outherScope = scope;
             this.down('searchmaterial').focus(false,200);
         });
     },
 
-    callSATOR_CONSULTAR_MATERIAL: function (value) {
-        console.info(value);
+    callSATOR_CONSULTAR_MATERIAL: function (scope) {
+        console.info(scope);
     },
 
-    callSATOR_CANCELAR_ULTIMA_LEITURA: function (value) {
-        console.info(value);
+    manualLancamento: function () {
+        var me = this,
+            view = me.getView(),
+            record = view.down('searchmaterial').foundRecord();
+
+        view.close();
+        me.workReadArea(record.get('barcode'));
     },
 
 	workReadArea: function (value) {
@@ -651,24 +673,24 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
 			
 		/**
-			* - Verificar é Kit ?
-			*      Não é Kit,
-			*          Já foi lançado ?
-			*              Sim -> Mensagem de duplicidade
-			*              Não -> Pesquisa e Insert (Depende do Status do Material)
-			*/		
+          * - Verificar é Kit ?
+          *      Não é Kit,
+          *          Já foi lançado ?
+          *              Sim -> Mensagem de duplicidade
+          *              Não -> Pesquisa e Insert (Depende do Status do Material)
+          */
 		if(!isMaterialBox) {
             return false;
 		}
 
 		/**
-			* - Verificar é Kit ?
-			*      Sim é Kit, [isMaterialBox]
-			*			Não foi encontrado no Kit ?
-			*          Já foi lançado ?
-			*              Sim -> Mensagem de duplicidade
-			*              Não -> Update Status do Item na Lista
-			*/			
+          * - Verificar é Kit ?
+          *      Sim é Kit, [isMaterialBox]
+          *			Não foi encontrado no Kit ?
+          *          Já foi lançado ?
+          *              Sim -> Mensagem de duplicidade
+          *              Não -> Update Status do Item na Lista
+          */
         var data = store.findRecord('barcode',value);
 
 		// Não foi encontrado no Kit ?

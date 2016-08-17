@@ -351,6 +351,23 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return $result;
     }
 
+    public function updatetUnconformities(array $data) {
+        $flowprocessingstepid = $data['flowprocessingstepid'];
+
+        try {
+            $pdo = $this->prepare("update flowprocessingstepmaterial set unconformities = '001' where flowprocessingstepid = :id");
+            $pdo->bindValue(":id", $flowprocessingstepid, \PDO::PARAM_INT);
+
+            $pdo->execute();
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     /**
      * Select
      */

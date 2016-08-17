@@ -68,10 +68,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
         {
             scale: 'medium',
             text: 'Confirmar',
-            showSmartTheme: 'green'
-            // listeners: {
-            //     click: 'selectUserFlow'
-            // }
+            showSmartTheme: 'green',
+            listeners: {
+                click: 'manualLancamento'
+            }
         }, {
             scale: 'medium',
             text: 'Cancelar',
