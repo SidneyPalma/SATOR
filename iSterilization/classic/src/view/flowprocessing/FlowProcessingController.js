@@ -638,7 +638,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_CANCELAR_LEITURAS: function (scope) {
         var me = scope,
             data = [],
-            view = me.getView(),
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
@@ -700,11 +699,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         data.set('unconformities','001');
-        store.sync({
-            callback: function () {
-                data.commit();
-            }
-        });
+        data.store.sync({async: false});
+        data.commit();
     },
 
 	workReadArea: function (value) {

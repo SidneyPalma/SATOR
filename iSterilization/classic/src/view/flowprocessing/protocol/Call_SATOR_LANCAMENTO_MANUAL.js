@@ -48,7 +48,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
                         hiddenNameId: 'materialid',
                         name: 'materialname',
                         listeners: {
-                            select: function (combo,record,eOpts) {
+                            select: function () {
                                 var me = this,
                                     button = me.up('window').down('button[name=confirm]');
                                 button.fireEvent('click', button);
