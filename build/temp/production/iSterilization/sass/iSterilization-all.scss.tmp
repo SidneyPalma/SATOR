@@ -1209,6 +1209,7 @@ $include-iadmin-view-sterilizationtype-coreflowcellrule: dynamic(false);;
 $include-iadmin-view-sterilizationtype-coreflowcellview: dynamic(false);;
 $include-iadmin-view-sterilizationtype-coreflowlinkview: dynamic(false);;
 $include-iadmin-view-sterilizationtype-coreflownoteview: dynamic(false);;
+$include-iadmin-view-sterilizationtype-sterilizationtypearea: dynamic(false);;
 $include-iadmin-view-sterilizationtype-sterilizationtypecontroller: dynamic(false);;
 $include-iadmin-view-sterilizationtype-sterilizationtypeedit: dynamic(false);;
 $include-iadmin-view-sterilizationtype-sterilizationtypeflow: dynamic(false);;
@@ -1254,6 +1255,7 @@ $include-isterilization-view-flowprocessing-readerflowprocessing: dynamic(false)
 $include-isterilization-view-flowprocessing-searchmaterial: dynamic(true);;
 $include-isterilization-view-flowprocessing-searchpatient: dynamic(true);;
 $include-isterilization-view-flowprocessing-searchsterilizationtype: dynamic(true);;
+$include-isterilization-view-flowprocessing-protocol-call_sator_lancamento_manual: dynamic(true);;
 $include-isterilization-view-login-login: dynamic(true);;
 $include-isterilization-view-login-logincontroller: dynamic(true);;
 $include-isterilization-view-main-main: dynamic(true);;

@@ -497,13 +497,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.clearFilter();
     },
 
-    setMessageText: function (msgType) {
+    setMessageText: function (msgType,protocol) {
         var me = this,
             md = Ext.getStore('flowprocessingstepmessage'),
             msgText = {
                 MSG_DUPLICATED: {
                     readercode: '001',
-                    readershow: 'error',
+                    readershow: 'warning',
                     readertext: 'O Material selecionado já foi atualizado!'
                 },
                 MSG_UNKNOWN: {
@@ -513,8 +513,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 },
                 MSG_PROTOCOL: {
                     readercode: '003',
-                    readershow: 'question',
-                    readertext: 'MSG_PROTOCOL'
+                    readershow: 'info',
+                    readertext: Ext.String.format('{0} - Solicitado execução de protocolo!',protocol)
+                },
+                MSG_PROTOCOL_ERROR: {
+                    readercode: '004',
+                    readershow: 'error',
+                    readertext: 'MSG_PROTOCOL_ERROR - O protocolo solicitado não foi reconhecido pelo sistema!'
                 }
             },
             msgItem = msgText[msgType];
@@ -523,8 +528,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         md.add({
             readercode: msgItem.readercode,
-            readertext: msgItem.readertext,
             readershow: msgItem.readershow,
+            readertext: protocol || msgItem.readertext,
             flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
         });
 
@@ -544,56 +549,148 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *
      *
      * - Verificar é Kit ?
-     *      Não é Kit,
-     *          Já foi lançado ?
-     *              Sim -> Mensagem de duplicidade
-     *              Não -> Pesquisa e Insert (Depende do Status do Material),
-     *      Sim é Kit,
+     *      Sim é Kit, [isMaterialBox]
      *          Já foi lançado ?
      *              Sim -> Mensagem de duplicidade
      *              Não -> Update Status do Item na Lista
+	 *
+     *      Não é Kit,
+     *          Já foi lançado ?
+     *              Sim -> Mensagem de duplicidade
+     *              Não -> Pesquisa e Insert (Depende do Status do Material)
      */
     onStartReaderView: function (field, e, eOpts) {
         var me = this,
-            value = field.getValue(),
-            store = Ext.getStore('flowprocessingstepmaterial'),
-            sm = me.getView().down('flowprocessingmaterial').getSelectionModel(),
-            materialboxid = me.getView().down('hiddenfield[name=materialboxid]').getValue();
+            value = field.getValue();
 
         field.reset();
 
         if(value && value.length != 0) {
-
-            // É protocolo .. seguir protocolo
+            // Sim é protocolo .. seguir workProtocol
             if(value.indexOf('SATOR') != -1) {
-                me.setMessageText('MSG_PROTOCOL');
-                return false;
+                me.workProtocol(value);
+				return false;
             }
 
-            var data = store.findRecord('barcode',value);
-
-            if(data) {
-
-                if(data.get('unconformities') != '001') {
-                    me.setMessageText('MSG_DUPLICATED');
-                    return false;
-                }
-
-                data.set('unconformities','010');
-                store.sync({
-                    callback: function () {
-                        data.commit();
-                        sm.select(data);
-                    }
-                });
-            } else {
-                if(materialboxid && materialboxid.length != 0) {
-                    me.setMessageText('MSG_UNKNOWN');
-                    return false;
-                }
-            }
+			// Não é protocolo .. seguir workReadArea
+			me.workReadArea(value);
         }
     },
+	
+	workProtocol: function (value) {
+	    var me = this,
+            call = {
+                SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,
+                SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,
+                SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,
+                SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,
+                SATOR_CANCELAR_LEITURAS: me.callSATOR_CANCELAR_LEITURAS,
+                SATOR_LANCAMENTO_MANUAL: me.callSATOR_LANCAMENTO_MANUAL,
+                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL,
+                SATOR_CANCELAR_ULTIMA_LEITURA: me.callSATOR_CANCELAR_ULTIMA_LEITURA
+            };
+
+	    try {
+	        call[value](value);
+            me.setMessageText('MSG_PROTOCOL',value);
+	    }
+	    catch (e) {
+	        me.setMessageText('MSG_PROTOCOL_ERROR');
+	    }
+	},
+
+    callSATOR_INICIAR_LEITURA: function (value) {
+        console.info(value);
+    },
+
+    callSATOR_ENCERRAR_LEITURA: function (value) {
+        console.info(value);
+    },
+
+    callSATOR_INFORMAR_INSUMOS: function (value) {
+        console.info(value);
+    },
+
+    callSATOR_IMPRIMIR_ETIQUETA: function (value) {
+        console.info(value);
+    },
+
+    callSATOR_CANCELAR_LEITURAS: function (value) {
+        var store = Ext.getStore('flowprocessingstepmaterial');
+
+        store.each(function(record) {
+            record.set('unconformities','001');
+            store.sync({ callback: function () { record.commit(); } });
+        });
+    },
+
+    callSATOR_LANCAMENTO_MANUAL: function (value) {
+        Ext.widget('call_SATOR_LANCAMENTO_MANUAL').show(null,function () {
+            this.down('searchmaterial').focus(false,200);
+        });
+    },
+
+    callSATOR_CONSULTAR_MATERIAL: function (value) {
+        console.info(value);
+    },
+
+    callSATOR_CANCELAR_ULTIMA_LEITURA: function (value) {
+        console.info(value);
+    },
+
+	workReadArea: function (value) {
+        var me = this,
+			view = me.getView(),
+            store = Ext.getStore('flowprocessingstepmaterial'),
+            model = view.down('flowprocessingmaterial').getSelectionModel(),
+            materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
+			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
+			
+		/**
+			* - Verificar é Kit ?
+			*      Não é Kit,
+			*          Já foi lançado ?
+			*              Sim -> Mensagem de duplicidade
+			*              Não -> Pesquisa e Insert (Depende do Status do Material)
+			*/		
+		if(!isMaterialBox) {
+            return false;
+		}
+
+		/**
+			* - Verificar é Kit ?
+			*      Sim é Kit, [isMaterialBox]
+			*			Não foi encontrado no Kit ?
+			*          Já foi lançado ?
+			*              Sim -> Mensagem de duplicidade
+			*              Não -> Update Status do Item na Lista
+			*/			
+        var data = store.findRecord('barcode',value);
+
+		// Não foi encontrado no Kit ?
+		if(!data) {
+			me.setMessageText('MSG_UNKNOWN');
+			return false;
+		}			
+
+		// Já foi lançado ?
+		// Sim -> Mensagem de duplicidade
+		if(data.get('unconformities') != '001') {
+			me.setMessageText('MSG_DUPLICATED');
+			return false;
+		}
+
+		// Já foi lançado ?
+		// Não -> Update Status do Item na Lista
+		data.set('unconformities','010');
+		store.sync({
+			callback: function () {
+				data.commit();
+				model.select(data);
+			}
+		});
+	},
+	
     /**
      * Leitura de Materias
      *  - Kit
@@ -608,12 +705,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *
      *  - Outras Leituras
      *      Protocolos
-     *          -   Consultar Material
-     *          -   Encerrar Leitura
-     *          -   Ler Insumos
-     *          -   Cancelar Leituras Relizadas
-     *          -   Cancelar Ultima Leitura
-     *          -   Imprimir Etiquetas
+     *          -   Encerrar Leitura                SATOR_ENCERRAR_LEITURA
+     *          -   Ler Insumos                     SATOR_INFORMAR_INSUMOS
+     *          -   Cancelar Leituras Relizadas     SATOR_CANCELAR_LEITURAS
+     *          -   Imprimir Etiquetas              SATOR_IMPRIMIR_ETIQUETA
+     *          -   Consultar Material              SATOR_CONSULTAR_MATERIAL
+     *          -   Cancelar Ultima Leitura         SATOR_CANCELAR_ULTIMA_LEITURA
      *          -   Solictar Quebra de Fluxo
      *          -   Relatar uso de EPI
      *              -   SIM Usa EPI
@@ -634,7 +731,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             // search = view.down('readerflowprocessing'),
             search = view.down('textfield[name=search]'),
             colorschema = data.rows[0].colorschema.split(","),
-            schema = "<div style='width: 20px; background: {0}; height: 26px; float: right;'></div>";
+            schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
 
         search.focus(false,200);
 

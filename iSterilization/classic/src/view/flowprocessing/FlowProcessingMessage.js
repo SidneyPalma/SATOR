@@ -51,10 +51,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
                     return Ext.String.format(iconMsg,iconCls[showCls][0],iconCls[showCls][1]);
                 }
             }, {
-                dataIndex: 'readertext',
                 flex: 1,
+                dataIndex: 'readertext',
                 renderer: function (value,metaData,record) {
-                    metaData.style = (value.indexOf('MSG_') != -1) ? 'font-weight: bold;' : '';
+                    var isMsg = (value.indexOf('MSG_') != -1);
+                    metaData.style = isMsg ? 'font-weight: bold;' : '';
                     return value;
                 }
             }, {
