@@ -38,28 +38,32 @@ Ext.Loader.setConfig({
         'iAdmin.store.material': '../iAdmin/app/store/material',
         'iAdmin.model.material': '../iAdmin/app/model/material',
 
+        'iAdmin.store.moviment': '../iAdmin/app/store/moviment',
+        'iAdmin.model.moviment': '../iAdmin/app/model/moviment',
+
         'iAdmin.store.equipment': '../iAdmin/app/store/equipment',
         'iAdmin.model.equipment': '../iAdmin/app/model/equipment',
 
         'iAdmin.view.box': '../iAdmin/classic/src/view/box',
         'iAdmin.view.users': '../iAdmin/classic/src/view/users',
         'iAdmin.view.input': '../iAdmin/classic/src/view/input',
+
         'iAdmin.view.enums': '../iAdmin/classic/src/view/enums',
         'iAdmin.view.profile': '../iAdmin/classic/src/view/profile',
         'iAdmin.view.itembase': '../iAdmin/classic/src/view/itembase',
         'iAdmin.view.material': '../iAdmin/classic/src/view/material',
+        'iAdmin.view.moviment': '../iAdmin/classic/src/view/moviment',
         'iAdmin.view.equipment': '../iAdmin/classic/src/view/equipment',
-		// 'iAdmin.view.sterilizationtype': '../iAdmin/classic/src/view/sterilizationtype',
-        'iAdmin.view.person.client': '../iAdmin/classic/src/view/person/client',
+        // 'iAdmin.view.moviment.InputEnterSearch',
 
         'iAdmin.view.helper.place': '../iAdmin/classic/src/view/helper/place',
-        'iAdmin.view.helper.flowing': '../iAdmin/classic/src/view/helper/flowing',
-        'iAdmin.view.helper.instrumentator': '../iAdmin/classic/src/view/helper/instrumentator',
-
         'iAdmin.view.helper.targe': '../iAdmin/classic/src/view/helper/targe',
-        'iAdmin.view.helper.cmeareas': '../iAdmin/classic/src/view/helper/areas',
+        'iAdmin.view.helper.flowing': '../iAdmin/classic/src/view/helper/flowing',
         'iAdmin.view.helper.packing': '../iAdmin/classic/src/view/helper/packing',
         'iAdmin.view.helper.provider': '../iAdmin/classic/src/view/helper/provider',
+        'iAdmin.view.helper.cmeareas': '../iAdmin/classic/src/view/helper/areas',
+        'iAdmin.view.helper.instrumentator': '../iAdmin/classic/src/view/helper/instrumentator',
+
         'iAdmin.view.person.client': '../iAdmin/classic/src/view/person/client',
         'iAdmin.view.person.proprietary': '../iAdmin/classic/src/view/person/proprietary',
         'iAdmin.view.helper.manufacturer': '../iAdmin/classic/src/view/helper/manufacturer',

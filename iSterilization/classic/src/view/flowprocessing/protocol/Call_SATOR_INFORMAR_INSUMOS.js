@@ -8,10 +8,13 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
         'Ext.form.Panel',
         'Smart.plugins.*',
         'Ext.window.Window',
+        'iAdmin.view.input.InputSearch',
+        'iAdmin.view.input.InputPresentationSearch',
+        'iSterilization.view.flowprocessing.FlowProcessingInput',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 500,
+    width: 400,
     modal: true,
     layout: 'fit',
     header: false,
@@ -34,6 +37,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                 xtype: 'form',
                 bodyPadding: 10,
                 layout: 'anchor',
+                plugins:'formenter',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
@@ -42,6 +46,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                 },
                 items: [
                     {
+                        xtype: 'label',
+                        cls: 'title-label',
+                        text: 'Lançar Insumos'
+                    }, {
+                        pageSize: 0,
+                        margin: '20 0 0 0',
                         fieldLabel: 'Equipamento / Sub-Area',
                         xtype: 'searchelement',
                         listeners: {
@@ -52,6 +62,41 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 button.fireEvent('click', button);
                             }
                         }
+                    }, {
+                        xtype: 'fieldcontainer',
+                        layout: 'hbox',
+                        defaults: {
+                            // anchor: '100%',
+                            allowBlank: false,
+                            fieldCls: 'smart-field-style-action',
+                            labelCls: 'smart-field-style-action'
+                        },
+                        items: [
+                            {
+                                flex: 3,
+                                pageSize: 0,
+                                margin: '0 5 0 0',
+                                xtype: 'inputpresentationsearch',
+                                fieldLabel: 'Insumo',
+                                hiddenNameId: 'presentation',
+                                name: 'presentationdescription'
+                                // listeners: {
+                                //     beforequery: 'onBeforeQueryInputPresentation'
+                                // }
+                            }, {
+                                flex: 2,
+                                margin: '0 0 0 5',
+                                xtype: 'textfield',
+                                name: 'quantity',
+                                fieldLabel: 'Quantidade',
+                                plugins: 'textmask',
+                                mask: '0,000',
+                                money: true
+                            }
+                        ]
+                    }, {
+                        height: 300,
+                        xtype: 'flowprocessinginput'
                     }
                 ]
             }

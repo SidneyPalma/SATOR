@@ -588,7 +588,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 				SATOR_RELATAR_USA_EPI: me.callSATOR_RELATAR_USA_EPI,                    // --> OK
                 SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,                    // -->
                 SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,                  // -->
-                SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,                  // -->
+                SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,                  // --> OK
                 SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,                // -->
                 SATOR_CANCELAR_LEITURAS: me.callSATOR_CANCELAR_LEITURAS,                // --> OK
                 SATOR_LANCAMENTO_MANUAL: me.callSATOR_LANCAMENTO_MANUAL,                // --> OK
@@ -655,13 +655,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onBeforeSearchElement: function (queryPlan , eOpts) {
-        var me = this,
-            data = Ext.getStore('flowprocessingstep').getAt(0);
+        var data = Ext.getStore('flowprocessingstep').getAt(0);
 
         queryPlan.combo.getStore().pageSize = 7;
         queryPlan.combo.getStore().setParams({
             flowprocessingid: data.get('flowprocessingid')
         });
+    },
+
+    onBeforeQueryInputPresentation: function ( queryPlan, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            combo = queryPlan.combo,
+            inputid = view.down('inputentersearch').getValue();
+
+        combo.store.removeAll();
+        combo.store.setParams({ inputid: inputid });
     },
 
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {

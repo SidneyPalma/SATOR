@@ -42,6 +42,11 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
                 },
                 items: [
                     {
+                        xtype: 'label',
+                        cls: 'title-label',
+                        text: 'Registrar Material'
+                    }, {
+                        margin: '20 0 0 0',
                         fieldLabel: 'Material',
                         xtype: 'searchmaterial',
                         hiddenNameId: 'materialid',
