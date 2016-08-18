@@ -84,16 +84,21 @@ Ext.define( 'iAdmin.view.input.InputList', {
                     }, {
                         width: 100,
                         text: 'Ativo',
-                        readOnly: true,
-                        dataIndex: 'isactive',
                         align: 'center',
-                        xtype: 'checkcolumn'
+                        xtype: 'actioncolumn',
+                        items: [
+                            {
+                                getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                    return parseInt(record.get('isactive')) == 1 ? "fa fa-check-circle action-checked-color-font" : '';
+                                }
+                            }
+                        ]
                     }, {
                         width: 40,
                         align: 'center',
                         xtype: 'actioncolumn',
                         handler: 'onViewEdit',
-                        iconCls: "fa fa-pencil action-update-color",
+                        iconCls: "fa fa-info-circle action-select-color-font",
                         tooltip: 'Editar cadastro!'
                     }
                 ],

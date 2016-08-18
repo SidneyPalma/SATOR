@@ -60,14 +60,14 @@ Ext.define( 'iAdmin.view.module.ModuleMenu', {
                 items: [
                     {
                         handler: 'showUpdateMenu',
-                        iconCls: "fa fa-pencil action-update-color",
+                        iconCls: "fa fa-info-circle action-select-color-font",
                         tooltip: 'Editar'
                     }, {
                         disabled: true,
                         xtype: 'splitter'
                     }, {
                         handler: 'showDeleteMenu',
-                        iconCls: "fa fa-ban action-delete-color",
+                        iconCls: "fa fa-minus-circle action-delete-color-font",
                         tooltip: 'Remover'
                     }
                 ]
