@@ -45,6 +45,12 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $target;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     */
+    private $useppe;
+
+    /**
      * @Policy {"nullable":true, "length":80}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -203,6 +209,22 @@ class flowprocessingstep extends \Smart\Data\Model {
      */
     public function setTarget($target) {
         $this->target = $target;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getUseppe() {
+        return $this->useppe;
+    }
+
+    /**
+     * @param type $useppe
+     * @return \iAdmin\Model\flowprocessingstep
+     */
+    public function setUseppe($useppe) {
+        $this->useppe = $useppe;
         return $this;
     }
 

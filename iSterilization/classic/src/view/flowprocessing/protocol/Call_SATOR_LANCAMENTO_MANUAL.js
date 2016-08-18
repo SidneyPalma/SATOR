@@ -32,7 +32,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
         me.items = [
             {
                 xtype: 'form',
-                plugins:'formenter',
                 bodyPadding: 10,
                 layout: 'anchor',
                 defaults: {
@@ -69,7 +68,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_LANCAMENTO_M
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'manualLancamento'
+                click: 'lancamentoManual'
             }
         }, {
             scale: 'medium',

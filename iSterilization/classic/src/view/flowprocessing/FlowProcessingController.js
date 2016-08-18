@@ -585,15 +585,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	workProtocol: function (value) {
 	    var me = this,
             call = {
-				SATOR_RELATAR_USA_EPI: me.callSATOR_RELATAR_USA_EPI,
-                SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,
-                SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,
-                SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,
-                SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,
-                SATOR_CANCELAR_LEITURAS: me.callSATOR_CANCELAR_LEITURAS,
-                SATOR_LANCAMENTO_MANUAL: me.callSATOR_LANCAMENTO_MANUAL,
-                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL,
-                SATOR_CANCELAR_ULTIMA_LEITURA: me.callSATOR_CANCELAR_ULTIMA_LEITURA
+				SATOR_RELATAR_USA_EPI: me.callSATOR_RELATAR_USA_EPI,                    // --> OK
+                SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,                    // -->
+                SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,                  // -->
+                SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,                  // -->
+                SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,                // -->
+                SATOR_CANCELAR_LEITURAS: me.callSATOR_CANCELAR_LEITURAS,                // --> OK
+                SATOR_LANCAMENTO_MANUAL: me.callSATOR_LANCAMENTO_MANUAL,                // --> OK
+                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL,              // -->
+                SATOR_CANCELAR_ULTIMA_LEITURA: me.callSATOR_CANCELAR_ULTIMA_LEITURA     // --> OK
             };
 
 	    try {
@@ -612,6 +612,26 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.master = me.getView();
             this.down('textfield[name=userprotected]').focus(false,200);
         });
+    },
+
+    relatarUsaEPI: function () {
+        var me = this,
+            view = me.getView(),
+            master = view.master,
+            useppe = ['SATOR_SIM','SATOR_NAO'],
+            store = Ext.getStore('flowprocessingstep'),
+            model = store.getAt(0),
+            value = view.down('textfield[name=userprotected]').getValue();
+
+        if(!value || value.length == 0 || useppe.indexOf(value) == -1) {
+            return false;
+        }
+
+        view.close();
+        me.setView(master);
+        model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
+        store.sync({async: false});
+        model.commit();
     },
 
     callSATOR_INICIAR_LEITURA: function (scope) {
@@ -667,7 +687,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    manualLancamento: function () {
+    lancamentoManual: function () {
         var me = this,
             view = me.getView(),
             master = view.master,
@@ -794,12 +814,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             data = view.xdata,
             text = 'Material ({0})',
-            // search = view.down('readerflowprocessing'),
-            search = view.down('textfield[name=search]'),
             colorschema = data.rows[0].colorschema.split(","),
             schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
 
-        search.focus(false,200);
+        Ext.getStore('flowprocessingstep').setParams({
+            method: 'selectStep',
+            query: data.rows[0].id
+        }).load();
 
         Ext.getStore('flowprocessingstepmaterial').setParams({
             method: 'selectCode',
@@ -817,6 +838,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             });
         }
 
+        view.down('textfield[name=search]').focus(false,200);
         view.down('container[name=colorschema]').update(list);
         view.down('textfield[name=username]').setValue(data.rows[0].username);
         view.down('textfield[name=areasname]').setValue(data.rows[0].areasname);
