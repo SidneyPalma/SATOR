@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_EPI', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INSUMOS', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_SATOR_RELATAR_USA_EPI',
+    xtype: 'call_SATOR_INFORMAR_INSUMOS',
 
     requires: [
         'Ext.form.Panel',
@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 400,
+    width: 550,
     modal: true,
     layout: 'fit',
     header: false,
@@ -42,7 +42,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
                 },
                 items: [
                     {
-                        // inputType: 'password',
                         fieldLabel: 'Relatar uso de EPI (Sim/Não)',
                         xtype: 'textfield',
                         name: 'userprotected',
@@ -70,7 +69,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'relatarUsaEPI'
+                // click: 'relatarUsaEPI'
             }
         }, {
             scale: 'medium',
