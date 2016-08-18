@@ -647,7 +647,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     callSATOR_INFORMAR_INSUMOS: function (scope) {
         var me = scope;
-        console.info(scope);
+        Ext.widget('call_SATOR_INFORMAR_INSUMOS').show(null,function () {
+            this.outherScope = scope;
+            this.master = me.getView();
+        });
     },
 
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
