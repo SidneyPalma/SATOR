@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 550,
+    width: 500,
     modal: true,
     layout: 'fit',
     header: false,
