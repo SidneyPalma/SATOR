@@ -42,16 +42,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                 },
                 items: [
                     {
-                        fieldLabel: 'Relatar uso de EPI (Sim/Não)',
-                        xtype: 'textfield',
-                        name: 'userprotected',
+                        fieldLabel: 'Equipamento / Sub-Area',
+                        xtype: 'searchelement',
                         listeners: {
-                            specialkey: function (field, e, eOpts) {
-                                if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                    var me = this,
-                                        button = me.up('window').down('button[name=confirm]');
-                                    button.fireEvent('click', button);
-                                }
+                            beforequery: 'onBeforeSearchElement',
+                            select: function () {
+                                var me = this,
+                                    button = me.up('window').down('button[name=confirm]');
+                                button.fireEvent('click', button);
                             }
                         }
                     }

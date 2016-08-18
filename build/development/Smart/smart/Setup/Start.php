@@ -9,8 +9,8 @@ class Start {
     private static $usr = "sa";
     private static $sch = "dbo";
     private static $pwd = "1844";
-    private static $dtb = "SATOR_TEST";
-    private static $log = "SATOR_TEST_LOG";
+    private static $dtb = "CME";
+    private static $log = "CME_LOG";
     private static $tmz = "America/Sao_Paulo";
     private static $dns = "sqlsrv:server=(local);database=dtb";
 
