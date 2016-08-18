@@ -520,6 +520,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     readercode: '004',
                     readershow: 'error',
                     readertext: 'MSG_PROTOCOL_ERROR - O protocolo solicitado não foi reconhecido pelo sistema!'
+                },
+                MSG_NOT_AVAILABLE: {
+                    readercode: '005',
+                    readershow: 'error',
+                    readertext: 'MSG_NOT_AVAILABLE - Não há lançamentos a serem Cancelados!'
                 }
             },
             msgItem = msgText[msgType];
@@ -580,6 +585,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	workProtocol: function (value) {
 	    var me = this,
             call = {
+				SATOR_RELATAR_USA_EPI: me.callSATOR_RELATAR_USA_EPI,
                 SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,
                 SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,
                 SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,
@@ -599,6 +605,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	    }
 	},
 
+	callSATOR_RELATAR_USA_EPI: function (scope) {
+        var me = scope;
+        Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
+            this.outherScope = scope;
+            this.master = me.getView();
+            this.down('textfield[name=userprotected]').focus(false,200);
+        });
+    },
+
     callSATOR_INICIAR_LEITURA: function (scope) {
         var me = scope,
             view = me.getView();
@@ -606,40 +621,40 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_ENCERRAR_LEITURA: function (scope) {
+        var me = scope;
         console.info(scope);
     },
 
     callSATOR_INFORMAR_INSUMOS: function (scope) {
+        var me = scope;
         console.info(scope);
     },
 
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
+        var me = scope;
         console.info(scope);
     },
 
     callSATOR_CANCELAR_LEITURAS: function (scope) {
         var me = scope,
-            view = me.getView(),
+            data = [],
             store = Ext.getStore('flowprocessingstepmaterial');
 
-        Ext.Ajax.request({
-            scope: me,
-            url: me.url,
-            params: {
-                action: 'select',
-                method: 'updatetUnconformities',
-                unconformities: '001',
-                flowprocessingstepid: view.xdata.rows[0].id
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-
-                store.load();
+        store.each(function (item) {
+            if(item.get('unconformities') != '001'){
+                data.push(item);
             }
+        },me);
+
+        if(data.length == 0) {
+            me.setMessageText('MSG_NOT_AVAILABLE');
+            return false;
+        }
+
+        Ext.each(data,function(item) {
+            item.set('unconformities','001');
+            item.store.sync({async: false});
+            item.commit();
         });
     },
 
@@ -652,6 +667,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    manualLancamento: function () {
+        var me = this,
+            view = me.getView(),
+            master = view.master,
+            record = view.down('searchmaterial').foundRecord();
+
+        view.close();
+        me.setView(master);
+        me.workReadArea(record.get('barcode'));
+    },
+	
     callSATOR_CONSULTAR_MATERIAL: function (scope) {
         console.info(scope);
     },
@@ -667,25 +693,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         },me);
 
-        if(data) {
-            data.set('unconformities','001');
-            store.sync({
-                callback: function () {
-                    data.commit();
-                }
-            });
+        if(!data) {
+            me.setMessageText('MSG_NOT_AVAILABLE');
+            return false;
         }
-    },
 
-    manualLancamento: function () {
-        var me = this,
-            view = me.getView(),
-            master = view.master,
-            record = view.down('searchmaterial').foundRecord();
-
-        view.close();
-        me.setView(master);
-        me.workReadArea(record.get('barcode'));
+        data.set('unconformities','001');
+        data.store.sync({async: false});
+        data.commit();
     },
 
 	workReadArea: function (value) {
@@ -763,7 +778,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Consultar Material              SATOR_CONSULTAR_MATERIAL
      *          -   Cancelar Ultima Leitura         SATOR_CANCELAR_ULTIMA_LEITURA
      *          -   Solictar Quebra de Fluxo
-     *          -   Relatar uso de EPI
+     *          -   Relatar uso de EPI				SATOR_RELATAR_USA_EPI
      *              -   SIM Usa EPI
      *              -   NÂO Usa EPI
      *          -
