@@ -8,8 +8,6 @@ Ext.define( 'iAdmin.view.input.InputPresentationSearch', {
         'Smart.form.field.ComboSearch'
     ],
 
-    pageSize: 10,
-
     displayField: 'name',
 
     url: '../iAdmin/business/Calls/inputpresentation.php',
