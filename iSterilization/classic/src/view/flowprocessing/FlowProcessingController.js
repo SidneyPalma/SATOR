@@ -650,6 +650,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.widget('call_SATOR_INFORMAR_INSUMOS').show(null,function () {
             this.outherScope = scope;
             this.master = me.getView();
+            this.down('searchelement').focus(false,200);
+        });
+    },
+
+    onBeforeSearchElement: function (queryPlan , eOpts) {
+        var me = this,
+            data = Ext.getStore('flowprocessingstep').getAt(0);
+
+        queryPlan.combo.getStore().pageSize = 7;
+        queryPlan.combo.getStore().setParams({
+            flowprocessingid: data.get('flowprocessingid')
         });
     },
 
@@ -810,7 +821,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Processamento e Leitura
      */
-
     onAfterRenderView: function () {
         var me = this,
             list = '',
