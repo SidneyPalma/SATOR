@@ -50,6 +50,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         cls: 'title-label',
                         text: 'Lançar Insumos'
                     }, {
+                        pageSize: 0,
                         margin: '20 0 0 0',
                         fieldLabel: 'Equipamento / Sub-Area',
                         xtype: 'searchelement',
@@ -73,6 +74,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         items: [
                             {
                                 flex: 3,
+                                pageSize: 0,
                                 margin: '0 5 0 0',
                                 xtype: 'inputpresentationsearch',
                                 fieldLabel: 'Insumo',
