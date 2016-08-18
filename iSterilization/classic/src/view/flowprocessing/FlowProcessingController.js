@@ -656,11 +656,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onBeforeSearchElement: function (queryPlan , eOpts) {
         var me = this,
-            view = me.getView(),
-            store = queryPlan.combo.getStore();
+            data = Ext.getStore('flowprocessingstep').getAt(0);
 
-        store.setParams({
-            flowprocessingid: view.master.xdata.rows[0].id
+        queryPlan.combo.getStore().pageSize = 7;
+        queryPlan.combo.getStore().setParams({
+            flowprocessingid: data.get('flowprocessingid')
         });
     },
 
@@ -821,7 +821,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Processamento e Leitura
      */
-
     onAfterRenderView: function () {
         var me = this,
             list = '',

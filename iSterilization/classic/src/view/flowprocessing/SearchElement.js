@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchElement', {
 
     displayField: 'elementname',
 
-    pageSize: 10,
+    pageSize: 8,
     showClear: true,
 
     url: '../iSterilization/business/Calls/flowprocessingstepinput.php',

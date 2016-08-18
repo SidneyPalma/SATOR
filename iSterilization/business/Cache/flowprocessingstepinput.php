@@ -8,6 +8,8 @@ class flowprocessingstepinput extends \Smart\Data\Cache {
 
     public function selectElement(array $data) {
         $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
         $flowprocessingid = $data['flowprocessingid'];
 
         $proxy = $this->getStore()->getProxy();
@@ -39,6 +41,7 @@ class flowprocessingstepinput extends \Smart\Data\Cache {
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
+            self::_setPage($start,$limit);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
