@@ -106,6 +106,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
+                        margin: '10 0 0 0',
                         defaults: {
                             useReadColor: true,
                             fieldCls: 'smart-field-style-action',
