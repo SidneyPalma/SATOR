@@ -8,8 +8,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
         'Ext.form.Panel',
         'Smart.plugins.*',
         'Ext.window.Window',
-        'iAdmin.view.input.InputSearch',
-        'iAdmin.view.input.InputPresentationSearch',
+        'iSterilization.view.flowprocessing.SearchInput',
+        'iSterilization.view.flowprocessing.SearchElement',
         'iSterilization.view.flowprocessing.FlowProcessingInput',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
@@ -55,6 +55,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         fieldLabel: 'Equipamento / Sub-Area',
                         xtype: 'searchelement',
                         listeners: {
+                            showclear: function (field) {
+                                var form = field.up('form'),
+                                    quantity = form.down('numberfield[name=quantity]');
+
+                                form.reset();
+                                quantity.setMinValue(0);
+                                quantity.setReadColor(true);
+                            },
                             beforequery: 'onBeforeSearchElement',
                             select: function () {
                                 var me = this,
@@ -64,15 +72,27 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         }
                     }, {
                         pageSize: 0,
-                        xtype: 'inputpresentationsearch',
+                        hideTrigger: true,
+                        xtype: 'searchinput',
                         fieldLabel: 'Insumo',
                         hiddenNameId: 'presentation',
-                        name: 'presentationdescription',
                         listeners: {
+                            beforequery: 'onBeforeSearchInput',
                             select: function (combo,record,eOpts) {
                                 var me = this,
+                                    hasbatch = record.get('hasbatch'),
+                                    hasstock = record.get('hasstock'),
+                                    lotpart = me.up('window').down('textfield[name=lotpart]'),
+                                    quantity = me.up('window').down('numberfield[name=quantity]'),
+                                    datevalidity = me.up('window').down('datefield[name=datevalidity]'),
                                     presentation = me.up('window').down('textfield[name=presentation]');
+
+                                lotpart.setValue(record.get('lotpart'));
+                                datevalidity.setValue(record.get('datevalidity'));
                                 presentation.setValue(record.get('presentationdescription'));
+
+                                quantity.setReadColor(hasstock != 1);
+                                quantity.setMinValue(hasstock == 1 ? 1 : 0);
                             }
                         }
                     }, {
@@ -93,7 +113,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 xtype: 'splitter'
                             }, {
                                 flex: 2,
-                                xtype: 'textfield',
+                                minValue: 0,
+                                hideTrigger: true,
+                                xtype: 'numberfield',
                                 name: 'quantity',
                                 fieldLabel: 'Quantidade',
                                 plugins: 'textmask',

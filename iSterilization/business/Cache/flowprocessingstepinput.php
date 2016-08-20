@@ -20,7 +20,10 @@ class flowprocessingstepinput extends \Smart\Data\Cache {
             
             select
                 fps.id,
-                fps.elementname
+                fps.areasid,
+                fps.elementname,
+                fps.equipmentid,
+                fps.elementtype
             from
                 flowprocessingstep fps
             where fps.flowprocessingid = @flowprocessingid

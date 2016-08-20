@@ -694,14 +694,14 @@ console.info(result);
         });
     },
 
-    onBeforeQueryInputPresentation: function ( queryPlan, eOpts ) {
+    onBeforeSearchInput: function ( queryPlan, eOpts ) {
         var me = this,
             view = me.getView(),
             combo = queryPlan.combo,
-            inputid = view.down('inputentersearch').getValue();
+            equipmentid = view.down('searchelement').foundRecord().get('equipmentid');
 
-        combo.store.removeAll();
-        combo.store.setParams({ inputid: inputid });
+        // combo.store.removeAll();
+        combo.store.setParams({ equipmentid: equipmentid });
     },
 
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
