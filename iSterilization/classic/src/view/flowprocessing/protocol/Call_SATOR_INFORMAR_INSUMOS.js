@@ -86,9 +86,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 quantity.setMinValue(0);
                                 quantity.setReadColor(true);
                                 searchinput.getStore().removeAll();
-                                // var me = this,
-                                //     button = me.up('window').down('button[name=confirm]');
-                                // button.fireEvent('click', button);
                             }
                         }
                     }, {
@@ -101,8 +98,11 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                             beforequery: 'onBeforeSearchInput',
                             select: function (combo,record,eOpts) {
                                 var me = this,
+                                    view = combo.up('window'),
+                                    form = view.down('form'),
                                     hasbatch = record.get('hasbatch'),
                                     hasstock = record.get('hasstock'),
+                                    button = view.down('button[name=confirm]'),
                                     lotpart = me.up('window').down('textfield[name=lotpart]'),
                                     quantity = me.up('window').down('numberfield[name=quantity]'),
                                     datevalidity = me.up('window').down('datefield[name=datevalidity]'),
@@ -117,6 +117,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 quantity.setReadColor(hasstock != 1);
                                 quantity.setMinValue(hasstock == 1 ? 1 : 0);
                                 quantity.setMaxValue(hasstock == 1 ? record.get('lotamount') : 0);
+
+                                if(hasstock != 1) {
+                                    button.fireEvent('click', button);
+                                    form.reset();
+                                    form.down('searchelement').focus(false,200);
+                                }
                             }
                         }
                     }, {
@@ -147,7 +153,25 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 fieldLabel: 'Quantidade',
                                 plugins: 'textmask',
                                 mask: '0,000',
-                                money: true
+                                money: true,
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                                            var view = field.up('window'),
+                                                form = view.down('form'),
+                                                button = view.down('button[name=confirm]');
+
+                                            if(!form.isValid()){
+                                                e.stopEvent();
+                                                return false;
+                                            }
+
+                                            button.fireEvent('click', button);
+                                            form.reset();
+                                            form.down('searchelement').focus(false,200);
+                                        }
+                                    }
+                                }
                             }
                         ]
                     }, {
