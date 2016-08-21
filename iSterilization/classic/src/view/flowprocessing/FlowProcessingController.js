@@ -695,22 +695,64 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      */
     callSATOR_ENCERRAR_LEITURA: function (scope) {
         var me = scope;
-        me.setMessageText('MSG_PROTOCOL','SATOR_ENCERRAR_LEITURA');
-        me.checkUnconformities();
+
+        if(me.checkUnconformities() == true) {
+            Ext.widget('call_UNCONFORMITIES').show(null,function () {
+                this.outherScope = scope;
+                this.master = me.getView();
+                Ext.getStore('flowprocessingstepmaterial').setParams({
+                    method: 'selectCode',
+                    query: me.getView().xdata.get('id')
+                }).load();
+            });
+        }
     },
 
     checkUnconformities: function () {
-        var me = this,
-            count = 0,
+        var count = 0,
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
             count += item.get('unconformities') == '010' ? 1 : 0;
         });
 
-        if(count != store.getCount()){
-            me.setMessageText('MSG_PROTOCOL','SATOR_ENCERRAR_LEITURA');
+        return (count != store.getCount());
+    },
+
+    onSelectUnconformities: function (combo,record,eOpts) {
+    var me = this,
+        view = me.getView(),
+        model = view.down('flowprocessingmaterial').getSelectionModel(),
+        selection = model.getSelection()[0];
+
+        selection.set('unconformities',combo.getValue());
+    },
+
+    setUnconformities: function () {
+        var me = this,
+            data = [],
+            view = me.getView(),
+            master = view.master,
+            store = Ext.getStore('flowprocessingstepmaterial');
+
+        store.each(function (item) {
+            if(item.dirty){
+                data.push(item);
+            }
+        },me);
+
+        if(data.length == 0) {
+            me.setMessageText('MSG_NOT_AVAILABLE');
+            return false;
         }
+
+        Ext.each(data,function(item) {
+            item.store.sync({async: false});
+        });
+
+        store.load();
+        view.close();
+        me.setView(master);
     },
 
     callSATOR_INFORMAR_INSUMOS: function (scope) {
@@ -858,6 +900,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_CANCELAR_LEITURAS: function (scope) {
         var me = scope,
             data = [],
+            view = me.getView(),
+            master = view.master,
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
@@ -876,6 +920,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             item.store.sync({async: false});
             item.commit();
         });
+
+        view.close();
+        me.setView(master);
     },
 
     callSATOR_LANCAMENTO_MANUAL: function (scope) {
@@ -1155,13 +1202,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
+    onBeforeEditMaterialFlowStepAction: function ( editor, context, eOpts ) {
+        var list = ['010'],
+            unconformities = context.record.get('unconformities');
+
+        return (context.grid.editable) && (list.indexOf(unconformities) == -1);
+    },
+
     onSelectMaterialFlowStepAction: function ( rowModel, record, index, eOpts) {
         var me = this,
             view = me.getView(),
             portrait = view.down('portrait');
 
-        portrait.beFileData(record.get('filetype'));
-        portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
+        if(portrait) {
+            portrait.beFileData(record.get('filetype'));
+            portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
+        }
     },
 
     onFlowTaskAction: function () {

@@ -6,8 +6,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
 
     requires: [
         'Ext.grid.Panel',
-        'Ext.grid.column.*'
+        'Ext.grid.column.*',
+        'Ext.grid.plugin.CellEditing'
     ],
+
+    editable: false,
 
     // border: true,
     cls: 'update-grid',
@@ -17,7 +20,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     store: 'flowprocessingstepmaterial',
 
     listeners: {
+        beforeedit: 'onBeforeEditMaterialFlowStepAction',
         select: 'onSelectMaterialFlowStepAction'
+    },
+
+    selType: 'cellmodel',
+
+    plugins: {
+        clicksToEdit: 1,
+        ptype: 'cellediting'
     },
 
     initComponent: function () {
@@ -80,7 +91,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                 }
             }, {
                 dataIndex: 'unconformitiesdescription',
-                width: 130
+                width: 180,
+                editor: {
+                    xtype: 'comboenum',
+                    queryFilter: 'I',
+                    name: 'unconformitiesdescription',
+                    fieldCls: 'smart-field-style-action',
+                    listeners: {
+                        select: 'onSelectUnconformities'
+                    }
+                }
             }
         ];
     }
