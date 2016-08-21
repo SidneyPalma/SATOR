@@ -56,37 +56,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         xtype: 'searchelement',
                         hiddenNameId: 'flowprocessingstepid',
                         listeners: {
-                            showclear: function (field) {
-                                var form = field.up('form'),
-                                    searchinput = form.down('searchinput'),
-                                    quantity = form.down('numberfield[name=quantity]');
-
-                                form.reset();
-                                quantity.setMinValue(0);
-                                quantity.setReadColor(true);
-                                searchinput.getStore().removeAll();
-                            },
+                            showclear: 'onShowClearSearchElement',
                             beforequery: 'onBeforeSearchElement',
-                            select: function (combo,record,eOpts) {
-                                var form = combo.up('form'),
-                                    searchinput = form.down('searchinput'),
-                                    lotpart = form.down('textfield[name=lotpart]'),
-                                    quantity = form.down('numberfield[name=quantity]'),
-                                    datevalidity = form.down('datefield[name=datevalidity]'),
-                                    presentation = form.down('hiddenfield[name=presentation]'),
-                                    presentationdescription = form.down('textfield[name=presentationdescription]');
-
-                                lotpart.reset();
-                                searchinput.reset();
-                                datevalidity.reset();
-                                presentation.reset();
-                                presentationdescription.reset();
-
-                                quantity.reset();
-                                quantity.setMinValue(0);
-                                quantity.setReadColor(true);
-                                searchinput.getStore().removeAll();
-                            }
+                            select: 'onSelectSearchElement'
                         }
                     }, {
                         pageSize: 0,
@@ -96,31 +68,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         hiddenNameId: 'inputpresentationid',
                         listeners: {
                             beforequery: 'onBeforeSearchInput',
-                            select: function (combo,record,eOpts) {
-                                var me = this,
-                                    view = me.up('window'),
-                                    hasbatch = record.get('hasbatch'),
-                                    hasstock = record.get('hasstock'),
-                                    button = view.down('button[name=confirm]'),
-                                    lotpart = view.down('textfield[name=lotpart]'),
-                                    quantity = view.down('numberfield[name=quantity]'),
-                                    datevalidity = view.down('datefield[name=datevalidity]'),
-                                    presentation = view.down('hiddenfield[name=presentation]'),
-                                    presentationdescription = view.down('textfield[name=presentationdescription]');
-
-                                lotpart.setValue(record.get('lotpart'));
-                                datevalidity.setValue(record.get('datevalidity'));
-                                presentation.setValue(record.get('presentation'));
-                                presentationdescription.setValue(record.get('presentationdescription'));
-
-                                quantity.setReadColor(hasstock != 1);
-                                quantity.setMinValue(hasstock == 1 ? 1 : 0);
-                                quantity.setMaxValue(hasstock == 1 ? record.get('lotamount') : 0);
-
-                                if(hasstock != 1) {
-                                    button.fireEvent('click', button);
-                                }
-                            }
+                            select: 'onSelectSearchInput'
                         }
                     }, {
                         xtype: 'container',

@@ -713,7 +713,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     informarInsumo: function () {
         var me = this,
             view = me.getView(),
-            // master = view.master,
             form = view.down('form'),
             store = Ext.getStore('flowprocessingstepinput');
 
@@ -725,13 +724,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.sync({
             callback: function() {
                 Ext.getStore('flowprocessingstepinputtree').load();
-                form.reset();
-                view.down('searchelement').focus(false,200);
+                me.onShowClearSearchElement();
             }
         });
-
-        // view.close();
-        // me.setView(master);
     },
 
     onActionDeleteTree: function(grid, rowIndex, colIndex) {
@@ -759,6 +754,70 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     },
 
+    onShowClearSearchElement: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            searchinput = form.down('searchinput'),
+            searchelement = form.down('searchelement'),
+            quantity = form.down('numberfield[name=quantity]');
+
+        form.reset();
+        quantity.setMinValue(0);
+        quantity.setReadColor(true);
+        searchinput.getStore().removeAll();
+        searchelement.focus(false,200);
+    },
+
+    onSelectSearchElement: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            searchinput = form.down('searchinput'),
+            lotpart = form.down('textfield[name=lotpart]'),
+            quantity = form.down('numberfield[name=quantity]'),
+            datevalidity = form.down('datefield[name=datevalidity]'),
+            presentation = form.down('hiddenfield[name=presentation]'),
+            presentationdescription = form.down('textfield[name=presentationdescription]');
+
+        lotpart.reset();
+        searchinput.reset();
+        datevalidity.reset();
+        presentation.reset();
+        presentationdescription.reset();
+
+        quantity.reset();
+        quantity.setMinValue(0);
+        quantity.setReadColor(true);
+        searchinput.getStore().removeAll();
+    },
+
+    onSelectSearchInput: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            hasbatch = record.get('hasbatch'),
+            hasstock = record.get('hasstock'),
+            button = view.down('button[name=confirm]'),
+            lotpart = view.down('textfield[name=lotpart]'),
+            quantity = view.down('numberfield[name=quantity]'),
+            datevalidity = view.down('datefield[name=datevalidity]'),
+            presentation = view.down('hiddenfield[name=presentation]'),
+            presentationdescription = view.down('textfield[name=presentationdescription]');
+
+        lotpart.setValue(record.get('lotpart'));
+        datevalidity.setValue(record.get('datevalidity'));
+        presentation.setValue(record.get('presentation'));
+        presentationdescription.setValue(record.get('presentationdescription'));
+
+        quantity.setReadColor(hasstock != 1);
+        quantity.setMinValue(hasstock == 1 ? 1 : 0);
+        quantity.setMaxValue(hasstock == 1 ? record.get('lotamount') : 0);
+
+        if(hasstock != 1) {
+            me.informarInsumo();
+        }
+    },
+        
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
         var me = scope;
         console.info(scope);
