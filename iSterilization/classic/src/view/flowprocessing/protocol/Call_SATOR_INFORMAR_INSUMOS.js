@@ -57,11 +57,13 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         listeners: {
                             showclear: function (field) {
                                 var form = field.up('form'),
+                                    searchinput = form.down('searchinput'),
                                     quantity = form.down('numberfield[name=quantity]');
 
                                 form.reset();
                                 quantity.setMinValue(0);
                                 quantity.setReadColor(true);
+                                searchinput.getStore().removeAll();
                             },
                             beforequery: 'onBeforeSearchElement',
                             select: function () {
@@ -93,6 +95,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
 
                                 quantity.setReadColor(hasstock != 1);
                                 quantity.setMinValue(hasstock == 1 ? 1 : 0);
+                                quantity.setMaxValue(hasstock == 1 ? 1 : 0);
                             }
                         }
                     }, {

@@ -700,7 +700,6 @@ console.info(result);
             combo = queryPlan.combo,
             equipmentid = view.down('searchelement').foundRecord().get('equipmentid');
 
-        // combo.store.removeAll();
         combo.store.setParams({ equipmentid: equipmentid });
     },
 
