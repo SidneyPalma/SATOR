@@ -898,7 +898,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             model = view.down('flowprocessingmaterial').getSelectionModel(),
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
-			
+
+        console.info(view.xdata.data);
+
 		/**
           * - Verificar é Kit ?
           *      Não é Kit,
@@ -907,6 +909,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
           *              Não -> Pesquisa e Insert (Depende do Status do Material)
           */
 		if(!isMaterialBox) {
+            me.setIsntMaterialBox();
             return false;
 		}
 
@@ -944,7 +947,47 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 			}
 		});
 	},
-	
+
+    setIsntMaterialBox: function (value) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('flowprocessingstepmaterial'),
+            model = view.down('flowprocessingmaterial').getSelectionModel();
+
+        var data = store.findRecord('barcode',value);
+
+        // Já foi lançado ?
+        // Sim -> Mensagem de duplicidade
+        if(data) {
+            me.setMessageText('MSG_DUPLICATED');
+            model.select(data);
+            return false;
+        }
+
+        // Já foi lançado ?
+        // Não -> Pesquisa e Insert (Depende do Status do Material)
+        Ext.Ajax.request({
+            scope: me,
+            url: store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'insertItem',
+                barcode: value,
+                flowprocessingstepid: view.xdata.get('flowprocessingstepid')
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    me.setMessageText('MSG_UNKNOWN');
+                    return false;
+                }
+
+                store.load();
+            }
+        });
+    },
+
     /**
      * Leitura de Materias
      *  - Kit
