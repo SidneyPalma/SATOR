@@ -71,7 +71,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
                         }
                     }
                 ]
-            } : {width: 1}
+            } : { width: 1 }
         ];
 
     }
