@@ -60,7 +60,7 @@ class areas extends \Smart\Data\Event {
     public function checUpdatekWorkstation($model) {
         $id = $model->getId();
 
-        $pdo = $this->getProxy()->prepare("select workstation from areas where id = :id");
+        $pdo = $this->getProxy()->prepare("select workstation, printlocate from areas where id = :id");
         $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
 
         $pdo->execute();
