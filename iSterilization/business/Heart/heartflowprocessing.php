@@ -341,12 +341,20 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $username = $data['username'];
         $flowprocessingstepid = $data['flowprocessingstepid'];
         $step = new \iSterilization\Coach\flowprocessingstep();
+        $message = new \iSterilization\Coach\flowprocessingstepmessage();
 
         $date = date("Y-m-d H:i");
         $step->getStore()->getModel()->set('id',$flowprocessingstepid);
         $step->getStore()->getModel()->set('username',$username);
         $step->getStore()->getModel()->set('datestart',$date);
         $result = $step->getStore()->update();
+
+        $message->getStore()->getModel()->set('id','');
+        $message->getStore()->getModel()->set('flowprocessingstepid',$flowprocessingstepid);
+        $message->getStore()->getModel()->set('readercode','001');
+        $message->getStore()->getModel()->set('readershow','info');
+        $message->getStore()->getModel()->set('readertext','SATOR_INICIAR_LEITURA');
+        $message->getStore()->insert();
 
         return $result;
     }

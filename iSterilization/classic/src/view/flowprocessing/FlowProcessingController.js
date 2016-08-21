@@ -308,7 +308,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onFireTypeOpenUser: function (userRows,eOpts) {
         var me = this,
             view = me.getView(),
-            id = view.xdata.get('id'),
+            id = view.xdata.get('flowprocessingstepid'),
             flowprocessingstepid = view.xdata.get('flowprocessingstepid');
 
         view.close();
@@ -673,12 +673,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     callSATOR_INICIAR_LEITURA: function (scope) {
         var me = scope;
-        me.setMessageText('MSG_INICIAR_LEITURA');
+        me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
     },
 
     callSATOR_ENCERRAR_LEITURA: function (scope) {
         var me = scope;
-        console.info(scope);
+        me.setMessageText('MSG_PROTOCOL','SATOR_ENCERRAR_LEITURA');
     },
 
     callSATOR_INFORMAR_INSUMOS: function (scope) {
