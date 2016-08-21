@@ -713,7 +713,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     informarInsumo: function () {
         var me = this,
             view = me.getView(),
-            master = view.master,
+            // master = view.master,
             form = view.down('form'),
             store = Ext.getStore('flowprocessingstepinput');
 
@@ -725,11 +725,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.sync({
             callback: function() {
                 Ext.getStore('flowprocessingstepinputtree').load();
+                form.reset();
+                view.down('searchelement').focus(false,200);
             }
         });
 
-        view.close();
-        me.setView(master);
+        // view.close();
+        // me.setView(master);
     },
 
     onActionDeleteTree: function(grid, rowIndex, colIndex) {

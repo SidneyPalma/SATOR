@@ -98,16 +98,15 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                             beforequery: 'onBeforeSearchInput',
                             select: function (combo,record,eOpts) {
                                 var me = this,
-                                    view = combo.up('window'),
-                                    form = view.down('form'),
+                                    view = me.up('window'),
                                     hasbatch = record.get('hasbatch'),
                                     hasstock = record.get('hasstock'),
                                     button = view.down('button[name=confirm]'),
-                                    lotpart = me.up('window').down('textfield[name=lotpart]'),
-                                    quantity = me.up('window').down('numberfield[name=quantity]'),
-                                    datevalidity = me.up('window').down('datefield[name=datevalidity]'),
-                                    presentation = me.up('window').down('hiddenfield[name=presentation]'),
-                                    presentationdescription = me.up('window').down('textfield[name=presentationdescription]');
+                                    lotpart = view.down('textfield[name=lotpart]'),
+                                    quantity = view.down('numberfield[name=quantity]'),
+                                    datevalidity = view.down('datefield[name=datevalidity]'),
+                                    presentation = view.down('hiddenfield[name=presentation]'),
+                                    presentationdescription = view.down('textfield[name=presentationdescription]');
 
                                 lotpart.setValue(record.get('lotpart'));
                                 datevalidity.setValue(record.get('datevalidity'));
@@ -120,8 +119,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
 
                                 if(hasstock != 1) {
                                     button.fireEvent('click', button);
-                                    form.reset();
-                                    form.down('searchelement').focus(false,200);
                                 }
                             }
                         }
@@ -158,17 +155,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                     specialkey: function (field, e, eOpts) {
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
                                             var view = field.up('window'),
-                                                form = view.down('form'),
                                                 button = view.down('button[name=confirm]');
 
-                                            if(!form.isValid()){
-                                                e.stopEvent();
-                                                return false;
-                                            }
-
                                             button.fireEvent('click', button);
-                                            form.reset();
-                                            form.down('searchelement').focus(false,200);
                                         }
                                     }
                                 }
