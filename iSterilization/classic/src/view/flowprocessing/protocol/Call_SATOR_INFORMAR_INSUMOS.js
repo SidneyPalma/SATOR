@@ -66,8 +66,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 searchinput.getStore().removeAll();
                             },
                             beforequery: 'onBeforeSearchElement',
-                            select: function () {
-                                var form = field.up('form'),
+                            select: function (combo,record,eOpts) {
+                                var form = combo.up('form'),
                                     searchinput = form.down('searchinput'),
                                     lotpart = form.down('textfield[name=lotpart]'),
                                     quantity = form.down('numberfield[name=quantity]'),
@@ -78,7 +78,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 searchinput.reset();
                                 datevalidity.reset();
                                 presentation.reset();
-                                
+
                                 quantity.reset();
                                 quantity.setMinValue(0);
                                 quantity.setReadColor(true);
