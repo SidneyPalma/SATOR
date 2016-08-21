@@ -49,7 +49,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
                             warning: ['x-message-box-warning','rgb(233, 127, 2);'],
                             question: ['x-message-box-question','rgb(38, 153, 23)']
                         },
-                        iconMsg = '<div class="{0}" style="float: left; width: 26px; font-size: 18px; color: {1};"></div>';
+                        iconMsg = '<div class="{0}" style="float: left; width: 26px; font-size: 19px; color: {1};"></div>';
 
                     switch(record.get('readertext')) {
                         case 'SATOR_INICIAR_LEITURA':

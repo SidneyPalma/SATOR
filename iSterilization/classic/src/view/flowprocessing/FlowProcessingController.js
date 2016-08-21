@@ -959,6 +959,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *
      *  - Outras Leituras
      *      Protocolos
+     *          -   Iniciar Leitura                 SATOR_INICIAR_LEITURA
      *          -   Encerrar Leitura                SATOR_ENCERRAR_LEITURA
      *          -   Ler Insumos                     SATOR_INFORMAR_INSUMOS
      *          -   Cancelar Leituras Relizadas     SATOR_CANCELAR_LEITURAS
