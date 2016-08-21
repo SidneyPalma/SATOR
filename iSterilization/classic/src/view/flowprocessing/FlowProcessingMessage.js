@@ -6,6 +6,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
 
     // border: true,
 
+    rowLines: false,
+
     requires: [
         'Ext.grid.Panel',
         'Ext.grid.column.*'
@@ -39,14 +41,26 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
             {
                 width: 40,
                 renderer: function (value,metaData,record) {
-                    var showCls = record.get('readershow'),
+                    var msgStyle = '',
+                        showCls = record.get('readershow'),
                         iconCls = {
                             info: ['x-message-box-info','rgb(15, 58, 208)'],
                             error: ['x-message-box-error','rgb(192, 41, 66)'],
-                            warning: ['x-message-box-warning','rgb(237, 213, 0)'],
+                            warning: ['x-message-box-warning','rgb(233, 127, 2);'],
                             question: ['x-message-box-question','rgb(38, 153, 23)']
                         },
-                        iconMsg = '<div class="{0}" style="float: left; width: 26px; font-size: 24px; color: {1};"></div>';
+                        iconMsg = '<div class="{0}" style="float: left; width: 26px; font-size: 18px; color: {1};"></div>';
+
+                    switch(record.get('readertext')) {
+                        case 'SATOR_INICIAR_LEITURA':
+                            msgStyle += ' font-weight: bold; color: red; background: #C7F464;';
+                            break;
+                        case 'SATOR_ENCERRAR_LEITURA':
+                            msgStyle += ' font-weight: bold; color: red; background: #EAFF96;';
+                            break;
+                    }
+
+                    metaData.style = msgStyle;
 
                     return Ext.String.format(iconMsg,iconCls[showCls][0],iconCls[showCls][1]);
                 }
@@ -58,10 +72,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
 
                     switch(record.get('readertext')) {
                         case 'SATOR_INICIAR_LEITURA':
-                            msgStyle += ' font-weight: bold; color: red; background: #FBF4F9;';
+                            msgStyle += ' font-weight: bold; color: red; background: #C7F464;';
                             break;
                         case 'SATOR_ENCERRAR_LEITURA':
-                            msgStyle += ' font-weight: bold; color: red; background: #EBE1C0;';
+                            msgStyle += ' font-weight: bold; color: red; background: #EAFF96;';
                             break;
                     }
 
@@ -78,10 +92,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
 
                     switch(record.get('readertext')) {
                         case 'SATOR_INICIAR_LEITURA':
-                            msgStyle += ' font-weight: bold; color: red; background: #FBF4F9;';
+                            msgStyle += ' font-weight: bold; color: red; background: #C7F464;';
                             break;
                         case 'SATOR_ENCERRAR_LEITURA':
-                            msgStyle += ' font-weight: bold; color: red; background: #EBE1C0;';
+                            msgStyle += ' font-weight: bold; color: red; background: #EAFF96;';
                             break;
                     }
 

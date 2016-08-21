@@ -551,7 +551,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 MSG_PROTOCOL: {
                     readercode: '003',
                     readershow: 'info',
-                    readertext: Ext.String.format('{0} - Solicitado execução de protocolo!',protocol)
+                    readertext: protocol
                 },
                 MSG_PROTOCOL_ERROR: {
                     readercode: '004',
@@ -571,7 +571,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.add({
             readercode: msgItem.readercode,
             readershow: msgItem.readershow,
-            readertext: protocol || msgItem.readertext,
+            readertext: msgItem.readertext,
             flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
         });
 

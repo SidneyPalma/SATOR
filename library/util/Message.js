@@ -305,7 +305,7 @@ Ext.define( 'Smart.util.Message', {
         var iconCls = {
                 info: ['x-message-box-info','rgb(15, 58, 208)'],
                 error: ['x-message-box-error','rgb(192, 41, 66)'],
-                warning: ['x-message-box-warning','rgb(237, 213, 0)'],
+                warning: ['x-message-box-warning','rgb(233, 127, 2)'],
                 question: ['x-message-box-question','rgb(38, 153, 23)']
             },
             msg = iconCls[iconMsg || 'error'][0],
