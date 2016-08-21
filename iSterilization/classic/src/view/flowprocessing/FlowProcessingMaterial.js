@@ -10,8 +10,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     ],
 
     // border: true,
+    cls: 'update-grid',
 
-    cls: 'processing-panel-header-flow processing-update-grid',
+    // cls: 'processing-panel-header-flow processing-update-grid',
 
     store: 'flowprocessingstepmaterial',
 
@@ -70,7 +71,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                 }
             }, {
                 dataIndex: 'barcode',
-                width: 100
+                width: 120
             }, {
                 dataIndex: 'materialname',
                 flex: 1,
@@ -79,7 +80,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                 }
             }, {
                 dataIndex: 'unconformitiesdescription',
-                width: 150
+                width: 130
             }
         ];
     }
