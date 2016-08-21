@@ -54,6 +54,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         pageSize: 0,
                         fieldLabel: 'Equipamento / Sub-Area',
                         xtype: 'searchelement',
+                        hiddenNameId: 'flowprocessingstepid',
                         listeners: {
                             showclear: function (field) {
                                 var form = field.up('form'),
@@ -72,12 +73,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                     lotpart = form.down('textfield[name=lotpart]'),
                                     quantity = form.down('numberfield[name=quantity]'),
                                     datevalidity = form.down('datefield[name=datevalidity]'),
-                                    presentation = form.down('textfield[name=presentation]');
+                                    presentation = form.down('hiddenfield[name=presentation]'),
+                                    presentationdescription = form.down('textfield[name=presentationdescription]');
 
                                 lotpart.reset();
                                 searchinput.reset();
                                 datevalidity.reset();
                                 presentation.reset();
+                                presentationdescription.reset();
 
                                 quantity.reset();
                                 quantity.setMinValue(0);
@@ -93,7 +96,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         hideTrigger: true,
                         xtype: 'searchinput',
                         fieldLabel: 'Insumo',
-                        hiddenNameId: 'presentation',
+                        hiddenNameId: 'inputpresentationid',
                         listeners: {
                             beforequery: 'onBeforeSearchInput',
                             select: function (combo,record,eOpts) {
@@ -103,11 +106,13 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                     lotpart = me.up('window').down('textfield[name=lotpart]'),
                                     quantity = me.up('window').down('numberfield[name=quantity]'),
                                     datevalidity = me.up('window').down('datefield[name=datevalidity]'),
-                                    presentation = me.up('window').down('textfield[name=presentation]');
+                                    presentation = me.up('window').down('hiddenfield[name=presentation]'),
+                                    presentationdescription = me.up('window').down('textfield[name=presentationdescription]');
 
                                 lotpart.setValue(record.get('lotpart'));
                                 datevalidity.setValue(record.get('datevalidity'));
-                                presentation.setValue(record.get('presentationdescription'));
+                                presentation.setValue(record.get('presentation'));
+                                presentationdescription.setValue(record.get('presentationdescription'));
 
                                 quantity.setReadColor(hasstock != 1);
                                 quantity.setMinValue(hasstock == 1 ? 1 : 0);
@@ -124,9 +129,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         },
                         items: [
                             {
+                                xtype: 'hiddenfield',
+                                name: 'presentation'
+                            }, {
                                 flex: 3,
                                 xtype: 'textfield',
-                                name: 'presentation',
+                                name: 'presentationdescription',
                                 fieldLabel: 'Apresentação'
                             }, {
                                 xtype: 'splitter'
@@ -198,7 +206,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                // click: 'relatarUsaEPI'
+                click: 'informarInsumo'
             }
         }, {
             scale: 'medium',

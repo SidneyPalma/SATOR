@@ -24,7 +24,7 @@ class flowprocessingstepinput extends \Smart\Data\Model {
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
-    private $inputpresentationd;
+    private $inputpresentationid;
 
     /**
      * @Policy {"nullable":false}
@@ -91,16 +91,16 @@ class flowprocessingstepinput extends \Smart\Data\Model {
     /**
      * @return type integer
      */
-    public function getInputpresentationd() {
-        return $this->inputpresentationd;
+    public function getInputpresentationid() {
+        return $this->inputpresentationid;
     }
 
     /**
-     * @param type $inputpresentationd
+     * @param type $inputpresentationid
      * @return \iSterilization\Model\flowprocessingstepinput
      */
-    public function setInputpresentationd($inputpresentationd) {
-        $this->inputpresentationd = $inputpresentationd;
+    public function setInputpresentationid($inputpresentationid) {
+        $this->inputpresentationid = $inputpresentationid;
         return $this;
     }
 

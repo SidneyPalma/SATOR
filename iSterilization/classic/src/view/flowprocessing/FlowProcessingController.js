@@ -145,6 +145,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             colorschema = data.get('colorschema').split(","),
             schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
 
+        Ext.getStore('flowprocessingstepinputtree').setParams({
+            flowprocessingid: data.get('flowprocessingid'),
+            method: 'selectTree'
+        }).load();
+
         Ext.getStore('flowprocessingstepmaterial').setParams({
             method: 'selectCode',
             query: data.get('id')
@@ -319,7 +324,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             },
             callback: function (options, success, response) {
                 var result = Ext.decode(response.responseText);
-console.info(result);
+
                 if(!success || !result.success) {
                     return false;
                 }
@@ -701,6 +706,34 @@ console.info(result);
             equipmentid = view.down('searchelement').foundRecord().get('equipmentid');
 
         combo.store.setParams({ equipmentid: equipmentid });
+    },
+
+    informarInsumo: function () {
+        var me = this,
+            view = me.getView(),
+            master = view.master,
+            form = view.down('form'),
+            store = Ext.getStore('flowprocessingstepinput');
+
+        if(!form.isValid()) {
+            return false;
+        }
+
+        // store.add(form.getValues());
+        // store.sync();
+
+        store.add(form.getValues());
+        store.sync({
+            callback: function() {
+                Ext.getStore('flowprocessingstepinputtree').load();
+            }
+        });
+
+        // view.outherScope.setModuleForm(form);
+        // view.outherScope.setModuleData('flowprocessingstepinput');
+
+    //     view.close();
+    //     me.setView(master);
     },
 
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
