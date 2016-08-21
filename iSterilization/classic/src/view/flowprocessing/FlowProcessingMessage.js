@@ -54,15 +54,39 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMessage', {
                 flex: 1,
                 dataIndex: 'readertext',
                 renderer: function (value,metaData,record) {
-                    var isMsg = (value.indexOf('MSG_') != -1);
-                    metaData.style = isMsg ? 'font-weight: bold;' : '';
+                    var msgStyle = (record.get('readertext').indexOf('MSG_') != -1) ? 'font-weight: bold;' : '';
+
+                    switch(record.get('readertext')) {
+                        case 'SATOR_INICIAR_LEITURA':
+                            msgStyle += ' font-weight: bold; color: red; background: #FBF4F9;';
+                            break;
+                        case 'SATOR_ENCERRAR_LEITURA':
+                            msgStyle += ' font-weight: bold; color: red; background: #EBE1C0;';
+                            break;
+                    }
+
+                    metaData.style = msgStyle;
+
                     return value;
                 }
             }, {
                 width: 120,
                 align: 'center',
                 dataIndex: 'readerdate',
-                renderer: function (value) {
+                renderer: function (value,metaData,record) {
+                    var msgStyle = '';
+
+                    switch(record.get('readertext')) {
+                        case 'SATOR_INICIAR_LEITURA':
+                            msgStyle += ' font-weight: bold; color: red; background: #FBF4F9;';
+                            break;
+                        case 'SATOR_ENCERRAR_LEITURA':
+                            msgStyle += ' font-weight: bold; color: red; background: #EBE1C0;';
+                            break;
+                    }
+
+                    metaData.style = msgStyle;
+
                     return Ext.Date.format(new Date(value), 'H:i d/m');
                 }
             }
