@@ -60,16 +60,9 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                 store: 'moviment',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
                 listeners: {
                     itemdblclick: 'onViewEdit'
-                },
-
-                columnsRenderer: function (value, metaData, record) {
-
-                    metaData.style = record.get('movimentstatus') == 'E' ? '' : 'color: red;'
-
-                    return value;
                 },
 
                 columns: [
@@ -79,21 +72,20 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                         align: 'center',
                         dataIndex: 'id',
                         renderer: function (value, metaData, record) {
-                            metaData.style = record.get('movimentstatus') == 'E' ? '' : 'color: red;';
                             return Ext.String.leftPad(value, 6, '0');
                         }
                     }, {
                         text: 'Data',
                         dataIndex: 'movimentdate',
                         align: 'center',
-                        width: 100,
+                        width: 130,
                         xtype: 'datecolumn'
                     }, {
                         flex: 1,
                         text: 'Tipo de Movimento',
                         dataIndex: 'movimenttypedescription'
                     }, {
-                        flex: 1,
+                        flex: 2,
                         text: 'Tipo de Documento',
                         dataIndex: 'documenttypedescription'
                     }, {
@@ -105,7 +97,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                         text: 'Status',
                         dataIndex: 'movimentstatusdescription'
                     }, {
-                        width: 120,
+                        width: 150,
                         text: 'Usuário',
                         dataIndex: 'username'
                     }, {
@@ -122,7 +114,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentList', {
                                 },
                                 getClass: function(v, meta, rec) {
                                     var movimentstatus = rec.data.movimentstatus;
-                                    return movimentstatus == 'F' ? "fa fa-info-circle action-select-color-font" : "";
+                                    return movimentstatus == 'F' ? "fa fa-power-off action-update-color-font" : "";
                                 },
                                 isDisabled: function (view, rowIdx, colIdx, item, rec) {
                                     return rec.data.movimentstatus != 'F';

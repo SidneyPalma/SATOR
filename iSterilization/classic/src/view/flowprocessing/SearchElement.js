@@ -26,8 +26,14 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchElement', {
             name: 'id',
             type: 'int'
         }, {
+            name: 'areasid',
+            type: 'int'
+        }, {
             name: 'elementname',
             type: 'auto'
+        }, {
+            name: 'equipmentid',
+            type: 'int'
         }, {
             name: 'elementtype',
             type: 'auto'

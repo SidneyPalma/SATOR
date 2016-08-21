@@ -13,7 +13,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentItem', {
     hideHeaders: false,
     headerBorders: false,
 
-    cls: 'list-grid',
+    cls: 'update-grid',
 
     selType: 'cellmodel',
 
@@ -79,7 +79,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentItem', {
                         },
                         getClass: function(v, meta, rec) {
                             var isactive = parseInt(rec.data.isactive);
-                            return (isactive == 0) ? "fa fa-check-circle action-select-color" : "";
+                            return (isactive == 0) ? "fa fa-info-circle action-select-color-font" : "";
                         },
                         isDisabled: function (view, rowIdx, colIdx, item, rec) {
                             var isactive = parseInt(rec.data.isactive);
@@ -91,7 +91,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentItem', {
                         xtype: 'splitter'
                     }, {
                         handler: 'onDeleteItem',
-                        iconCls: "fa fa-times-circle action-delete-color",
+                        iconCls: "fa fa-times-circle action-delete-color-font",
                         tooltip: 'Excluir lançamento!'
                     }
                 ]

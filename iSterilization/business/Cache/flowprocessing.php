@@ -136,6 +136,59 @@ class flowprocessing extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectOpenInput(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $equipmentid = $data['equipmentid'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            SELECT
+                ip.id,
+                ib.name,
+                ip.acronym,
+				ip.presentation,
+                dbo.getEnum('presentation',ip.presentation) as presentationdescription,
+				cas.lotamount,
+				cas.datevalidity,
+				cas.lotpart,
+				cas.lotamount,
+				i.hasbatch,
+				i.hasstock
+            FROM
+                itembase ib
+                inner join input i on ( i.id = ib.id )
+                inner join inputpresentation ip on ( ip.inputid = i.id )
+				left join cmeareasstock cas on ( 
+							cas.equipmentid = :equipmentid
+						and cas.inputid = ip.inputid
+						and cas.presentation = ip.presentation
+						)
+            WHERE ib.name LIKE :name";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $query = "%{$query}%";
+
+            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":equipmentid", $equipmentid, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectDashFlow(array $data) {
         $dateof = $data['dateof'];
         $proxy = $this->getStore()->getProxy();

@@ -31,22 +31,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             app = Smart.app.getController('App');
 
-        Ext.Ajax.request({
+        Ext.getStore('flowprocessingstep').setParams({
+            method: 'selectStep',
+            query: id
+        }).load({
             scope: me,
-            url: me.url,
-            params: {
-                action: 'select',
-                method: 'selectFlowDash',
-                query: id
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
+            callback: function(records, operation, success) {
 
-                if(!success || !result.success) {
+                if(!success || records.length == 0) {
                     return false;
                 }
 
-                app.onMainPageView({xtype: 'flowprocessingview', xdata: result});
+                app.onMainPageView({xtype: 'flowprocessingview', xdata: records[0]});
             }
         });
     },
@@ -110,10 +106,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             query: Smart.workstation.areasid
         }).load();
     },
-
-    /**
-     * Controles para Rastreabilidade
-     */
+    
     onAfterRenderDash: function () {
         var me = this,
             date = new Date(),
@@ -141,6 +134,45 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         //     ],
         //     scope: me
         // });
+    },
+
+    onAfterRenderView: function () {
+        var me = this,
+            list = '',
+            view = me.getView(),
+            data = view.xdata,
+            text = 'Material ({0})',
+            colorschema = data.get('colorschema').split(","),
+            schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
+
+        Ext.getStore('flowprocessingstepmaterial').setParams({
+            method: 'selectCode',
+            query: data.get('id')
+        }).load();
+
+        Ext.getStore('flowprocessingstepmessage').setParams({
+            method: 'selectCode',
+            query: data.get('id')
+        }).load();
+
+        if(colorschema) {
+            Ext.each(colorschema,function(item) {
+                list += Ext.String.format(schema,item);
+            });
+        }
+
+        view.down('hiddenfield[name=id]').setValue(data.get('id'));
+        view.down('hiddenfield[name=materialboxid]').setValue(data.get('materialboxid'));
+
+        view.down('textfield[name=search]').focus(false,200);
+        view.down('container[name=colorschema]').update(list);
+        view.down('textfield[name=username]').setValue(data.get('username'));
+        view.down('textfield[name=areasname]').setValue(data.get('areasname'));
+        view.down('textfield[name=clientname]').setValue(data.get('clientname'));
+        view.down('textfield[name=equipmentname]').setValue(data.get('equipmentname'));
+        view.down('textfield[name=sterilizationtypename]').setValue(data.get('sterilizationtypename'));
+        view.down('textfield[name=priorityleveldescription]').setValue(data.get('priorityleveldescription'));
+        view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.get('materialboxname')));
     },
 
     flowProcessingRead: function () {
@@ -287,7 +319,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             },
             callback: function (options, success, response) {
                 var result = Ext.decode(response.responseText);
-
+console.info(result);
                 if(!success || !result.success) {
                     return false;
                 }
@@ -586,7 +618,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	    var me = this,
             call = {
 				SATOR_RELATAR_USA_EPI: me.callSATOR_RELATAR_USA_EPI,                    // --> OK
-                SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,                    // -->
+                SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,                    // --> OK
                 SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,                  // -->
                 SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,                  // --> OK
                 SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,                // -->
@@ -635,9 +667,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_INICIAR_LEITURA: function (scope) {
-        var me = scope,
-            view = me.getView();
-        console.info(scope);
+        var me = scope;
+        me.setMessageText('MSG_INICIAR_LEITURA');
     },
 
     callSATOR_ENCERRAR_LEITURA: function (scope) {
@@ -663,14 +694,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    onBeforeQueryInputPresentation: function ( queryPlan, eOpts ) {
+    onBeforeSearchInput: function ( queryPlan, eOpts ) {
         var me = this,
             view = me.getView(),
             combo = queryPlan.combo,
-            inputid = view.down('inputentersearch').getValue();
+            equipmentid = view.down('searchelement').foundRecord().get('equipmentid');
 
-        combo.store.removeAll();
-        combo.store.setParams({ inputid: inputid });
+        combo.store.setParams({ equipmentid: equipmentid });
     },
 
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
@@ -785,7 +815,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 		// Sim -> Mensagem de duplicidade
 		if(data.get('unconformities') != '001') {
 			me.setMessageText('MSG_DUPLICATED');
-            // model.select(data);
+            model.select(data);
 			return false;
 		}
 
@@ -830,48 +860,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Processamento e Leitura
      */
-    onAfterRenderView: function () {
-        var me = this,
-            list = '',
-            view = me.getView(),
-            data = view.xdata,
-            text = 'Material ({0})',
-            colorschema = data.rows[0].colorschema.split(","),
-            schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
-
-        Ext.getStore('flowprocessingstep').setParams({
-            method: 'selectStep',
-            query: data.rows[0].id
-        }).load();
-
-        Ext.getStore('flowprocessingstepmaterial').setParams({
-            method: 'selectCode',
-            query: data.rows[0].id
-        }).load();
-
-        Ext.getStore('flowprocessingstepmessage').setParams({
-            method: 'selectCode',
-            query: data.rows[0].id
-        }).load();
-
-        if(colorschema) {
-            Ext.each(colorschema,function(item) {
-                list += Ext.String.format(schema,item);
-            });
-        }
-
-        view.down('textfield[name=search]').focus(false,200);
-        view.down('container[name=colorschema]').update(list);
-        view.down('textfield[name=username]').setValue(data.rows[0].username);
-        view.down('textfield[name=areasname]').setValue(data.rows[0].areasname);
-        view.down('textfield[name=clientname]').setValue(data.rows[0].clientname);
-        view.down('textfield[name=equipmentname]').setValue(data.rows[0].equipmentname);
-        view.down('textfield[name=sterilizationtypename]').setValue(data.rows[0].sterilizationtypename);
-        view.down('textfield[name=priorityleveldescription]').setValue(data.rows[0].priorityleveldescription);
-        view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.rows[0].materialboxname));
-        view.down('hiddenfield[name=materialboxid]').setValue(data.rows[0].materialboxid);
-        view.down('hiddenfield[name=id]').setValue(data.rows[0].id);
-    },
 
     onChangedMaterial: function (store, eOpts) {
         var me = this,
@@ -961,9 +949,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onFlowStepAction: function ( viewView, record, item, index, e, eOpts ) {
         var me = this,
-            stepid = record.get('id'),
             userid = record.get('username'),
-            action = record.get('flowstepaction');
+            action = record.get('flowstepaction'),
+            stepid = record.get('flowprocessingstepid');
 
         switch(action) {
             case '001':

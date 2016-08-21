@@ -8,13 +8,13 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
         'Ext.form.Panel',
         'Smart.plugins.*',
         'Ext.window.Window',
-        'iAdmin.view.input.InputSearch',
-        'iAdmin.view.input.InputPresentationSearch',
+        'iSterilization.view.flowprocessing.SearchInput',
+        'iSterilization.view.flowprocessing.SearchElement',
         'iSterilization.view.flowprocessing.FlowProcessingInput',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 400,
+    width: 450,
     modal: true,
     layout: 'fit',
     header: false,
@@ -50,11 +50,21 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         cls: 'title-label',
                         text: 'Lançar Insumos'
                     }, {
+                        style: 'margin-top: 20px',
                         pageSize: 0,
-                        margin: '20 0 0 0',
                         fieldLabel: 'Equipamento / Sub-Area',
                         xtype: 'searchelement',
                         listeners: {
+                            showclear: function (field) {
+                                var form = field.up('form'),
+                                    searchinput = form.down('searchinput'),
+                                    quantity = form.down('numberfield[name=quantity]');
+
+                                form.reset();
+                                quantity.setMinValue(0);
+                                quantity.setReadColor(true);
+                                searchinput.getStore().removeAll();
+                            },
                             beforequery: 'onBeforeSearchElement',
                             select: function () {
                                 var me = this,
@@ -63,35 +73,95 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                             }
                         }
                     }, {
-                        xtype: 'fieldcontainer',
+                        pageSize: 0,
+                        hideTrigger: true,
+                        xtype: 'searchinput',
+                        fieldLabel: 'Insumo',
+                        hiddenNameId: 'presentation',
+                        listeners: {
+                            beforequery: 'onBeforeSearchInput',
+                            select: function (combo,record,eOpts) {
+                                var me = this,
+                                    hasbatch = record.get('hasbatch'),
+                                    hasstock = record.get('hasstock'),
+                                    lotpart = me.up('window').down('textfield[name=lotpart]'),
+                                    quantity = me.up('window').down('numberfield[name=quantity]'),
+                                    datevalidity = me.up('window').down('datefield[name=datevalidity]'),
+                                    presentation = me.up('window').down('textfield[name=presentation]');
+
+                                lotpart.setValue(record.get('lotpart'));
+                                datevalidity.setValue(record.get('datevalidity'));
+                                presentation.setValue(record.get('presentationdescription'));
+
+                                quantity.setReadColor(hasstock != 1);
+                                quantity.setMinValue(hasstock == 1 ? 1 : 0);
+                                quantity.setMaxValue(hasstock == 1 ? record.get('lotamount') : 0);
+                            }
+                        }
+                    }, {
+                        xtype: 'container',
                         layout: 'hbox',
                         defaults: {
-                            // anchor: '100%',
-                            allowBlank: false,
+                            useReadColor: true,
                             fieldCls: 'smart-field-style-action',
                             labelCls: 'smart-field-style-action'
                         },
                         items: [
                             {
                                 flex: 3,
-                                pageSize: 0,
-                                margin: '0 5 0 0',
-                                xtype: 'inputpresentationsearch',
-                                fieldLabel: 'Insumo',
-                                hiddenNameId: 'presentation',
-                                name: 'presentationdescription'
-                                // listeners: {
-                                //     beforequery: 'onBeforeQueryInputPresentation'
-                                // }
+                                xtype: 'textfield',
+                                name: 'presentation',
+                                fieldLabel: 'Apresentação'
+                            }, {
+                                xtype: 'splitter'
                             }, {
                                 flex: 2,
-                                margin: '0 0 0 5',
-                                xtype: 'textfield',
+                                minValue: 0,
+                                hideTrigger: true,
+                                xtype: 'numberfield',
                                 name: 'quantity',
                                 fieldLabel: 'Quantidade',
                                 plugins: 'textmask',
                                 mask: '0,000',
                                 money: true
+                            }
+                        ]
+                    }, {
+
+                    }, {
+                        xtype: 'container',
+                        layout: 'hbox',
+                        margin: '10 0 0 0',
+                        defaults: {
+                            useReadColor: true,
+                            fieldCls: 'smart-field-style-action',
+                            labelCls: 'smart-field-style-action'
+                        },
+                        items: [
+                            {
+                                flex: 3,
+                                xtype: 'textfield',
+                                margin: '0 5 0 0',
+                                name: 'lotpart',
+                                fieldLabel: 'Lote'
+                            }, {
+                                flex: 2,
+                                fieldLabel: 'Validade',
+                                margin: '0 0 0 5',
+                                name: 'datevalidity',
+                                xtype: 'datefield',
+                                plugins: 'textmask',
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        if (e.getKey() === e.ENTER) {
+                                            var view = field.up('movimentview'),
+                                                button = view.down('button[name=update]');
+
+                                            field.blur();
+                                            button.fireEvent('click', button);
+                                        }
+                                    }
+                                }
                             }
                         ]
                     }, {
