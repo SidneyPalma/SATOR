@@ -95,7 +95,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
 
                                 quantity.setReadColor(hasstock != 1);
                                 quantity.setMinValue(hasstock == 1 ? 1 : 0);
-                                quantity.setMaxValue(hasstock == 1 ? 1 : 0);
+                                quantity.setMaxValue(hasstock == 1 ? record.get('lotamount') : 0);
                             }
                         }
                     }, {
