@@ -19,12 +19,14 @@ Ext.define( 'iAdmin.view.module.ModuleController', {
 
         Ext.widget('moduleworkstation').show(null,function () {
             this.down('areassearch').setReadColor(Smart.workstation);
+            this.down('textfield[name=printlocate]').setReadColor(Smart.workstation);
             this.down('button[handler=updateWorkstation]').setDisabled(Smart.workstation);
             this.down('button[handler=deleteWorkstation]').setDisabled(!Smart.workstation);
 
             if(Smart.workstation) {
                 this.down('areassearch').setRawValue(Smart.workstation.areasname);
                 this.down('hiddenfield[name=areasid]').setValue(Smart.workstation.areasid);
+                this.down('textfield[name=printlocate]').setValue(Smart.workstation.printlocate);
                 this.down('hiddenfield[name=workstation]').setValue(Smart.workstation.workstation);
             }
         });
@@ -39,6 +41,7 @@ Ext.define( 'iAdmin.view.module.ModuleController', {
 
         work = {
             workstation: '',
+            printlocate: data.printlocate,
             areasid: data.areasid,
             areasname: areassearch.getRawValue()
         };
@@ -48,7 +51,7 @@ Ext.define( 'iAdmin.view.module.ModuleController', {
                 if (choice === 'yes') {
                     Ext.getStore('areas').setParams({
                         action: 'update',
-                        rows: Ext.encode({id: data.areasid, workstation: 'update'})
+                        rows: Ext.encode({id: data.areasid, printlocate: data.printlocate, workstation: 'update'})
                     }).load({
                         scope: me,
                         callback: function(records, operation, success) {
@@ -76,6 +79,7 @@ Ext.define( 'iAdmin.view.module.ModuleController', {
                                     if(success) {
                                         var result = Ext.decode(response.responseText);
                                         work.workstation = result.rows[0].workstation;
+                                        work.printlocate = result.rows[0].printlocate;
                                         Smart.workstation = work;
                                         localStorage.setItem('workstation', Ext.encode(work));
                                         Ext.WindowMgr.get('moduleedit').down('textfield[name=workstation]').setValue(work.areasname);
@@ -124,6 +128,7 @@ Ext.define( 'iAdmin.view.module.ModuleController', {
                             view.down('form').reset();
                             view.down('areassearch').setReadColor(false);
                             view.down('areassearch').getStore().removeAll();
+                            view.down('textfield[name=printlocate]').setReadColor(false);
                             view.down('button[handler=deleteWorkstation]').setDisabled(true);
                             view.down('button[handler=updateWorkstation]').setDisabled(false);
                             Ext.WindowMgr.get('moduleedit').down('textfield[name=workstation]').setValue('');
@@ -139,6 +144,7 @@ Ext.define( 'iAdmin.view.module.ModuleController', {
             view = me.getView(),
             form = view.down('form');
 
+        form.down('textfield[name=printlocate]').setValue(record.get('printlocate'));
         form.down('hiddenfield[name=workstation]').setValue(record.get('workstation'));
     },
 

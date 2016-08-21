@@ -38,6 +38,13 @@ class areas extends \Smart\Data\Model {
      */
     private $workstation;
 
+
+    /**
+     * @Policy {"nullable":false, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $printlocate;
+
     /**
      * @Policy {"nullable":false, "length":1}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"A"}
@@ -145,6 +152,22 @@ class areas extends \Smart\Data\Model {
      */
     public function setWorkstation($workstation) {
         $this->workstation = $workstation;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getPrintlocate() {
+        return $this->printlocate;
+    }
+
+    /**
+     * @param type $printlocate
+     * @return \iAdmin\Model\areas
+     */
+    public function setPrintlocate($printlocate) {
+        $this->printlocate = $printlocate;
         return $this;
     }
 

@@ -55,6 +55,11 @@ Ext.define( 'iAdmin.view.module.ModuleWorkstation', {
                     }, {
                         xtype: 'hiddenfield',
                         name: 'workstation'
+                    }, {
+                        fieldLabel: 'Servidor de impressão',
+                        xtype: 'textfield',
+                        name: 'printlocate',
+                        fieldCls: 'smart-field-style-action'
                     }
                 ]
             }
