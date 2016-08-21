@@ -67,9 +67,25 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                             },
                             beforequery: 'onBeforeSearchElement',
                             select: function () {
-                                var me = this,
-                                    button = me.up('window').down('button[name=confirm]');
-                                button.fireEvent('click', button);
+                                var form = field.up('form'),
+                                    searchinput = form.down('searchinput'),
+                                    lotpart = form.down('textfield[name=lotpart]'),
+                                    quantity = form.down('numberfield[name=quantity]'),
+                                    datevalidity = form.down('datefield[name=datevalidity]'),
+                                    presentation = form.down('textfield[name=presentation]');
+
+                                lotpart.reset();
+                                searchinput.reset();
+                                datevalidity.reset();
+                                presentation.reset();
+                                
+                                quantity.reset();
+                                quantity.setMinValue(0);
+                                quantity.setReadColor(true);
+                                searchinput.getStore().removeAll();
+                                // var me = this,
+                                //     button = me.up('window').down('button[name=confirm]');
+                                // button.fireEvent('click', button);
                             }
                         }
                     }, {
