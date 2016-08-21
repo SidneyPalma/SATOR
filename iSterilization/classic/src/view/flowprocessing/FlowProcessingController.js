@@ -676,9 +676,41 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
     },
 
+    /**
+     * Encerrar Leitura
+     * Todos os Lançamentos Ok?
+     *      - Sim
+     *          Exceções
+     *          - Quebra
+     *          - Altera
+     *
+     *          Flags Diversos..
+     *          - ...
+     *          - ...
+     *          - ...
+     *          - ...
+     *
+     *      - Não
+     *          - Registrar Inconformidades por Item
+     */
     callSATOR_ENCERRAR_LEITURA: function (scope) {
         var me = scope;
         me.setMessageText('MSG_PROTOCOL','SATOR_ENCERRAR_LEITURA');
+        me.checkUnconformities();
+    },
+
+    checkUnconformities: function () {
+        var me = this,
+            count = 0,
+            store = Ext.getStore('flowprocessingstepmaterial');
+
+        store.each(function (item) {
+            count += item.get('unconformities') == '010' ? 1 : 0;
+        });
+
+        if(count != store.getCount()){
+            me.setMessageText('MSG_PROTOCOL','SATOR_ENCERRAR_LEITURA');
+        }
     },
 
     callSATOR_INFORMAR_INSUMOS: function (scope) {
@@ -927,7 +959,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 		if(!data) {
 			me.setMessageText('MSG_UNKNOWN');
 			return false;
-		}			
+		}
 
 		// Já foi lançado ?
 		// Sim -> Mensagem de duplicidade
