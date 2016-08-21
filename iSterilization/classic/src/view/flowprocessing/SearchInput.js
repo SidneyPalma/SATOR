@@ -63,7 +63,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchInput', {
         '<tpl for=".">',
             '<div class="x-boundlist-item">',
                 '<div style="font-size: 16px;">{name}</div>',
-                '<div style="font-size: 14px;">{presentationdescription} Lote: {lotpart} - {datevalidity}</div>',
+                '<div style="font-size: 14px;">{presentationdescription} Lote: {lotpart} / {datevalidity}</div>',
             '</div>',
         '</tpl>'
     ]
