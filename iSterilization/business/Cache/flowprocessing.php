@@ -160,7 +160,7 @@ class flowprocessing extends \Smart\Data\Cache {
                 itembase ib
                 inner join input i on ( i.id = ib.id )
                 inner join inputpresentation ip on ( ip.inputid = i.id )
-				left join cmeareasstock cas on ( 
+				inner join cmeareasstock cas on ( 
 							cas.equipmentid = :equipmentid
 						and cas.inputid = ip.inputid
 						and cas.presentation = ip.presentation
