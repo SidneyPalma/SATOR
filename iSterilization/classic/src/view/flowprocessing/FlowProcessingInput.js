@@ -13,6 +13,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
     store: 'flowprocessingstepinputtree',
 
     useArrows: true,
+    hasDelete: false,
     rootVisible: false,
     // hideHeaders: false,
     multiSelect: false,
@@ -37,7 +38,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
     },
 
     makeColumn: function () {
-        var me = this;
+        var me = this,
+            isDisabled = function (view, rowIdx, colIdx, item, record) {
+                return !record.data.leaf;
+            };
 
         me.columns = [
             {
@@ -50,7 +54,24 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
                     metaData.style = !leaf ? 'font-weight: bold; color: blue;' : '';
                     return value;
                 }
-            }
+            }, me.hasDelete ? {
+                width: 50,
+                align: 'center',
+                sortable: false,
+                xtype: 'actioncolumn',
+                items: [
+                    {
+                        handler: 'onActionDeleteTree',
+                        isDisabled: isDisabled,
+                        getTip: function(v, meta, rec) {
+                            return rec.data.leaf ? 'Remover lançamento!' : '';
+                        },
+                        getClass: function(v, meta, rec) {
+                            return rec.data.leaf ? "fa fa-minus-circle action-delete-color-font" : '';
+                        }
+                    }
+                ]
+            } : {width: 1}
         ];
 
     }

@@ -684,6 +684,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_INFORMAR_INSUMOS: function (scope) {
         var me = scope;
         Ext.widget('call_SATOR_INFORMAR_INSUMOS').show(null,function () {
+            var tree = this.down('treepanel');
+            tree.getStore().remove(tree.getStore().getAt(0));
             this.outherScope = scope;
             this.master = me.getView();
             this.down('searchelement').focus(false,200);
@@ -719,9 +721,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        // store.add(form.getValues());
-        // store.sync();
-
         store.add(form.getValues());
         store.sync({
             callback: function() {
@@ -729,11 +728,33 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         });
 
-        // view.outherScope.setModuleForm(form);
-        // view.outherScope.setModuleData('flowprocessingstepinput');
+        view.close();
+        me.setView(master);
+    },
 
-    //     view.close();
-    //     me.setView(master);
+    onActionDeleteTree: function(grid, rowIndex, colIndex) {
+        var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
+
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    Ext.Ajax.request({
+                        scope: me,
+                        url: store.getUrl(),
+                        params: {
+                            action: 'delete',
+                            rows: Ext.encode({id: record.get('id')})
+                        },
+                        success: function(response, opts) {
+                            store.remove(record);
+                        }
+                    });
+                }
+            }
+        );
+
     },
 
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
