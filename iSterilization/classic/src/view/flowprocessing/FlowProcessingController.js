@@ -145,6 +145,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             colorschema = data.get('colorschema').split(","),
             schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
 
+        Ext.getStore('flowprocessingstepinputtree').setParams({
+            flowprocessingid: data.get('flowprocessingid'),
+            method: 'selectTree'
+        }).load();
+
         Ext.getStore('flowprocessingstepmaterial').setParams({
             method: 'selectCode',
             query: data.get('id')
@@ -303,7 +308,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onFireTypeOpenUser: function (userRows,eOpts) {
         var me = this,
             view = me.getView(),
-            id = view.xdata.get('id'),
+            id = view.xdata.get('flowprocessingstepid'),
             flowprocessingstepid = view.xdata.get('flowprocessingstepid');
 
         view.close();
@@ -319,7 +324,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             },
             callback: function (options, success, response) {
                 var result = Ext.decode(response.responseText);
-console.info(result);
+
                 if(!success || !result.success) {
                     return false;
                 }
@@ -546,7 +551,7 @@ console.info(result);
                 MSG_PROTOCOL: {
                     readercode: '003',
                     readershow: 'info',
-                    readertext: Ext.String.format('{0} - Solicitado execução de protocolo!',protocol)
+                    readertext: protocol
                 },
                 MSG_PROTOCOL_ERROR: {
                     readercode: '004',
@@ -566,7 +571,7 @@ console.info(result);
         store.add({
             readercode: msgItem.readercode,
             readershow: msgItem.readershow,
-            readertext: protocol || msgItem.readertext,
+            readertext: msgItem.readertext,
             flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
         });
 
@@ -668,17 +673,93 @@ console.info(result);
 
     callSATOR_INICIAR_LEITURA: function (scope) {
         var me = scope;
-        me.setMessageText('MSG_INICIAR_LEITURA');
+        me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
     },
 
+    /**
+     * Encerrar Leitura
+     * Todos os Lançamentos Ok?
+     *      - Sim
+     *          Exceções
+     *          - Quebra
+     *          - Altera
+     *
+     *          Flags Diversos..
+     *          - ...
+     *          - ...
+     *          - ...
+     *          - ...
+     *
+     *      - Não
+     *          - Registrar Inconformidades por Item
+     */
     callSATOR_ENCERRAR_LEITURA: function (scope) {
         var me = scope;
-        console.info(scope);
+
+        if(me.checkUnconformities() == true) {
+            Ext.widget('call_UNCONFORMITIES').show(null,function () {
+                this.outherScope = scope;
+                this.master = me.getView();
+                Ext.getStore('flowprocessingstepmaterial').setParams({
+                    method: 'selectCode',
+                    query: me.getView().xdata.get('id')
+                }).load();
+            });
+        }
+    },
+
+    checkUnconformities: function () {
+        var count = 0,
+            store = Ext.getStore('flowprocessingstepmaterial');
+
+        store.each(function (item) {
+            count += item.get('unconformities') == '010' ? 1 : 0;
+        });
+
+        return (count != store.getCount());
+    },
+
+    onSelectUnconformities: function (combo,record,eOpts) {
+    var me = this,
+        view = me.getView(),
+        model = view.down('flowprocessingmaterial').getSelectionModel(),
+        selection = model.getSelection()[0];
+
+        selection.set('unconformities',combo.getValue());
+    },
+
+    setUnconformities: function () {
+        var me = this,
+            data = [],
+            view = me.getView(),
+            master = view.master,
+            store = Ext.getStore('flowprocessingstepmaterial');
+
+        store.each(function (item) {
+            if(item.dirty){
+                data.push(item);
+            }
+        },me);
+
+        if(data.length == 0) {
+            me.setMessageText('MSG_NOT_AVAILABLE');
+            return false;
+        }
+
+        Ext.each(data,function(item) {
+            item.store.sync({async: false});
+        });
+
+        store.load();
+        view.close();
+        me.setView(master);
     },
 
     callSATOR_INFORMAR_INSUMOS: function (scope) {
         var me = scope;
         Ext.widget('call_SATOR_INFORMAR_INSUMOS').show(null,function () {
+            var tree = this.down('treepanel');
+            tree.getStore().remove(tree.getStore().getAt(0));
             this.outherScope = scope;
             this.master = me.getView();
             this.down('searchelement').focus(false,200);
@@ -703,6 +784,114 @@ console.info(result);
         combo.store.setParams({ equipmentid: equipmentid });
     },
 
+    informarInsumo: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            store = Ext.getStore('flowprocessingstepinput');
+
+        if(!form.isValid()) {
+            return false;
+        }
+
+        store.add(form.getValues());
+        store.sync({
+            callback: function() {
+                Ext.getStore('flowprocessingstepinputtree').load();
+                me.onShowClearSearchElement();
+            }
+        });
+    },
+
+    onActionDeleteTree: function(grid, rowIndex, colIndex) {
+        var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex);
+
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    Ext.Ajax.request({
+                        scope: me,
+                        url: store.getUrl(),
+                        params: {
+                            action: 'delete',
+                            rows: Ext.encode({id: record.get('id')})
+                        },
+                        success: function(response, opts) {
+                            store.remove(record);
+                        }
+                    });
+                }
+            }
+        );
+
+    },
+
+    onShowClearSearchElement: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            searchinput = form.down('searchinput'),
+            searchelement = form.down('searchelement'),
+            quantity = form.down('numberfield[name=quantity]');
+
+        form.reset();
+        quantity.setMinValue(0);
+        quantity.setReadColor(true);
+        searchinput.getStore().removeAll();
+        searchelement.focus(false,200);
+    },
+
+    onSelectSearchElement: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            searchinput = form.down('searchinput'),
+            lotpart = form.down('textfield[name=lotpart]'),
+            quantity = form.down('numberfield[name=quantity]'),
+            datevalidity = form.down('datefield[name=datevalidity]'),
+            presentation = form.down('hiddenfield[name=presentation]'),
+            presentationdescription = form.down('textfield[name=presentationdescription]');
+
+        lotpart.reset();
+        searchinput.reset();
+        datevalidity.reset();
+        presentation.reset();
+        presentationdescription.reset();
+
+        quantity.reset();
+        quantity.setMinValue(0);
+        quantity.setReadColor(true);
+        searchinput.getStore().removeAll();
+    },
+
+    onSelectSearchInput: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            hasbatch = record.get('hasbatch'),
+            hasstock = record.get('hasstock'),
+            button = view.down('button[name=confirm]'),
+            lotpart = view.down('textfield[name=lotpart]'),
+            quantity = view.down('numberfield[name=quantity]'),
+            datevalidity = view.down('datefield[name=datevalidity]'),
+            presentation = view.down('hiddenfield[name=presentation]'),
+            presentationdescription = view.down('textfield[name=presentationdescription]');
+
+        lotpart.setValue(record.get('lotpart'));
+        datevalidity.setValue(record.get('datevalidity'));
+        presentation.setValue(record.get('presentation'));
+        presentationdescription.setValue(record.get('presentationdescription'));
+
+        quantity.setReadColor(hasstock != 1);
+        quantity.setMinValue(hasstock == 1 ? 1 : 0);
+        quantity.setMaxValue(hasstock == 1 ? record.get('lotamount') : 0);
+
+        if(hasstock != 1) {
+            me.informarInsumo();
+        }
+    },
+        
     callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
         var me = scope;
         console.info(scope);
@@ -711,6 +900,8 @@ console.info(result);
     callSATOR_CANCELAR_LEITURAS: function (scope) {
         var me = scope,
             data = [],
+            view = me.getView(),
+            master = view.master,
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
@@ -729,6 +920,9 @@ console.info(result);
             item.store.sync({async: false});
             item.commit();
         });
+
+        view.close();
+        me.setView(master);
     },
 
     callSATOR_LANCAMENTO_MANUAL: function (scope) {
@@ -783,7 +977,9 @@ console.info(result);
             model = view.down('flowprocessingmaterial').getSelectionModel(),
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
-			
+
+        console.info(view.xdata.data);
+
 		/**
           * - Verificar é Kit ?
           *      Não é Kit,
@@ -792,6 +988,7 @@ console.info(result);
           *              Não -> Pesquisa e Insert (Depende do Status do Material)
           */
 		if(!isMaterialBox) {
+            me.setIsntMaterialBox();
             return false;
 		}
 
@@ -809,7 +1006,7 @@ console.info(result);
 		if(!data) {
 			me.setMessageText('MSG_UNKNOWN');
 			return false;
-		}			
+		}
 
 		// Já foi lançado ?
 		// Sim -> Mensagem de duplicidade
@@ -829,7 +1026,47 @@ console.info(result);
 			}
 		});
 	},
-	
+
+    setIsntMaterialBox: function (value) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('flowprocessingstepmaterial'),
+            model = view.down('flowprocessingmaterial').getSelectionModel();
+
+        var data = store.findRecord('barcode',value);
+
+        // Já foi lançado ?
+        // Sim -> Mensagem de duplicidade
+        if(data) {
+            me.setMessageText('MSG_DUPLICATED');
+            model.select(data);
+            return false;
+        }
+
+        // Já foi lançado ?
+        // Não -> Pesquisa e Insert (Depende do Status do Material)
+        Ext.Ajax.request({
+            scope: me,
+            url: store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'insertItem',
+                barcode: value,
+                flowprocessingstepid: view.xdata.get('flowprocessingstepid')
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    me.setMessageText('MSG_UNKNOWN');
+                    return false;
+                }
+
+                store.load();
+            }
+        });
+    },
+
     /**
      * Leitura de Materias
      *  - Kit
@@ -844,6 +1081,7 @@ console.info(result);
      *
      *  - Outras Leituras
      *      Protocolos
+     *          -   Iniciar Leitura                 SATOR_INICIAR_LEITURA
      *          -   Encerrar Leitura                SATOR_ENCERRAR_LEITURA
      *          -   Ler Insumos                     SATOR_INFORMAR_INSUMOS
      *          -   Cancelar Leituras Relizadas     SATOR_CANCELAR_LEITURAS
@@ -964,13 +1202,22 @@ console.info(result);
         }
     },
 
+    onBeforeEditMaterialFlowStepAction: function ( editor, context, eOpts ) {
+        var list = ['010'],
+            unconformities = context.record.get('unconformities');
+
+        return (context.grid.editable) && (list.indexOf(unconformities) == -1);
+    },
+
     onSelectMaterialFlowStepAction: function ( rowModel, record, index, eOpts) {
         var me = this,
             view = me.getView(),
             portrait = view.down('portrait');
 
-        portrait.beFileData(record.get('filetype'));
-        portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
+        if(portrait) {
+            portrait.beFileData(record.get('filetype'));
+            portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
+        }
     },
 
     onFlowTaskAction: function () {

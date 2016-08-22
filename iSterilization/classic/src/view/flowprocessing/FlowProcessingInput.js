@@ -6,38 +6,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
 
     requires: [
         'Ext.grid.Panel',
-        'Ext.grid.column.*'
+        'Ext.grid.column.*',
+        'iSterilization.store.flowprocessing.FlowProcessingStepInputTree'
     ],
 
-    // border: true,
+    store: 'flowprocessingstepinputtree',
 
+    useArrows: true,
+    hasDelete: false,
     rootVisible: false,
-
-    cls: 'processing-panel-header-flow processing-update-grid',
-
-    store: Ext.create('Ext.data.TreeStore', {
-        root: {
-            expanded: true,
-            children: [
-                { text: 'Lavagem Manual', leaf: true },
-                { text: 'Termodesinfectora', expanded: true, children: [
-                    { text: 'Ácido', leaf: true },
-                    { text: 'Sabão', leaf: true}
-                ] },
-                { text: 'buy lottery tickets', leaf: true }
-            ]
-        }
-    }),
-
-    // store: Ext.create('Ext.data.Store', {
-    //     fields:['email'],
-    //     data: [
-    //         { email: 'lisa@simpsons.com' },
-    //         { email: 'bart@simpsons.com' },
-    //         { email: 'homer@simpsons.com' },
-    //         { email: 'marge@simpsons.com' }
-    //     ]
-    // }),
+    // hideHeaders: false,
+    multiSelect: false,
+    singleExpand: true,
+    headerBorders: false,
+    reserveScrollbar: false,
+    cls: 'update-grid',
 
     dockedItems: [
         {
@@ -50,25 +33,47 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
 
     initComponent: function () {
         var me = this;
-        //me.buildItems();
+        me.makeColumn();
         me.callParent();
     },
 
-    buildItems: function () {
-        var me = this;
+    makeColumn: function () {
+        var me = this,
+            isDisabled = function (view, rowIdx, colIdx, item, record) {
+                return !record.data.leaf;
+            };
 
         me.columns = [
             {
-                width: 40,
-                renderer: function (value,metaData,record) {
-                    return '<div style="border: 2px solid rgb(105, 112, 194); width: 100%; height: 100%; padding: 10px; background: rgb(0, 190, 237);"></div>';
+                flex: 1,
+                dataIndex: 'text',
+                sortable: false,
+                xtype: 'treecolumn',
+                renderer: function (value, metaData, record) {
+                    var leaf = record.get('leaf');
+                    metaData.style = !leaf ? 'font-weight: bold; color: blue;' : '';
+                    return value;
                 }
-            }, {
-                text: 'Email',
-                dataIndex: 'email',
-                flex: 1
-            }
+            }, me.hasDelete ? {
+                width: 50,
+                align: 'center',
+                sortable: false,
+                xtype: 'actioncolumn',
+                items: [
+                    {
+                        handler: 'onActionDeleteTree',
+                        isDisabled: isDisabled,
+                        getTip: function(v, meta, rec) {
+                            return rec.data.leaf ? 'Remover lançamento!' : '';
+                        },
+                        getClass: function(v, meta, rec) {
+                            return rec.data.leaf ? "fa fa-minus-circle action-delete-color-font" : '';
+                        }
+                    }
+                ]
+            } : { width: 1 }
         ];
+
     }
 
 });

@@ -12,6 +12,13 @@ Ext.define( 'iSterilization.store.flowprocessing.FlowProcessingStepInput', {
 
     url: '../iSterilization/business/Calls/flowprocessingstepinput.php',
 
-    model: 'iSterilization.model.flowprocessing.FlowProcessingStepInput'
+    model: 'iSterilization.model.flowprocessing.FlowProcessingStepInput',
+
+    config: {
+        extraParams: {
+            action: 'select',
+            method: 'selectCode'
+        }
+    }
 
 });

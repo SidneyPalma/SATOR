@@ -47,4 +47,50 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function insertItem(array $data) {
+        $barcode = $data['barcode'];
+        $flowprocessingstepid = $data['flowprocessingstepid'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            SELECT
+                ib.id,
+				ib.isactive,
+				ib.id as materialid,
+				ib.name as materialname
+            FROM
+                itembase ib
+                inner join material m on ( m.id = ib.id )
+            WHERE ib.barcode COLLATE Latin1_General_CI_AI = :barcode
+              and ib.isactive = 1";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            if(count($rows) == 0) {
+                throw new \PDOException("O Material solicitado não pôde ser encontrado!");
+            }
+
+            $date = date("Y-m-d H:i");
+            $material = new \iSterilization\Coach\flowprocessingstepmaterial();
+            $material->getStore()->getModel()->set('id','');
+            $material->getStore()->getModel()->set('dateof',$date);
+            $material->getStore()->getModel()->set('dateto',$date);
+            $material->getStore()->getModel()->set('unconformities','010');
+            $material->getStore()->getModel()->set('flowprocessingstepid',$flowprocessingstepid);
+            $material->getStore()->insert();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }

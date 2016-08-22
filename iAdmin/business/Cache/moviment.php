@@ -84,7 +84,7 @@ class moviment extends \Smart\Data\Cache {
                 inner join itembase ib on ( ib.id = i.id )
             where ib.name like :name
               and it.lotamount > 0
-              and convert(varchar(10),it.datevalidity, 106) >= convert(varchar(10),getdate(),106)";
+              --and convert(varchar(10),it.datevalidity, 106) >= convert(varchar(10),getdate(),106)";
 
         try {
             $pdo = $proxy->prepare($sql);

@@ -54,65 +54,21 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         pageSize: 0,
                         fieldLabel: 'Equipamento / Sub-Area',
                         xtype: 'searchelement',
+                        hiddenNameId: 'flowprocessingstepid',
                         listeners: {
-                            showclear: function (field) {
-                                var form = field.up('form'),
-                                    searchinput = form.down('searchinput'),
-                                    quantity = form.down('numberfield[name=quantity]');
-
-                                form.reset();
-                                quantity.setMinValue(0);
-                                quantity.setReadColor(true);
-                                searchinput.getStore().removeAll();
-                            },
+                            showclear: 'onShowClearSearchElement',
                             beforequery: 'onBeforeSearchElement',
-                            select: function (combo,record,eOpts) {
-                                var form = combo.up('form'),
-                                    searchinput = form.down('searchinput'),
-                                    lotpart = form.down('textfield[name=lotpart]'),
-                                    quantity = form.down('numberfield[name=quantity]'),
-                                    datevalidity = form.down('datefield[name=datevalidity]'),
-                                    presentation = form.down('textfield[name=presentation]');
-
-                                lotpart.reset();
-                                searchinput.reset();
-                                datevalidity.reset();
-                                presentation.reset();
-
-                                quantity.reset();
-                                quantity.setMinValue(0);
-                                quantity.setReadColor(true);
-                                searchinput.getStore().removeAll();
-                                // var me = this,
-                                //     button = me.up('window').down('button[name=confirm]');
-                                // button.fireEvent('click', button);
-                            }
+                            select: 'onSelectSearchElement'
                         }
                     }, {
                         pageSize: 0,
                         hideTrigger: true,
                         xtype: 'searchinput',
                         fieldLabel: 'Insumo',
-                        hiddenNameId: 'presentation',
+                        hiddenNameId: 'inputpresentationid',
                         listeners: {
                             beforequery: 'onBeforeSearchInput',
-                            select: function (combo,record,eOpts) {
-                                var me = this,
-                                    hasbatch = record.get('hasbatch'),
-                                    hasstock = record.get('hasstock'),
-                                    lotpart = me.up('window').down('textfield[name=lotpart]'),
-                                    quantity = me.up('window').down('numberfield[name=quantity]'),
-                                    datevalidity = me.up('window').down('datefield[name=datevalidity]'),
-                                    presentation = me.up('window').down('textfield[name=presentation]');
-
-                                lotpart.setValue(record.get('lotpart'));
-                                datevalidity.setValue(record.get('datevalidity'));
-                                presentation.setValue(record.get('presentationdescription'));
-
-                                quantity.setReadColor(hasstock != 1);
-                                quantity.setMinValue(hasstock == 1 ? 1 : 0);
-                                quantity.setMaxValue(hasstock == 1 ? record.get('lotamount') : 0);
-                            }
+                            select: 'onSelectSearchInput'
                         }
                     }, {
                         xtype: 'container',
@@ -124,9 +80,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         },
                         items: [
                             {
+                                xtype: 'hiddenfield',
+                                name: 'presentation'
+                            }, {
                                 flex: 3,
                                 xtype: 'textfield',
-                                name: 'presentation',
+                                name: 'presentationdescription',
                                 fieldLabel: 'Apresentação'
                             }, {
                                 xtype: 'splitter'
@@ -139,7 +98,17 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                                 fieldLabel: 'Quantidade',
                                 plugins: 'textmask',
                                 mask: '0,000',
-                                money: true
+                                money: true,
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                                            var view = field.up('window'),
+                                                button = view.down('button[name=confirm]');
+
+                                            button.fireEvent('click', button);
+                                        }
+                                    }
+                                }
                             }
                         ]
                     }, {
@@ -182,6 +151,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
                         ]
                     }, {
                         height: 300,
+                        hasDelete: true,
                         xtype: 'flowprocessinginput'
                     }
                 ]
@@ -198,7 +168,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_INFORMAR_INS
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                // click: 'relatarUsaEPI'
+                click: 'informarInsumo'
             }
         }, {
             scale: 'medium',

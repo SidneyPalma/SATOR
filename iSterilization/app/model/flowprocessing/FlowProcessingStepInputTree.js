@@ -1,6 +1,6 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepInput', {
-    extend: 'Ext.data.Model',
+Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepInputTree', {
+    extend: 'Ext.data.TreeModel',
 
     requires: [
         'Smart.data.identifier.Auto'
@@ -13,6 +13,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepInput', {
             name: 'id',
             type: 'int',
             serializeType: 'auto'
+        }, {
+            name: 'parentid',
+            type: 'int'
         }, {
             name: 'flowprocessingstepid',
             type: 'int'
