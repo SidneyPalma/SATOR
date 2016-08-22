@@ -588,4 +588,36 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function printerFlowItem(array $data) {
+        $datetime = date("d/m/Y H:i");
+        $printlocate = $data['printlocate'];
+
+        $tpl = "
+            ^XA
+            ^CF0,20
+            ^FO70,050^FD$entityname^FS
+            ^FO420,050^FD$proprietaryname^FS
+            ^FO70,080^FDPREPARADO EM: $datetime^FS
+            ^FO70,110^FDOP: $username^FS
+            ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
+            ^FO70,170^FDVALIDADE: $valididy ($days)^FS
+            ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
+            ^FO70,230^FDMATERIAL: $materialboxname ($quantity Itens)^FS
+            ^FO260,260^BXN,3,200^FD$barcode^FS^
+            ^FO70,275^FD$barcode^FS^
+            ^XZ";
+
+        $ph = printer_open($printlocate);
+
+        if($ph) {
+            printer_set_option($ph, PRINTER_MODE, "RAW");
+            printer_write($ph, $tpl);
+            printer_close($ph);
+        }  else {
+            //"Couldn't connect..."
+        };
+
+
+    }
+
 }

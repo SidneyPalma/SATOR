@@ -684,7 +684,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          - Quebra
      *          - Altera
      *
-     *          Flags Diversos..
+     *          Flags Diversos ...
      *          - ...
      *          - ...
      *          - ...
@@ -692,6 +692,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *
      *      - Não
      *          - Registrar Inconformidades por Item
+     *
+     *           #002	Item Danificado
+     *           #004	Extraviado
+     *           #007	Ausente no Kit
+     *              Bloqueia Kit
+     *              Bloqueia Material (processos)
+     *              Encerra Fluxo
+     *
+     *           003	Material Úmido
+     *           005	Embalagem não íntegra
+     *           006	Embalagem Violada
+     *           008	Não Utilizado
+     *           009	Vencido
+     *              Registrar NC
+     *              Fluxo Segue
      */
     callSATOR_ENCERRAR_LEITURA: function (scope) {
         var me = scope;
