@@ -622,30 +622,43 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	workProtocol: function (value) {
 	    var me = this;
 
-            me.callProtocol = {
-				SATOR_RELATAR_USA_EPI: me.callSATOR_RELATAR_USA_EPI,                    // --> OK
-                SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,                    // --> OK
-                SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,                  // -->
-                SATOR_INFORMAR_INSUMOS: me.callSATOR_INFORMAR_INSUMOS,                  // --> OK
-                SATOR_IMPRIMIR_ETIQUETA: me.callSATOR_IMPRIMIR_ETIQUETA,                // -->
-                SATOR_CANCELAR_LEITURAS: me.callSATOR_CANCELAR_LEITURAS,                // --> OK
-                SATOR_LANCAMENTO_MANUAL: me.callSATOR_LANCAMENTO_MANUAL,                // --> OK
-                SATOR_CONSULTAR_MATERIAL: me.callSATOR_CONSULTAR_MATERIAL,              // -->
-                SATOR_CANCELAR_ULTIMA_LEITURA: me.callSATOR_CANCELAR_ULTIMA_LEITURA     // --> OK
-            };
-
-        if(!me.callProtocol.hasOwnProperty(value)) {
-            me.setMessageText('MSG_PROTOCOL_ERROR');
-            return false;
+        switch(value) {
+            case 'SATOR_RELATAR_USA_EPI':
+                me.callSATOR_RELATAR_USA_EPI();
+                break;
+            case 'SATOR_INICIAR_LEITURA':
+                me.callSATOR_INICIAR_LEITURA();
+                break;
+            case 'SATOR_ENCERRAR_LEITURA':
+                me.callSATOR_ENCERRAR_LEITURA();
+                break;
+            case 'SATOR_INFORMAR_INSUMOS':
+                me.callSATOR_INFORMAR_INSUMOS();
+                break;
+            case 'SATOR_IMPRIMIR_ETIQUETA':
+                me.callSATOR_IMPRIMIR_ETIQUETA();
+                break;
+            case 'SATOR_CANCELAR_LEITURAS':
+                me.callSATOR_CANCELAR_LEITURAS();
+                break;
+            case 'SATOR_LANCAMENTO_MANUAL':
+                me.callSATOR_LANCAMENTO_MANUAL();
+                break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
+                break;
+            case 'SATOR_CANCELAR_ULTIMA_LEITURA':
+                me.callSATOR_CANCELAR_ULTIMA_LEITURA();
+                break;
+            default:
+                me.setMessageText('MSG_PROTOCOL_ERROR');
         }
 
-        me.callProtocol[value](me);
 	},
 
-	callSATOR_RELATAR_USA_EPI: function (scope) {
-        var me = scope;
+	callSATOR_RELATAR_USA_EPI: function () {
+        var me = this;
         Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
-            this.outherScope = scope;
             this.master = me.getView();
             this.down('textfield[name=userprotected]').focus(false,200);
         });
@@ -671,8 +684,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         model.commit();
     },
 
-    callSATOR_INICIAR_LEITURA: function (scope) {
-        var me = scope;
+    callSATOR_INICIAR_LEITURA: function () {
+        var me = this;
         me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
     },
 
@@ -708,8 +721,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *              Registrar NC
      *              Fluxo Segue
      */
-    callSATOR_ENCERRAR_LEITURA: function (scope) {
-        var me = scope,
+    callSATOR_ENCERRAR_LEITURA: function () {
+        var me = this,
             id = me.getView().xdata.get('id');
 
         if(!me.checkUnconformities()) {
@@ -717,7 +730,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         Ext.widget('call_UNCONFORMITIES').show(null,function () {
-            this.outherScope = me;
             this.master = me.getView();
             Ext.getStore('flowprocessingstepmaterial').setParams({
                 method: 'selectCode',
@@ -792,12 +804,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.setView(master);
     },
 
-    callSATOR_INFORMAR_INSUMOS: function (scope) {
-        var me = scope;
+    callSATOR_INFORMAR_INSUMOS: function () {
+        var me = this;
         Ext.widget('call_SATOR_INFORMAR_INSUMOS').show(null,function () {
             var tree = this.down('treepanel');
             tree.getStore().remove(tree.getStore().getAt(0));
-            this.outherScope = scope;
             this.master = me.getView();
             this.down('searchelement').focus(false,200);
         });
@@ -929,13 +940,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
         
-    callSATOR_IMPRIMIR_ETIQUETA: function (scope) {
-        var me = scope;
-        console.info(scope);
+    callSATOR_IMPRIMIR_ETIQUETA: function () {
+        var me = this;
+        console.info(me);
     },
 
-    callSATOR_CANCELAR_LEITURAS: function (scope) {
-        var me = scope,
+    callSATOR_CANCELAR_LEITURAS: function () {
+        var me = this,
             data = [],
             store = Ext.getStore('flowprocessingstepmaterial');
 
@@ -957,10 +968,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    callSATOR_LANCAMENTO_MANUAL: function (scope) {
-        var me = scope;
+    callSATOR_LANCAMENTO_MANUAL: function () {
+        var me = this;
         Ext.widget('call_SATOR_LANCAMENTO_MANUAL').show(null,function () {
-            this.outherScope = scope;
             this.master = me.getView();
             this.down('searchmaterial').focus(false,200);
         });
@@ -977,12 +987,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.workReadArea(record.get('barcode'));
     },
 	
-    callSATOR_CONSULTAR_MATERIAL: function (scope) {
-        console.info(scope);
+    callSATOR_CONSULTAR_MATERIAL: function () {
+        console.info(this);
     },
 
-    callSATOR_CANCELAR_ULTIMA_LEITURA: function (scope) {
-        var me = scope,
+    callSATOR_CANCELAR_ULTIMA_LEITURA: function () {
+        var me = this,
             data = null,
             store = Ext.getStore('flowprocessingstepmaterial');
 
