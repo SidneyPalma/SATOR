@@ -26,9 +26,7 @@ class flowprocessingstepmaterial extends \Smart\Data\Event {
     public function preUpdate( \iSterilization\Model\flowprocessingstepmaterial &$model ) {
         Session::hasProfile('','');
 
-        $id = $model->getId();
-
-        $dateto = date("Y-d-m H:i:s");
+        $dateto = date("Y-m-d H:i:s");
         $model->set('dateto',$dateto);
     }
 
