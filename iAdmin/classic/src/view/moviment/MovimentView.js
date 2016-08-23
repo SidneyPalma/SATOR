@@ -12,7 +12,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
         'iAdmin.view.moviment.MovimentItem',
         'iAdmin.view.moviment.InputEnterSearch',
         'iAdmin.view.moviment.MovimentController',
-        'iAdmin.view.moviment.InputPresentationSearch'
+        'iAdmin.view.moviment.PresentationSearch'
     ],
 
     layout: 'border',
@@ -171,7 +171,7 @@ Ext.define( 'iAdmin.view.moviment.MovimentView', {
                                         },
                                         items: [
                                             {
-                                                xtype: 'inputpresentationsearch',
+                                                xtype: 'presentationsearch',
                                                 fieldLabel: 'Apresentação',
                                                 hiddenNameId: 'presentation',
                                                 name: 'presentationdescription',

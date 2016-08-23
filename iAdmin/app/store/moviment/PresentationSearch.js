@@ -1,10 +1,10 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.store.moviment.InputPresentationSearch', {
+Ext.define( 'iAdmin.store.moviment.PresentationSearch', {
     extend: 'Smart.data.StoreBase',
 
-    storeId: 'inputpresentationsearch',
+    storeId: 'presentationsearch',
 
-    alias: 'store.InputPresentationSearch',
+    alias: 'store.PresentationSearch',
 
     fields: [
         'acronym',

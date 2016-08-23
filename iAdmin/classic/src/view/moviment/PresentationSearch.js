@@ -1,12 +1,12 @@
 //@charset UTF-8
-Ext.define( 'iAdmin.view.moviment.InputPresentationSearch', {
+Ext.define( 'iAdmin.view.moviment.PresentationSearch', {
     extend: 'Smart.form.field.ComboSearch',
 
-    xtype: 'inputpresentationsearch',
+    xtype: 'presentationsearch',
 
     requires: [
         'Smart.form.field.ComboSearch',
-        'iAdmin.store.moviment.InputPresentationSearch'
+        'iAdmin.store.moviment.PresentationSearch'
     ],
 
     valueField: 'presentation',
@@ -15,7 +15,7 @@ Ext.define( 'iAdmin.view.moviment.InputPresentationSearch', {
     pageSize: 0,
     showClear: true,
 
-    store: 'iAdmin.store.moviment.InputPresentationSearch',
+    store: 'iAdmin.store.moviment.PresentationSearch',
 
     // template for the content List
     tpl: [

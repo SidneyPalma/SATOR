@@ -590,7 +590,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
     public function printerFlowItem(array $data) {
         $datetime = date("d/m/Y H:i");
-        $printlocate = $data['printlocate'];
+        $printlocate = isset($data['printlocate']) ? $data['printlocate'] : null;
+        
+		$ph = $printlocate ? printer_open($printlocate) : null;
 
         $tpl = "
             ^XA
@@ -600,14 +602,12 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             ^FO70,080^FDPREPARADO EM: $datetime^FS
             ^FO70,110^FDOP: $username^FS
             ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
-            ^FO70,170^FDVALIDADE: $valididy ($days)^FS
+            ^FO70,170^FDVALIDADE: $validity ($days)^FS
             ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
             ^FO70,230^FDMATERIAL: $materialboxname ($quantity Itens)^FS
             ^FO260,260^BXN,3,200^FD$barcode^FS^
             ^FO70,275^FD$barcode^FS^
             ^XZ";
-
-        $ph = printer_open($printlocate);
 
         if($ph) {
             printer_set_option($ph, PRINTER_MODE, "RAW");
@@ -615,8 +615,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             printer_close($ph);
         }  else {
             //"Couldn't connect..."
-        };
-
+        }
 
     }
 
