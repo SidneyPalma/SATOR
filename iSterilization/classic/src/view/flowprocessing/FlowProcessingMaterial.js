@@ -76,6 +76,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     return Ext.String.format(flag,unconformities);
                 }
             }, {
+                // hidden: true,
                 dataIndex: 'barcode',
                 width: 120
             }, {

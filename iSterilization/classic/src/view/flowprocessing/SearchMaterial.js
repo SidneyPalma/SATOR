@@ -13,11 +13,9 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
 
     pageSize: 0,
     showClear: true,
-    useUpperCase: true,
-
-    minChars: 999,
-    maxLength: 60,
     hideTrigger: true,
+    useUpperCase: true,
+    readerBarCode: false,
 
     url: '../iSterilization/business/Calls/flowprocessing.php',
 
@@ -96,7 +94,12 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
     initComponent: function () {
         var me = this;
         me.callParent();
-        me.store.onAfter( 'load', me.fnLoad, me);
+
+        if(me.readerBarCode == true) {
+            me.minChars = 999;
+            me.maxLength = 60;
+            me.store.onAfter( 'load', me.fnLoad, me);
+        }
     },
 
     fnLoad: function ( store, records, successful, operation, eOpts) {
