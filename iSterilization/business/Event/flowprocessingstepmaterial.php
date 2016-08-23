@@ -34,6 +34,7 @@ class flowprocessingstepmaterial extends \Smart\Data\Event {
      * @param \iSterilization\Model\flowprocessingstepmaterial $model
      */
     public function posUpdate( \iSterilization\Model\flowprocessingstepmaterial &$model ) {
+
     }
 
     /**
