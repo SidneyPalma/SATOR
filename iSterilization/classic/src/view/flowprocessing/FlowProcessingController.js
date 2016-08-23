@@ -731,12 +731,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         Ext.widget('call_UNCONFORMITIES').show(null,function () {
             this.master = me.getView();
-            Ext.getStore('flowprocessingstepmaterial').setParams({
-                method: 'selectCode',
-                query: id
-            }).load();
         },me);
-
     },
 
     checkUnconformities: function () {

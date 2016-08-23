@@ -107,6 +107,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInput');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepAction');
+        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepMaterial');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInputTree');
 
         me.items = [

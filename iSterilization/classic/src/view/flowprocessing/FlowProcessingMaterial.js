@@ -66,8 +66,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepMaterial');
-
         me.columns = [
             {
                 width: 40,
