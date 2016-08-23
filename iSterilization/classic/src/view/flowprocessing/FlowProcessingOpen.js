@@ -134,6 +134,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 listeners: {
                                     select: 'onSelectMaterial',
                                     showclear: 'showClearMaterial',
+                                    specialkey: 'onSpecialKeySearch',
                                     beforedeselect: 'showClearMaterial'
                                 }
                             }, {
@@ -245,16 +246,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
     buttons: [
         {
             scale: 'medium',
-            iconCls: "fa fa-upload",
             text: 'Confirmar',
-            showSmartTheme: 'red',
+            showSmartTheme: 'blue',
             handler: 'insertFlow'
         }, {
             scale: 'medium',
             text: 'Fechar',
             showSmartTheme: 'red',
             handler: function (btn) {
-                btn.up('window').close();
+                btn.windowClose();
             }
         }
     ]

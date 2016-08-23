@@ -14,7 +14,11 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
     pageSize: 0,
     showClear: true,
     useUpperCase: true,
-    
+
+    minChars: 999,
+    maxLength: 60,
+    hideTrigger: true,
+
     url: '../iSterilization/business/Calls/flowprocessing.php',
 
     params: {
@@ -87,6 +91,19 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
                 '<div style="font-size: 14px; line-height: 20px; background-color: rgba(250, 241, 210, .4);">Código de Barras: <a style="color: red;">{barcode}</a></div>',
             '</div>',
         '</tpl>'
-    ]
+    ],
+
+    initComponent: function () {
+        var me = this;
+        me.callParent();
+        me.store.onAfter( 'load', me.fnLoad, me);
+    },
+
+    fnLoad: function ( store, records, successful, operation, eOpts) {
+        console.info(this);
+        console.info(records);
+        console.info(operation);
+        console.info(successful);
+    }
 
 });

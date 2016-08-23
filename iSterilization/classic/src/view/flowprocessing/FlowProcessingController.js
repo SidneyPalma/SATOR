@@ -393,6 +393,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('clientsearch').reset();
     },
 
+    onSpecialKeySearch: function (field, e, eOpts) {
+        if ([e.ESC].indexOf(e.getKey()) != -1) {
+            field.reset();
+        }
+        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+            var value = field.getRawValue(),
+                result = field.doQuery(value,true,true);
+            if(result) {
+                Ext.defer(function() {
+                    // console.info(field.store.findRecord('barcode',value));
+                }, 1000);
+            }
+            e.stopEvent();
+        }
+    },
+    
     onSelectSterilization: function (combo,record,eOpts) {
         var me = this,
             view = me.getView();
