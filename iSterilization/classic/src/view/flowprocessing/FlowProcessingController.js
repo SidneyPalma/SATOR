@@ -783,7 +783,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         data = [];
 
         store.each(function (item) {
-            if(['001','010'].indexOf() != -1) {
+            if(['001'].indexOf() != -1) {
                 data.push(item);
             }
         },me);
