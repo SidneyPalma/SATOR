@@ -770,7 +770,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         if(data.length != 0) {
             store.load();
-            me.setMessageText('MSG_NOT_AVAILABLE');
+            me.setMessageText('MSG_PROTOCOL','Inconformidades pendentes no encerramento!');
             return false;
         }
 
