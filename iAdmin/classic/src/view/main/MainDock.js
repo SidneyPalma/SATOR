@@ -22,6 +22,7 @@ Ext.define( 'iAdmin.view.main.MainDock', {
 
     items: [
         {
+			scrollable: 'y',
 			xtype: 'panel',
 			items: [
 				{
