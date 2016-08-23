@@ -572,7 +572,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             readercode: msgItem.readercode,
             readershow: msgItem.readershow,
             readertext: msgItem.readertext,
-            flowprocessingstepid: me.getView().down('hiddenfield[name=id]').getValue()
+            flowprocessingstepid: me.getView().master.xdata.get('id')
         });
 
         store.sync({
@@ -657,9 +657,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	},
 
 	callSATOR_RELATAR_USA_EPI: function () {
-        var me = this;
+        var me = this,
+            view = me.getView();
         Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
-            this.master = me.getView();
+            this.master = view;
             this.down('textfield[name=userprotected]').focus(false,200);
         });
     },
@@ -723,15 +724,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      */
     callSATOR_ENCERRAR_LEITURA: function () {
         var me = this,
-            id = me.getView().xdata.get('id');
+            view = me.getView();
 
         if(!me.checkUnconformities()) {
             return false;
         }
 
         Ext.widget('call_UNCONFORMITIES').show(null,function () {
-            this.master = me.getView();
-        },me);
+            this.master = view;
+        });
     },
 
     checkUnconformities: function () {
@@ -762,12 +763,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
-            if(['001'].indexOf() != -1) {
+            if(['001'].indexOf(item.get('unconformities')) != -1) {
                 data.push(item);
             }
         },me);
 
         if(data.length != 0) {
+            store.load();
             me.setMessageText('MSG_NOT_AVAILABLE');
             return false;
         }
@@ -776,7 +778,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         store.each(function (item) {
             if(item.dirty) {
-                data.push(item.get('id'));
+                data.push(item);
                 item.commit();
             }
         },me);
@@ -787,10 +789,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         Ext.each(data,function(item) {
-            var record = store.findRecord('id',item);
-            record.set('isdirty',true);
-            record.store.sync({async: false});
-            record.commit();
+            item.set('isdirty',true);
+            item.store.sync({async: false});
+            item.commit();
         });
 
         view.close();
