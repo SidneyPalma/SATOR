@@ -620,8 +620,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 	
 	workProtocol: function (value) {
-	    var me = this,
-            call = {
+	    var me = this;
+
+            me.callProtocol = {
 				SATOR_RELATAR_USA_EPI: me.callSATOR_RELATAR_USA_EPI,                    // --> OK
                 SATOR_INICIAR_LEITURA: me.callSATOR_INICIAR_LEITURA,                    // --> OK
                 SATOR_ENCERRAR_LEITURA: me.callSATOR_ENCERRAR_LEITURA,                  // -->
@@ -633,13 +634,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 SATOR_CANCELAR_ULTIMA_LEITURA: me.callSATOR_CANCELAR_ULTIMA_LEITURA     // --> OK
             };
 
-	    try {
-	        call[value](me);
-            me.setMessageText('MSG_PROTOCOL',value);
-	    }
-	    catch (e) {
-	        me.setMessageText('MSG_PROTOCOL_ERROR');
-	    }
+        if(!me.callProtocol.hasOwnProperty(value)) {
+            me.setMessageText('MSG_PROTOCOL_ERROR');
+            return false;
+        }
+
+        me.callProtocol[value](me);
 	},
 
 	callSATOR_RELATAR_USA_EPI: function (scope) {
@@ -709,18 +709,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *              Fluxo Segue
      */
     callSATOR_ENCERRAR_LEITURA: function (scope) {
-        var me = scope;
+        var me = scope,
+            id = me.getView().xdata.get('id');
 
-        if(me.checkUnconformities() == true) {
-            Ext.widget('call_UNCONFORMITIES').show(null,function () {
-                this.outherScope = scope;
-                this.master = me.getView();
-                Ext.getStore('flowprocessingstepmaterial').setParams({
-                    method: 'selectCode',
-                    query: me.getView().xdata.get('id')
-                }).load();
-            });
+        if(!me.checkUnconformities()) {
+            return false;
         }
+
+        Ext.widget('call_UNCONFORMITIES').show(null,function () {
+            this.outherScope = me;
+            this.master = me.getView();
+            Ext.getStore('flowprocessingstepmaterial').setParams({
+                method: 'selectCode',
+                query: id
+            }).load();
+        },me);
+
     },
 
     checkUnconformities: function () {
@@ -731,7 +735,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             count += item.get('unconformities') == '010' ? 1 : 0;
         });
 
-        return (count != store.getCount());
+        return (count != store.count);
     },
 
     onSelectUnconformities: function (combo,record,eOpts) {
@@ -751,8 +755,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
-            if(item.dirty){
-                data.push(item);
+            if(item.dirty) {
+                data.push(item.get('id'));
+                item.commit();
             }
         },me);
 
@@ -762,10 +767,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         Ext.each(data,function(item) {
-            item.store.sync({async: false});
+            var record = store.findRecord('id',item);
+            record.set('isdirty',true);
+            record.store.sync({async: false});
+            record.commit();
         });
 
+        data = [];
+
+        store.each(function (item) {
+            if(['001','010'].indexOf() != -1) {
+                data.push(item);
+            }
+        },me);
+
+        if(data.length != 0) {
+            me.setMessageText('MSG_NOT_AVAILABLE');
+            return false;
+        }
+
         store.load();
+
         view.close();
         me.setView(master);
     },
@@ -915,8 +937,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_CANCELAR_LEITURAS: function (scope) {
         var me = scope,
             data = [],
-            view = me.getView(),
-            master = view.master,
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
@@ -935,9 +955,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             item.store.sync({async: false});
             item.commit();
         });
-
-        view.close();
-        me.setView(master);
     },
 
     callSATOR_LANCAMENTO_MANUAL: function (scope) {

@@ -30,7 +30,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepMaterial', {
             type: 'auto'
         }, {
             name: 'unconformities',
-            type: 'auto'
+            type: 'auto',
+            persist: true,
+            critical: true
         }, {
             name: 'unconformitiesdescription',
             type: 'auto'
@@ -59,6 +61,10 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepMaterial', {
                     type = (info && info.length !== 0) ? Ext.decode(info) : null;
                 return (type) ? Ext.String.format('data:{0};base64,{1}',type.fileType,record.get('filedata')) : record.get('filedata');
             }
+        }, {
+            name: 'isdirty',
+            type: 'boolean',
+            defaultValue: false
         }
     ]
 

@@ -155,10 +155,10 @@ Ext.define( 'iAdmin.view.moviment.MovimentController', {
     onShowClearEnter: function () {
         var me = this,
             form = me.getView().down('form[name=movimententer]'),
-            inputpresentationsearch = form.down('inputpresentationsearch');
+            presentationsearch = form.down('presentationsearch');
 
-        inputpresentationsearch.reset();
-        delete inputpresentationsearch.lastQuery;
+        presentationsearch.reset();
+        delete presentationsearch.lastQuery;
         form.down('textfield[name=lotpart]').setDisabled(false);
         form.down('datefield[name=datevalidity]').setDisabled(false);
     },

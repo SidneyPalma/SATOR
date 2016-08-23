@@ -12,10 +12,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
 
     editable: false,
 
-    // border: true,
     cls: 'update-grid',
-
-    // cls: 'processing-panel-header-flow processing-update-grid',
 
     store: 'flowprocessingstepmaterial',
 
