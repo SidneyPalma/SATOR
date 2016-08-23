@@ -762,6 +762,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
+            if(['001'].indexOf() != -1) {
+                data.push(item);
+            }
+        },me);
+
+        if(data.length != 0) {
+            me.setMessageText('MSG_NOT_AVAILABLE');
+            return false;
+        }
+
+        data = [];
+
+        store.each(function (item) {
             if(item.dirty) {
                 data.push(item.get('id'));
                 item.commit();
@@ -779,21 +792,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             record.store.sync({async: false});
             record.commit();
         });
-
-        data = [];
-
-        store.each(function (item) {
-            if(['001'].indexOf() != -1) {
-                data.push(item);
-            }
-        },me);
-
-        if(data.length != 0) {
-            me.setMessageText('MSG_NOT_AVAILABLE');
-            return false;
-        }
-
-        store.load();
 
         view.close();
         me.setView(master);
