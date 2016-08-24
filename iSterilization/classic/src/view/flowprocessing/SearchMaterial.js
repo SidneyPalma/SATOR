@@ -111,6 +111,11 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
         var me = this;
 
         me.setListeners({
+            expand: function (field, eOpts) {
+                if(field.readerBarCode == true) {
+                    field.picker.getSelectionModel().select(0);
+                }
+            },
             specialkey: function (field, e, eOpts) {
                 if ([e.ESC].indexOf(e.getKey()) != -1) {
                     field.reset();
