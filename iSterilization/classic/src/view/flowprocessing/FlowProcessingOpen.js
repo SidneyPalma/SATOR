@@ -124,10 +124,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 xtype: 'searchmaterial',
                                 hiddenNameId: 'materialid',
                                 name: 'materialname',
+                                readerBarCode: true,
                                 listeners: {
                                     select: 'onSelectMaterial',
                                     showclear: 'showClearMaterial',
-                                    // specialkey: 'onSpecialKeySearch',
                                     beforedeselect: 'showClearMaterial'
                                 }
                             }, {
