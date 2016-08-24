@@ -484,6 +484,30 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         win.show();
     },
 
+    deleteCellFlags: function () {
+        var me = this,
+            cells = me.router.graph.getElements();
+
+        Ext.Msg.confirm('Excluir Regras', 'Confirma a exclusão das regras dos elementos?',
+            function (choice) {
+                if (choice === 'yes') {
+                    Ext.each(cells, function(cell) {
+                        cell.set("stepsettings",'');
+                        cell.set('masterid', false);
+                        cell.set('exceptionof', '');
+                        cell.set('isactive', false);
+                        cell.set("exceptionby",false);
+                        cell.set("exceptiondo",false);
+                        cell.set('flowchoice', false);
+                        cell.set('flowbreach', false);
+                    });
+                    me.updateFlow();
+                }
+            }
+        );
+
+    },
+
     onSelectBasicStep: function () {
         var me = this,
             data = [],
@@ -877,6 +901,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         },this);
 
+        console.info(area);
+
         store.add(Smart.Rss.sortArrayBy(area, "steplevel"));
     },
 
@@ -1012,6 +1038,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             area = [],
             view = me.getView(),
             graph = view.graph,
+
             store = view.down('gridpanel').getStore(),
             checkboxgroup = view.down('checkboxgroup'),
             record = view.down('combobox[name=elementname]').foundRecord();

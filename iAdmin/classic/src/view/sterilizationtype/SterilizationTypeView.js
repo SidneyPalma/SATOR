@@ -156,6 +156,10 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeView', {
                                     }, {
                                         iconCls: "fa fa-share-alt",
                                         handler: 'updateFlowRules'
+                                    }, {
+                                        showSmartTheme: 'blue',
+                                        iconCls: "fa fa-magic",
+                                        handler: 'deleteCellFlags'
                                     }
                                 ]
                             }
