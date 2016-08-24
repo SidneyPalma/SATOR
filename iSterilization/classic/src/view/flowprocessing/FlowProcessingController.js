@@ -95,7 +95,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView();
 
         if(!Smart.workstation) {
-             
             return false;
         }
 
@@ -106,7 +105,41 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             query: Smart.workstation.areasid
         }).load();
     },
-    
+
+    onQueryReaderView: function (field, e, eOpts) {
+        var me = this,
+            value = field.getValue();
+
+        field.reset();
+console.info(value);
+        if(value && value.length != 0) {
+            if(value.indexOf('SATOR') != -1) {
+                me.areaProtocol(value);
+                return false;
+            }
+        }
+    },
+
+    areaProtocol: function (value) {
+        var me = this;
+
+        switch(value) {
+            case 'SATOR_PROCESSAR_ITENS':
+                me.callSATOR_PROCESSAR_ITENS();
+                break;
+            default:
+                me.setMessageText('MSG_PROTOCOL_ERROR');
+        }
+
+    },
+
+    callSATOR_PROCESSAR_ITENS: function () {
+        var me = this,
+            view = me.getView();
+
+        me.flowProcessingOpen('flowopen');
+    },
+
     onAfterRenderDash: function () {
         var me = this,
             date = new Date(),
@@ -184,7 +217,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this;
 
         me.onAfterRenderDash();
-        me.flowProcessingOpen('flowopen')
+        me.flowProcessingOpen('flowopen');
     },
 
     flowProcessingOpen: function (flowtype) {
@@ -631,6 +664,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	    var me = this;
 
         switch(value) {
+            case 'SATOR_PROCESSAR_ITENS':
+                me.callSATOR_PROCESSAR_ITENS();
+                break;
             case 'SATOR_RELATAR_USA_EPI':
                 me.callSATOR_RELATAR_USA_EPI();
                 break;
