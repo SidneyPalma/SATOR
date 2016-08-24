@@ -98,15 +98,34 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
         if(me.readerBarCode == true) {
             me.minChars = 999;
             me.maxLength = 60;
-            me.store.onAfter( 'load', me.fnLoad, me);
+            me.setSpecialKeyEvent();
+            me.store.onAfter('load', me.fnLoad, me);
         }
     },
 
     fnLoad: function ( store, records, successful, operation, eOpts) {
+        this.expand();
         console.info(this);
         console.info(records);
         console.info(operation);
         console.info(successful);
+    },
+
+    setSpecialKeyEvent: function () {
+        var me = this;
+
+        me.setListeners({
+            specialkey: function (field, e, eOpts) {
+                if ([e.ESC].indexOf(e.getKey()) != -1) {
+                    field.reset();
+                }
+                if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                    var value = field.getRawValue();
+                    field.doQuery(value,true,true);
+                    e.stopEvent();
+                }
+            }
+        });
     }
 
 });
