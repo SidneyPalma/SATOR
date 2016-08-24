@@ -80,6 +80,18 @@ Ext.define( 'iSterilization.view.flowprocessing.ReaderFlowProcessing', {
         '</tpl>'
     ],
 
+    listeners: {
+        specialkey: function (field, e, eOpts) {
+            if ([e.ESC].indexOf(e.getKey()) != -1) {
+                field.reset();
+            }
+            if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                field.doQuery(field.getRawValue(),true,true);
+                //e.stopEvent();
+            }
+        }
+    },
+
     initComponent: function () {
         var me = this;
 

@@ -23,7 +23,7 @@ Ext.define( 'iSterilization.view.main.MainDock', {
 	items: [
 		{
 			xtype: 'panel',
-			layout: 'fit',
+			scrollable: 'y',
 			items: [
 				{
 					iconCls: "fa fa-bars",

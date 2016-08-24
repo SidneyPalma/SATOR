@@ -14,7 +14,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
 
     constrain: true,
 
-    width: 550,
+    width: 500,
     modal: true,
     resizable: false,
     showAnimate: true,

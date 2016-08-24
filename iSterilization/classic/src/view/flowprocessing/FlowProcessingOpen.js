@@ -81,13 +81,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         fieldLabel: 'Identificação',
                         items: [
                             {
-                            //     anchor: '100%',
-                            //     checked: true,
-                            //     xtype: 'checkboxfield',
-                            //     fieldLabel: 'Iniciar Leitura',
-                            //     boxLabel  : 'Iniciar leitura após confirmação dos parâmetros',
-                            //     name      : 'startflow'
-                            // }, {
                                 xtype: 'container',
                                 layout: 'hbox',
                                 defaultType: 'textfield',
@@ -134,6 +127,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 listeners: {
                                     select: 'onSelectMaterial',
                                     showclear: 'showClearMaterial',
+                                    // specialkey: 'onSpecialKeySearch',
                                     beforedeselect: 'showClearMaterial'
                                 }
                             }, {
@@ -245,16 +239,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
     buttons: [
         {
             scale: 'medium',
-            iconCls: "fa fa-upload",
             text: 'Confirmar',
-            showSmartTheme: 'red',
+            showSmartTheme: 'blue',
             handler: 'insertFlow'
         }, {
             scale: 'medium',
             text: 'Fechar',
             showSmartTheme: 'red',
             handler: function (btn) {
-                btn.up('window').close();
+                btn.windowClose();
             }
         }
     ]

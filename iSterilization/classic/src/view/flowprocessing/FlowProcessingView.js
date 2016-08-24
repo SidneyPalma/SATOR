@@ -4,6 +4,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
 
     xtype: 'flowprocessingview',
 
+    id: 'flowprocessingview',
+
     requires: [
         'Ext.grid.Panel',
         'Ext.grid.column.*',
