@@ -393,6 +393,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('clientsearch').reset();
     },
 
+    nextFieldMaterial: function (field,eOpts) {
+        var me = this,
+            view = me.getView(),
+            type = view.down('searchsterilizationtype');
+
+        type.focus(false,200);
+    },
+
     onSelectSterilization: function (combo,record,eOpts) {
         var me = this,
             view = me.getView();

@@ -127,6 +127,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 readerBarCode: true,
                                 listeners: {
                                     select: 'onSelectMaterial',
+                                    nextfield: 'nextFieldMaterial',
                                     showclear: 'showClearMaterial',
                                     beforedeselect: 'showClearMaterial'
                                 }
