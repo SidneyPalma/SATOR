@@ -103,12 +103,8 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
         }
     },
 
-    fnLoad: function ( store, records, successful, operation, eOpts) {
+    fnLoad: function (store, records, successful, operation, eOpts) {
         this.expand();
-        console.info(this);
-        console.info(records);
-        console.info(operation);
-        console.info(successful);
     },
 
     setSpecialKeyEvent: function () {
