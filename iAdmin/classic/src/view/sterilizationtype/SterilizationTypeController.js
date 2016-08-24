@@ -909,8 +909,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         },this);
 
-        console.info(area);
-
         store.add(Smart.Rss.sortArrayBy(area, "steplevel"));
     },
 
