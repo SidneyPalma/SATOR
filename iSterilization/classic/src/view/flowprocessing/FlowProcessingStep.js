@@ -47,6 +47,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
     listeners: {
         selectaction: 'onSelectAction',
+        queryreader: 'onQueryReaderView',
         afterrender: 'onAfterRenderStep'
     },
 
@@ -175,7 +176,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 useReadColor: false,
                                 fieldLabel: 'Consultar',
                                 cls: 'processing-field',
-                                labelCls: 'processing-field-font'
+                                labelCls: 'processing-field-font',
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        var view = field.up('flowprocessingstep');
+                                        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+                                            view.fireEvent('queryreader', field, e, eOpts);
+                                        }
+                                    }
+                                }
                             }, {
                                 height: 150,
                                 xtype: 'dataview',

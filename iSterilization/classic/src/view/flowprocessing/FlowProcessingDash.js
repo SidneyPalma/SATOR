@@ -11,10 +11,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
         'Ext.grid.column.*',
         'Ext.button.Segmented',
         'iSterilization.store.flowprocessing.*',
-        // 'iAdmin.view.material.MaterialSearch',
-        // 'iAdmin.view.equipment.EquipmentSearch',
-        // 'iAdmin.view.box.MaterialBoxItemSearch',
-        // 'iAdmin.view.helper.areas.CMEAreasSearch',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
