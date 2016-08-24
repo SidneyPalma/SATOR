@@ -112,7 +112,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
 
         me.setListeners({
             expand: function (field, eOpts) {
-                if(field.readerBarCode == true) {
+                if(field.store.count == 1) {
                     field.picker.getSelectionModel().select(0);
                 }
             },
