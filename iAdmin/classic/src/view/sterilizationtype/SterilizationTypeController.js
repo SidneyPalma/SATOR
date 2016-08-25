@@ -1051,7 +1051,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             record = view.down('combobox[name=elementname]').foundRecord();
 
         if( !record ) {
-            checkboxgroup.reset();
+            // checkboxgroup.reset();
             // var cell = graph.getCell(record.get('id'));
             // cell.set('flowchoice',newValue.flowchoice);
             // cell.set('flowbreach',newValue.flowbreach);
