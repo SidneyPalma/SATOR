@@ -838,9 +838,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         Ext.each(list, function (item) {
             var cell = graph.getCell(item.id);
-            cell.set('masterid', false);
-            cell.set('exceptionof', '');
-            cell.set('isactive', false);
+            cell.set('masterid',false);
+            cell.set('isactive',false);
             cell.set('typelesscode','');
             cell.set('typelessname','');
             cell.set("steppriority",'');
@@ -917,7 +916,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             area = [],
             view = me.getView(),
             form = btn.up('form'),
-            store = form.down('gridpanel').getStore(),
+            store = form.down('gridpanel[name=areas]').getStore(),
             readarea = form.down('combobox[name=readarea]'),
             elementname = view.down('combobox[name=elementname]'),
             checkboxgroup = view.down('checkboxgroup');
@@ -941,7 +940,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         store.removeAll();
         checkboxgroup.reset();
 
-        view.down('gridpanel').getStore().removeAll();
+        view.down('gridpanel[name=exceptions]').getStore().removeAll();
         view.down('hiddenfield[name=readarea]').setValue(readarea.getValue());
         view.down('sterilizationtypearea').setRawValue(readarea.getRawValue());
 
@@ -968,7 +967,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             view = me.getView(),
             graph = view.graph,
             cell = graph.getCell(record.get('id')),
-            store = view.down('gridpanel').getStore(),
+            store = view.down('gridpanel[name=exceptions]').getStore(),
             checkboxgroup = view.down('checkboxgroup'),
             links = graph.getConnectedLinks(cell, { outbound : true });
 
@@ -1003,6 +1002,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             grid = context.grid,
             record = context.record,
             cell = graph.getCell(record.get('id')),
+            checkboxgroup = view.down('checkboxgroup'),
             readarea = view.down('hiddenfield[name=readarea]'),
             elementname = view.down('combobox[name=elementname]');
 
@@ -1031,6 +1031,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
                 item.push(result.data);
             });
             area.set('exceptiondo',Ext.encode(item));
+            area.set('flowchoice',checkboxgroup.getValue().flowchoice);
+            area.set('flowbreach',checkboxgroup.getValue().flowbreach);
 
             elementname.getStore().each(function (result) {
                 list.push(result.data);
@@ -1041,28 +1043,29 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
     onCheckBoxGroupChange: function (field,newValue,OldValue,eOpts) {
         var me = this,
-            area = [],
+            // area = [],
             view = me.getView(),
-            graph = view.graph,
-            store = view.down('gridpanel').getStore(),
+            // graph = view.graph,
+            // store = view.down('gridpanel[name=exceptions]').getStore(),
             checkboxgroup = view.down('checkboxgroup'),
             record = view.down('combobox[name=elementname]').foundRecord();
 
-        if( record ) {
-            var cell = graph.getCell(record.get('id'));
-            cell.set('flowchoice',newValue.flowchoice);
-            cell.set('flowbreach',newValue.flowbreach);
+        if( !record ) {
+            checkboxgroup.reset();
+            // var cell = graph.getCell(record.get('id'));
+            // cell.set('flowchoice',newValue.flowchoice);
+            // cell.set('flowbreach',newValue.flowbreach);
+            //
+            // store.each(function (item) {
+            //     area.push(item.data);
+            // });
+            //
+            // cell.set('exceptiondo',Ext.encode(area));
 
-            store.each(function (item) {
-                area.push(item.data);
-            });
-
-            cell.set('exceptiondo',Ext.encode(area));
-
-            return false;
+            // return false;
         }
 
-        checkboxgroup.reset();
+        // checkboxgroup.reset();
     },
 
     commandManagerUndo: function () {

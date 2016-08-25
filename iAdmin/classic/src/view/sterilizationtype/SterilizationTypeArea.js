@@ -59,6 +59,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeArea', {
                         style: 'font-weight: bold;'
                     }, {
                         height: 150,
+                        name: 'areas',
                         xtype: 'gridpanel',
                         store: Ext.create('Ext.data.Store'),
                         columns: [

@@ -144,6 +144,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 }
                             }, {
                                 height: 220,
+                                name: 'exceptions',
                                 xtype: 'gridpanel',
                                 hideHeaders: false,
                                 headerBorders: false,
