@@ -117,6 +117,12 @@ class flowprocessing extends \Smart\Data\Model {
     private $flowstatusdescription;
 
     /**
+     * @Policy {"nullable":true, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $barcode;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -385,6 +391,22 @@ class flowprocessing extends \Smart\Data\Model {
      */
     public function setFlowstatus($flowstatus) {
         $this->flowstatus = $flowstatus;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getBarcode() {
+        return $this->barcode;
+    }
+
+    /**
+     * @param type $barcode
+     * @return \iSterilization\Model\flowprocessing
+     */
+    public function setBarcode($barcode) {
+        $this->barcode = $barcode;
         return $this;
     }
 

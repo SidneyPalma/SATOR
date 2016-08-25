@@ -71,6 +71,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         xtype: 'hiddenfield',
                         name: 'healthinsurance'
                     }, {
+                        xtype: 'hiddenfield',
+                        name: 'version'
+                    }, {
                         xtype: 'label',
                         cls: 'title-label',
                         text: 'Iniciar Nova Leitura'

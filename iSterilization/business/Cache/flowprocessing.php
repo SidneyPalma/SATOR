@@ -22,6 +22,7 @@ class flowprocessing extends \Smart\Data\Cache {
                 b.materialboxid,
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo,
+                st.version,
                 mf.name as manufacturername,
                 -- tipo de fluxo e prioridade
                 mtf.sterilizationtypeid,
