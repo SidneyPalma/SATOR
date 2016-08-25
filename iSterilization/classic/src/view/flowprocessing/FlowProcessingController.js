@@ -111,7 +111,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             value = field.getValue();
 
         field.reset();
-console.info(value);
+
         if(value && value.length != 0) {
             if(value.indexOf('SATOR') != -1) {
                 me.areaProtocol(value);

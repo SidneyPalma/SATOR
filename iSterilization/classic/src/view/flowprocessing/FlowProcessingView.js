@@ -54,6 +54,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
 
     initComponent: function () {
         var me = this;
+
         me.buildItems();
         me.callParent();
     },
