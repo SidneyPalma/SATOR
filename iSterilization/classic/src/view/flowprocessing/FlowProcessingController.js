@@ -790,10 +790,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onSelectUnconformities: function (combo,record,eOpts) {
-    var me = this,
-        view = me.getView(),
-        model = view.down('flowprocessingmaterial').getSelectionModel(),
-        selection = model.getSelection()[0];
+        var me = this,
+            view = me.getView(),
+            model = view.down('flowprocessingmaterial').getSelectionModel(),
+            selection = model.getSelection()[0];
 
         selection.set('unconformities',combo.getValue());
     },
@@ -801,6 +801,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     setUnconformities: function () {
         var me = this,
             data = [],
+            list = [],
             view = me.getView(),
             master = view.master,
             store = Ext.getStore('flowprocessingstepmaterial');
@@ -821,6 +822,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         store.each(function (item) {
             if(item.dirty) {
+                list.push(item.get('unconformities'));
                 data.push(item);
                 item.commit();
             }
@@ -839,6 +841,44 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.close();
         me.setView(master);
+
+        if( list.indexOf('002') != -1 ||
+            list.indexOf('004') != -1 ||
+            list.indexOf('007') != -1 ) {
+            history.back();
+
+//SATOR_ENCERRAR_LEITURA
+//             console.info(master.xdata.data);
+//             var flowprocessingid = master.xdata.get('flowprocessingid');
+//             var flowprocessingstepid = master.xdata.get('id');
+//             var flowstepstatus = '003'; // etapa
+//             var flowstatus = 'A';  // fluxo
+//             var isactive = 0;      // action
+//             var statusbox = '004'; // bloqueado (Kit)
+//             var material = '';        // Status
+
+            // Ext.Ajax.request({
+            //     scope: me,
+            //     url: store.getUrl(),
+            //     params: {
+            //         action: 'delete',
+            //         rows: Ext.encode({id: record.get('id')})
+            //     },
+            //     success: function(response, opts) {
+            //         store.remove(record);
+            //     }
+            // });
+
+            // var flow = Ext.getStore('flowprocessing');
+            //
+            // flow.getAt(0).set('flowstatus','A');
+            // flow.sync({
+            //     callback: function () {
+            //         history.back();
+            //     }
+            // });
+        }
+
     },
 
     callSATOR_INFORMAR_INSUMOS: function () {
