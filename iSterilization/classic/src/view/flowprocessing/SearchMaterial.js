@@ -32,6 +32,9 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             name: 'name',
             type: 'auto'
         }, {
+            name: 'version',
+            type: 'int'
+        }, {
             name: 'description',
             type: 'auto'
         }, {
@@ -113,7 +116,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
         me.setListeners({
             expand: function (field, eOpts) {
                 
-                if(field.getStore().getCount()) {
+                if(field.getStore().getCount() === 0) {
                     field.picker.getSelectionModel().select(0);
                     field.fireEvent('nextfield',field,eOpts);
                 }

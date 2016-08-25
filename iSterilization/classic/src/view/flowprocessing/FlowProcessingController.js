@@ -53,7 +53,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             view = me.getView();
 
-        if (e.getKey() === e.ENTER) {
+        if ([e.ENTER].indexOf(e.getKey()) != -1) {
             console.info(e.getKey());
         }
     },
