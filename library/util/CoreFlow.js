@@ -323,7 +323,7 @@ Ext.define( 'Smart.util.CoreFlow', {
                         var exceptiondo = (targetLinks.length >= 2);
                         var read = (flag && ((flag.indexOf('001') != -1) || (flag.indexOf('019') != -1)));
 
-                        model.set('exceptiondo', exceptiondo ? 1 : 0);
+                        //model.set('exceptiondo', exceptiondo ? 1 : 0);
 
                         Ext.each(sourceLinks,function(link) {
                             link.attr('.marker-target/fill', read ? (exceptionby ? '#BDFC00' : '#7A7EE9') : '#4b4a67');
