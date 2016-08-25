@@ -1057,8 +1057,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
 
-        console.info(view.xdata.data);
-
 		/**
           * - Verificar é Kit ?
           *      Não é Kit,
@@ -1177,7 +1175,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Controles para Processamento e Leitura
      */
-
     onChangedMaterial: function (store, eOpts) {
         var me = this,
             count = 0,
