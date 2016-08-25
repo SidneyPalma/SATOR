@@ -240,6 +240,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.flowtype = flowtype ? flowtype : 'flowopen';
             this.down('textfield[name=usercode]').focus(false,200);
         });
+
+        view.searchToogle();
     },
 
     onSelectUserCode: function (win,field,eOpts) {
@@ -537,12 +539,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 view.close();
 
-                Ext.getStore('flowprocessing').setParams({
-                    method: 'selectDashFlow',
-                    dateof: Ext.util.Format.date(date,'Y-m-d')
+                Ext.getStore('flowprocessingstepaction').setParams({
+                    method: 'selectArea',
+                    query: Smart.workstation.areasid
                 }).load();
 
-                Ext.getStore('flowprocessingstep').removeAll();
+                // Ext.getStore('flowprocessing').setParams({
+                //     method: 'selectDashFlow',
+                //     dateof: Ext.util.Format.date(date,'Y-m-d')
+                // }).load();
+                //
+                // Ext.getStore('flowprocessingstep').removeAll();
             }
         });
     },
