@@ -890,7 +890,9 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
         store.removeAll();
 
         Ext.each(cells, function(item) {
-            var exceptiondo = item.get('exceptiondo');
+            var targetLinks = graph.getConnectedLinks(item, { outbound : true });
+            // var exceptiondo = item.get('exceptiondo');
+            var exceptiondo = (targetLinks.length >= 2) ? 1 : 0;
             var isAreas = areas.indexOf(item.get('type')) != -1;
             var isBigger = steplevel <= parseInt(item.get('steplevel'));
             var isNumber = (Ext.isNumber(exceptiondo) && (parseInt(exceptiondo) == 1));
