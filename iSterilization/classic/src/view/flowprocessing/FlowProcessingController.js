@@ -542,13 +542,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     method: 'selectArea',
                     query: Smart.workstation.areasid
                 }).load();
-
-                // Ext.getStore('flowprocessing').setParams({
-                //     method: 'selectDashFlow',
-                //     dateof: Ext.util.Format.date(date,'Y-m-d')
-                // }).load();
-                //
-                // Ext.getStore('flowprocessingstep').removeAll();
             }
         });
     },
