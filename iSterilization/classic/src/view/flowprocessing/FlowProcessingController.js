@@ -134,8 +134,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_PROCESSAR_ITENS: function () {
-        var me = this,
-            view = me.getView();
+        var me = this;
 
         me.flowProcessingOpen('flowopen');
     },

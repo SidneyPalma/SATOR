@@ -255,7 +255,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     $flow->getStore()->update();
 
                     // update flowprocessingstep
-                    $date = date("Y-m-d H:i");
+                    $date = date("Ymd H:i:s");
                     $step->getStore()->getModel()->set('id',$id);
                     $step->getStore()->getModel()->set('datestart',$date);
                     $step->getStore()->getModel()->set('flowstepstatus','001');
@@ -347,7 +347,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $step = new \iSterilization\Coach\flowprocessingstep();
         $message = new \iSterilization\Coach\flowprocessingstepmessage();
 
-        $date = date("Y-m-d H:i");
+        $date = date("Ymd H:i:s");
         $step->getStore()->getModel()->set('id',$flowprocessingstepid);
         $step->getStore()->getModel()->set('username',$username);
         $step->getStore()->getModel()->set('datestart',$date);
