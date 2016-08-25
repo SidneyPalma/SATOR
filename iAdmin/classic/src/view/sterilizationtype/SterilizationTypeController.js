@@ -1030,7 +1030,7 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             grid.getStore().each(function (result) {
                 item.push(result.data);
             });
-            area.set('exceptionof',Ext.encode(item));
+            area.set('exceptiondo',Ext.encode(item));
 
             elementname.getStore().each(function (result) {
                 list.push(result.data);
@@ -1044,7 +1044,6 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             area = [],
             view = me.getView(),
             graph = view.graph,
-
             store = view.down('gridpanel').getStore(),
             checkboxgroup = view.down('checkboxgroup'),
             record = view.down('combobox[name=elementname]').foundRecord();
@@ -1054,8 +1053,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             cell.set('flowchoice',newValue.flowchoice);
             cell.set('flowbreach',newValue.flowbreach);
 
-            store.each(function (record) {
-                area.push(record.data);
+            store.each(function (item) {
+                area.push(item.data);
             });
 
             cell.set('exceptiondo',Ext.encode(area));
