@@ -90,23 +90,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDash', {
                         listeners: {
                             select: 'selectDatePicker'
                         }
-                    }, {
-                        xtype: 'segmentedbutton',
-                        vertical: true,
-                        allowToggle: false,
-                        defaults: {
-                            height: 44,
-                            scale: 'large',
-                            iconAlign: 'left',
-                            textAlign: 'center',
-                            showSmartTheme: 'green'
-                        },
-                        items: [
-                            {
-                                text: 'Iniciar Nova Leitura',
-                                handler: 'flowProcessingRead'
-                            }
-                        ]
+                    // }, {
+                    //     xtype: 'segmentedbutton',
+                    //     vertical: true,
+                    //     allowToggle: false,
+                    //     defaults: {
+                    //         height: 44,
+                    //         scale: 'large',
+                    //         iconAlign: 'left',
+                    //         textAlign: 'center',
+                    //         showSmartTheme: 'green'
+                    //     },
+                    //     items: [
+                    //         {
+                    //             text: 'Iniciar Nova Leitura',
+                    //             handler: 'flowProcessingRead'
+                    //         }
+                    //     ]
                     }, {
                         xtype: 'fieldcontainer',
                         margin: '10 0 0 0',

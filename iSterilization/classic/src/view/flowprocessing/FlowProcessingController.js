@@ -111,7 +111,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             value = field.getValue();
 
         field.reset();
-console.info(value);
+
         if(value && value.length != 0) {
             if(value.indexOf('SATOR') != -1) {
                 me.areaProtocol(value);
@@ -128,14 +128,13 @@ console.info(value);
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
             default:
-                me.setMessageText('MSG_PROTOCOL_ERROR');
+                Smart.Msg.showToast('Protocolo Inválido para esta área');
         }
 
     },
 
     callSATOR_PROCESSAR_ITENS: function () {
-        var me = this,
-            view = me.getView();
+        var me = this;
 
         me.flowProcessingOpen('flowopen');
     },
@@ -240,6 +239,8 @@ console.info(value);
             this.flowtype = flowtype ? flowtype : 'flowopen';
             this.down('textfield[name=usercode]').focus(false,200);
         });
+
+        view.searchToogle();
     },
 
     onSelectUserCode: function (win,field,eOpts) {
@@ -537,12 +538,10 @@ console.info(value);
 
                 view.close();
 
-                Ext.getStore('flowprocessing').setParams({
-                    method: 'selectDashFlow',
-                    dateof: Ext.util.Format.date(date,'Y-m-d')
+                Ext.getStore('flowprocessingstepaction').setParams({
+                    method: 'selectArea',
+                    query: Smart.workstation.areasid
                 }).load();
-
-                Ext.getStore('flowprocessingstep').removeAll();
             }
         });
     },
@@ -1058,8 +1057,6 @@ console.info(value);
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
 
-        console.info(view.xdata.data);
-
 		/**
           * - Verificar é Kit ?
           *      Não é Kit,
@@ -1178,7 +1175,6 @@ console.info(value);
     /**
      * Controles para Processamento e Leitura
      */
-
     onChangedMaterial: function (store, eOpts) {
         var me = this,
             count = 0,

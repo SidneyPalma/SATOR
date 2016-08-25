@@ -45,12 +45,6 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $target;
 
     /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
-     */
-    private $useppe;
-
-    /**
      * @Policy {"nullable":true, "length":80}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -69,13 +63,13 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $elementname;
 
     /**
-     * @Policy {"nullable":true}
+     * @Policy {"nullable":true, "length":0}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $stepflaglist;
 
     /**
-     * @Policy {"nullable":true}
+     * @Policy {"nullable":true, "length":0}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $stepsettings;
@@ -93,28 +87,52 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $equipmentid;
 
     /**
-     * @Policy {"nullable":true, "length":3}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"000"}
+     * @Policy {"nullable":false, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"'000'"}
      */
     private $flowstepstatus;
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,flowstepstatus"}
-     */
-    private $flowstepstatusdescription;
-
-    /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"date", "policy":true, "logallow":true, "default":""}
      */
     private $datestart;
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"date", "policy":true, "logallow":true, "default":""}
      */
     private $datefinal;
+
+    /**
+     * @Policy {"nullable":true, "length":0}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $exceptionby;
+
+    /**
+     * @Policy {"nullable":true, "length":0}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $exceptiondo;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     */
+    private $useppe;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     */
+    private $flowchoice;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     */
+    private $flowbreach;
 
     /**
      * @return type integer
@@ -209,22 +227,6 @@ class flowprocessingstep extends \Smart\Data\Model {
      */
     public function setTarget($target) {
         $this->target = $target;
-        return $this;
-    }
-
-    /**
-     * @return type boolean
-     */
-    public function getUseppe() {
-        return $this->useppe;
-    }
-
-    /**
-     * @param type $useppe
-     * @return \iAdmin\Model\flowprocessingstep
-     */
-    public function setUseppe($useppe) {
-        $this->useppe = $useppe;
         return $this;
     }
 
@@ -357,7 +359,7 @@ class flowprocessingstep extends \Smart\Data\Model {
     }
 
     /**
-     * @return type string
+     * @return type date
      */
     public function getDatestart() {
         return $this->datestart;
@@ -373,7 +375,7 @@ class flowprocessingstep extends \Smart\Data\Model {
     }
 
     /**
-     * @return type string
+     * @return type date
      */
     public function getDatefinal() {
         return $this->datefinal;
@@ -385,6 +387,86 @@ class flowprocessingstep extends \Smart\Data\Model {
      */
     public function setDatefinal($datefinal) {
         $this->datefinal = $datefinal;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getExceptionby() {
+        return $this->exceptionby;
+    }
+
+    /**
+     * @param type $exceptionby
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setExceptionby($exceptionby) {
+        $this->exceptionby = $exceptionby;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getExceptiondo() {
+        return $this->exceptiondo;
+    }
+
+    /**
+     * @param type $exceptiondo
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setExceptiondo($exceptiondo) {
+        $this->exceptiondo = $exceptiondo;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getUseppe() {
+        return $this->useppe;
+    }
+
+    /**
+     * @param type $useppe
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setUseppe($useppe) {
+        $this->useppe = $useppe;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getFlowchoice() {
+        return $this->flowchoice;
+    }
+
+    /**
+     * @param type $flowchoice
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setFlowchoice($flowchoice) {
+        $this->flowchoice = $flowchoice;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getFlowbreach() {
+        return $this->flowbreach;
+    }
+
+    /**
+     * @param type $flowbreach
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setFlowbreach($flowbreach) {
+        $this->flowbreach = $flowbreach;
         return $this;
     }
 
