@@ -128,7 +128,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
             default:
-                me.setMessageText('MSG_PROTOCOL_ERROR');
+                Smart.Msg.showToast('Protocolo Inválido para esta área');
         }
 
     },
