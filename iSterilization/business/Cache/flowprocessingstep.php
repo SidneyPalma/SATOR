@@ -141,7 +141,15 @@ class flowprocessingstep extends \Smart\Data\Cache {
                                 for xml path ('')
                             ) ,1,1,''
                         )                
-                )
+                ),
+				originplace = (
+					select top 1
+						a.elementname
+					from
+						flowprocessingstep a
+					where a.flowprocessingid = fps.flowprocessingid
+					  and a.steplevel = fps.steplevel-1
+				)
             from
                 flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
