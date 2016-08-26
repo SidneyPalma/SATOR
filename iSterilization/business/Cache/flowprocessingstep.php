@@ -101,6 +101,8 @@ class flowprocessingstep extends \Smart\Data\Cache {
         $sql = "
             select
                 fps.id,
+                fp.barcode,
+                fp.version,
                 fps.username,
                 fps.datestart,
                 fps.elementname,

@@ -116,7 +116,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
         me.setListeners({
             expand: function (field, eOpts) {
                 
-                if(field.getStore().getCount() === 0) {
+                if(field.getStore().getCount()) {
                     field.picker.getSelectionModel().select(0);
                     field.fireEvent('nextfield',field,eOpts);
                 }
@@ -125,7 +125,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
                 if ([e.ESC].indexOf(e.getKey()) != -1) {
                     field.reset();
                 }
-                if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                if ([e.ENTER].indexOf(e.getKey()) != -1) {
                     var value = field.getRawValue();
                     field.doQuery(value,true,true);
                     e.stopEvent();
