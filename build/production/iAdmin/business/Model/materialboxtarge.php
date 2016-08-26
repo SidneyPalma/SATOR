@@ -33,6 +33,12 @@ class materialboxtarge extends \Smart\Data\Model {
 	private $targecolorname;
 
     /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $targeorderby;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -77,6 +83,22 @@ class materialboxtarge extends \Smart\Data\Model {
      */
     public function setTargecolorid($targecolorid) {
         $this->targecolorid = $targecolorid;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getTargeorderby() {
+        return $this->targeorderby;
+    }
+
+    /**
+     * @param type $targeorderby
+     * @return \iAdmin\Model\materialboxtarge
+     */
+    public function setTargeorderby($targeorderby) {
+        $this->targeorderby = $targeorderby;
         return $this;
     }
 

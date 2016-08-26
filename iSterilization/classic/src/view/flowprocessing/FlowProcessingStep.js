@@ -154,14 +154,29 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 itemSelector: 'div.thumb-wrap',
                                 tpl: [
                                     '<tpl for=".">',
+                                    // '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                    // '<div class="thumb-action-{flowstepaction}"></div>',
+                                    // '<span>',
+                                    // '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
+                                    // '</span>',
+                                    // '</div>',
                                     '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                                    '<div class="thumb-action-{flowstepaction}"></div>',
-                                    '<span>',
-                                    '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
-                                    '</span>',
-                                    '</div>',
+                                        '<div style="margin-bottom: 10px;" class="step">',
+                                            '<img class="step-left" src="resources/images/stage/MaterialReader.png">',
+                                            '<div class="step-right">',
+                                                // '<span>',
+                                                '<a style="font-size: 16px; color: #0a2b1d">{flowstepactiondescription}</a>',
+                                                // '</span>',
+                                            '</div>',
+                                        '</div>',
                                     '</tpl>'
                                 ],
+
+                                // <div class="step">
+                                // <img class="step-left" src="iSterilization/resources/images/stage/MaterialReader.png">
+                                // <div class="step-right">OlaMundo</div>
+                                // </div>
+
                                 listeners: {
                                     select: 'onFlowStepSelect',
                                     deselect: 'onFlowStepDeSelect',

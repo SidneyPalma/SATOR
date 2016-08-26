@@ -9,9 +9,9 @@ use Smart\Utils\Session;
 
 class MovimentEnter extends Report {
 
-    private $proxy;
-
     public function preConstruct() {
+        parent::preConstruct();
+
         $this->post = (object) self::decodeUTF8($_REQUEST);
 
         $id = $this->post->id;
@@ -19,8 +19,6 @@ class MovimentEnter extends Report {
         $sizeColumns = array(20,20,20,20,15,15);
         $this->sizeColumns = $this->scaleCalc(array_sum($sizeColumns),intval($this->getInternalW()),$sizeColumns);
         $this->squareWidth = intval($this->getInternalW() / 12);
-
-        $this->proxy = new Proxy(array(Start::getConnnect(), Start::getUserName(), Start::getPassWord()));
 
         $sql = "
             select
@@ -145,10 +143,6 @@ class MovimentEnter extends Report {
         $this->Cell($sw * 2,4, utf8_decode("Lançado por"),'T',0,'C');
         $this->Cell($sw * 2,3, '',0,0,'C');
         $this->Cell($sw * 2,4, utf8_decode("Encerrado por"),'T',1,'C');
-    }
-
-    public function Footer() {
-        $this->loadFooter($this->getInternalW(),false);
     }
 
 }
