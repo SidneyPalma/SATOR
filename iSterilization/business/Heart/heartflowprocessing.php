@@ -161,8 +161,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     public function newFlowView(array $data) {
         $query = self::jsonToObject($data['query']);
 
+        //Gerando BarCode
         $dateof = date("Ym");
-        $pdo = $this->prepare("select dbo.getLeftPad(5,'0',count(*)+1) as newcode  from flowprocessing where convert(varchar(6),dateof,112) = :dateof;");
+        $pdo = $this->prepare("select dbo.getLeftPad(6,'0',count(*)+1) as newcode  from flowprocessing where convert(varchar(6),dateof,112) = :dateof;");
         $pdo->bindValue(":dateof", $dateof, \PDO::PARAM_STR);
         $pdo->execute();
         $rows = $pdo->fetchAll();
@@ -173,6 +174,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $coach = new \iSterilization\Coach\flowprocessing();
 
         $coach->getStore()->getModel()->set('barcode',$barcode);
+        $coach->getStore()->getModel()->set('version',$query->version);
         $coach->getStore()->getModel()->set('areasid',$query->areasid);
         $coach->getStore()->getModel()->set('clientid',$query->clientid);
         $coach->getStore()->getModel()->set('username',$query->username);

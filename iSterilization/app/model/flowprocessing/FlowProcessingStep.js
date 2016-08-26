@@ -55,6 +55,18 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStep', {
         }, {
             name: 'flowstepstatusdescription',
             type: 'auto'
+        }, {
+            name: 'sterilizationtypename',
+            type: 'auto'
+        }, {
+            name: 'sterilizationtypeversion',
+            type: 'auto',
+            convert: function (value, record) {
+                return record.get('sterilizationtypename') + ' v.' + record.get('version');
+            }
+        }, {
+            name: 'originplace',
+            type: 'auto'
         }
     ]
 

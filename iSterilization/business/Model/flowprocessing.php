@@ -58,6 +58,12 @@ class flowprocessing extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $version;
+
+    /**
+     * @Policy {"nullable":true}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $dateto;
@@ -327,6 +333,22 @@ class flowprocessing extends \Smart\Data\Model {
      */
     public function setInstrumentatorid($instrumentatorid) {
         $this->instrumentatorid = $instrumentatorid;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getVersion() {
+        return $this->version;
+    }
+
+    /**
+     * @param type $version
+     * @return \iSterilization\Model\flowprocessing
+     */
+    public function setVersion($version) {
+        $this->version = $version;
         return $this;
     }
 

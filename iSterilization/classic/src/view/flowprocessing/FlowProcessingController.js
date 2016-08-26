@@ -206,8 +206,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('textfield[name=username]').setValue(data.get('username'));
         view.down('textfield[name=areasname]').setValue(data.get('areasname'));
         view.down('textfield[name=clientname]').setValue(data.get('clientname'));
-        view.down('textfield[name=equipmentname]').setValue(data.get('equipmentname'));
-        view.down('textfield[name=sterilizationtypename]').setValue(data.get('sterilizationtypename'));
+        view.down('textfield[name=originplace]').setValue(data.get('originplace'));
+        view.down('textfield[name=sterilizationtypename]').setValue(data.get('sterilizationtypeversion'));
         view.down('textfield[name=priorityleveldescription]').setValue(data.get('priorityleveldescription'));
         view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.get('materialboxname')));
     },
@@ -412,6 +412,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         flow.setValue(record.get('sterilizationtypeid'));
         flow.setRawValue(record.get('sterilizationpriority'));
 
+        view.down('hiddenfield[name=version]').setValue(record.get('version'));
         view.down('hiddenfield[name=prioritylevel]').setValue(record.get('prioritylevel'));
         view.down('hiddenfield[name=materialboxid]').setValue(record.get('materialboxid'));
         view.down('hiddenfield[name=sterilizationtypeid]').setValue(record.get('sterilizationtypeid'));
