@@ -970,13 +970,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     relatarExceptionDo: function () {
         var me = this,
+            list = [],
             view = me.getView(),
             store = view.down('gridpanel').getStore();
 
-        store.each(function(rec) {
-           console.info(rec.data);
+        store.each(function(record) {
+            var element = record.get('element');
+            if(element.length) {
+                var item = Ext.decode(element);
+                list.push({
+                    steplevel: item.steplevel,
+                    elementcode: item.elementcode
+                })
+            }
         });
 
+        console.info(list);
+
+        // SATOR_ENCERRAR_LEITURA
+        if(list.length != store.getCount()) {
+            Smart.Msg.showToast('Favor configurar todas a exceções antes de prosseguir!');
+        }
     },
 
     relatarCycleStatus: function () {
