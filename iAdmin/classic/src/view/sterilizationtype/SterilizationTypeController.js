@@ -977,11 +977,13 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
 
         Ext.each(links, function(link) {
             var item = graph.getCell(link.prop('target/id'));
+
             list.push({
                 id: item.get('id'),
                 areasid: item.get('typeid'),
                 steplevel: item.get('steplevel'),
                 elementcode: item.get('typeid'),
+                elementtype: item.get('type'),
                 elementname: item.get('name'),
                 steppriority: item.get('steppriority'),
                 typelesscode: item.get('typelesscode'),

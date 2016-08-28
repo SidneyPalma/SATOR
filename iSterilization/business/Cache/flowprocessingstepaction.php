@@ -64,6 +64,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						flowprocessingstep a
 					where a.flowprocessingid = fps.flowprocessingid
 					  and a.steplevel = fps.steplevel-1
+					  and a.stepchoice is not null
 				)
             from 
                 flowprocessingstepaction fpsa
