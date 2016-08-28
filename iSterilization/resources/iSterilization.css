@@ -137,16 +137,16 @@
 }
 
 .step:hover {
-    border: 2px solid #BD1550;
+    border: 1px solid #BD1550;
     border-left: 8px solid #BD1550;
     background: rgb(245, 245, 245);
 }
 
 .step {
-    background: rgba(245, 245, 245, .7);
+    background: rgba(245, 245, 245, .3);
     padding: 5px;
     height: 70px;
-    border: 2px solid #454B61;
+    border: 1px solid #454B61;
     border-left: 8px solid #454B61;
     overflow: hidden;
     width: 300px;

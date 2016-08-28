@@ -154,29 +154,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 itemSelector: 'div.thumb-wrap',
                                 tpl: [
                                     '<tpl for=".">',
-                                    // '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                                    // '<div class="thumb-action-{flowstepaction}"></div>',
-                                    // '<span>',
-                                    // '<a style="font-size: 14px;">{flowstepactiondescription}</a>',
-                                    // '</span>',
-                                    // '</div>',
                                     '<div style="margin-bottom: 10px;" class="thumb-wrap">',
                                         '<div style="margin-bottom: 10px;" class="step">',
                                             '<img class="step-left" src="resources/images/stage/MaterialReader.png">',
                                             '<div class="step-right">',
-                                                // '<span>',
-                                                '<a style="font-size: 16px; color: #0a2b1d">{flowstepactiondescription}</a>',
-                                                // '</span>',
+                                                '<div style="font-size: 16px; font-weight: 700; text-align: left;">{flowstepactiondescription}</div>',
+                                                '<div style="font-weight: 700; margin-top: 25px;">',
+                                                    '<div style="text-align: left; float: left; width: 30%;">{timeof}</div>',
+                                                    '<div style="text-align: right; float: right; width: 70%;">{barcode}</div>',
+                                                '</div>',
                                             '</div>',
                                         '</div>',
                                     '</tpl>'
                                 ],
-
-                                // <div class="step">
-                                // <img class="step-left" src="iSterilization/resources/images/stage/MaterialReader.png">
-                                // <div class="step-right">OlaMundo</div>
-                                // </div>
-
                                 listeners: {
                                     select: 'onFlowStepSelect',
                                     deselect: 'onFlowStepDeSelect',

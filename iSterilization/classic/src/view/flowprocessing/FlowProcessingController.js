@@ -613,7 +613,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             readercode: msgItem.readercode,
             readershow: msgItem.readershow,
             readertext: msgItem.readertext,
-            flowprocessingstepid: me.getView().master.xdata.get('id')
+            flowprocessingstepid: me.getView().xdata.get('id')
         });
 
         store.sync({
@@ -644,7 +644,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      */
     onStartReaderView: function (field, e, eOpts) {
         var me = this,
-            value = field.getValue();
+            view = me.getView(),
+            record = view.xdata,
+            value = field.getValue(),
+            stepflaglist = record.get('stepflaglist');
+
+        /**
+         * 017 - Registrar Final de Ciclo de Equipamento
+         */
+        if(stepflaglist.indexOf('017')) {
+            if(record.get('cyclefinal') == null) {
+                me.callSATOR_RELATAR_CYCLE_STATUS('FINAL');
+                return false;
+            }
+        }
 
         field.reset();
 
@@ -727,6 +740,31 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
         store.sync({async: false});
         model.commit();
+        me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_USA_EPI');
+    },
+
+    relatarCycleStatus: function () {
+        var me = this,
+            view = me.getView(),
+            master = view.master,
+            cyclestatus = ['SATOR_SIM','SATOR_NAO'],
+            store = Ext.getStore('flowprocessingstep'),
+            model = store.getAt(0),
+            value = view.down('textfield[name=cyclestatus]').getValue();
+
+        if(!value || value.length == 0 || cyclestatus.indexOf(value) == -1) {
+            return false;
+        }
+
+        if(value.indexOf('SATOR_SIM') != -1) {
+            model.set('cyclestart','START');
+            store.sync({async: false});
+            model.commit();
+            me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_CYCLE_STATUS');
+        }
+
+        view.close();
+        me.setView(master);
     },
 
     callSATOR_INICIAR_LEITURA: function () {
@@ -768,9 +806,47 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      */
     callSATOR_ENCERRAR_LEITURA: function () {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            record = view.xdata,
+            exceptionby = record.get('exceptionby'),
+            stepflaglist = record.get('stepflaglist');
 
         if(!me.checkUnconformities()) {
+            return false;
+        }
+
+        console.warn(record.data);
+
+        /**
+         * Fazer checagens de encerramento
+         */
+
+        /**
+         * 011 - Exige uso de EPI na Leitura de Entrada
+         */
+        if(stepflaglist.indexOf('011')) {
+            if(record.get('useppe') == null) {
+                me.callSATOR_RELATAR_USA_EPI();
+                return false;
+            }
+        }
+
+        /**
+         * 016 - Registrar Inicio de Ciclo de Equipamento
+         */
+        if(stepflaglist.indexOf('016')) {
+            if(record.get('cyclestart') == null) {
+                me.callSATOR_RELATAR_CYCLE_STATUS('START');
+                return false;
+            }
+        }
+
+        /**
+         * Registrar exceções
+         */
+        if(exceptionby != null) {
+            console.info(Ext.decode(exceptionby));
+            console.info(Ext.decode(exceptiondo));
             return false;
         }
 
@@ -840,46 +916,43 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             item.commit();
         });
 
-        view.close();
-        me.setView(master);
-
         if( list.indexOf('002') != -1 ||
             list.indexOf('004') != -1 ||
             list.indexOf('007') != -1 ) {
-            history.back();
 
-//SATOR_ENCERRAR_LEITURA
-//             console.info(master.xdata.data);
-//             var flowprocessingid = master.xdata.get('flowprocessingid');
-//             var flowprocessingstepid = master.xdata.get('id');
-//             var flowstepstatus = '003'; // etapa
-//             var flowstatus = 'A';  // fluxo
-//             var isactive = 0;      // action
-//             var statusbox = '004'; // bloqueado (Kit)
-//             var material = '';        // Status
-
-            // Ext.Ajax.request({
-            //     scope: me,
-            //     url: store.getUrl(),
-            //     params: {
-            //         action: 'delete',
-            //         rows: Ext.encode({id: record.get('id')})
-            //     },
-            //     success: function(response, opts) {
-            //         store.remove(record);
-            //     }
-            // });
-
-            // var flow = Ext.getStore('flowprocessing');
-            //
-            // flow.getAt(0).set('flowstatus','A');
-            // flow.sync({
-            //     callback: function () {
-            //         history.back();
-            //     }
-            // });
+            Ext.Ajax.request({
+                scope: me,
+                url: me.url,
+                params: {
+                    action: 'select',
+                    method: 'setUnconformities',
+                    params: Ext.encode(master.xdata.data)
+                },
+                success: function(response, opts) {
+                    view.close();
+                    me.setView(master);
+                    history.back();
+                }
+            });
         }
+    },
 
+    callSATOR_RELATAR_CYCLE_STATUS: function (status) {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
+            this.master = view;
+            this.down('hiddenfield[name=cyclestatus]').setValue(status);
+            switch(status) {
+                case 'START':
+                    this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Inicio de Ciclo de Equipamento');
+                    break;
+                case 'FINAL':
+                    this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Final de Ciclo de Equipamento');
+                    break;
+            }
+        });
     },
 
     callSATOR_INFORMAR_INSUMOS: function () {

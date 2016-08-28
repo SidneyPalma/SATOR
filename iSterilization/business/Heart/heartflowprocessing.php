@@ -392,6 +392,19 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function setUnconformities(array $data) {
+        // var flowprocessingid = master.xdata.get('flowprocessingid');
+        // var flowprocessingstepid = master.xdata.get('id');
+        // var flowstepstatus = '003'; // etapa
+        // var flowstatus = 'A';  // fluxo
+        // var isactive = 0;      // action
+        // var statusbox = '004'; // bloqueado (Kit)
+        // var material = '';        // Status
+        // var datefinal
+        // var cyclestart
+        // var cyclefinal
+    }
+
     /**
      * Select
      */

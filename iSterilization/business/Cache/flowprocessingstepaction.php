@@ -46,16 +46,22 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         $sql = "
             select
                 fpsa.id,
+                fp.dateof,
+                fp.barcode,
                 fps.username,
+                fp.patientname,
                 fps.elementname,
                 fpsa.flowstepaction,
                 fps.flowprocessingid,
                 fpsa.flowprocessingstepid,
+                substring(convert(varchar(16), fp.dateof, 121),12,5) as timeof,
                 dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription
             from 
                 flowprocessingstepaction fpsa
-                inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
-            where fps.areasid = :areasid";
+                inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid and fps.areasid = :areasid )
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+            where fpsa.isactive = 1
+            order by fp.dateof desc";
 
         try {
             $pdo = $proxy->prepare($sql);
