@@ -917,6 +917,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         area.push({
                             id: item.id,
                             steplevel: item.steplevel,
+                            elementtype: item.elementtype,
                             elementcode: item.elementcode,
                             elementname: item.elementname
                         })
@@ -927,6 +928,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         area.push({
                             id: item.id,
                             steplevel: item.steplevel,
+                            elementtype: item.elementtype,
                             elementcode: item.elementcode,
                             elementname: item.elementname
                         })
@@ -963,6 +965,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         data.set('element',Ext.encode({
             stepchoice: flowexception,
             steplevel: record.get('steplevel'),
+            elementtype: record.get('elementtype'),
             elementcode: record.get('elementcode'),
             elementname: record.get('elementname')
         }));
@@ -982,16 +985,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             if(element.length) {
                 var item = Ext.decode(element);
                 list.push({
-                    id: master.xdata.get('id'),
                     steplevel: item.steplevel,
                     stepchoice: item.stepchoice,
-                    elementcode: item.elementcode,
-                    flowprocessingid: master.xdata.get('flowprocessingid')
+                    elementtype: item.elementtype,
+                    elementcode: item.elementcode
                 })
             }
         });
 
-        // SATOR_ENCERRAR_LEITURA
+        // SATOR_ENCERRAR_LEITURA SATOR_PROCESSAR_ITENS
         if(list.length != store.getCount()) {
             Smart.Msg.showToast('Favor configurar todas a exceções antes de prosseguir!');
             return false;
@@ -1003,7 +1005,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             params: {
                 action: 'select',
                 method: 'setExceptionDo',
-                params: Ext.encode(list)
+                params: Ext.encode(list),
+                query: master.xdata.get('id'),
+                flowprocessingid: master.xdata.get('flowprocessingid'),
+                flowprocessingstepactionid: master.xdata.get('flowprocessingstepactionid')
             },
             callback: function (options, success, response) {
             }
