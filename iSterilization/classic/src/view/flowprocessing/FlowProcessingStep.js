@@ -151,10 +151,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 multiSelect: false,
                                 name: 'flowprocessingstepaction',
                                 store: 'flowprocessingstepaction',
-                                itemSelector: 'div.thumb-wrap',
+                                itemSelector: 'div.step',
                                 tpl: [
                                     '<tpl for=".">',
-                                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
                                         '<div style="margin-bottom: 10px;" class="step">',
                                             '<img class="step-left" src="resources/images/stage/MaterialReader.png">',
                                             '<div class="step-right" style="font-weight: 700;">',
