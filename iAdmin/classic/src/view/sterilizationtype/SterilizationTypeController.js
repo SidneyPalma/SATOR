@@ -980,6 +980,8 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeController', {
             list.push({
                 id: item.get('id'),
                 areasid: item.get('typeid'),
+                steplevel: item.get('steplevel'),
+                elementcode: item.get('typeid'),
                 elementname: item.get('name'),
                 steppriority: item.get('steppriority'),
                 typelesscode: item.get('typelesscode'),

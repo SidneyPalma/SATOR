@@ -392,6 +392,45 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function getExceptionDo(array $data) {
+        $typeid = self::jsonToArray($data['typeid']);
+        $flowprocessingid = $data['flowprocessingid'];
+        $steplevel = self::jsonToArray($data['steplevel']);
+
+        $typeid = implode(",", $typeid);
+        $steplevel = implode(",", $steplevel);
+
+        $sql = "
+            select
+                a.id,
+                a.name, 
+                fps.flowbreach,
+                fps.flowchoice,
+                fps.exceptiondo
+            from
+                flowprocessingstep fps
+                inner join areas a on ( a.id = fps.areasid )
+            where fps.flowprocessingid = :flowprocessingid
+              and fps.steplevel in ({$steplevel})
+              and fps.areasid in ({$typeid})";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function setUnconformities(array $data) {
         // var flowprocessingid = master.xdata.get('flowprocessingid');
         // var flowprocessingstepid = master.xdata.get('id');

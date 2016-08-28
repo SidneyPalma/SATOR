@@ -577,6 +577,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     setMessageText: function (msgType,protocol) {
         var me = this,
+            view = me.getView(),
+            master = view.master ? view.master : view,
             store = Ext.getStore('flowprocessingstepmessage'),
             msgText = {
                 MSG_DUPLICATED: {
@@ -613,7 +615,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             readercode: msgItem.readercode,
             readershow: msgItem.readershow,
             readertext: msgItem.readertext,
-            flowprocessingstepid: me.getView().xdata.get('id')
+            flowprocessingstepid: master.xdata.get('id')
         });
 
         store.sync({
@@ -649,17 +651,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             value = field.getValue(),
             stepflaglist = record.get('stepflaglist');
 
+        field.reset();
+
         /**
          * 017 - Registrar Final de Ciclo de Equipamento
          */
-        if(stepflaglist.indexOf('017')) {
+        if(stepflaglist.indexOf('017') != -1) {
             if(record.get('cyclefinal') == null) {
                 me.callSATOR_RELATAR_CYCLE_STATUS('FINAL');
                 return false;
             }
         }
-
-        field.reset();
 
         if(value && value.length != 0) {
             // Sim é protocolo .. seguir workProtocol
@@ -743,30 +745,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_USA_EPI');
     },
 
-    relatarCycleStatus: function () {
-        var me = this,
-            view = me.getView(),
-            master = view.master,
-            cyclestatus = ['SATOR_SIM','SATOR_NAO'],
-            store = Ext.getStore('flowprocessingstep'),
-            model = store.getAt(0),
-            value = view.down('textfield[name=cyclestatus]').getValue();
-
-        if(!value || value.length == 0 || cyclestatus.indexOf(value) == -1) {
-            return false;
-        }
-
-        if(value.indexOf('SATOR_SIM') != -1) {
-            model.set('cyclestart','START');
-            store.sync({async: false});
-            model.commit();
-            me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_CYCLE_STATUS');
-        }
-
-        view.close();
-        me.setView(master);
-    },
-
     callSATOR_INICIAR_LEITURA: function () {
         var me = this;
         me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
@@ -824,7 +802,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * 011 - Exige uso de EPI na Leitura de Entrada
          */
-        if(stepflaglist.indexOf('011')) {
+        if(stepflaglist.indexOf('011') != -1) {
             if(record.get('useppe') == null) {
                 me.callSATOR_RELATAR_USA_EPI();
                 return false;
@@ -834,7 +812,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * 016 - Registrar Inicio de Ciclo de Equipamento
          */
-        if(stepflaglist.indexOf('016')) {
+        if(stepflaglist.indexOf('016') != -1) {
             if(record.get('cyclestart') == null) {
                 me.callSATOR_RELATAR_CYCLE_STATUS('START');
                 return false;
@@ -845,14 +823,184 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Registrar exceções
          */
         if(exceptionby != null) {
-            console.info(Ext.decode(exceptionby));
-            console.info(Ext.decode(exceptiondo));
+            me.relatarExceptionBy(Ext.decode(exceptionby));
             return false;
         }
 
         Ext.widget('call_UNCONFORMITIES').show(null,function () {
             this.master = view;
         });
+    },
+
+    relatarExceptionBy: function (exceptionby) {
+        var me = this,
+            list = [],
+            typeid = [],
+            steplevel = [],
+            view = me.getView(),
+            record = view.xdata;
+
+        Ext.each(exceptionby,function (item) {
+            typeid.push(item.typeid);
+            steplevel.push(item.steplevel);
+        });
+        
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'getExceptionDo',
+                typeid: Ext.encode(typeid),
+                steplevel: Ext.encode(steplevel),
+                flowprocessingid: record.get('flowprocessingid')
+            },
+            callback: function (options, success, response) {
+                if(success) {
+                    var rows = Ext.decode(response.responseText).rows;
+                    Ext.widget('call_SATOR_RELATAR_EXCEPTION').show(null,function () {
+                        this.master = view;
+                        Ext.each(rows,function (item) {
+                            item.element = '';
+                            item.flowexception = 0;
+                            list.push(item);
+                        });
+                        this.down('gridpanel').getStore().add(list);
+                        this.down('gridpanel').getSelectionModel().select(0);
+                    });
+                }
+            }
+        });
+    },
+
+    onExceptionArea: function ( rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            exceptiondo = Ext.decode(record.get('exceptiondo')),
+            elementname = view.down('combobox[name=elementname]'),
+            record = view.down('gridpanel').getSelectionModel().getSelection()[0];
+
+        elementname.reset();
+        elementname.setReadColor(true);
+        elementname.getStore().removeAll();
+
+        view.down('radiogroup').reset();
+        view.down('radiogroup').setValue({
+            flowexception: parseInt(record.get('flowexception'))
+        });
+    },
+    // SATOR_ENCERRAR_LEITURA
+    onChangeTypeException: function (field,newValue,OldValue,eOpts) {
+        var me = this,
+            area = [],
+            view = me.getView(),
+            flowexception = newValue.flowexception,
+            elementname = view.down('combobox[name=elementname]'),
+            record = view.down('gridpanel').getSelectionModel().getSelection()[0],
+            exceptiondo = Ext.decode(record.get('exceptiondo'));
+
+        if(!record.get('flowexception')) {
+            record.set('flowexception',flowexception);
+            record.commit();
+        }
+
+        console.info(record.get('element'));
+
+        elementname.reset();
+        elementname.setReadColor(true);
+        elementname.getStore().removeAll();
+
+        Ext.each(exceptiondo,function (item) {
+            switch(flowexception) {
+                case 1:
+                    if(item.typelesscode == 'A') {
+                        area.push({
+                            id: item.id,
+                            steplevel: item.steplevel,
+                            elementcode: item.elementcode,
+                            elementname: item.elementname
+                        })
+                    }
+                    break;
+                case 2:
+                    if(item.typelesscode == 'Q') {
+                        area.push({
+                            id: item.id,
+                            steplevel: item.steplevel,
+                            elementcode: item.elementcode,
+                            elementname: item.elementname
+                        })
+                    }
+                    break;
+            }
+        });
+
+        if(area.length == 0) {
+            return false;
+        }
+
+        elementname.setReadColor(false);
+        elementname.setStore(
+            Ext.create('Ext.data.Store', {
+                fields: [ 'id', 'steplevel', 'elementcode', 'elementname' ],
+                data: area
+            })
+        );
+
+        if(record.get('element').length) {
+            var element = Ext.decode(record.get('element'));
+            elementname.setValue(element.elementcode);
+            elementname.setRawValue(element.elementname);
+        }
+    },
+
+    onSelectElementName: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            data = view.down('gridpanel').getSelectionModel().getSelection()[0];
+
+        data.set('element',Ext.encode({
+            steplevel: record.get('steplevel'),
+            elementcode: record.get('elementcode'),
+            elementname: record.get('elementname')
+        }));
+
+        data.commit();
+    },
+
+    relatarExceptionDo: function () {
+        var me = this,
+            view = me.getView(),
+            store = view.down('gridpanel').getStore();
+
+        store.each(function(rec) {
+           console.info(rec.data);
+        });
+
+    },
+
+    relatarCycleStatus: function () {
+        var me = this,
+            view = me.getView(),
+            master = view.master,
+            cyclestatus = ['SATOR_SIM','SATOR_NAO'],
+            store = Ext.getStore('flowprocessingstep'),
+            model = store.getAt(0),
+            value = view.down('textfield[name=cyclestatus]').getValue();
+
+        if(!value || value.length == 0 || cyclestatus.indexOf(value) == -1) {
+            return false;
+        }
+
+        if(value.indexOf('SATOR_SIM') != -1) {
+            model.set('cyclestart','START');
+            store.sync({async: false});
+            model.commit();
+            me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_CYCLE_STATUS');
+        }
+
+        view.close();
+        me.setView(master);
     },
 
     checkUnconformities: function () {
@@ -943,6 +1091,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
             this.master = view;
+            this.down('textfield[name=cyclestatus]').focus(false,200);
             this.down('hiddenfield[name=cyclestatus]').setValue(status);
             switch(status) {
                 case 'START':

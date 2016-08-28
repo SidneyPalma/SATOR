@@ -139,7 +139,7 @@
 .step:hover {
     border: 1px solid #BD1550;
     border-left: 8px solid #BD1550;
-    background: rgb(237, 213, 0);
+    background: rgba(237, 213, 0, .7);
 }
 
 .step {
