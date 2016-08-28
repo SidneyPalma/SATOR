@@ -873,9 +873,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    onExceptionArea: function ( rowModel, record, index, eOpts) {
+    onSelectExceptionArea: function ( rowModel, record, index, eOpts) {
         var me = this,
             view = me.getView(),
+            radiogroup = view.down('radiogroup'),
             exceptiondo = Ext.decode(record.get('exceptiondo')),
             elementname = view.down('combobox[name=elementname]'),
             record = view.down('gridpanel').getSelectionModel().getSelection()[0];
@@ -884,8 +885,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         elementname.setReadColor(true);
         elementname.getStore().removeAll();
 
-        view.down('radiogroup').reset();
-        view.down('radiogroup').setValue({
+        radiogroup.reset();
+        radiogroup.setValue({
             flowexception: parseInt(record.get('flowexception'))
         });
     },
@@ -899,12 +900,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             record = view.down('gridpanel').getSelectionModel().getSelection()[0],
             exceptiondo = Ext.decode(record.get('exceptiondo'));
 
-        if(!record.get('flowexception')) {
+        if((flowexception)&&(flowexception != record.get('flowexception'))) {
+            record.set('element','');
             record.set('flowexception',flowexception);
             record.commit();
         }
-
-        console.info(record.get('element'));
 
         elementname.reset();
         elementname.setReadColor(true);
