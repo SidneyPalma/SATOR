@@ -22,13 +22,13 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":"((0))"}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $steppriority;
 
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":"((0))"}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $steplevel;
 
@@ -88,7 +88,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false, "length":3}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"('000')"}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"'000'"}
      */
     private $flowstepstatus;
 
@@ -135,14 +135,20 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $useppe;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $stepchoice;
+
+    /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"((0))"}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
      */
     private $flowchoice;
 
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"((0))"}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
      */
     private $flowbreach;
 
@@ -155,7 +161,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $id
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setId($id) {
         $this->id = $id;
@@ -171,7 +177,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $flowprocessingid
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setFlowprocessingid($flowprocessingid) {
         $this->flowprocessingid = $flowprocessingid;
@@ -187,7 +193,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $steppriority
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setSteppriority($steppriority) {
         $this->steppriority = $steppriority;
@@ -203,7 +209,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $steplevel
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setSteplevel($steplevel) {
         $this->steplevel = $steplevel;
@@ -219,7 +225,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $source
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setSource($source) {
         $this->source = $source;
@@ -235,7 +241,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $target
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setTarget($target) {
         $this->target = $target;
@@ -251,7 +257,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $username
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setUsername($username) {
         $this->username = $username;
@@ -267,7 +273,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $elementtype
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setElementtype($elementtype) {
         $this->elementtype = $elementtype;
@@ -283,7 +289,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $elementname
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setElementname($elementname) {
         $this->elementname = $elementname;
@@ -299,7 +305,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $stepflaglist
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setStepflaglist($stepflaglist) {
         $this->stepflaglist = $stepflaglist;
@@ -315,7 +321,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $stepsettings
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setStepsettings($stepsettings) {
         $this->stepsettings = $stepsettings;
@@ -331,7 +337,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $areasid
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setAreasid($areasid) {
         $this->areasid = $areasid;
@@ -347,7 +353,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $equipmentid
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setEquipmentid($equipmentid) {
         $this->equipmentid = $equipmentid;
@@ -363,7 +369,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $flowstepstatus
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setFlowstepstatus($flowstepstatus) {
         $this->flowstepstatus = $flowstepstatus;
@@ -379,7 +385,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $datestart
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setDatestart($datestart) {
         $this->datestart = $datestart;
@@ -395,7 +401,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $datefinal
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setDatefinal($datefinal) {
         $this->datefinal = $datefinal;
@@ -411,7 +417,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $cyclestart
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setCyclestart($cyclestart) {
         $this->cyclestart = $cyclestart;
@@ -427,7 +433,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $cyclefinal
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setCyclefinal($cyclefinal) {
         $this->cyclefinal = $cyclefinal;
@@ -443,7 +449,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $exceptionby
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setExceptionby($exceptionby) {
         $this->exceptionby = $exceptionby;
@@ -459,7 +465,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $exceptiondo
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setExceptiondo($exceptiondo) {
         $this->exceptiondo = $exceptiondo;
@@ -475,10 +481,26 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $useppe
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setUseppe($useppe) {
         $this->useppe = $useppe;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getStepchoice() {
+        return $this->stepchoice;
+    }
+
+    /**
+     * @param type $stepchoice
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setStepchoice($stepchoice) {
+        $this->stepchoice = $stepchoice;
         return $this;
     }
 
@@ -491,7 +513,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $flowchoice
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setFlowchoice($flowchoice) {
         $this->flowchoice = $flowchoice;
@@ -507,7 +529,7 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @param type $flowbreach
-     * @return \flowprocessingstep\Model\flowprocessingstep
+     * @return \iSterilization\Model\flowprocessingstep
      */
     public function setFlowbreach($flowbreach) {
         $this->flowbreach = $flowbreach;

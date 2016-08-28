@@ -66,7 +66,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_EXCE
                             }
                         ],
                         listeners: {
-                            select: 'onExceptionArea'
+                            select: 'onSelectExceptionArea'
                         }
                     }, {
                         margin: '20 0 10 0',
