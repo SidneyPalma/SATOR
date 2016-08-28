@@ -53,13 +53,23 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 fps.elementname,
                 fpsa.flowstepaction,
                 fps.flowprocessingid,
+                c.name as clientname,
                 fpsa.flowprocessingstepid,
-                substring(convert(varchar(16), fp.dateof, 121),12,5) as timeof,
-                dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription
+                substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
+                dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription,
+				originplace = (
+					select top 1
+						a.elementname
+					from
+						flowprocessingstep a
+					where a.flowprocessingid = fps.flowprocessingid
+					  and a.steplevel = fps.steplevel-1
+				)
             from 
                 flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid and fps.areasid = :areasid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join client c on ( c.id = fp.clientid )
             where fpsa.isactive = 1
             order by fp.dateof desc";
 

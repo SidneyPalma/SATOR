@@ -40,6 +40,12 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepAction', {
         }, {
             name: 'timeof',
             type: 'auto'
+        }, {
+            name: 'clientname',
+            type: 'auto'
+        }, {
+            name: 'originplace',
+            type: 'auto'
         }
     ]
 
