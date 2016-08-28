@@ -431,6 +431,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function setExceptionDo(array $data) {
+        $params = self::jsonToArray($data['params']);
+
+        print_r($params);
+        exit;
+    }
+
     public function setUnconformities(array $data) {
         // var flowprocessingid = master.xdata.get('flowprocessingid');
         // var flowprocessingstepid = master.xdata.get('id');

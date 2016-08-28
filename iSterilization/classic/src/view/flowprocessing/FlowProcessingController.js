@@ -957,9 +957,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onSelectElementName: function (combo,record,eOpts) {
         var me = this,
             view = me.getView(),
+            flowexception = view.down('radiogroup').getValue().flowexception,
             data = view.down('gridpanel').getSelectionModel().getSelection()[0];
 
         data.set('element',Ext.encode({
+            stepchoice: flowexception,
             steplevel: record.get('steplevel'),
             elementcode: record.get('elementcode'),
             elementname: record.get('elementname')
@@ -972,6 +974,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             list = [],
             view = me.getView(),
+            master = view.master,
             store = view.down('gridpanel').getStore();
 
         store.each(function(record) {
@@ -979,18 +982,32 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             if(element.length) {
                 var item = Ext.decode(element);
                 list.push({
+                    id: master.xdata.get('id'),
                     steplevel: item.steplevel,
-                    elementcode: item.elementcode
+                    stepchoice: item.stepchoice,
+                    elementcode: item.elementcode,
+                    flowprocessingid: master.xdata.get('flowprocessingid')
                 })
             }
         });
 
-        console.info(list);
-
         // SATOR_ENCERRAR_LEITURA
         if(list.length != store.getCount()) {
             Smart.Msg.showToast('Favor configurar todas a exceções antes de prosseguir!');
+            return false;
         }
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'setExceptionDo',
+                params: Ext.encode(list)
+            },
+            callback: function (options, success, response) {
+            }
+        });
     },
 
     relatarCycleStatus: function () {

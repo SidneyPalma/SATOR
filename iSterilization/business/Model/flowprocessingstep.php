@@ -34,12 +34,6 @@ class flowprocessingstep extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
-     */
-    private $stepchoice;
-
-    /**
-     * @Policy {"nullable":true}
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $source;
@@ -141,6 +135,12 @@ class flowprocessingstep extends \Smart\Data\Model {
     private $useppe;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $stepchoice;
+
+    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
      */
@@ -213,22 +213,6 @@ class flowprocessingstep extends \Smart\Data\Model {
      */
     public function setSteplevel($steplevel) {
         $this->steplevel = $steplevel;
-        return $this;
-    }
-
-    /**
-     * @return type boolean
-     */
-    public function getStepchoice() {
-        return $this->stepchoice;
-    }
-
-    /**
-     * @param type $stepchoice
-     * @return \iSterilization\Model\flowprocessingstep
-     */
-    public function setStepchoice($stepchoice) {
-        $this->stepchoice = $stepchoice;
         return $this;
     }
 
@@ -501,6 +485,22 @@ class flowprocessingstep extends \Smart\Data\Model {
      */
     public function setUseppe($useppe) {
         $this->useppe = $useppe;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getStepchoice() {
+        return $this->stepchoice;
+    }
+
+    /**
+     * @param type $stepchoice
+     * @return \iSterilization\Model\flowprocessingstep
+     */
+    public function setStepchoice($stepchoice) {
+        $this->stepchoice = $stepchoice;
         return $this;
     }
 
