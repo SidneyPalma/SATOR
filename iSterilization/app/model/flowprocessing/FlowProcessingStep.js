@@ -26,6 +26,12 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStep', {
             name: 'elementname',
             type: 'auto'
         }, {
+            name: 'exceptionby',
+            type: 'auto'
+        }, {
+            name: 'exceptiondo',
+            type: 'auto'
+        }, {
             name: 'stepflaglist',
             type: 'auto'
         }, {
@@ -49,6 +55,18 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStep', {
         }, {
             name: 'useppe',
             type: 'int'
+        }, {
+            name: 'datestart',
+            type: 'auto'
+        }, {
+            name: 'datefinal',
+            type: 'auto'
+        }, {
+            name: 'cyclestart',
+            type: 'auto'
+        }, {
+            name: 'cyclefinal',
+            type: 'auto'
         }, {
             name: 'flowstepstatus',
             type: 'auto'

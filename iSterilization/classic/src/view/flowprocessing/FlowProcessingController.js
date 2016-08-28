@@ -577,6 +577,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     setMessageText: function (msgType,protocol) {
         var me = this,
+            view = me.getView(),
+            master = view.master ? view.master : view,
             store = Ext.getStore('flowprocessingstepmessage'),
             msgText = {
                 MSG_DUPLICATED: {
@@ -613,7 +615,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             readercode: msgItem.readercode,
             readershow: msgItem.readershow,
             readertext: msgItem.readertext,
-            flowprocessingstepid: me.getView().master.xdata.get('id')
+            flowprocessingstepid: master.xdata.get('id')
         });
 
         store.sync({
@@ -644,9 +646,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      */
     onStartReaderView: function (field, e, eOpts) {
         var me = this,
-            value = field.getValue();
+            view = me.getView(),
+            record = view.xdata,
+            value = field.getValue(),
+            stepflaglist = record.get('stepflaglist');
 
         field.reset();
+
+        /**
+         * 017 - Registrar Final de Ciclo de Equipamento
+         */
+        if(stepflaglist.indexOf('017') != -1) {
+            if(record.get('cyclefinal') == null) {
+                me.callSATOR_RELATAR_CYCLE_STATUS('FINAL');
+                return false;
+            }
+        }
 
         if(value && value.length != 0) {
             // Sim é protocolo .. seguir workProtocol
@@ -727,6 +742,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
         store.sync({async: false});
         model.commit();
+        me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_USA_EPI');
     },
 
     callSATOR_INICIAR_LEITURA: function () {
@@ -768,15 +784,223 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      */
     callSATOR_ENCERRAR_LEITURA: function () {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            record = view.xdata,
+            exceptionby = record.get('exceptionby'),
+            stepflaglist = record.get('stepflaglist');
 
         if(!me.checkUnconformities()) {
+            return false;
+        }
+
+        console.warn(record.data);
+
+        /**
+         * Fazer checagens de encerramento
+         */
+
+        /**
+         * 011 - Exige uso de EPI na Leitura de Entrada
+         */
+        if(stepflaglist.indexOf('011') != -1) {
+            if(record.get('useppe') == null) {
+                me.callSATOR_RELATAR_USA_EPI();
+                return false;
+            }
+        }
+
+        /**
+         * 016 - Registrar Inicio de Ciclo de Equipamento
+         */
+        if(stepflaglist.indexOf('016') != -1) {
+            if(record.get('cyclestart') == null) {
+                me.callSATOR_RELATAR_CYCLE_STATUS('START');
+                return false;
+            }
+        }
+
+        /**
+         * Registrar exceções
+         */
+        if(exceptionby != null) {
+            me.relatarExceptionBy(Ext.decode(exceptionby));
             return false;
         }
 
         Ext.widget('call_UNCONFORMITIES').show(null,function () {
             this.master = view;
         });
+    },
+
+    relatarExceptionBy: function (exceptionby) {
+        var me = this,
+            list = [],
+            typeid = [],
+            steplevel = [],
+            view = me.getView(),
+            record = view.xdata;
+
+        Ext.each(exceptionby,function (item) {
+            typeid.push(item.typeid);
+            steplevel.push(item.steplevel);
+        });
+        
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'getExceptionDo',
+                typeid: Ext.encode(typeid),
+                steplevel: Ext.encode(steplevel),
+                flowprocessingid: record.get('flowprocessingid')
+            },
+            callback: function (options, success, response) {
+                if(success) {
+                    var rows = Ext.decode(response.responseText).rows;
+                    Ext.widget('call_SATOR_RELATAR_EXCEPTION').show(null,function () {
+                        this.master = view;
+                        Ext.each(rows,function (item) {
+                            item.element = '';
+                            item.flowexception = 0;
+                            list.push(item);
+                        });
+                        this.down('gridpanel').getStore().add(list);
+                        this.down('gridpanel').getSelectionModel().select(0);
+                    });
+                }
+            }
+        });
+    },
+
+    onExceptionArea: function ( rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            exceptiondo = Ext.decode(record.get('exceptiondo')),
+            elementname = view.down('combobox[name=elementname]'),
+            record = view.down('gridpanel').getSelectionModel().getSelection()[0];
+
+        elementname.reset();
+        elementname.setReadColor(true);
+        elementname.getStore().removeAll();
+
+        view.down('radiogroup').reset();
+        view.down('radiogroup').setValue({
+            flowexception: parseInt(record.get('flowexception'))
+        });
+    },
+    // SATOR_ENCERRAR_LEITURA
+    onChangeTypeException: function (field,newValue,OldValue,eOpts) {
+        var me = this,
+            area = [],
+            view = me.getView(),
+            flowexception = newValue.flowexception,
+            elementname = view.down('combobox[name=elementname]'),
+            record = view.down('gridpanel').getSelectionModel().getSelection()[0],
+            exceptiondo = Ext.decode(record.get('exceptiondo'));
+
+        if(!record.get('flowexception')) {
+            record.set('flowexception',flowexception);
+            record.commit();
+        }
+
+        console.info(record.get('element'));
+
+        elementname.reset();
+        elementname.setReadColor(true);
+        elementname.getStore().removeAll();
+
+        Ext.each(exceptiondo,function (item) {
+            switch(flowexception) {
+                case 1:
+                    if(item.typelesscode == 'A') {
+                        area.push({
+                            id: item.id,
+                            steplevel: item.steplevel,
+                            elementcode: item.elementcode,
+                            elementname: item.elementname
+                        })
+                    }
+                    break;
+                case 2:
+                    if(item.typelesscode == 'Q') {
+                        area.push({
+                            id: item.id,
+                            steplevel: item.steplevel,
+                            elementcode: item.elementcode,
+                            elementname: item.elementname
+                        })
+                    }
+                    break;
+            }
+        });
+
+        if(area.length == 0) {
+            return false;
+        }
+
+        elementname.setReadColor(false);
+        elementname.setStore(
+            Ext.create('Ext.data.Store', {
+                fields: [ 'id', 'steplevel', 'elementcode', 'elementname' ],
+                data: area
+            })
+        );
+
+        if(record.get('element').length) {
+            var element = Ext.decode(record.get('element'));
+            elementname.setValue(element.elementcode);
+            elementname.setRawValue(element.elementname);
+        }
+    },
+
+    onSelectElementName: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            data = view.down('gridpanel').getSelectionModel().getSelection()[0];
+
+        data.set('element',Ext.encode({
+            steplevel: record.get('steplevel'),
+            elementcode: record.get('elementcode'),
+            elementname: record.get('elementname')
+        }));
+
+        data.commit();
+    },
+
+    relatarExceptionDo: function () {
+        var me = this,
+            view = me.getView(),
+            store = view.down('gridpanel').getStore();
+
+        store.each(function(rec) {
+           console.info(rec.data);
+        });
+
+    },
+
+    relatarCycleStatus: function () {
+        var me = this,
+            view = me.getView(),
+            master = view.master,
+            cyclestatus = ['SATOR_SIM','SATOR_NAO'],
+            store = Ext.getStore('flowprocessingstep'),
+            model = store.getAt(0),
+            value = view.down('textfield[name=cyclestatus]').getValue();
+
+        if(!value || value.length == 0 || cyclestatus.indexOf(value) == -1) {
+            return false;
+        }
+
+        if(value.indexOf('SATOR_SIM') != -1) {
+            model.set('cyclestart','START');
+            store.sync({async: false});
+            model.commit();
+            me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_CYCLE_STATUS');
+        }
+
+        view.close();
+        me.setView(master);
     },
 
     checkUnconformities: function () {
@@ -840,46 +1064,44 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             item.commit();
         });
 
-        view.close();
-        me.setView(master);
-
         if( list.indexOf('002') != -1 ||
             list.indexOf('004') != -1 ||
             list.indexOf('007') != -1 ) {
-            history.back();
 
-//SATOR_ENCERRAR_LEITURA
-//             console.info(master.xdata.data);
-//             var flowprocessingid = master.xdata.get('flowprocessingid');
-//             var flowprocessingstepid = master.xdata.get('id');
-//             var flowstepstatus = '003'; // etapa
-//             var flowstatus = 'A';  // fluxo
-//             var isactive = 0;      // action
-//             var statusbox = '004'; // bloqueado (Kit)
-//             var material = '';        // Status
-
-            // Ext.Ajax.request({
-            //     scope: me,
-            //     url: store.getUrl(),
-            //     params: {
-            //         action: 'delete',
-            //         rows: Ext.encode({id: record.get('id')})
-            //     },
-            //     success: function(response, opts) {
-            //         store.remove(record);
-            //     }
-            // });
-
-            // var flow = Ext.getStore('flowprocessing');
-            //
-            // flow.getAt(0).set('flowstatus','A');
-            // flow.sync({
-            //     callback: function () {
-            //         history.back();
-            //     }
-            // });
+            Ext.Ajax.request({
+                scope: me,
+                url: me.url,
+                params: {
+                    action: 'select',
+                    method: 'setUnconformities',
+                    params: Ext.encode(master.xdata.data)
+                },
+                success: function(response, opts) {
+                    view.close();
+                    me.setView(master);
+                    history.back();
+                }
+            });
         }
+    },
 
+    callSATOR_RELATAR_CYCLE_STATUS: function (status) {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
+            this.master = view;
+            this.down('textfield[name=cyclestatus]').focus(false,200);
+            this.down('hiddenfield[name=cyclestatus]').setValue(status);
+            switch(status) {
+                case 'START':
+                    this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Inicio de Ciclo de Equipamento');
+                    break;
+                case 'FINAL':
+                    this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Final de Ciclo de Equipamento');
+                    break;
+            }
+        });
     },
 
     callSATOR_INFORMAR_INSUMOS: function () {

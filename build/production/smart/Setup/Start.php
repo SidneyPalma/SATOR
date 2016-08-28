@@ -5,6 +5,7 @@ namespace Smart\Setup;
 class Start {
 
     //http://php.net/manual/pt_BR/timezones.america.php
+
     private static $usr = "sa";
     private static $sch = "dbo";
     private static $pwd = "1844";

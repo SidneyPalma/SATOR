@@ -4,11 +4,14 @@ Ext.define( 'Ext.overrides.form.Label', {
 
     labelAlign: 'top',
     labelSeparator: '',
+    useLabelBold: false,
 
     initComponent: function () {
         var me = this;
 
         me.callParent();
+
+        me.setLabelBold(me.useLabelBold);
 
         me.on({
             afterrender: { fn: 'fnAfterRender', scope: me }
@@ -23,6 +26,20 @@ Ext.define( 'Ext.overrides.form.Label', {
 
         el.on('click', function(){ me.fireEvent('click', me, el, eOpts); }, me);
 
+    },
+
+    /**
+     * Muda o Label para Style Bold
+     *
+     * @param value boolean
+     */
+    setLabelBold: function ( value ) {
+        var me = this,
+            labelBold = 'font-weight: bold;';
+
+        if(value) {
+            me.style = me.style ? (me.style + labelBold) : labelBold;
+        }
     }
 
 });

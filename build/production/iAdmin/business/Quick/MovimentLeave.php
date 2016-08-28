@@ -9,9 +9,9 @@ use Smart\Utils\Session;
 
 class MovimentLeave extends Report {
 
-    private $proxy;
-
     public function preConstruct() {
+        parent::preConstruct();
+
         $this->post = (object) self::decodeUTF8($_REQUEST);
 
         $id = $this->post->id;
@@ -153,10 +153,6 @@ class MovimentLeave extends Report {
         $this->Cell($sw * 2,4, utf8_decode("Lançado por"),'T',0,'C');
         $this->Cell($sw * 2,3, '',0,0,'C');
         $this->Cell($sw * 2,4, utf8_decode("Encerrado por"),'T',1,'C');
-    }
-
-    public function Footer() {
-        $this->loadFooter($this->getInternalW(),false);
     }
 
 }
