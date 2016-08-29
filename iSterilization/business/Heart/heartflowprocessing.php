@@ -403,7 +403,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $sql = "
             select
                 a.id,
-                a.name, 
+                a.name,
+                fps.typechoice,
+                fps.stepchoice,
                 fps.flowbreach,
                 fps.flowchoice,
                 fps.exceptiondo
@@ -438,8 +440,10 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $params = self::jsonToArray($data['params']);
 
-        try {
+//        print_r($params);
+//        exit;
 
+        try {
             $step = new \iSterilization\Coach\flowprocessingstep();
             $action = new \iSterilization\Coach\flowprocessingstepaction();
 
@@ -475,12 +479,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
                 $pdo->execute();
                 unset($pdo);
-
-                // insert flowprocessingstepaction
-//                $action->getStore()->getModel()->set('flowprocessingstepid',$id);
-//                $action->getStore()->getModel()->set('flowstepaction','001');
-//                $action->getStore()->getModel()->set('isactive',1);
-//                $action->getStore()->insert();
             }
 
             $sql = "
@@ -498,20 +496,38 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
+            $newid = $rows[0]['id'];
 
             if(count($rows) != 0) {
                 // insert flowprocessingstepaction
-                $action->getStore()->getModel()->set('flowprocessingstepid',$rows[0]['id']);
+                $action->getStore()->getModel()->set('flowprocessingstepid',$newid);
                 $action->getStore()->getModel()->set('flowstepaction','001');
                 $action->getStore()->getModel()->set('isactive',1);
                 $action->getStore()->insert();
 
                 // update flowprocessingstep
                 $date = date("Ymd H:i:s");
-                $step->getStore()->getModel()->set('id',$rows[0]['id']);
+                $step->getStore()->getModel()->set('id',$newid);
                 $step->getStore()->getModel()->set('datestart',$date);
                 $step->getStore()->getModel()->set('flowstepstatus','001');
                 $step->getStore()->update();
+
+                $sql = "
+                    insert into
+                          flowprocessingstepmaterial
+                          ( flowprocessingstepid, materialid, unconformities, dateof )  
+                    select
+                          {$newid} as flowprocessingstepid,
+                          materialid,
+                          '001' as unconformities,
+                          getdate() dateof
+                    from
+                        flowprocessingstepmaterial
+                    where flowprocessingstepid = :flowprocessingstepid;";
+
+                $pdo = $this->prepare($sql);
+                $pdo->bindValue(":flowprocessingstepid", $id, \PDO::PARAM_INT);
+                $pdo->execute();
             }
 
         } catch ( \PDOException $e ) {

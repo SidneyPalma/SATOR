@@ -54,6 +54,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_EXCE
                         text: 'Áreas com leituras',
                         cls: 'sub-title-label'
                     }, {
+                        height: 160,
                         margin: '10 0 0 0',
                         cls: 'update-grid',
                         xtype: 'gridpanel',

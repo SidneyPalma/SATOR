@@ -64,6 +64,8 @@ class flowprocessingstep extends \Smart\Data\Cache {
                 fps.cyclefinal,
                 fps.datestart,
                 fps.datefinal,
+                fps.typechoice,
+                fps.stepchoice,
                 fps.exceptionby,
                 fps.exceptiondo,   
                 fps.elementname,
