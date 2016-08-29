@@ -49,6 +49,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 fp.dateof,
                 fp.barcode,
                 fps.username,
+                fps.typechoice,
+                fps.stepchoice,
                 fp.patientname,
                 fps.elementname,
                 fpsa.flowstepaction,

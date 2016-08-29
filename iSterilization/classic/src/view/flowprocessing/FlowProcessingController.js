@@ -240,7 +240,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.down('textfield[name=usercode]').focus(false,200);
         });
 
-        view.searchToogle();
+        // view.searchToogle();
     },
 
     onSelectUserCode: function (win,field,eOpts) {
@@ -793,8 +793,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        console.warn(record.data);
-
         /**
          * Fazer checagens de encerramento
          */
@@ -1010,7 +1008,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 flowprocessingid: master.xdata.get('flowprocessingid'),
                 flowprocessingstepactionid: master.xdata.get('flowprocessingstepactionid')
             },
+            // success: function(response, opts) {
+            //     view.close();
+            //     me.setView(master);
+            //     history.back();
+            // }
             callback: function (options, success, response) {
+                if(success) {
+                    view.close();
+                    me.setView(master);
+                    history.back();
+                }
             }
         });
     },
