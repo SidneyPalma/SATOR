@@ -44,6 +44,9 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @areasid int = :areasid;
+
             select
                 fpsa.id,
                 fp.dateof,
@@ -53,27 +56,37 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 fps.stepchoice,
                 fp.patientname,
                 fps.elementname,
-                fpsa.flowstepaction,
+                coalesce(s.flowstepaction,fpsa.flowstepaction) as flowstepaction,
                 fps.flowprocessingid,
                 c.name as clientname,
                 fpsa.flowprocessingstepid,
                 substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
                 dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription,
-				originplace = (
-					select top 1
-						a.elementname
+				o.originplace
+            from 
+                flowprocessingstepaction fpsa
+                inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid and fps.areasid = @areasid )
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join client c on ( c.id = fp.clientid )
+				outer apply (
+					select
+						a.elementname as originplace
 					from
 						flowprocessingstep a
 					where a.flowprocessingid = fps.flowprocessingid
-					  and a.steplevel = fps.steplevel-1
-					  and a.stepchoice is not null
-				)
-            from 
-                flowprocessingstepaction fpsa
-                inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid and fps.areasid = :areasid )
-                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
-                inner join client c on ( c.id = fp.clientid )
+					  and a.id = fps.source
+				) o
+				outer apply (
+					select
+						a.flowstepaction
+					from
+						flowprocessingstepaction a
+					where a.flowprocessingstepid = fps.id
+					  and a.flowstepaction = '002'
+					  and a.isactive = 1
+				) s
             where fpsa.isactive = 1
+			  and fpsa.flowstepaction = '001'
             order by fp.dateof desc";
 
         try {

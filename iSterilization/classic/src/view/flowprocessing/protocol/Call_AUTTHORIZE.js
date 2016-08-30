@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_EPI', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_AUTTHORIZE', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_SATOR_RELATAR_USA_EPI',
+    xtype: 'call_AUTTHORIZE',
 
     requires: [
         'Ext.form.Panel',
@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 450,
+    width: 400,
     modal: true,
     layout: 'fit',
     header: false,
@@ -44,22 +44,20 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
                     {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Uso de EPI'
+                        text: 'Processos pendentes'
                     }, {
-                        margin: '20 0 0 0',
-                        useUpperCase: true,
-                        fieldLabel: 'Relatar uso de EPI (Sim/Não)',
-                        xtype: 'textfield',
-                        name: 'userprotected',
-                        listeners: {
-                            specialkey: function (field, e, eOpts) {
-                                if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                    var me = this,
-                                        button = me.up('window').down('button[name=confirm]');
-                                    button.fireEvent('click', button);
-                                }
+                        height: 400,
+                        margin: '10 0 0 0',
+                        cls: 'update-grid',
+                        xtype: 'gridpanel',
+                        store: Ext.create('Ext.data.Store'),
+                        columns: [
+                            {
+                                flex: 1,
+                                sortable: false,
+                                dataIndex: 'name'
                             }
-                        }
+                        ]
                     }
                 ]
             }
@@ -75,7 +73,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'relatarUsaEPI'
+                click: 'setUnconformities'
             }
         }, {
             scale: 'medium',

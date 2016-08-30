@@ -47,7 +47,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function preUpdate(&$entity) {
@@ -63,7 +62,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function posUpdate(&$entity) {
@@ -79,7 +77,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function preInsert(&$entity) {
@@ -95,7 +92,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function posInsert(&$entity) {
@@ -111,7 +107,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function preDelete(&$entity) {
@@ -127,7 +122,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function posDelete(&$entity) {

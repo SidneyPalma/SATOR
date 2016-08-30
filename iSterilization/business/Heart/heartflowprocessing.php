@@ -143,6 +143,30 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
             $rows = $this->query($sql)->fetchAll();
 
+            $sql = "
+                update
+                    flowprocessingstep
+                    set
+                        source = (
+                            select top 1
+                                a.id
+                            from
+                                flowprocessingstep a
+                            where a.flowprocessingid = flowprocessingstep.flowprocessingid
+                              and a.steplevel = flowprocessingstep.source
+                        ),
+                        target = (
+                            select top 1
+                                a.id
+                            from
+                                flowprocessingstep a
+                            where a.flowprocessingid = flowprocessingstep.flowprocessingid
+                              and a.steplevel = flowprocessingstep.target
+                        )
+                where flowprocessingid = {$id}";
+
+            $this->exec($sql);
+
             $message = $rows[0]['error_text'];
             $success = intval($rows[0]['error_code']) == 0;
 
@@ -434,13 +458,15 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     }
 
     public function setExceptionDo(array $data) {
-        $id = $data['query'];
         $flowprocessingid = $data['flowprocessingid'];
+        $flowprocessingstepid = $data['flowprocessingstepid'];
         $flowprocessingstepactionid = $data['flowprocessingstepactionid'];
 
         $params = self::jsonToArray($data['params']);
 
-//        print_r($params);
+        $data['params'] = $params;
+
+//        print_r($data);
 //        exit;
 
         try {
@@ -448,55 +474,75 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $action = new \iSterilization\Coach\flowprocessingstepaction();
 
             // update flowprocessingstepaction
-            $action->getStore()->getModel()->set('id',$flowprocessingstepactionid);
-            $action->getStore()->getModel()->set('isactive',0);
+            $action->getStore()->getModel()->set('id', $flowprocessingstepactionid);
+            $action->getStore()->getModel()->set('isactive', 0);
             $action->getStore()->update();
 
-            while(list(, $item) = each($params)) {
+            while (list(, $item) = each($params)) {
                 extract($item);
 
-                switch ($elementtype) {
-                    case 'basic.Equipment':
-                        $filtercode = "and equipmentid = $elementcode";
-                        break;
-                    default:
-                        $filtercode = "and areasid = $elementcode";
-                }
+                $filtercode = ($elementtype == 'basic.Equipment') ? "and fps.equipmentid = $elementcode" : "and fps.areasid = $elementcode";
 
                 $sql = "
-                    update 
-                        flowprocessingstep
-                    set stepchoice = :stepchoice
-                    where flowprocessingid = :flowprocessingid
-                      and steplevel = :steplevel
-                      and elementtype = :elementtype
-                      {$filtercode}";
+                    declare
+                        @id int,
+                        @source int,
+                        @target int,
+                        @steplevel int = :steplevel,
+                        @stepchoice int = :stepchoice,
+                        @flowprocessingid int = :flowprocessingid;
+
+                    select
+                        @id = fps.id,
+                        @source = fps.source,
+                        @target = fps.target
+                    from
+                        flowprocessingstep fps
+                    where fps.flowprocessingid = @flowprocessingid
+                      and fps.steplevel = @steplevel
+                      {$filtercode};
+
+                    update flowprocessingstep set source = @id where id = @target;
+                    update flowprocessingstep set stepchoice = @stepchoice where id = @id;
+                    
+                    if (@stepchoice = 2)
+                    begin
+                        insert into 
+                            flowprocessingstepaction ( flowprocessingstepid, flowstepaction, isactive )
+                        values
+                            (@source,'002',1);
+                    end";
 
                 $pdo = $this->prepare($sql);
                 $pdo->bindValue(":steplevel", $steplevel, \PDO::PARAM_INT);
                 $pdo->bindValue(":stepchoice", $stepchoice, \PDO::PARAM_INT);
-                $pdo->bindValue(":elementtype", $elementtype, \PDO::PARAM_STR);
                 $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
                 $pdo->execute();
-                unset($pdo);
             }
 
             $sql = "
+                declare
+                    @newid int,
+                    @flowprocessingid int = :flowprocessingid,
+                    @flowprocessingstepid int = :flowprocessingstepid;
+                                    
                 select top 1
-                    fps.id
+                    @newid = fps.id
                 from
                     flowprocessingstep fps
-                where fps.flowprocessingid = :flowprocessingid
-                  and fps.id > :id
-                  and (fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%')
-                order by fps.id";
+                where fps.flowprocessingid = @flowprocessingid
+                    and fps.id > @flowprocessingstepid
+                    and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' )                
+                
+                select @newid as newid;";
 
             $pdo = $this->prepare($sql);
-            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
             $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
+            $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
-            $newid = $rows[0]['id'];
+            $newid = $rows[0]['newid'];
+            unset($pdo);
 
             if(count($rows) != 0) {
                 // insert flowprocessingstepaction
@@ -513,6 +559,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $step->getStore()->update();
 
                 $sql = "
+                    declare
+                        @flowprocessingstepid int = :flowprocessingstepid;
+                        
                     insert into
                           flowprocessingstepmaterial
                           ( flowprocessingstepid, materialid, unconformities, dateof )  
@@ -523,10 +572,10 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                           getdate() dateof
                     from
                         flowprocessingstepmaterial
-                    where flowprocessingstepid = :flowprocessingstepid;";
+                    where flowprocessingstepid = @flowprocessingstepid;";
 
                 $pdo = $this->prepare($sql);
-                $pdo->bindValue(":flowprocessingstepid", $id, \PDO::PARAM_INT);
+                $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
                 $pdo->execute();
             }
 

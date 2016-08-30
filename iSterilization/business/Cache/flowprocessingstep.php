@@ -106,15 +106,7 @@ class flowprocessingstep extends \Smart\Data\Cache {
                             ) ,1,1,''
                         )                
                 ),
-				originplace = (
-					select top 1
-						a.elementname
-					from
-						flowprocessingstep a
-					where a.flowprocessingid = fps.flowprocessingid
-					  and a.steplevel = fps.steplevel-1
-					  and a.stepchoice is not null
-				)
+				O.originplace
             from
                 flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
@@ -124,6 +116,14 @@ class flowprocessingstep extends \Smart\Data\Cache {
                 left join materialbox mb on ( mb.id = fp.materialboxid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 inner join client c on ( c.id = fp.clientid )
+				outer apply (
+					select
+						a.elementname as originplace
+					from
+						flowprocessingstep a
+					where a.flowprocessingid = fps.flowprocessingid
+					  and a.id = fps.source
+				) o
             where fps.id = :id";
 
         try {

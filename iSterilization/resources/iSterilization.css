@@ -132,16 +132,40 @@
     height: 70px;
     width: 300px;
     cursor: pointer;
-    margin: 10px 0 0 20px;
-    border: 1px solid #454B61;
-    border-left: 8px solid #454B61;
-    background: rgba(245, 245, 245, .3);
+    margin: 10px 0 0 10px;
+    /*border: 1px solid #454B61;*/
+    /*border-left: 8px solid #454B61;*/
+    /*background: rgba(245, 245, 245, .3);*/
 }
 
-.step:hover {
-    border: 1px solid #BD1550;
-    border-left: 8px solid #BD1550;
-    background: rgba(237, 213, 0, .7);
+/*.step:hover {*/
+    /*border: 1px solid #BD1550;*/
+    /*border-left: 8px solid #BD1550;*/
+    /*background: rgba(237, 213, 0, .7);*/
+/*}*/
+
+.step-001 {
+    border: 1px solid #6A864B;
+    border-left: 8px solid #6A864B;
+    background: rgba(225, 213, 213, .3);
+}
+
+.step-001:hover {
+    border: 1px solid #79BE2D;
+    border-left: 8px solid #79BE2D;
+    background: rgba(166, 232, 94, .7);
+}
+
+.step-002 {
+    border: 1px solid #B81D5F;
+    border-left: 8px solid #B81D5F;
+    background: rgba(255, 104, 113, .3);
+}
+
+.step-002:hover {
+    border: 1px solid #B81D5F;
+    border-left: 8px solid #B81D5F;
+    background: rgba(254, 99, 71, .7);
 }
 
 .step-left {
