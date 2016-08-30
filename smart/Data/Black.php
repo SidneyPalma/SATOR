@@ -50,5 +50,41 @@ class Black extends \PDO {
     public static function getUserName() {
         return self::$usr;
     }
+	
+	public function getPatient(array $data) {
+		$query = $data['query'];
+		$start = $data['start'];
+		$limit = $data['limit'];
+
+		$sql = "
+            select
+                AVISO_CIRURGIA as id,
+                COD_PACIENTE as id_patient,
+                PACIENTE as name,
+                CONVENIO as health_insurance
+            from
+                avisocirurgia
+            where AVISO_CIRURGIA like :AVISO_CIRURGIA or PACIENTE like :PACIENTE";
+
+		try {
+
+			$query = "%{$query}%";
+
+			$pdo = $this->prepare($sql);
+			$pdo->bindValue(":PACIENTE", $query, \PDO::PARAM_STR);
+			$pdo->bindValue(":AVISO_CIRURGIA", $query, \PDO::PARAM_STR);
+			$pdo->execute();
+			$rows = $pdo->fetchAll();
+
+			self::_setRows($rows);
+			self::_setPage($start,$limit);
+
+		} catch ( \PDOException $e ) {
+			self::_setSuccess(false);
+			self::_setText($e->getMessage());
+		}
+
+		return self::getResultToJson();
+	}
 
 }

@@ -133,12 +133,27 @@
     width: 300px;
     cursor: pointer;
     margin: 10px 0 0 20px;
+}
+
+.step-001 {
+    border: 1px solid #0A3442;
+    border-left: 8px solid #0A3442;
+    background: rgba(225, 213, 213, .3);
+}
+
+.step-001:hover {
+    border: 1px solid #00BEED;
+    border-left: 8px solid #00BEED;
+    background: rgba(255, 237, 79, .7);
+}
+
+.step-002 {
     border: 1px solid #454B61;
     border-left: 8px solid #454B61;
     background: rgba(245, 245, 245, .3);
 }
 
-.step:hover {
+.step-002:hover {
     border: 1px solid #BD1550;
     border-left: 8px solid #BD1550;
     background: rgba(237, 213, 0, .7);

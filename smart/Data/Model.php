@@ -33,12 +33,15 @@ class Model {
     }
 
     public function set ($field,$value) {
+		$result = "Método inexistente na Classe!";
 		$method = "set" . strtoupper($field[0]) . substr($field, 1);
-	
-		$this->$method($value);
-        $this->_submit->setRowValue($field,$value);
-		$this->_submit->setRawValue($field,$value);
-		
+
+		if(method_exists($this, $method)) {
+			$this->$method($value);
+			$this->_submit->setRowValue($field,$value);
+			$this->_submit->setRawValue($field,$value);			
+		}
+
         return $this;
     }
 
@@ -48,7 +51,7 @@ class Model {
 	
 		if(method_exists($this, $method)) {
 			$result = $this->$method();
-		}		
+		}
 		
         return $result;
     }

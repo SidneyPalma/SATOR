@@ -114,21 +114,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
         me.items = [
             {
-                xtype: 'container',
-                margin: '10 0 0 0',
-                layout: 'anchor',
-                items: [
-                    {
-                        anchor: '100%',
-                        xtype: 'label',
-                        cls: 'processing-field-font',
-                        text: 'Estação de Trabalho Não Configurada',
-                        name: 'labelareas'
-                    }
-                ]
-            }, {
                 flex: 1,
-                margin: '5 0 0 0',
+                margin: '10 0 0 0',
                 xtype: 'container',
                 layout: {
                     type: 'hbox',
@@ -144,6 +131,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                         },
                         items: [
                             {
+                                xtype: 'label',
+                                cls: 'processing-field-font',
+                                text: 'Estação de Trabalho Não Configurada',
+                                name: 'labelareas'
+                            }, {
                                 flex: 1,
                                 xtype: 'dataview',
                                 trackOver: true,
@@ -154,15 +146,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 itemSelector: 'div.step',
                                 tpl: [
                                     '<tpl for=".">',
-                                        '<div style="margin-bottom: 10px;" class="step">',
-                                            '<img class="step-left" src="resources/images/stage/MaterialReader.png">',
+                                        '<div style="margin-bottom: 10px;" class="step step-{flowstepaction}">',
+                                            '<img class="step-left" src="resources/images/stage/MaterialReader.png"/>',
                                             '<div class="step-right" style="font-weight: 700;">',
                                                 '<div style="font-size: 16px; color: #900000;">{originplace}</div>',
                                                 '<div style="font-size: 14px; line-height: 25px;">{clientname}</div>',
-                                                '<div>',
-                                                    '<div style="text-align: left; float: left; width: 30%;">{timeof}</div>',
-                                                    '<div style="text-align: right; float: right; width: 70%;">{barcode}</div>',
-                                                '</div>',
+                                            '<div>',
+                                                '<div style="text-align: left; float: left; width: 30%;">{timeof}</div>',
+                                                '<div style="text-align: right; float: right; width: 70%;">{barcode}</div>',
                                             '</div>',
                                         '</div>',
                                     '</tpl>'
@@ -173,6 +164,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                     itemdblclick: 'onFlowStepAction'
                                 },
                                 emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>'
+                            }
+                        ]
+                    }, {
+                        flex: 2,
+                        xtype: 'container',
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [
+                            {
+                                xtype: 'label',
+                                cls: 'processing-field-font',
+                                text: 'Consultar',
+                                name: 'labelareas'
                             }, {
                                 hidden: true,
                                 name: 'search',
@@ -180,7 +186,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 xtype: 'textfield',
                                 useUpperCase: true,
                                 useReadColor: false,
-                                fieldLabel: 'Consultar',
                                 cls: 'processing-field',
                                 labelCls: 'processing-field-font',
                                 listeners: {
@@ -192,59 +197,56 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                     }
                                 }
                             }, {
-                                height: 150,
-                                xtype: 'dataview',
-                                trackOver: true,
-                                autoScroll: true,
-                                multiSelect: false,
-                                name: 'flowprocessingsteptask',
-                                store: {
-                                    fields: [ 'taskcode', 'taskname' ],
-                                    data: [
-                                        { taskcode: '001', taskname: 'Consultar Material' },
-                                        { taskcode: '002', taskname: 'Consultar Insumos' }
-                                    ]
-                                },
-                                itemSelector: 'div.thumb-wrap',
-                                tpl: [
-                                    '<tpl for=".">',
-                                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                                    '<div class="thumb-task-{taskcode}"></div>',
-                                    '<span>',
-                                    '<a style="font-size: 14px;">{taskname}</a>',
-                                    '</span>',
-                                    '</div>',
-                                    '</tpl>'
-                                ],
+                                source: {},
+                                autoHeight: true,
+                                columnLines: false,
+                                xtype: 'propertygrid',
+                                defaults: { readOnly: true },
+                                disableSelection: true,
+                                cls: 'flowprocessingstep',
+                                frame: false,
+                                border: false,
+                                bodyStyle: 'background:transparent;',
                                 listeners: {
-                                    itemdblclick: 'onFlowTaskAction'
+                                    'beforeedit': function (e) { return false; },
+                                    'itemkeydown': function ( tableView, td, cellIndex, record, e, eOpts ) {
+                                        if(e.keyCode == 27) {
+                                            tableView.up('flowprocessingstep').searchToogle();
+                                        }
+                                    }
                                 }
                             }
                         ]
-                    }, {
-                        xtype: 'splitter'
-                    }, {
-                        flex: 2,
-                        source: {},
-                        autoHeight: true,
-                        columnLines: false,
-                        xtype: 'propertygrid',
-                        defaults: { readOnly: true },
-                        disableSelection: true,
-                        cls: 'flowprocessingstep',
-                        frame: false,
-                        border: false,
-                        bodyStyle: 'background:transparent;',
-                        listeners: {
-                            'beforeedit': function (e) { return false; },
-                            'itemkeydown': function ( tableView, td, cellIndex, record, e, eOpts ) {
-                                if(e.keyCode == 27) {
-                                    tableView.up('flowprocessingstep').searchToogle();
-                                }
-                            }
-                        }
                     }
                 ]
+            }, {
+                height: 150,
+                xtype: 'dataview',
+                trackOver: true,
+                autoScroll: true,
+                multiSelect: false,
+                name: 'flowprocessingsteptask',
+                store: {
+                    fields: [ 'taskcode', 'taskname' ],
+                    data: [
+                        { taskcode: '001', taskname: 'Consultar Material' },
+                        { taskcode: '002', taskname: 'Consultar Insumos' }
+                    ]
+                },
+                itemSelector: 'div.thumb-wrap',
+                tpl: [
+                    '<tpl for=".">',
+                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                            '<div class="thumb-task-{taskcode}"></div>',
+                            '<span>',
+                                '<a style="font-size: 14px;">{taskname}</a>',
+                            '</span>',
+                        '</div>',
+                    '</tpl>'
+                ],
+                listeners: {
+                    itemdblclick: 'onFlowTaskAction'
+                }
             }
         ];
     }

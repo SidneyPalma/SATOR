@@ -515,7 +515,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         var patient = form.down('searchpatient').foundRecord();
 
-        data.patientname = patient.get('name');
+        data.patientname = patient ? patient.get('name') : null;
 
         view.setLoading('Gerando estrutura de leitura de materiais...');
 
@@ -856,6 +856,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             callback: function (options, success, response) {
                 if(success) {
                     var rows = Ext.decode(response.responseText).rows;
+                    // SATOR_ENCERRAR_LEITURA
                     Ext.widget('call_SATOR_RELATAR_EXCEPTION').show(null,function () {
                         this.master = view;
                         Ext.each(rows,function (item) {
@@ -1004,15 +1005,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 action: 'select',
                 method: 'setExceptionDo',
                 params: Ext.encode(list),
-                query: master.xdata.get('id'),
                 flowprocessingid: master.xdata.get('flowprocessingid'),
+                flowprocessingstepid: master.xdata.get('id'),
                 flowprocessingstepactionid: master.xdata.get('flowprocessingstepactionid')
             },
-            // success: function(response, opts) {
-            //     view.close();
-            //     me.setView(master);
-            //     history.back();
-            // }
             callback: function (options, success, response) {
                 if(success) {
                     view.close();
@@ -1465,6 +1461,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *
      *  - Outras Leituras
      *      Protocolos
+     *          -   Processar Itens                 SATOR_PROCESSAR_ITENS
      *          -   Iniciar Leitura                 SATOR_INICIAR_LEITURA
      *          -   Encerrar Leitura                SATOR_ENCERRAR_LEITURA
      *          -   Ler Insumos                     SATOR_INFORMAR_INSUMOS
@@ -1472,7 +1469,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Imprimir Etiquetas              SATOR_IMPRIMIR_ETIQUETA
      *          -   Consultar Material              SATOR_CONSULTAR_MATERIAL
      *          -   Cancelar Ultima Leitura         SATOR_CANCELAR_ULTIMA_LEITURA
-     *          -   Solictar Quebra de Fluxo
      *          -   Relatar uso de EPI				SATOR_RELATAR_USA_EPI
      *              -   SIM Usa EPI
      *              -   NÂO Usa EPI

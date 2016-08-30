@@ -47,6 +47,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
                         text: 'Uso de EPI'
                     }, {
                         margin: '20 0 0 0',
+                        useUpperCase: true,
                         fieldLabel: 'Relatar uso de EPI (Sim/Não)',
                         xtype: 'textfield',
                         name: 'userprotected',
