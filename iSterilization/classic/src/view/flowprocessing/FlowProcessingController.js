@@ -1578,6 +1578,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         me.redirectTo( 'flowprocessingview/' + stepid);
                     }
                 break;
+            case '002':
+                Smart.Msg.showToast('Este processo requer autorização antes de prosseguir!');
+                return false;
+                break;
         }
     },
 
@@ -1600,8 +1604,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onFlowTaskAction: function () {
-        var me = this,
-            url = 'business/Calls/Quick/FlowProtocol.php?id=1';
+        var url = 'business/Calls/Quick/FlowProtocol.php?id=1';
 
         window.open(url);
     }

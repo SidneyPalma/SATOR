@@ -147,13 +147,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 tpl: [
                                     '<tpl for=".">',
                                         '<div style="margin-bottom: 10px;" class="step step-{flowstepaction}">',
-                                            '<img class="step-left" src="resources/images/stage/MaterialReader.png"/>',
+                                            '<img class="step-left" src="resources/images/stage/MaterialReader.png">',
                                             '<div class="step-right" style="font-weight: 700;">',
                                                 '<div style="font-size: 16px; color: #900000;">{originplace}</div>',
                                                 '<div style="font-size: 14px; line-height: 25px;">{clientname}</div>',
-                                            '<div>',
-                                                '<div style="text-align: left; float: left; width: 30%;">{timeof}</div>',
-                                                '<div style="text-align: right; float: right; width: 70%;">{barcode}</div>',
+                                                '<div>',
+                                                    '<div style="text-align: left; float: left; width: 30%;">{timeof}</div>',
+                                                    '<div style="text-align: right; float: right; width: 70%;">{barcode}</div>',
+                                                '</div>',
                                             '</div>',
                                         '</div>',
                                     '</tpl>'
