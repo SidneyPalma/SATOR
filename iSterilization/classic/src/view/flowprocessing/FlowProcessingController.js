@@ -1603,10 +1603,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    onFlowTaskAction: function () {
-        var url = 'business/Calls/Quick/FlowProtocol.php?id=1';
+    onFlowTaskAction: function ( viewView, record, item, index, e, eOpts ) {
+        var me = this,
+            taskcode = record.get('taskcode'),
+            url = 'business/Calls/Quick/FlowProtocol.php?id=1';
 
-        window.open(url);
+
+        switch(taskcode) {
+            case '001':
+                Ext.widget('call_AUTTHORIZE').show();
+                break;
+            case '002':
+                window.open(url);
+                break;
+        }
     }
 
 });

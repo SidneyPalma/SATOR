@@ -209,8 +209,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 border: false,
                                 bodyStyle: 'background:transparent;',
                                 listeners: {
-                                    'beforeedit': function (e) { return false; },
-                                    'itemkeydown': function ( tableView, td, cellIndex, record, e, eOpts ) {
+                                    beforeedit: function (e) { return false; },
+                                    itemkeydown: function ( tableView, td, cellIndex, record, e, eOpts ) {
                                         if(e.keyCode == 27) {
                                             tableView.up('flowprocessingstep').searchToogle();
                                         }
@@ -230,8 +230,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                 store: {
                     fields: [ 'taskcode', 'taskname' ],
                     data: [
-                        { taskcode: '001', taskname: 'Consultar Material' },
-                        { taskcode: '002', taskname: 'Consultar Insumos' }
+                        { taskcode: '001', taskname: 'Autorizar Processos' },
+                        { taskcode: '002', taskname: 'Mensagens de Leitura' }
                     ]
                 },
                 itemSelector: 'div.thumb-wrap',
