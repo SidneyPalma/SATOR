@@ -133,16 +133,8 @@
     width: 300px;
     cursor: pointer;
     margin: 10px 0 0 10px;
-    /*border: 1px solid #454B61;*/
-    /*border-left: 8px solid #454B61;*/
-    /*background: rgba(245, 245, 245, .3);*/
-}
 
-/*.step:hover {*/
-    /*border: 1px solid #BD1550;*/
-    /*border-left: 8px solid #BD1550;*/
-    /*background: rgba(237, 213, 0, .7);*/
-/*}*/
+}
 
 .step-001 {
     border: 1px solid #6A864B;

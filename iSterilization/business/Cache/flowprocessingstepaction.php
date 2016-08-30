@@ -6,6 +6,52 @@ use iSterilization\Model\flowprocessingstepaction as Model;
 
 class flowprocessingstepaction extends \Smart\Data\Cache {
 
+	public function actionStep(array $data) {
+		$query = $data['query'];
+		$proxy = $this->getStore()->getProxy();
+		
+		$sql = "
+			select
+				fpsa.id,
+				fpsa.flowprocessingstepid,
+				fpsa.flowstepaction,
+				fpsa.isactive,
+				fpsa.dateof,
+				c.name as clientname,
+				fps.elementname,
+				substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
+				fp.barcode,
+				o.originplace
+			from
+				flowprocessingstepaction fpsa
+				inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
+				inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+				inner join client c on ( c.id = fp.clientid )
+				outer apply (
+					select
+						a.elementname as originplace
+					from
+						flowprocessingstep a
+					where a.flowprocessingid = fps.flowprocessingid
+						and a.id = fps.source
+				) o
+			where fpsa.flowstepaction = '002'
+				and fpsa.isactive = 1";
+
+		try {
+            $rows = $proxy->query($sql)->fetchAll();
+
+			self::_setRows($rows);
+
+		} catch ( \PDOException $e ) {
+			self::_setSuccess(false);
+			self::_setText($e->getMessage());
+		}
+
+		return self::getResultToJson();
+
+	}
+
     public function selectCode(array $data) {
         $query = $data['query'];
         $proxy = $this->getStore()->getProxy();
@@ -108,7 +154,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 
     public function selectStep(array $data) {
         $query = $data['query'];
-
+		$proxy = $this->getStore()->getProxy();
+		
         $sql = "
             select
                 fps.id,
@@ -136,7 +183,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
             where fpsa.id = :actionid";
 
         try {
-            $pdo = $this->prepare($sql);
+			$pdo = $proxy->prepare($sql);
             $pdo->bindValue(":actionid", $query, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();

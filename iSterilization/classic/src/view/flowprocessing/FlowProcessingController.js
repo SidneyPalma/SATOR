@@ -1611,7 +1611,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         switch(taskcode) {
             case '001':
-                Ext.widget('call_AUTTHORIZE').show();
+                Ext.widget('call_AUTTHORIZE').show(null, function () {
+                    this.down('gridpanel').getStore().load();
+                });
                 break;
             case '002':
                 window.open(url);
