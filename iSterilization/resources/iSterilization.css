@@ -290,3 +290,15 @@
 .flowprocessingstep .x-grid-empty {
     display: none;
 }
+
+/*<span class="notification-icon icon-comment" aria-hidden=""></span>*/
+/*.unread .notification-icon {*/
+    /*color: #f55567;*/
+/*}*/
+/*.notification-icon {*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*font-size: 19px;*/
+    /*transition: color .1s;*/
+/*}*/
