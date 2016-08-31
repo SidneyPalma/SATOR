@@ -1364,7 +1364,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(stepflaglist.indexOf('019') != -1) {
             store.each(function (data) {
                 data.set('unconformities','010');
-                store.sync({async: false});
+                data.store.sync({async: false});
                 data.commit();
             });
         }
