@@ -735,6 +735,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             exceptionby = record.get('exceptionby'),
             stepflaglist = record.get('stepflaglist');
 
+
+        /**
+         * 004 - Libera Kit Incompleto
+         */
+        if(stepflaglist.indexOf('004') != -1) {
+
+        }
+
         if(!me.checkUnconformities()) {
             return false;
         }
