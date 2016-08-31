@@ -155,9 +155,9 @@
 }
 
 .step-002:hover {
-    border: 1px solid #B81D5F;
-    border-left: 8px solid #B81D5F;
-    background: rgba(254, 99, 71, .7);
+    border: 1px solid rgb(254, 99, 71);
+    border-left: 8px solid rgb(254, 99, 71);
+    background: rgba(254, 99, 71, .4);
 }
 
 .step-left {

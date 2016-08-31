@@ -24,7 +24,7 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepAction', {
             type: 'auto'
         }, {
             name: 'isactive',
-            type: 'boolean'
+            type: 'int'
         }, {
             name: 'username',
             type: 'auto'
@@ -38,6 +38,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepAction', {
             name: 'dateof',
             type: 'auto'
         }, {
+            name: 'dateto',
+            type: 'auto'
+        }, {
             name: 'timeof',
             type: 'auto'
         }, {
@@ -45,6 +48,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepAction', {
             type: 'auto'
         }, {
             name: 'originplace',
+            type: 'auto'
+        }, {
+            name: 'authorizedby',
             type: 'auto'
         }
     ]

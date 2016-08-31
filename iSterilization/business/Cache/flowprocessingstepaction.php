@@ -19,6 +19,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				fpsa.dateof,
 				c.name as clientname,
 				fps.elementname,
+				fpsa.authorizedby,
 				substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
 				fp.barcode,
 				o.originplace

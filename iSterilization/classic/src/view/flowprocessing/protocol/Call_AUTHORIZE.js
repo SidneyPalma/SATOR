@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_AUTTHORIZE', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_AUTHORIZE', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_AUTTHORIZE',
+    xtype: 'call_AUTHORIZE',
 
     requires: [
         'Ext.form.Panel',
@@ -50,7 +50,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_AUTTHORIZE', {
                         xtype: 'container'
                     }, {
                         xtype: 'label',
-                        text: 'Exceções',
+                        text: 'Exceções ... quebra de fluxo!',
+                        style: 'color: blue;',
                         cls: 'sub-title-label'
                     }, {
                         height: 400,
@@ -95,26 +96,37 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_AUTTHORIZE', {
                             }, {
                                 name: 'originplace',
                                 type: 'auto'
+                            }, {
+                                name: 'authorizedby',
+                                type: 'auto'
+                            }, {
+                                name: 'haspending',
+                                type: 'int',
+                                defaultValue: 0
                             }
                         ],
                         columns: [
                             {
                                 flex: 1,
                                 sortable: false,
-                                dataIndex: 'elementname'
+                                dataIndex: 'elementname',
+                                renderer: function (value,metaData,rec) {
+                                    metaData.style = rec.data.haspending ? 'color: red;' : '';
+                                    return value;
+                                }
                             }, {
                                 width: 60,
                                 align: 'center',
+                                sortable: false,
+                                dataIndex: 'haspending',
                                 xtype: 'actioncolumn',
-                                iconCls: "fa fa-check-circle action-checked-color-font"
-                                // width: 120,
-                                // xtype: 'widgetcolumn',
-                                // widget: {
-                                //     scale: 'medium',
-                                //     xtype: 'button',
-                                //     text: 'Autorizar',
-                                //     showSmartTheme: 'blue'
-                                // }
+                                handler: 'setAuthorize',
+                                getTip: function(v, meta, rec) {
+                                    return rec.data.haspending ? 'Cancelar ação!' : 'Autorizar quebra de fluxo!';
+                                },
+                                getClass: function(v, meta, rec) {
+                                    return rec.data.haspending ? "fa fa-hand-paper-o action-delete-color-font" : "fa fa-thumbs-up action-delete-color-font";
+                                }
                             }
                         ]
                     }
@@ -132,7 +144,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_AUTTHORIZE', {
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'setUnconformities'
+                click: 'setAuthorizeList'
             }
         }, {
             scale: 'medium',

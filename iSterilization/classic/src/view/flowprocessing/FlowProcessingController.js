@@ -274,9 +274,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    selectUserFlow: function () {
+    selectUserFlow: function (btn) {
         var me = this,
-            view = me.getView(),
+            view = btn.up('window'),
             form = view.down('form');
 
         if(!form.isValid()) {
@@ -314,6 +314,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return false;
             }
 
+            if( view.doCallBack(rows) ) {
+                view.close();
+            }
+
             switch(view.flowtype) {
                 case 'flowopen': // Abrir Novo Processamento/Leitura
                     me.onFireTypeOpenFlow(rows,{});
@@ -321,11 +325,41 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 case 'flowuser': // Usuário do Processamento/Leitura
                     me.onFireTypeOpenUser(rows,{});
                     break;
+                case 'sanction': // Autorizar Quebra de Fluxo
+                    //me.setApproveStepFlow(rows,{});
+                    break
             }
         }
     },
 
-    onFireTypeOpenFlow: function (userRows,eOpts) {
+    onFormSubmitFailure: function (form, action) {
+        var me = this,
+            view = me.getView();
+
+        view.setLoading(false);
+        Smart.Msg.showToast(action.result.text,'info');
+        view.down('textfield[name=password]').focus(false,200);
+    },
+
+    setApproveStepFlow: function (rows, eOpts) {
+        // var me = this,
+        //     view = me.getView(),
+        //     sm = view.down('gridpanel').getSelectionModel(),
+        //     dt = sm.getSelection()[0];
+        //
+        // dt.set('isactive', 0);
+        // dt.set('authorizedby', rows.username);
+        //
+        // dt.store.sync({
+        //     callback: function (records, operation, success) {
+        //         if (success) {
+        //             dt.commit();
+        //         }
+        //     }
+        // });
+    },
+
+    onFireTypeOpenFlow: function (userRows, eOpts) {
         var me = this,
             view = me.getView();
 
@@ -339,7 +373,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    onFireTypeOpenUser: function (userRows,eOpts) {
+    onFireTypeOpenUser: function (userRows, eOpts) {
         var me = this,
             view = me.getView(),
             id = view.xdata.get('flowprocessingstepid'),
@@ -365,15 +399,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.redirectTo( 'flowprocessingview/' + id );
             }
         });
-    },
-
-    onFormSubmitFailure: function (form, action) {
-        var me = this,
-            view = me.getView();
-
-        view.setLoading(false);
-        Smart.Msg.showToast(action.result.text,'info');
-        view.down('textfield[name=password]').focus(false,200);
     },
 
     selectDatePicker: function (datePicker, date, eOpts) {
@@ -1470,8 +1495,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Consultar Material              SATOR_CONSULTAR_MATERIAL
      *          -   Cancelar Ultima Leitura         SATOR_CANCELAR_ULTIMA_LEITURA
      *          -   Relatar uso de EPI				SATOR_RELATAR_USA_EPI
-     *              -   SIM Usa EPI
-     *              -   NÂO Usa EPI
+     *              -   SATOR_SIM
+     *              -   SATOR_NAO
      *          -
      */
 
@@ -1605,20 +1630,65 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onFlowTaskAction: function ( viewView, record, item, index, e, eOpts ) {
         var me = this,
-            taskcode = record.get('taskcode'),
-            url = 'business/Calls/Quick/FlowProtocol.php?id=1';
-
+            taskcode = record.get('taskcode');
 
         switch(taskcode) {
             case '001':
-                Ext.widget('call_AUTTHORIZE').show(null, function () {
+                Ext.widget('call_AUTHORIZE').show(null, function () {
+                    this.master = me.getView();
                     this.down('gridpanel').getStore().load();
                 });
                 break;
             case '002':
-                window.open(url);
+                window.open('business/Calls/Quick/FlowProtocol.php?id=1');
                 break;
         }
+    },
+
+    setAuthorize: function(grid, rowIndex, colIndex) {
+        var record = grid.getStore().getAt(rowIndex);
+
+        record.set('haspending',!record.get('haspending'));
+        record.commit();
+    },
+
+    setAuthorizeList: function () {
+        var me = this,
+            list = [],
+            view = me.getView(),
+            store = view.down('gridpanel').getStore(),
+            doCallBack = function (rows) {
+                var kont = 0;
+                Ext.each(list,function (item) {
+                    item.set('isactive', 0);
+                    item.set('authorizedby', rows.username);
+                    kont += item.store.sync({async: false}) ? 1 : 0;
+                });
+                if(kont == list.length) {
+                    view.close();
+                    Ext.getStore('flowprocessingstepaction').load();
+                }
+                return (kont == list.length);
+            };
+
+        store.each(function(record) {
+            if(record.get('haspending')) {
+                list.push(record);
+            }
+        });
+
+        if(list.length == 0) {
+            Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
+            return false;
+        }
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
     }
 
 });
