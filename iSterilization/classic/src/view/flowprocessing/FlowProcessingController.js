@@ -784,7 +784,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             view = me.getView();
 
-        Ext.widget('call_UNCONFORMITIES').show(null, function () {
+        Ext.widget('call_SATOR_UNCONFORMITIES').show(null, function () {
             this.master = view;
         });
     },
@@ -1313,7 +1313,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
 	workReadArea: function (value) {
         var me = this,
-            list = [],
 			view = me.getView(),
             record = view.xdata,
             stepflaglist = record.get('stepflaglist'),
@@ -1617,7 +1616,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         switch(taskcode) {
             case '001':
-                Ext.widget('call_AUTHORIZE').show(null, function () {
+                Ext.widget('call_SATOR_AUTHORIZE').show(null, function () {
                     this.master = me.getView();
                     this.down('gridpanel').getStore().load();
                 });
@@ -1643,7 +1642,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             doCallBack = function (rows) {
                 var kont = 0;
                 Ext.each(list,function (item) {
-                    item.set('isactive', 0);
+                    item.set('isactive', 'AUTHORIZE');
                     item.set('authorizedby', rows.username);
                     kont += item.store.sync({async: false}) ? 1 : 0;
                 });

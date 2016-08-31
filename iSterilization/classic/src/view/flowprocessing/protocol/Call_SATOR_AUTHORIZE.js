@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_AUTHORIZE', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_AUTHORIZE',
+    xtype: 'call_SATOR_AUTHORIZE',
 
     requires: [
         'Ext.form.Panel',
