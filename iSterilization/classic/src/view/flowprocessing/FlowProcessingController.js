@@ -735,6 +735,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             exceptionby = record.get('exceptionby'),
             stepflaglist = record.get('stepflaglist');
 
+
+        /**
+         * 004 - Libera Kit Incompleto
+         */
+        if(stepflaglist.indexOf('004') != -1) {
+
+        }
+
         if(!me.checkUnconformities()) {
             return false;
         }
@@ -1300,11 +1308,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
 	workReadArea: function (value) {
         var me = this,
+            list = [],
 			view = me.getView(),
-            store = Ext.getStore('flowprocessingstepmaterial'),
+            record = view.xdata,
+            stepflaglist = record.get('stepflaglist'),
+            store = view.down('flowprocessingmaterial').getStore(),
             model = view.down('flowprocessingmaterial').getSelectionModel(),
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
+
 
 		/**
           * - Verificar é Kit ?
@@ -1351,7 +1363,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 				model.select(data);
 			}
 		});
-	},
+
+        Ext.suspendLayouts();
+
+        /**
+         * 019 - Leitura única, valida os itens do Kit
+         */
+        if(stepflaglist.indexOf('019') != -1) {
+            store.each(function (data) {
+                data.set('unconformities','010');
+                data.store.sync({async: false});
+                data.commit();
+            });
+        }
+
+        Ext.resumeLayouts(true);
+
+    },
 
     setIsntMaterialBox: function (value) {
         var me = this,
@@ -1407,15 +1435,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *
      *  - Outras Leituras
      *      Protocolos
-     *          -   Processar Itens                 SATOR_PROCESSAR_ITENS
-     *          -   Iniciar Leitura                 SATOR_INICIAR_LEITURA
-     *          -   Encerrar Leitura                SATOR_ENCERRAR_LEITURA
-     *          -   Ler Insumos                     SATOR_INFORMAR_INSUMOS
-     *          -   Cancelar Leituras Relizadas     SATOR_CANCELAR_LEITURAS
-     *          -   Imprimir Etiquetas              SATOR_IMPRIMIR_ETIQUETA
-     *          -   Consultar Material              SATOR_CONSULTAR_MATERIAL
-     *          -   Cancelar Ultima Leitura         SATOR_CANCELAR_ULTIMA_LEITURA
-     *          -   Relatar uso de EPI				SATOR_RELATAR_USA_EPI
+     *          -   Processar Itens                         SATOR_PROCESSAR_ITENS
+     *          -   Iniciar Leitura                         SATOR_INICIAR_LEITURA
+     *          -   Encerrar Leitura                        SATOR_ENCERRAR_LEITURA
+     *          -   Ler Insumos                             SATOR_INFORMAR_INSUMOS
+     *          -   Cancelar Leituras Relizadas             SATOR_CANCELAR_LEITURAS
+     *          -   Imprimir Etiquetas                      SATOR_IMPRIMIR_ETIQUETA
+     *          -   Consultar Material                      SATOR_CONSULTAR_MATERIAL
+     *          -   Leitura única, valida os itens do Kit   SATOR_LEITURA_UNICA
+     *          -   Cancelar Ultima Leitura                 SATOR_CANCELAR_ULTIMA_LEITURA
+     *          -   Relatar uso de EPI				        SATOR_RELATAR_USA_EPI
      *              -   SATOR_SIM
      *              -   SATOR_NAO
      *          -
