@@ -1357,30 +1357,28 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 			return false;
 		}
 
-		// Já foi lançado ?
-		// Não -> Update Status do Item na Lista
-		data.set('unconformities','010');
-		store.sync({
-			callback: function () {
-				data.commit();
-				model.select(data);
-			}
-		});
-
-        Ext.suspendLayouts();
-
         /**
          * 019 - Leitura única, valida os itens do Kit
          */
         if(stepflaglist.indexOf('019') != -1) {
+            store.getAt(0);
             store.each(function (data) {
                 data.set('unconformities','010');
                 data.store.sync({async: false});
                 data.commit();
             });
+            return false;
         }
 
-        Ext.resumeLayouts(true);
+        // Já foi lançado ?
+        // Não -> Update Status do Item na Lista
+        data.set('unconformities','010');
+        store.sync({
+            callback: function () {
+                data.commit();
+                model.select(data);
+            }
+        });
 
     },
 
