@@ -760,7 +760,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         if (!me.checkUnconformities()) {
-            me.callUNCONFORMITIES();
+            me.callSATOR_UNCONFORMITIES();
             return false;
         }
 
@@ -768,7 +768,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * 004 - Libera Kit Incompleto
          */
         if (stepflaglist.indexOf('004') != -1) {
-
+            //return false;
         }
 
         /**
@@ -780,7 +780,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    callUNCONFORMITIES: function () {
+    callSATOR_UNCONFORMITIES: function () {
         var me = this,
             view = me.getView();
 
