@@ -1437,9 +1437,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onSelectDataView: function (view,record,eOpts) {
-        var me = this,
-            view = me.getView();
-
         Ext.getStore('flowprocessingstep').setParams({
             method: 'selectCode',
             query: record.get('id')
