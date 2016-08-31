@@ -11,6 +11,40 @@ Ext.define( 'Ext.overrides.view.View', {
             records = sm.getSelection();
 
         return records.length ? records[0] : null;
+    },
+
+    config: {
+        url: null,
+        fields: null,
+        params: {
+            query: '%',
+            action: 'select',
+            method: 'selectLike',
+            field: 'description'
+        }
+    },
+
+    initComponent: function () {
+        var me = this;
+
+        me.initConfig();
+        me.buildStore();
+        me.callParent();
+    },
+
+    buildStore: function () {
+        var me = this;
+
+        if(me.getFields()) {
+            me.store = Ext.create(
+                Ext.define( me.getXType() + 'Store', {
+                    extend: 'Smart.data.StoreBase',
+                    url: me.getUrl(),
+                    storeId: me.getXType(),
+                    fields: me.getFields()
+                })
+            ).setParams(me.params);
+        }
     }
 
 });

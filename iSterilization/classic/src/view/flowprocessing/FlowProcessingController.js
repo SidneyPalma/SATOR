@@ -60,11 +60,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onSelectAction : function () {
         var me = this,
-            store = Ext.getStore('flowprocessingstepaction');
+            view = me.getView(),
+            store = Ext.getStore('flowprocessingstepaction'),
+            dataview = view.down('dataview[name=flowprocessingsteptask]');
 
         if(!Smart.workstation) {
             return false;
         }
+
+        dataview.load();
 
         Ext.Ajax.request({
             scope: me,
@@ -1665,8 +1669,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     kont += item.store.sync({async: false}) ? 1 : 0;
                 });
                 if(kont == list.length) {
-                    view.close();
                     Ext.getStore('flowprocessingstepaction').load();
+                    view.master.down('dataview[name=flowprocessingsteptask]').store.load();
+                    view.close();
                 }
                 return (kont == list.length);
             };

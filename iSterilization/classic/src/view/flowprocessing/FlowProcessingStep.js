@@ -227,25 +227,31 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                 autoScroll: true,
                 multiSelect: false,
                 name: 'flowprocessingsteptask',
-                store: {
-                    fields: [ 'taskcode', 'taskname' ],
-                    data: [
-                        { taskcode: '001', taskname: 'Autorizar Processos' },
-                        { taskcode: '002', taskname: 'Mensagens de Leitura' }
-                    ]
+                
+                url: '../iSterilization/business/Calls/flowprocessingstepaction.php',
+
+                params: {
+                    action: 'select',
+                    method: 'actionTask'
                 },
+
+                fields: [ 'taskcode', 'taskname', 'taskrows' ],
+
                 itemSelector: 'div.thumb-wrap',
                 tpl: [
                     '<tpl for=".">',
                         '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                            '<div class="thumb-task-{taskcode}"></div>',
-                            '<span>',
-                                '<a style="font-size: 14px;">{taskname}</a>',
-                            '</span>',
+                            '<div class="thumb-task-{taskcode}">',
+                                '<a class="authorize">{taskrows}</a>',
+                            '</div>',
+                            '<span><a style="font-size: 14px;">{taskname}</a></span>',
                         '</div>',
                     '</tpl>'
                 ],
                 listeners: {
+                    render: function () {
+                        this.getStore().load();
+                    },
                     itemdblclick: 'onFlowTaskAction'
                 }
             }
