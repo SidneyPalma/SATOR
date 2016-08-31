@@ -236,49 +236,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.get('materialboxname')));
     },
 
-    // Usuário do Processamento/Leitura
-    flowProcessingOpen: function (flowtype) {
-        var me = this,
-            view = me.getView(),
-            doCallBack = function (rows) {
-                var id = view.xdata.get('flowprocessingstepid'),
-                    flowprocessingstepid = view.xdata.get('flowprocessingstepid');
-
-                Ext.Ajax.request({
-                    scope: me,
-                    url: me.url,
-                    params: {
-                        action: 'select',
-                        method: 'updateUserStep',
-                        username: rows.username,
-                        flowprocessingstepid: flowprocessingstepid
-                    },
-                    callback: function (options, success, response) {
-                        var result = Ext.decode(response.responseText);
-
-                        view.close();
-
-                        if(!success || !result.success) {
-                            return false;
-                        }
-                        me.redirectTo( 'flowprocessingview/' + id );
-                    }
-                });
-
-                return true;
-            };
-
-        if(!Smart.workstation) {
-            Smart.Msg.showToast('Estação de Trabalho Não Configurada, Operação Não pode ser Realizada!','error');
-            return false;
-        }
-
-        if(flowtype == 'flowuser') {
-            var sm = view.down('dataview[name=flowprocessingstepaction]').getSelectionModel(),
-                md = sm.getSelection()[0];
-        }
-    },
-
     onSelectUserCode: function (win,field,eOpts) {
         var me = this,
             view = me.getView(),
@@ -1589,7 +1546,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         switch(action) {
             case '001':
                     if(!userid) {
-                        // me.flowProcessingOpen('flowuser');
                         Ext.widget('flowprocessinguser', {
                             scope: me,
                             doCallBack: doCallBack
