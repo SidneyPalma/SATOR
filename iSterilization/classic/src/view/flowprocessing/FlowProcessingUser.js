@@ -24,6 +24,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
         selectusercode: 'onSelectUserCode'
     },
 
+    doCallBack: Ext.emptyFn,
+
     initComponent: function () {
         var me = this;
         me.buildItems();
@@ -117,7 +119,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
             text: 'Cancelar',
             showSmartTheme: 'red',
             handler: function (btn) {
-                btn.up('window').close();
+                btn.windowClose();
             }
         }
     ]

@@ -466,9 +466,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $data['params'] = $params;
 
-//        print_r($data);
-//        exit;
-
         try {
             $step = new \iSterilization\Coach\flowprocessingstep();
             $action = new \iSterilization\Coach\flowprocessingstepaction();

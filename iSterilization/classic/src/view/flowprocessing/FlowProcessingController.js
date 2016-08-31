@@ -60,10 +60,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onSelectAction : function () {
         var me = this,
-            store = Ext.getStore('flowprocessingstepaction');
+            view = me.getView(),
+            store = Ext.getStore('flowprocessingstepaction'),
+            dataview = view.down('dataview[name=flowprocessingsteptask]');
 
         if(!Smart.workstation) {
             return false;
+        }
+
+        if (dataview) {
+            dataview.store.load();
         }
 
         Ext.Ajax.request({
@@ -132,11 +138,29 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
     },
-
+    // Abrir Novo Processamento/Leitura
     callSATOR_PROCESSAR_ITENS: function () {
-        var me = this;
+        var me = this,
+            view = me.getView(),
+            doCallBack = function (rows) {
+                // view.close();
+                Ext.widget('flowprocessingopen').show(null,function () {
+                    this.down('searchmaterial').focus(false,200);
+                    this.down('textfield[name=username]').setValue(rows.username);
+                    this.down('hiddenfield[name=areasid]').setValue(Smart.workstation.areasid);
+                    this.down('textfield[name=areasname]').setValue(Smart.workstation.areasname);
+                });
 
-        me.flowProcessingOpen('flowopen');
+                return true;
+            };
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
     },
 
     onAfterRenderDash: function () {
@@ -212,37 +236,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.get('materialboxname')));
     },
 
-    flowProcessingRead: function () {
-        var me = this;
-
-        me.onAfterRenderDash();
-        me.flowProcessingOpen('flowopen');
-    },
-
-    flowProcessingOpen: function (flowtype) {
-        var me = this,
-            view = me.getView();
-
-        if(!Smart.workstation) {
-            Smart.Msg.showToast('Estação de Trabalho Não Configurada, Operação Não pode ser Realizada!','error');
-            return false;
-        }
-
-        if(flowtype == 'flowuser') {
-            var sm = view.down('dataview[name=flowprocessingstepaction]').getSelectionModel(),
-                md = sm.getSelection()[0];
-        }
-
-        Ext.widget('flowprocessinguser').show(null,function () {
-            this.xdata = md ? md : null;
-            this.down('form').reset();
-            this.flowtype = flowtype ? flowtype : 'flowopen';
-            this.down('textfield[name=usercode]').focus(false,200);
-        });
-
-        // view.searchToogle();
-    },
-
     onSelectUserCode: function (win,field,eOpts) {
         var me = this,
             view = me.getView(),
@@ -274,9 +267,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    selectUserFlow: function () {
+    selectUserFlow: function (btn) {
         var me = this,
-            view = me.getView(),
+            view = btn.up('window'),
             form = view.down('form');
 
         if(!form.isValid()) {
@@ -314,57 +307,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return false;
             }
 
-            switch(view.flowtype) {
-                case 'flowopen': // Abrir Novo Processamento/Leitura
-                    me.onFireTypeOpenFlow(rows,{});
-                    break;
-                case 'flowuser': // Usuário do Processamento/Leitura
-                    me.onFireTypeOpenUser(rows,{});
-                    break;
+            if( view.doCallBack(rows) ) {
+                view.close();
             }
         }
-    },
-
-    onFireTypeOpenFlow: function (userRows,eOpts) {
-        var me = this,
-            view = me.getView();
-
-        view.close();
-
-        Ext.widget('flowprocessingopen').show(null,function () {
-            this.down('searchmaterial').focus(false,200);
-            this.down('textfield[name=username]').setValue(userRows.username);
-            this.down('hiddenfield[name=areasid]').setValue(Smart.workstation.areasid);
-            this.down('textfield[name=areasname]').setValue(Smart.workstation.areasname);
-        });
-    },
-
-    onFireTypeOpenUser: function (userRows,eOpts) {
-        var me = this,
-            view = me.getView(),
-            id = view.xdata.get('flowprocessingstepid'),
-            flowprocessingstepid = view.xdata.get('flowprocessingstepid');
-
-        view.close();
-
-        Ext.Ajax.request({
-            scope: me,
-            url: me.url,
-            params: {
-                action: 'select',
-                method: 'updateUserStep',
-                username: userRows.username,
-                flowprocessingstepid: flowprocessingstepid
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-                me.redirectTo( 'flowprocessingview/' + id );
-            }
-        });
     },
 
     onFormSubmitFailure: function (form, action) {
@@ -1470,8 +1416,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Consultar Material              SATOR_CONSULTAR_MATERIAL
      *          -   Cancelar Ultima Leitura         SATOR_CANCELAR_ULTIMA_LEITURA
      *          -   Relatar uso de EPI				SATOR_RELATAR_USA_EPI
-     *              -   SIM Usa EPI
-     *              -   NÂO Usa EPI
+     *              -   SATOR_SIM
+     *              -   SATOR_NAO
      *          -
      */
 
@@ -1491,9 +1437,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onSelectDataView: function (view,record,eOpts) {
-        var me = this,
-            view = me.getView();
-
         Ext.getStore('flowprocessingstep').setParams({
             method: 'selectCode',
             query: record.get('id')
@@ -1568,12 +1511,45 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             userid = record.get('username'),
             action = record.get('flowstepaction'),
-            stepid = record.get('flowprocessingstepid');
+            stepid = record.get('flowprocessingstepid'),
+            doCallBack = function (rows) {
+                Ext.Ajax.request({
+                    scope: me,
+                    url: me.url,
+                    params: {
+                        action: 'select',
+                        method: 'updateUserStep',
+                        username: rows.username,
+                        flowprocessingstepid: stepid
+                    },
+                    callback: function (options, success, response) {
+                        var result = Ext.decode(response.responseText);
+
+                        if(!success || !result.success) {
+                            return false;
+                        }
+                        me.redirectTo( 'flowprocessingview/' + stepid );
+                    }
+                });
+
+                return true;
+            };
+
+        if(!Smart.workstation) {
+            Smart.Msg.showToast('Estação de Trabalho Não Configurada, Operação Não pode ser Realizada!','error');
+            return false;
+        }
 
         switch(action) {
             case '001':
                     if(!userid) {
-                        me.flowProcessingOpen('flowuser');
+                        Ext.widget('flowprocessinguser', {
+                            scope: me,
+                            doCallBack: doCallBack
+                        }).show(null,function () {
+                            this.down('form').reset();
+                            this.down('textfield[name=usercode]').focus(false,200);
+                        });
                     } else {
                         me.redirectTo( 'flowprocessingview/' + stepid);
                     }
@@ -1605,18 +1581,66 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onFlowTaskAction: function ( viewView, record, item, index, e, eOpts ) {
         var me = this,
-            taskcode = record.get('taskcode'),
-            url = 'business/Calls/Quick/FlowProtocol.php?id=1';
-
+            taskcode = record.get('taskcode');
 
         switch(taskcode) {
             case '001':
-                Ext.widget('call_AUTTHORIZE').show();
+                Ext.widget('call_AUTHORIZE').show(null, function () {
+                    this.master = me.getView();
+                    this.down('gridpanel').getStore().load();
+                });
                 break;
             case '002':
-                window.open(url);
+                window.open('business/Calls/Quick/FlowProtocol.php?id=1');
                 break;
         }
+    },
+
+    setAuthorize: function(grid, rowIndex, colIndex) {
+        var record = grid.getStore().getAt(rowIndex);
+
+        record.set('haspending',!record.get('haspending'));
+        record.commit();
+    },
+    // Autorizar Quebra de Fluxo
+    setAuthorizeList: function () {
+        var me = this,
+            list = [],
+            view = me.getView(),
+            store = view.down('gridpanel').getStore(),
+            doCallBack = function (rows) {
+                var kont = 0;
+                Ext.each(list,function (item) {
+                    item.set('isactive', 0);
+                    item.set('authorizedby', rows.username);
+                    kont += item.store.sync({async: false}) ? 1 : 0;
+                });
+                if(kont == list.length) {
+                    Ext.getStore('flowprocessingstepaction').load();
+                    view.master.down('dataview[name=flowprocessingsteptask]').store.load();
+                    view.close();
+                }
+                return (kont == list.length);
+            };
+
+        store.each(function(record) {
+            if(record.get('haspending')) {
+                list.push(record);
+            }
+        });
+
+        if(list.length == 0) {
+            Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
+            return false;
+        }
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
     }
 
 });

@@ -133,16 +133,8 @@
     width: 300px;
     cursor: pointer;
     margin: 10px 0 0 10px;
-    /*border: 1px solid #454B61;*/
-    /*border-left: 8px solid #454B61;*/
-    /*background: rgba(245, 245, 245, .3);*/
-}
 
-/*.step:hover {*/
-    /*border: 1px solid #BD1550;*/
-    /*border-left: 8px solid #BD1550;*/
-    /*background: rgba(237, 213, 0, .7);*/
-/*}*/
+}
 
 .step-001 {
     border: 1px solid #6A864B;
@@ -163,9 +155,9 @@
 }
 
 .step-002:hover {
-    border: 1px solid #B81D5F;
-    border-left: 8px solid #B81D5F;
-    background: rgba(254, 99, 71, .7);
+    border: 1px solid rgb(254, 99, 71);
+    border-left: 8px solid rgb(254, 99, 71);
+    background: rgba(254, 99, 71, .4);
 }
 
 .step-left {
@@ -245,6 +237,17 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-image: url(images/stage/ConferMaterial.png);
+}
+
+.thumb-wrap .thumb-task-001 .authorize {
+    width: 30px;
+    color: white;
+    height: 20px;
+    padding: 5px;
+    font-weight: 500;
+    border-radius: 50%;
+    text-align: center;
+    background: rgb(195, 63, 119);
 }
 
 .thumb-wrap .thumb-task-002 {

@@ -33,6 +33,24 @@ class flowprocessingstepaction extends \Smart\Data\Model {
     private $isactive;
 
     /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $dateof;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $dateto;
+
+    /**
+     * @Policy {"nullable":true, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $authorizedby;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -93,6 +111,54 @@ class flowprocessingstepaction extends \Smart\Data\Model {
      */
     public function setIsactive($isactive) {
         $this->isactive = $isactive;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getDateof() {
+        return $this->dateof;
+    }
+
+    /**
+     * @param type $dateof
+     * @return \iSterilization\Model\flowprocessingstepaction
+     */
+    public function setDateof($dateof) {
+        $this->dateof = $dateof;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getDateto() {
+        return $this->dateto;
+    }
+
+    /**
+     * @param type $dateto
+     * @return \iSterilization\Model\flowprocessingstepaction
+     */
+    public function setDateto($dateto) {
+        $this->dateto = $dateto;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getAuthorizedby() {
+        return $this->authorizedby;
+    }
+
+    /**
+     * @param type $authorizedby
+     * @return \iSterilization\Model\flowprocessingstepaction
+     */
+    public function setAuthorizedby($authorizedby) {
+        $this->authorizedby = $authorizedby;
         return $this;
     }
 
