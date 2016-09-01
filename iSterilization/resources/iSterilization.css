@@ -258,6 +258,14 @@
     background-image: url(images/stage/BarCode.png);
 }
 
+.thumb-wrap .thumb-task-003 {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(images/stage/RegistrarCiclo.png);
+}
+
 .unconformities {
     width: 100%;
     height: 100%;

@@ -601,12 +601,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * 017 - Registrar Final de Ciclo de Equipamento
          */
-        if(stepflaglist.indexOf('017') != -1) {
-            if(record.get('cyclefinal') == null) {
-                me.callSATOR_RELATAR_CYCLE_STATUS('FINAL');
-                return false;
-            }
-        }
+        // if(stepflaglist.indexOf('017') != -1) {
+        //     if(record.get('cyclefinal') == null) {
+        //         me.callSATOR_RELATAR_CYCLE_STATUS('FINAL');
+        //         return false;
+        //     }
+        // }
 
         if(value && value.length != 0) {
             // Sim é protocolo .. seguir workProtocol
@@ -751,12 +751,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * 016 - Registrar Inicio de Ciclo de Equipamento
          */
-        if(stepflaglist.indexOf('016') != -1) {
-            if(record.get('cyclestart') == null) {
-                me.callSATOR_RELATAR_CYCLE_STATUS('START');
-                return false;
-            }
-        }
+        // if(stepflaglist.indexOf('016') != -1) {
+        //     if(record.get('cyclestart') == null) {
+        //         me.callSATOR_RELATAR_CYCLE_STATUS('START');
+        //         return false;
+        //     }
+        // }
 
         if (!me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
@@ -766,9 +766,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * 004 - Libera Kit Incompleto
          */
-        if (stepflaglist.indexOf('004') != -1) {
-            //return false;
-        }
+        // if (stepflaglist.indexOf('004') != -1) {
+        //     //return false;
+        // }
 
         /**
          * Registrar exceções
