@@ -38,7 +38,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $authenticate = $rows[0]['authenticate'];
 
         if(intval($authenticate) == 0) {
-            throw new \PDOException('O Fluxo Selecionado para esta Leitura Nao Esta Autenticado!');
+            throw new \PDOException('<b>O Fluxo</b> selecionado para esta leitura <b>Não Está Autenticado!</b>');
         }
     }
 
