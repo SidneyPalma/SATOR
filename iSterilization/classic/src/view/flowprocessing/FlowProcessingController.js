@@ -1367,6 +1367,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 data.store.sync({async: false});
                 data.commit();
             });
+            me.setMessageText('MSG_PROTOCOL','Leitura única realizada!');
             return false;
         }
 
