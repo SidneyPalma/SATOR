@@ -38,7 +38,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $authenticate = $rows[0]['authenticate'];
 
         if(intval($authenticate) == 0) {
-            throw new \PDOException('O Fluxo Selecionado para esta Leitura Não Está Autenticado!');
+            throw new \PDOException('<b>O Fluxo</b> selecionado para esta leitura <b>Não Está Autenticado!</b>');
         }
     }
 
@@ -185,59 +185,69 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     public function newFlowView(array $data) {
         $query = self::jsonToObject($data['query']);
 
-        //Gerando BarCode
-        $dateof = date("Ym");
-        $pdo = $this->prepare("select dbo.getLeftPad(6,'0',count(*)+1) as newcode  from flowprocessing where convert(varchar(6),dateof,112) = :dateof;");
-        $pdo->bindValue(":dateof", $dateof, \PDO::PARAM_STR);
-        $pdo->execute();
-        $rows = $pdo->fetchAll();
-        $barcode = $dateof . $rows[0]['newcode'];
-        unset($pdo);
-        unset($rows);
+        try {
 
-        $coach = new \iSterilization\Coach\flowprocessing();
+            //Gerando BarCode
+            $dateof = date("Ym");
+            $pdo = $this->prepare("select dbo.getLeftPad(6,'0',count(*)+1) as newcode  from flowprocessing where convert(varchar(6),dateof,112) = :dateof;");
+            $pdo->bindValue(":dateof", $dateof, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+            $barcode = $dateof . $rows[0]['newcode'];
+            unset($pdo);
+            unset($rows);
 
-        $coach->getStore()->getModel()->set('barcode',$barcode);
-        $coach->getStore()->getModel()->set('version',$query->version);
-        $coach->getStore()->getModel()->set('areasid',$query->areasid);
-        $coach->getStore()->getModel()->set('clientid',$query->clientid);
-        $coach->getStore()->getModel()->set('username',$query->username);
-        $coach->getStore()->getModel()->set('materialid',$query->materialid);
-        $coach->getStore()->getModel()->set('prioritylevel',$query->prioritylevel);
-        $coach->getStore()->getModel()->set('sterilizationtypeid',$query->sterilizationtypeid);
+            $coach = new \iSterilization\Coach\flowprocessing();
 
-        if(isset($query->materialboxid) && strlen($query->materialboxid) != 0) {
-            $coach->getStore()->getModel()->set('materialboxid',$query->materialboxid);
-        }
+            $coach->getStore()->getModel()->set('barcode',$barcode);
+            $coach->getStore()->getModel()->set('version',$query->version);
+            $coach->getStore()->getModel()->set('areasid',$query->areasid);
+            $coach->getStore()->getModel()->set('clientid',$query->clientid);
+            $coach->getStore()->getModel()->set('username',$query->username);
+            $coach->getStore()->getModel()->set('materialid',$query->materialid);
+            $coach->getStore()->getModel()->set('prioritylevel',$query->prioritylevel);
+            $coach->getStore()->getModel()->set('sterilizationtypeid',$query->sterilizationtypeid);
 
-        if($query->clienttype == '004') {
-            $coach->getStore()->getModel()->set('placeid',$query->placeid);
-            $coach->getStore()->getModel()->set('flowingid',$query->flowingid);
-            $coach->getStore()->getModel()->set('patientname',$query->patientname);
-            $coach->getStore()->getModel()->set('healthinsurance',$query->healthinsurance);
-            $coach->getStore()->getModel()->set('surgicalwarning',$query->surgicalwarning);
-            $coach->getStore()->getModel()->set('instrumentatorid',$query->instrumentatorid);
-        }
+            if(isset($query->materialboxid) && strlen($query->materialboxid) != 0) {
+                $coach->getStore()->getModel()->set('materialboxid',$query->materialboxid);
+            }
 
-        $model = $coach->getStore()->getModel();
-        $this->preInsert($model);
+            if($query->clienttype == '004') {
+                $coach->getStore()->getModel()->set('placeid',$query->placeid);
+                $coach->getStore()->getModel()->set('flowingid',$query->flowingid);
+                $coach->getStore()->getModel()->set('patientname',$query->patientname);
+                $coach->getStore()->getModel()->set('healthinsurance',$query->healthinsurance);
+                $coach->getStore()->getModel()->set('surgicalwarning',$query->surgicalwarning);
+                $coach->getStore()->getModel()->set('instrumentatorid',$query->instrumentatorid);
+            }
 
-        $result = self::jsonToObject($coach->getStore()->insert());
-
-        if($result->success) {
             $model = $coach->getStore()->getModel();
-            $this->posInsert($model);
+            $this->preInsert($model);
+
+            $result = self::jsonToObject($coach->getStore()->insert());
+
+            if($result->success) {
+                $model = $coach->getStore()->getModel();
+                $this->posInsert($model);
+            }
+
+            $step = array();
+
+            $step['flowprocessingid'] = $result->rows->id;
+
+            if($result->success) {
+                $this->newFlowStep($step);
+            }
+
+            $result = self::objectToJson($result);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+            $result = self::getResultToJson();
         }
 
-        $step = array();
-
-        $step['flowprocessingid'] = $result->rows->id;
-
-        if($result->success) {
-            $this->newFlowStep($step);
-        }
-
-        return self::objectToJson($result);
+        return $result;
     }
 
     public function newFlowStep(array $step) {
