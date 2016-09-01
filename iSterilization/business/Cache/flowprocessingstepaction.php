@@ -28,6 +28,10 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
             $list[1]['taskcode'] = '002';
             $list[1]['taskname'] = 'Mensagens de Leitura';
 
+            $list[2]['taskrows'] = 0;
+            $list[2]['taskcode'] = '003';
+            $list[2]['taskname'] = 'Registrar Ciclo';
+
             self::_setRows($list);
 
         } catch ( \PDOException $e ) {
