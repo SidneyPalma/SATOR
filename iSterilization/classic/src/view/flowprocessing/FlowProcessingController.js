@@ -735,18 +735,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             exceptionby = record.get('exceptionby'),
             stepflaglist = record.get('stepflaglist');
 
-
-        /**
-         * 004 - Libera Kit Incompleto
-         */
-        if(stepflaglist.indexOf('004') != -1) {
-
-        }
-
-        if(!me.checkUnconformities()) {
-            return false;
-        }
-
         /**
          * Fazer checagens de encerramento
          */
@@ -771,20 +759,37 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         }
 
+        if (!me.checkUnconformities()) {
+            me.callSATOR_UNCONFORMITIES();
+            return false;
+        }
+
+        /**
+         * 004 - Libera Kit Incompleto
+         */
+        if (stepflaglist.indexOf('004') != -1) {
+            //return false;
+        }
+
         /**
          * Registrar exceções
          */
         if(exceptionby != null) {
-            me.relatarExceptionBy(Ext.decode(exceptionby));
+            me.callSATOR_RELATAR_EXCEPTION(Ext.decode(exceptionby));
             return false;
         }
+    },
 
-        Ext.widget('call_UNCONFORMITIES').show(null,function () {
+    callSATOR_UNCONFORMITIES: function () {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('call_SATOR_UNCONFORMITIES').show(null, function () {
             this.master = view;
         });
     },
 
-    relatarExceptionBy: function (exceptionby) {
+    callSATOR_RELATAR_EXCEPTION: function (exceptionby) {
         var me = this,
             list = [],
             typeid = [],
@@ -792,11 +797,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             record = view.xdata;
 
-        Ext.each(exceptionby,function (item) {
+        Ext.each(exceptionby, function (item) {
             typeid.push(item.typeid);
             steplevel.push(item.steplevel);
         });
-        
+
         Ext.Ajax.request({
             scope: me,
             url: me.url,
@@ -808,12 +813,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 flowprocessingid: record.get('flowprocessingid')
             },
             callback: function (options, success, response) {
-                if(success) {
+                if (success) {
                     var rows = Ext.decode(response.responseText).rows;
                     // SATOR_ENCERRAR_LEITURA
-                    Ext.widget('call_SATOR_RELATAR_EXCEPTION').show(null,function () {
+                    Ext.widget('call_SATOR_RELATAR_EXCEPTION').show(null, function () {
                         this.master = view;
-                        Ext.each(rows,function (item) {
+                        Ext.each(rows, function (item) {
                             item.element = '';
                             item.flowexception = 0;
                             list.push(item);
@@ -1308,7 +1313,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
 	workReadArea: function (value) {
         var me = this,
-            list = [],
 			view = me.getView(),
             record = view.xdata,
             stepflaglist = record.get('stepflaglist'),
@@ -1316,7 +1320,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             model = view.down('flowprocessingmaterial').getSelectionModel(),
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
-
 
 		/**
           * - Verificar é Kit ?
@@ -1354,31 +1357,29 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 			return false;
 		}
 
-		// Já foi lançado ?
-		// Não -> Update Status do Item na Lista
-		data.set('unconformities','010');
-		store.sync({
-			callback: function () {
-				data.commit();
-				model.select(data);
-			}
-		});
-
-        Ext.suspendLayouts();
-
         /**
          * 019 - Leitura única, valida os itens do Kit
          */
         if(stepflaglist.indexOf('019') != -1) {
+            store.getAt(0);
             store.each(function (data) {
                 data.set('unconformities','010');
                 data.store.sync({async: false});
                 data.commit();
             });
+            me.setMessageText('MSG_PROTOCOL','Leitura única realizada!');
+            return false;
         }
 
-        Ext.resumeLayouts(true);
-
+        // Já foi lançado ?
+        // Não -> Update Status do Item na Lista
+        data.set('unconformities','010');
+        store.sync({
+            callback: function () {
+                data.commit();
+                model.select(data);
+            }
+        });
     },
 
     setIsntMaterialBox: function (value) {
@@ -1442,7 +1443,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Cancelar Leituras Relizadas             SATOR_CANCELAR_LEITURAS
      *          -   Imprimir Etiquetas                      SATOR_IMPRIMIR_ETIQUETA
      *          -   Consultar Material                      SATOR_CONSULTAR_MATERIAL
-     *          -   Leitura única, valida os itens do Kit   SATOR_LEITURA_UNICA
      *          -   Cancelar Ultima Leitura                 SATOR_CANCELAR_ULTIMA_LEITURA
      *          -   Relatar uso de EPI				        SATOR_RELATAR_USA_EPI
      *              -   SATOR_SIM
@@ -1614,7 +1614,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         switch(taskcode) {
             case '001':
-                Ext.widget('call_AUTHORIZE').show(null, function () {
+                Ext.widget('call_SATOR_AUTHORIZE').show(null, function () {
                     this.master = me.getView();
                     this.down('gridpanel').getStore().load();
                 });
@@ -1640,7 +1640,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             doCallBack = function (rows) {
                 var kont = 0;
                 Ext.each(list,function (item) {
-                    item.set('isactive', 0);
+                    item.set('isactive', 'AUTHORIZE');
                     item.set('authorizedby', rows.username);
                     kont += item.store.sync({async: false}) ? 1 : 0;
                 });

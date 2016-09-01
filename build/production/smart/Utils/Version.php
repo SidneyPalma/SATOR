@@ -207,6 +207,7 @@ class Version {
         $modulebuild = "{$this->major}.{$this->minor}.{$this->patch}.{$this->build}";
 
         $this->release->buildby = array(
+            'application'=>'production',
             'logusername'=>gethostname(),
             'lastdateapp'=>date('Y-m-d H:i')
         );
@@ -224,7 +225,7 @@ class Version {
 
         return "... $name $modulebuild";
     }
-	
+
 	public function setSourceBase ($configs) {
 	}
 	

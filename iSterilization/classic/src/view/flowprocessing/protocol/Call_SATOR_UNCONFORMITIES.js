@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_UNCONFORMITIES', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITIES', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_UNCONFORMITIES',
+    xtype: 'call_SATOR_UNCONFORMITIES',
 
     requires: [
         'Ext.form.Panel',

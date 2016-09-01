@@ -25,10 +25,10 @@ class flowprocessingstepaction extends \Smart\Data\Event {
      */
     public function preUpdate( \iSterilization\Model\flowprocessingstepaction &$model ) {
         Session::hasProfile('','');
-        $authorizedby = $model->getAuthorizedby();
 
-        if((isset($authorizedby)) && (strlen($authorizedby) != 0)) {
+        if($model->getIsactive() == 'AUTHORIZE') {
             $dateto = date("Ymd H:i:s");
+            $model->set('isactive',0);
             $model->set('dateto',$dateto);
         }
     }
