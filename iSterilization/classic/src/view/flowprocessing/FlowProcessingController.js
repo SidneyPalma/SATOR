@@ -475,12 +475,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             },
             callback: function (options, success, response) {
                 view.setLoading(false);
-
-                if(!success) {
-                    console.info(response);
-                    return false;
-                }
-
                 var result = Ext.decode(response.responseText);
 
                 if(!success || !result.success) {
