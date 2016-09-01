@@ -1379,7 +1379,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 model.select(data);
             }
         });
-
     },
 
     setIsntMaterialBox: function (value) {

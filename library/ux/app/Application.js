@@ -13,6 +13,7 @@ Ext.define( 'Smart.ux.app.Application', {
         me.initQuickTips();
 
         Smart.app = me;
+        Smart.appType = 'pro';
 
         Ext.USE_NATIVE_JSON = true;
         Ext.enableAriaButtons = false;
@@ -24,6 +25,10 @@ Ext.define( 'Smart.ux.app.Application', {
         var me = this,
             workstation = localStorage.getItem('workstation'),
             loggedIn = localStorage.getItem(Ext.manifest.name + 'In');
+
+        //<debug>
+            Smart.appType = 'dev';
+        //</debug>
 
         me.redirectTo(Ext.manifest.name.toLowerCase());
 
