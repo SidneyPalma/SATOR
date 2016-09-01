@@ -24,13 +24,18 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
             $list[0]['taskrows'] = str_pad($rows[0]['rows'], 2, '0', STR_PAD_LEFT);
             $list[0]['taskcode'] = '001';
             $list[0]['taskname'] = 'Autorizar Processos';
-            $list[1]['taskrows'] = 0;
+
+            $list[1]['taskrows'] = '';
             $list[1]['taskcode'] = '002';
             $list[1]['taskname'] = 'Mensagens de Leitura';
 
-            $list[2]['taskrows'] = 0;
+            $list[2]['taskrows'] = '';
             $list[2]['taskcode'] = '003';
             $list[2]['taskname'] = 'Registrar Ciclo';
+
+            $list[3]['taskrows'] = '';
+            $list[3]['taskcode'] = '004';
+            $list[3]['taskname'] = 'Finalizar Ciclo';
 
             self::_setRows($list);
 
