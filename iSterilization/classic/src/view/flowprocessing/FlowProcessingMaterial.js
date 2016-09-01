@@ -86,6 +86,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     return Ext.String.format('{0} ({1})',value,record.get('proprietaryname'));
                 }
             }, {
+                width: 150,
+                // hidden: true,
+                xtype: 'widgetcolumn',
+                widget: {
+                    xtype: 'textfield',
+                    listeners: {
+                        scope: this,
+                        specialkey: function(field, events){
+                            if (events.getKey() == Ext.EventObject.ENTER) {
+                                events.keyCode = Ext.EventObject.TAB;
+                            }
+                        }
+                    }
+                }
+            }, {
                 dataIndex: 'unconformitiesdescription',
                 width: 180,
                 editor: {
