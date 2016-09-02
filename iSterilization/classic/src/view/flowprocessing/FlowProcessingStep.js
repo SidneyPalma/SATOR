@@ -79,11 +79,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         if(!search.isVisible()) {
             search.show(false,function () {
                 search.focus(false,200);
+                me.down('label[name=labelitem]').setText('Consultar');
             });
         } else {
             if(search.getValue().length != 0) {
                 search.reset();
-            } else search.hide();
+            } else  {
+                search.hide();
+                me.down('label[name=labelitem]').setText('Detalhes');
+            }
         }
     },
 
@@ -178,8 +182,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                             {
                                 xtype: 'label',
                                 cls: 'processing-field-font',
-                                text: 'Consultar',
-                                name: 'labelareas'
+                                text: 'Detalhamento',
+                                name: 'labelitem'
                             }, {
                                 hidden: true,
                                 name: 'search',

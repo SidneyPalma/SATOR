@@ -7,6 +7,8 @@ use Smart\Utils\Session;
 use Endroid\QrCode\QrCode;
 
 class exceptionbyflow extends Report {
+    protected $col = 0; // Current column
+    protected $y0;
 
     public function preConstruct() {
         parent::preConstruct();
@@ -50,72 +52,94 @@ class exceptionbyflow extends Report {
         $this->SetLineWidth(.2);
         $this->Cell($this->squareWidth,3, '','T',1,'C');
         $this->configStyleHeader(16);
-        $this->Cell($this->getInternalW(),6, "$name v.$version",0,1,'C',false);
+        $this->Cell($this->squareWidth,6, "$name v.$version",0,1,'C',false);
+        $this->Ln(5);
+        $this->y0 = $this->GetY();
     }
 
-    public function QrCode($qrCode,$qrStep) {
-        $qrTemp = __DIR__;
-        $tpStep = self::arrayToOject($qrStep);
-        $colorFore = array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0);
-        $colorBack = array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0);
+    public function SetCol($col) {
+        // Set position at a given column
+        $this->col = $col;
+        $x = 10+$col*65;
+        $this->SetLeftMargin($x + 7);
+        $this->SetX($x);
+    }
 
-        $qrFile = "{$qrTemp}{$tpStep->text}.png";
+    public function AcceptPageBreak() {
+        // Method accepting or not automatic page break
+        if($this->col<2) {
+            // Go to next column
+            $this->SetCol($this->col+1);
+            // Set ordinate to top
+            $this->SetY($this->y0);
+            // Keep on page
+            return false;
+        } else {
+            // Go back to first column
+            $this->SetCol(0);
+            // Page break
+            return true;
+        }
+    }
 
-        $qrCode
-            ->setText($tpStep->text)
-            ->setSize(60)
-            ->setPadding(10)
-//            ->setLabel($tpStep->mark)
-//            ->setLabelFontSize(10)
-            ->setErrorCorrection('high')
-            ->setForegroundColor($colorFore)
-            ->setBackgroundColor($colorBack)
-            ->setImageType(QrCode::IMAGE_TYPE_PNG)
-            ->render($qrFile);
-
-        $this->Image($qrFile,$tpStep->posX,$tpStep->posY);
-        unlink($qrFile);
+    public function Footer() {
     }
 
     public function Detail() {
-        $qrStep = [];
+        $qrTemp = __DIR__;
         $qrCode = new QrCode();
-        $sw = intval($this->squareWidth / 2);
-        $flow = self::encodeUTF8(self::jsonToArray($this->rows->dataflowstep));
+        $sw = intval($this->squareWidth / 4);
+        $flow = self::decodeUTF8(self::jsonToArray($this->rows->dataflowstep));
 
-        $posX = intval($sw/2) + (2.3);
-
-        $this->Ln(5);
-        $this->configStyleHeader(14);
-
-        $list = self::searchArray($flow,'exceptiondo',1);
+        $this->SetLeftMargin($this->lMargin + 5);
 
         $i = 0;
+        $list = [];
+        foreach ($flow as $item) {
+            if(strlen($item['equipmentid']) != 0) {
+                $list[$i]['barcodestep'] = $item['barcode'];
+                $list[$i]['elementstep'] = $item['steplevel'];
+                $list[$i]['elementname'] = $item['elementname'];
+                $list[$i]['equipmentid'] = $item['equipmentid'];
+                $i++;
+            }
+        }
 
-        foreach ($list as $item) {
-            $list[$i]['step'] = self::searchArray($flow,'source',$item['steplevel']);
-            $i++;
+        $this->configStyleHeader(12);
+
+        $list = self::sorterArray($list,'elementstep');
+
+        for ($i; $i<24; $i++) {
+            $list[$i]['barcodestep'] = '';
+            $list[$i]['elementname'] = '';
         }
 
         foreach ($list as $item) {
-            $step = self::arrayToOject($item['step']);
-            $elementname = utf8_decode($item['elementname']);
+            $barcodestep = $item['barcodestep'];
+            $elementname = $item['elementname'];
 
-            $this->configStyleHeader(12);
-            $this->Cell($sw * 1.0,10,$elementname,'B',1,'C',1);
+            $this->Cell($sw * 1.0,10,$elementname,1,1,'C',1);
 
-            foreach ($step as $field => $value) {
-                $this->Ln(1);
-                $qrStep['posX'] = $posX;
-                $qrStep['posY'] = $this->y;
-                $qrStep['text'] = $value->barcode;
-                $qrStep['mark'] = $value->elementname;
+            if(strlen($barcodestep) != 0) {
+                $this->SetY($this->y+5);
 
-                $this->QrCode($qrCode,$qrStep);
-                $this->Cell($sw * 1.0,20,'',0,1,'C',0);
-                $this->SetFont('Arial', '', 10);
-                $this->Cell($sw * 1.0,7,utf8_decode($value->elementname),0,1,'C',0);
+                $qrFile = "{$qrTemp}{$barcodestep}.png";
+
+                $qrCode
+                    ->setText($barcodestep)
+                    ->setSize(30)
+                    ->setPadding(0)
+                    ->setErrorCorrection('high')
+                    ->setImageType(QrCode::IMAGE_TYPE_PNG)
+                    ->render($qrFile);
+
+                $this->Image($qrFile,$this->x+19,$this->y);
+                unlink($qrFile);
+
+                $this->SetY($this->y-5);
             }
+
+            $this->Cell($sw * 1.0,20,'',1,1,'C',0);
         }
     }
 
