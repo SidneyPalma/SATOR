@@ -61,7 +61,7 @@ class exceptionbyflow extends Report {
         // Set position at a given column
         $this->col = $col;
         $x = 10+$col*65;
-        $this->SetLeftMargin($x);
+        $this->SetLeftMargin($x + 7);
         $this->SetX($x);
     }
 
@@ -88,8 +88,10 @@ class exceptionbyflow extends Report {
     public function Detail() {
         $qrTemp = __DIR__;
         $qrCode = new QrCode();
-        $sw = intval($this->squareWidth / 3);
+        $sw = intval($this->squareWidth / 4);
         $flow = self::decodeUTF8(self::jsonToArray($this->rows->dataflowstep));
+
+        $this->SetLeftMargin($this->lMargin + 5);
 
         $i = 0;
         $list = [];
@@ -119,25 +121,25 @@ class exceptionbyflow extends Report {
             $this->Cell($sw * 1.0,10,$elementname,1,1,'C',1);
 
             if(strlen($barcodestep) != 0) {
-                $this->SetY($this->y+3);
+                $this->SetY($this->y+5);
 
                 $qrFile = "{$qrTemp}{$barcodestep}.png";
 
                 $qrCode
                     ->setText($barcodestep)
-                    ->setSize(50)
+                    ->setSize(30)
                     ->setPadding(0)
                     ->setErrorCorrection('high')
                     ->setImageType(QrCode::IMAGE_TYPE_PNG)
                     ->render($qrFile);
 
-                $this->Image($qrFile,$this->x+22,$this->y);
+                $this->Image($qrFile,$this->x+19,$this->y);
                 unlink($qrFile);
 
-                $this->SetY($this->y-3);
+                $this->SetY($this->y-5);
             }
 
-            $this->Cell($sw * 1.0,20,'',0,1,'C',0);
+            $this->Cell($sw * 1.0,20,'',1,1,'C',0);
         }
     }
 
