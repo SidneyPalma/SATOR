@@ -133,6 +133,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
+            case 'SATOR_RELATAR_CYCLE_START':
+                me.callSATOR_RELATAR_CYCLE_START();
+                break;
+            case 'SATOR_RELATAR_CYCLE_FINAL':
+                me.callSATOR_RELATAR_CYCLE_FINAL();
+                break;
             default:
                 Smart.Msg.showToast('Protocolo Inválido para esta área');
         }
@@ -141,9 +147,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     // Abrir Novo Processamento/Leitura
     callSATOR_PROCESSAR_ITENS: function () {
         var me = this,
-            view = me.getView(),
             doCallBack = function (rows) {
-                // view.close();
                 Ext.widget('flowprocessingopen').show(null,function () {
                     this.down('searchmaterial').focus(false,200);
                     this.down('textfield[name=username]').setValue(rows.username);
@@ -161,6 +165,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.down('form').reset();
             this.down('textfield[name=usercode]').focus(false,200);
         });
+    },
+
+    callSATOR_RELATAR_CYCLE_START: function () {
+        Smart.Msg.showToast('SATOR_RELATAR_CYCLE_START');
+    },
+
+    callSATOR_RELATAR_CYCLE_FINAL: function () {
+        Smart.Msg.showToast('SATOR_RELATAR_CYCLE_FINAL');
     },
 
     onAfterRenderDash: function () {
