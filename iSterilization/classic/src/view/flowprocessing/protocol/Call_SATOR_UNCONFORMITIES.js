@@ -20,6 +20,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITI
 
     controller: 'flowprocessing',
 
+    listeners: {
+        startreaderunconformities: 'onStartReaderUnconformities'
+    },
+
     initComponent: function () {
         var me = this;
         me.buildItems();
@@ -60,14 +64,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITI
 
     buttons: [
         {
-            scale: 'medium',
-            name: 'confirm',
-            text: 'Confirmar',
-            showSmartTheme: 'green',
-            listeners: {
-                click: 'setUnconformities'
-            }
-        }, {
+        //     scale: 'medium',
+        //     name: 'confirm',
+        //     text: 'Confirmar',
+        //     showSmartTheme: 'green',
+        //     listeners: {
+        //         click: 'setUnconformities'
+        //     }
+        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',

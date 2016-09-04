@@ -655,6 +655,31 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 			me.workReadArea(value);
         }
     },
+
+    onStartReaderUnconformities: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            value = field.getValue();
+
+        field.reset();
+
+        if(value && value.length != 0) {
+            if(value.indexOf('SATOR-U') != -1) {
+                var grid = view.down('flowprocessingmaterial'),
+                    sm = grid.getSelectionModel(),
+                    md = sm.getSelection()[0];
+
+                value = value.replace('SATOR-U','');
+                md.set('unconformities',value);
+                md.store.sync({async: false});
+                md.commit();
+                sm.select(md);
+
+                return false;
+            }
+            me.setMessageText('MSG_PROTOCOL_ERROR');
+        }
+    },
 	
 	workProtocol: function (value) {
 	    var me = this;
@@ -794,7 +819,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         //     }
         // }
 
-        if (!me.checkUnconformities()) {
+        if (me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
             return false;
         }
@@ -820,6 +845,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView();
 
         Ext.widget('call_SATOR_UNCONFORMITIES').show(null, function () {
+            var list = [],
+                grid = this.down('flowprocessingmaterial'),
+                sm = grid.getSelectionModel();
+
+            grid.store.each(function(data) {
+                if(data.get('unconformities') == '001') {
+                    list.push(data);
+                }
+            });
+
+            if(list.length != 0) {
+                var item = list[0];
+                sm.select(item);
+                grid.plugins[0].startEditByPosition({row: grid.store.indexOf(item), column: 1});
+            }
+
             this.master = view;
         });
     },
@@ -1045,7 +1086,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             count += item.get('unconformities') == '010' ? 1 : 0;
         });
 
-        return (count != store.count);
+        return (count != store.getCount());
     },
 
     onSelectUnconformities: function (combo,record,eOpts) {
@@ -1627,7 +1668,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onBeforeEditMaterialFlowStepAction: function ( editor, context, eOpts ) {
         var list = ['010'],
-            unconformities = context.record.get('unconformities');
+            grid = context.grid,
+            data = context.record,
+            unconformities = data.get('unconformities');
+
+        grid.getSelectionModel().select(data);
 
         return (context.grid.editable) && (list.indexOf(unconformities) == -1);
     },
