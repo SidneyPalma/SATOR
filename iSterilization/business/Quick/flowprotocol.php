@@ -29,7 +29,6 @@ class flowprotocol extends Report {
 
     public function Header() {
         $this->squareWidth = $this->getInternalW();
-        $sizeColumns = array(intval($this->squareWidth / 2),intval($this->squareWidth / 2));
 
         $sw = intval($this->squareWidth / 10);
         $module = current(explode( '\\', __NAMESPACE__ ));
