@@ -21,11 +21,11 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 
             $list = [];
             
-            if(intval($rows[0]['rows']) != 0 ) {
+//            if(intval($rows[0]['rows']) != 0 ) {
                 $list[0]['taskrows'] = str_pad($rows[0]['rows'], 2, '0', STR_PAD_LEFT);
                 $list[0]['taskcode'] = '001';
                 $list[0]['taskname'] = 'Autorizar Processos';
-            }
+//            }
 
 //            $list[1]['taskrows'] = '';
 //            $list[1]['taskcode'] = '002';
