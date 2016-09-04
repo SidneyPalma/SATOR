@@ -597,6 +597,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
     public function setUnconformities(array $data) {
 
+        $data['params'] = json_decode($data['params']);
+
         print_r($data);
         exit;
         // var flowprocessingid = master.xdata.get('flowprocessingid');
