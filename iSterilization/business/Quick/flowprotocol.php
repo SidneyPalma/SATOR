@@ -15,7 +15,8 @@ class flowprotocol extends Report {
             select
                 et.name,
                 etl.code,
-                etl.description
+                etl.description,
+                et.description as type
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
@@ -48,9 +49,6 @@ class flowprotocol extends Report {
 
         $this->SetLineWidth(.2);
         $this->Cell($this->squareWidth,3, '','T',1,'C');
-        $this->configStyleHeader(16);
-        $this->Cell($this->getInternalW(),6, utf8_decode("Mensagens de Leitura"),0,1,'C',false);
-        $this->Ln(5);
     }
 
     public function Detail() {
@@ -58,15 +56,24 @@ class flowprotocol extends Report {
         $qrCode = new QrCode();
         $sw = $this->squareWidth / 2;
 
-        $this->configStyleHeader(14);
-
         $i = 1;
         $line = 1;
+        $typeGroup = '';
 
         while(list(, $item) = each($this->rows)) {
             extract($item);
 
+            if($typeGroup == "" || $typeGroup != $type) {
+                $typeGroup = $type;
+
+                $this->configStyleHeader(16);
+                $this->Cell($this->squareWidth,6, $typeGroup,0,1,'C',false);
+                $this->Ln(5);
+            }
+
             $line = $line == 0 ? 1 : 0;
+            $this->configStyleHeader(12);
+            $this->SetFillColor(245, 242, 198);
             $this->Cell($sw * 1.0,10,"$description",'B',$line,'C',1);
 
             $code = ( $name == "unconformities" ) ? "SATOR-U$code" : $code;
@@ -86,6 +93,7 @@ class flowprotocol extends Report {
             if($line == 1) {
                 $this->Cell($sw * 2,30,'',0,1,'C',0);
             }
+
             $i++;
             if($i == 13) {
                 $i = 1;
