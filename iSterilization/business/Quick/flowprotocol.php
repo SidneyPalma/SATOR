@@ -13,14 +13,15 @@ class flowprotocol extends Report {
 
         $sql = "
             select
+                et.name,
                 etl.code,
                 etl.description
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-            where et.name = 'flowprotocol'
+            where et.name in ('flowprotocol','unconformities')
                 and etl.isactive = 1
-            order by etl.orderby";
+            order by et.name, etl.orderby";
 
         $this->rows = $this->getProxy()->query($sql)->fetchAll();
     }
@@ -59,6 +60,7 @@ class flowprotocol extends Report {
 
         $this->configStyleHeader(14);
 
+        $i = 1;
         $line = 1;
 
         while(list(, $item) = each($this->rows)) {
@@ -66,6 +68,8 @@ class flowprotocol extends Report {
 
             $line = $line == 0 ? 1 : 0;
             $this->Cell($sw * 1.0,10,"$description",'B',$line,'C',1);
+
+            $code = ( $name == "unconformities" ) ? "SATOR-U$code" : $code;
 
             $qrFile = "{$qrTemp}{$code}.png";
 
@@ -81,6 +85,11 @@ class flowprotocol extends Report {
 
             if($line == 1) {
                 $this->Cell($sw * 2,30,'',0,1,'C',0);
+            }
+            $i++;
+            if($i == 13) {
+                $i = 1;
+                $this->AddPage();
             }
         }
     }
