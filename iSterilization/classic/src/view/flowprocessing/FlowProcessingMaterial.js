@@ -24,8 +24,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     selType: 'cellmodel',
 
     plugins: {
+        ptype: 'cellediting',
         clicksToEdit: 1,
-        ptype: 'cellediting'
+        pluginId: 'myplugin'
     },
 
     initComponent: function () {
@@ -76,6 +77,35 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     return Ext.String.format(flag,unconformities);
                 }
             }, {
+                width: 150,
+                hidden: !me.editable,
+                editor: {
+                    showClear: true,
+                    useUpperCase: true,
+                    xtype: 'textfield',
+                    listeners: {
+                        scope: this,
+                        // focusenter: function (field, event, eOpts) {
+                        //     console.info(field,field.ownerCt);
+                        // },
+                        specialkey: function(field, e){
+                            if (e.getKey() == Ext.EventObject.ENTER) {
+                                e.keyCode = Ext.EventObject.TAB;
+                            }
+
+                            if ([e.ESC].indexOf(e.getKey()) != -1) {
+                                field.reset();
+                            }
+                            if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                                var view = field.up('call_SATOR_UNCONFORMITIES');
+                                if(view) {
+                                    view.fireEvent('startreaderunconformities', field, e);
+                                }
+                            }
+                        }
+                    }
+                }
+            }, {
                 hidden: Smart.appType == 'pro',
                 dataIndex: 'barcode',
                 width: 120
@@ -86,32 +116,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     return Ext.String.format('{0} ({1})',value,record.get('proprietaryname'));
                 }
             }, {
-                width: 150,
-                // hidden: true,
-                xtype: 'widgetcolumn',
-                widget: {
-                    xtype: 'textfield',
-                    listeners: {
-                        scope: this,
-                        specialkey: function(field, events){
-                            if (events.getKey() == Ext.EventObject.ENTER) {
-                                events.keyCode = Ext.EventObject.TAB;
-                            }
-                        }
-                    }
-                }
-            }, {
                 dataIndex: 'unconformitiesdescription',
-                width: 180,
-                editor: {
-                    xtype: 'comboenum',
-                    queryFilter: 'I',
-                    name: 'unconformitiesdescription',
-                    fieldCls: 'smart-field-style-action',
-                    listeners: {
-                        select: 'onSelectUnconformities'
-                    }
-                }
+                width: 180
+                // editor: {
+                //     xtype: 'comboenum',
+                //     queryFilter: 'I',
+                //     name: 'unconformitiesdescription',
+                //     fieldCls: 'smart-field-style-action',
+                //     listeners: {
+                //         select: 'onSelectUnconformities'
+                //     }
+                // }
             }
         ];
     }

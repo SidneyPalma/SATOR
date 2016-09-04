@@ -29,8 +29,6 @@ class exceptionbyflow extends Report {
         $name = $this->rows->name;
         $version = $this->rows->version;
         $this->squareWidth = $this->getInternalW();
-        $sizeColumns = array(intval($this->squareWidth / 2),intval($this->squareWidth / 2));
-        $this->sizeColumns = $this->scaleCalc(array_sum($sizeColumns),intval($this->squareWidth),$sizeColumns);
 
         $sw = intval($this->squareWidth / 10);
         $module = current(explode( '\\', __NAMESPACE__ ));
