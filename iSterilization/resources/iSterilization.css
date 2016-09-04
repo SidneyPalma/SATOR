@@ -148,6 +148,20 @@
     background: rgba(166, 232, 94, .7);
 }
 
+/*.step {*/
+    /*position: relative;*/
+/*}*/
+
+/*.step:before {*/
+    /*position: absolute;*/
+    /*content: '';*/
+    /*border-top: 0px solid transparent;*/
+    /*border-bottom: 30px solid transparent;*/
+    /*border-right: 30px solid #3c4260;*/
+    /*right: 0px;*/
+/*}*/
+
+
 .step-002 {
     border: 1px solid #B81D5F;
     border-left: 8px solid #B81D5F;

@@ -27,10 +27,10 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 $list[0]['taskname'] = 'Autorizar Processos';
 //            }
 
-//            $list[1]['taskrows'] = '';
-//            $list[1]['taskcode'] = '002';
-//            $list[1]['taskname'] = 'Mensagens de Leitura';
-//
+            $list[1]['taskrows'] = '';
+            $list[1]['taskcode'] = '002';
+            $list[1]['taskname'] = 'Mensagens de Leitura';
+
 //            $list[2]['taskrows'] = '';
 //            $list[2]['taskcode'] = '003';
 //            $list[2]['taskname'] = 'Registrar Ciclo';
