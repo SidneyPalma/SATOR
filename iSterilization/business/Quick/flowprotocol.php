@@ -13,14 +13,15 @@ class flowprotocol extends Report {
 
         $sql = "
             select
+                et.name,
                 etl.code,
                 etl.description
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-            where et.name = 'flowprotocol'
+            where et.name in ('flowprotocol','unconformities')
                 and etl.isactive = 1
-            order by etl.orderby";
+            order by et.name, etl.orderby";
 
         $this->rows = $this->getProxy()->query($sql)->fetchAll();
     }
@@ -49,54 +50,47 @@ class flowprotocol extends Report {
         $this->Cell($this->squareWidth,3, '','T',1,'C');
         $this->configStyleHeader(16);
         $this->Cell($this->getInternalW(),6, utf8_decode("Mensagens de Leitura"),0,1,'C',false);
+        $this->Ln(5);
     }
 
     public function Detail() {
         $qrTemp = __DIR__;
         $qrCode = new QrCode();
-        $sw = intval($this->squareWidth / 2);
-        $colorFore = array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0);
-        $colorBack = array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0);
+        $sw = $this->squareWidth / 2;
 
-        $next = 0;
-        $true = 0;
-        $posY = 55;
-        $posX = intval($sw/2);
-
-        $this->Ln(5);
         $this->configStyleHeader(14);
+
+        $i = 1;
+        $line = 1;
 
         while(list(, $item) = each($this->rows)) {
             extract($item);
 
-            $next++;
-            $true = !($next % 2) ? 1 : 0;
+            $line = $line == 0 ? 1 : 0;
+            $this->Cell($sw * 1.0,10,"$description",'B',$line,'C',1);
 
-            $this->Cell($sw * 1.0,10,"$description",'B',$true,'C',1);
-
-            if($true == 1) {
-                $this->Cell($sw * 2.0,30,'',0,$true,'L',0);
-            }
+            $code = ( $name == "unconformities" ) ? "SATOR-U$code" : $code;
 
             $qrFile = "{$qrTemp}{$code}.png";
 
             $qrCode->setText($code)
-                ->setSize(70)
-                ->setPadding(10)
-				->setLabel($code)
-				->setLabelFontSize(10)
+                ->setSize(50)
+                ->setPadding(0)
                 ->setErrorCorrection('high')
-                ->setForegroundColor($colorFore)
-                ->setBackgroundColor($colorBack)
                 ->setImageType(QrCode::IMAGE_TYPE_PNG)
                 ->render($qrFile);
 
-            $posX = ($true == 1) ? (intval($sw/2)+$sw) : $posX;
-
-            $this->Image($qrFile,$posX,$posY);
-            $posY += ($true == 1) ? 40 : 0;
-            $posX = intval($sw/2);
+            $this->Image($qrFile,$sw-$this->x+64,$this->y+($line == 0 ? 17 : 7));
             unlink($qrFile);
+
+            if($line == 1) {
+                $this->Cell($sw * 2,30,'',0,1,'C',0);
+            }
+            $i++;
+            if($i == 13) {
+                $i = 1;
+                $this->AddPage();
+            }
         }
     }
 
