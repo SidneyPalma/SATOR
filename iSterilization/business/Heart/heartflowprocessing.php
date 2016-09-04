@@ -607,20 +607,56 @@ class heartflowprocessing extends \Smart\Data\Proxy {
      */
     public function setUnconformities(array $data) {
 
-        $data['params'] = json_decode($data['params']);
+        $update = self::jsonToArray($data['update']);
+        $params = self::jsonToArray($data['params']);
 
-        print_r($data);
-        exit;
-        // var flowprocessingid = master.xdata.get('flowprocessingid');
-        // var flowprocessingstepid = master.xdata.get('id');
-        // var flowstepstatus = '003'; // etapa
-        // var flowstatus = 'A';  // fluxo
-        // var isactive = 0;      // action
-        // var statusbox = '004'; // bloqueado (Kit)
-        // var material = '';        // Status
-        // var datefinal
-        // var cyclestart
-        // var cyclefinal
+        $materiallist = implode(',',$update);
+        $flowprocessingstepid = $params['id'];
+        $flowprocessingid = $params['flowprocessingid'];
+        $flowprocessingstepactionid = $params['flowprocessingstepactionid'];
+
+        $sql = "
+            declare
+                @flowprocessingid int = :flowprocessingid, 
+                @flowprocessingstepid int = :flowprocessingstepid,
+                @flowprocessingstepactionid int = :flowprocessingstepactionid;
+    
+            update flowprocessing
+                set
+                    dateto = getdate(),
+                    flowstatus = 'A'
+            where id = @flowprocessingid;
+            
+            update flowprocessingstep
+                set 
+                    datefinal = getdate(),
+                    flowstepstatus = '003'
+            where id = @flowprocessingstepid;
+    
+            update flowprocessingstepaction
+                set 
+                    dateto = getdate(),
+                    isactive = 0
+            where id = @flowprocessingstepactionid;
+                
+            update material
+                set
+                    materialstatus = '005'
+            where id in ($materiallist);";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
+            $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
+            $pdo->bindValue(":flowprocessingstepactionid", $flowprocessingstepactionid, \PDO::PARAM_INT);
+            $pdo->execute();
+            self::_setSuccess(true);
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
     }
 
     /**
