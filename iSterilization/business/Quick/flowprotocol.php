@@ -88,7 +88,7 @@ class flowprotocol extends Report {
             unlink($qrFile);
 
             if($line == 1) {
-                $this->Cell($sw * 2,30,'',0,1,'C',0);
+                $this->Cell($sw * 2,30,'',1,1,'C',0);
             }
 
             $i++;
