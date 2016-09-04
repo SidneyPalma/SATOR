@@ -15,8 +15,8 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
         'iAdmin.view.equipment.EquipmentController',
         'iAdmin.view.helper.packing.PackingSearch',
         'iAdmin.view.person.proprietary.ProprietarySearch',
-        'iAdmin.view.helper.manufacturer.ManufacturerSearch',
-        'iAdmin.view.helper.materialstatus.MaterialStatusSearch'
+        'iAdmin.view.helper.manufacturer.ManufacturerSearch'
+        // 'iAdmin.view.helper.materialstatus.MaterialStatusSearch'
     ],
 
     layout: 'border',
@@ -348,11 +348,15 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                         name: 'proprietaryname'
                                     }, {
                                         flex: 1,
+                                        value: '001',
                                         margin: '0 0 0 5',
+                                        useReadColor: true,
                                         fieldLabel: 'Status',
-                                        xtype: 'equipmentstatussearch',
-                                        hiddenNameId: 'equipmentstatusid',
-                                        name: 'equipmentstatusname'
+                                        xtype: 'comboenum',
+                                        name: 'equipmentstatusdescription'
+                                        // xtype: 'equipmentstatussearch',
+                                        // hiddenNameId: 'equipmentstatusid',
+                                        // name: 'equipmentstatusname'
                                     }, {
                                         xtype: 'splitter'
                                     }, {

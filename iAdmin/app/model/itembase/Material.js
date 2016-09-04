@@ -12,12 +12,12 @@ Ext.define( 'iAdmin.model.itembase.Material', {
             type: 'int',
             serializeType: 'auto'
         }, {
-            name: 'materialstatusid',
-            type: 'int',
+            name: 'materialstatus',
+            type: 'auto',
             persist: true,
             critical: true
         }, {
-            name: 'materialstatusname',
+            name: 'materialstatusdescription',
             type: 'auto'
         }, {
             name: 'packingid',

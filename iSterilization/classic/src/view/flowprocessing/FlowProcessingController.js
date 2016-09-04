@@ -1118,6 +1118,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
             total = 2;
 
+            /**
+             *  Cadastros
+             *     Material
+             *          - Bloqueado     - Inviabiliza Leituras
+             *     Kit
+             *          - Bloqueado     - Inviabiliza Leituras
+             *
+             *     Fluxo Atual
+             *          - Fecha e não pode avançar para próxima Área
+             */
             Ext.Ajax.request({
                 url: me.url,
                 async: false,

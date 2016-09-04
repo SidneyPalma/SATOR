@@ -595,6 +595,16 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
     }
 
+    /**
+     *  Cadastros
+     *     Material
+     *          - Bloqueado     - Inviabiliza Leituras
+     *     Kit
+     *          - Bloqueado     - Inviabiliza Leituras
+     *
+     *     Fluxo Atual
+     *          - Fecha e não pode avançar para próxima Área
+     */
     public function setUnconformities(array $data) {
 
         $data['params'] = json_decode($data['params']);
