@@ -659,13 +659,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onStartReaderUnconformities: function (field, e, eOpts) {
         var me = this,
             view = me.getView(),
+            master = view.master,
             value = field.getValue();
 
         field.reset();
 
         if(value && value.length != 0) {
             if(value.indexOf('SATOR-U') != -1) {
-                var grid = view.down('flowprocessingmaterial'),
+                var list = [],
+                    grid = view.down('flowprocessingmaterial'),
                     sm = grid.getSelectionModel(),
                     md = sm.getSelection()[0];
 
@@ -674,6 +676,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 md.store.sync({async: false});
                 md.commit();
                 sm.select(md);
+
+                md.store.each(function (data) {
+                    if(data.get('unconformities') == '001') {
+                        list.push(data);
+                    }
+                });
+
+                if(list.length == 0) {
+                    view.close();
+                    me.setView(master);
+                    history.back();
+                }
 
                 return false;
             }
@@ -819,9 +833,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         //     }
         // }
 
-        if (me.checkUnconformities()) {
-            me.callSATOR_UNCONFORMITIES();
-            return false;
+        switch (me.checkUnconformities()) {
+            case 1:
+                me.callSATOR_UNCONFORMITIES();
+                return false;
+                break;
+            case 2:
+                return false;
+                break;
         }
 
         /**
@@ -1079,14 +1098,43 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     checkUnconformities: function () {
-        var count = 0,
+        var me = this,
+            count = 0,
+            list = [],
+            total = 0,
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
-            count += item.get('unconformities') == '010' ? 1 : 0;
+            if(['002','004','007','001'].indexOf(item.get('unconformities')) != -1) {
+                list.push(item.get('unconformities'));
+            }
+            count += item.get('unconformities') == '001' ? 1 : 0;
         });
 
-        return (count != store.getCount());
+        if( list.indexOf('001') == -1 && (
+            list.indexOf('002') != -1 ||
+            list.indexOf('004') != -1 ||
+            list.indexOf('007') != -1 )) {
+
+            total = 2;
+
+            Ext.Ajax.request({
+                url: me.url,
+                async: false,
+                params: {
+                    action: 'select',
+                    method: 'setUnconformities',
+                    params: Ext.encode(me.getView().xdata.data)
+                },
+                callback: function() {
+                    history.back();
+                }
+            });
+        }
+
+        total = (count != 0) ? 1 : total;
+
+        return total;
     },
 
     onSelectUnconformities: function (combo,record,eOpts) {

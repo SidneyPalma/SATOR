@@ -71,7 +71,7 @@ class flowprotocol extends Report {
             $line = $line == 0 ? 1 : 0;
             $this->configStyleHeader(12);
             $this->SetFillColor(245, 242, 198);
-            $this->Cell($sw * 1.0,10,"$description",'B',$line,'C',1);
+            $this->Cell($sw * 1.0,10,"$description",1,$line,'C',1);
 
             $code = ( $name == "unconformities" ) ? "SATOR-U$code" : $code;
 
@@ -88,7 +88,7 @@ class flowprotocol extends Report {
             unlink($qrFile);
 
             if($line == 1) {
-                $this->Cell($sw * 2,30,'',0,1,'C',0);
+                $this->Cell($sw * 2,30,'',1,1,'C',0);
             }
 
             $i++;
