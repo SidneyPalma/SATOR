@@ -68,9 +68,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        if (dataview) {
-            dataview.store.load();
-        }
+        // if (dataview) {
+        //     dataview.store.load();
+        // }
 
         Ext.Ajax.request({
             scope: me,
@@ -94,11 +94,35 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
             }
         });
+
+        Ext.Ajax.request({
+            scope: me,
+            url: dataview.store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'actionTask'
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                dataview.store.removeAll();
+
+                if(result.rows) {
+                    dataview.store.loadData(result.rows);
+                }
+            }
+        });
+
     },
 
     onAfterRenderStep: function () {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            dataview = view.down('dataview[name=flowprocessingsteptask]');
 
         if(!Smart.workstation) {
             return false;
