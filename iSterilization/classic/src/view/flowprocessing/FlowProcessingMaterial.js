@@ -85,9 +85,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     xtype: 'textfield',
                     listeners: {
                         scope: this,
-                        // focusenter: function (field, event, eOpts) {
-                        //     console.info(field,field.ownerCt);
-                        // },
                         specialkey: function(field, e){
                             if (e.getKey() == Ext.EventObject.ENTER) {
                                 e.keyCode = Ext.EventObject.TAB;
