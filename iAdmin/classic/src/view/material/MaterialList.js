@@ -86,7 +86,7 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                     }, {
                         width: 120,
                         text: 'Status',
-                        dataIndex: 'materialstatusname'
+                        dataIndex: 'materialstatusdescription'
                     }, {
                         width: 120,
                         text: 'Embalagem',

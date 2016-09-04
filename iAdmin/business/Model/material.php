@@ -16,15 +16,15 @@ class material extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $materialstatusid;
+    private $materialstatus;
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,materialstatusid"}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,materialstatus"}
      */
-    private $materialstatusname;
+    private $materialstatusdescription;
 
     /**
      * @Policy {"nullable":false}
@@ -97,18 +97,18 @@ class material extends \Smart\Data\Model {
     }
 
     /**
-     * @return type integer
+     * @return type string
      */
-    public function getMaterialstatusid() {
-        return $this->materialstatusid;
+    public function getMaterialstatus() {
+        return $this->materialstatus;
     }
 
     /**
-     * @param type $materialstatusid
+     * @param type $materialstatus
      * @return \iAdmin\Model\material
      */
-    public function setMaterialstatusid($materialstatusid) {
-        $this->materialstatusid = $materialstatusid;
+    public function setMaterialstatus($materialstatus) {
+        $this->materialstatus = $materialstatus;
         return $this;
     }
 

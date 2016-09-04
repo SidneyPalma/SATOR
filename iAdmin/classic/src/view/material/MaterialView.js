@@ -19,8 +19,8 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
         'iAdmin.view.itembase.ItemBaseServiceType',
         'iAdmin.view.person.proprietary.ProprietarySearch',
         'iAdmin.view.helper.manufacturer.ManufacturerSearch',
-        'iAdmin.view.sterilizationtype.SterilizationTypeSearch',
-        'iAdmin.view.helper.materialstatus.MaterialStatusSearch'
+        'iAdmin.view.sterilizationtype.SterilizationTypeSearch'
+        // 'iAdmin.view.helper.materialstatus.MaterialStatusSearch'
     ],
 
     layout: 'border',
@@ -277,11 +277,15 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                         name: 'proprietaryname'
                                     }, {
                                         flex: 1,
+                                        value: '001',
                                         margin: '0 0 0 5',
+                                        useReadColor: true,
                                         fieldLabel: 'Status',
-                                        xtype: 'materialstatussearch',
-                                        hiddenNameId: 'materialstatusid',
-                                        name: 'materialstatusname'
+                                        xtype: 'comboenum',
+                                        name: 'materialstatusdescription'
+                                        // xtype: 'materialstatussearch',
+                                        // hiddenNameId: 'materialstatusid',
+                                        // name: 'materialstatusname'
                                     }, {
                                         flex: 2,
                                         xtype: 'container'

@@ -20,10 +20,12 @@ Ext.define( 'iAdmin.model.itembase.Equipment', {
             name: 'cmeareasname',
             type: 'auto'
         }, {
-            name: 'equipmentstatusid',
-            type: 'int'
+            name: 'equipmentstatus',
+            type: 'auto',
+            persist: true,
+            critical: true
         }, {
-            name: 'equipmentstatusname',
+            name: 'equipmentstatusdescription',
             type: 'auto'
         }, {
             name: 'sterilizationflow',

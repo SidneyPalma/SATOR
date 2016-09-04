@@ -40,14 +40,15 @@ class material extends \Smart\Data\Cache {
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ),
                 m.*,
-                ms.name as materialstatusname,
+                --ms.name as materialstatusname,
+                dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
                 pk.name as packingname,
                 pt.name as proprietaryname,
                 mf.name as manufacturername
             FROM
                 itembase ib
                 inner join material m on ( m.id = ib.id )
-                inner join materialstatus ms on ( ms.id = m.materialstatusid )
+                --inner join materialstatus ms on ( ms.id = m.materialstatusid )
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
@@ -112,14 +113,15 @@ class material extends \Smart\Data\Cache {
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ),
                 m.*,
-                ms.name as materialstatusname,
+                --ms.name as materialstatusname,
+                dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
                 pk.name as packingname,
                 pt.name as proprietaryname,
                 mf.name as manufacturername
             FROM
                 itembase ib
                 inner join material m on ( m.id = ib.id )
-                inner join materialstatus ms on ( ms.id = m.materialstatusid )
+                --inner join materialstatus ms on ( ms.id = m.materialstatusid )
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
@@ -176,14 +178,15 @@ class material extends \Smart\Data\Cache {
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ),
                 m.*,
-                ms.name as materialstatusname,
+                --ms.name as materialstatusname,
+                dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
                 pk.name as packingname,
                 pt.name as proprietaryname,
                 mf.name as manufacturername
             FROM
                 itembase ib
                 inner join material m on ( m.id = ib.id )
-                inner join materialstatus ms on ( ms.id = m.materialstatusid )
+                --inner join materialstatus ms on ( ms.id = m.materialstatusid )
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
