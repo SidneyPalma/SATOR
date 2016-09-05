@@ -667,6 +667,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(value && value.length != 0) {
             if(value.indexOf('SATOR-U') != -1) {
                 var list = [],
+                    data = [],
                     grid = view.down('flowprocessingmaterial'),
                     sm = grid.getSelectionModel(),
                     md = sm.getSelection()[0];
@@ -677,20 +678,51 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 md.commit();
                 sm.select(md);
 
-                md.store.each(function (data) {
-                    if(data.get('unconformities') == '001') {
-                        list.push(data);
+                md.store.each(function (item) {
+                    data.push(item.get('unconformities'));
+                    if(['002','004','007'].indexOf(item.get('unconformities')) != -1) {
+                        list.push(item.get('materialid'));
                     }
                 });
 
-                if(list.length == 0) {
-                    view.close();
-                    me.setView(master);
-                    history.back();
-                }
+                if( data.indexOf('001') == -1 && (
+                    data.indexOf('002') != -1 ||
+                    data.indexOf('004') != -1 ||
+                    data.indexOf('007') != -1 ) ) {
 
+                    /**
+                     * SATOR-U00, SATOR_ENCERRAR_LEITURA
+                     *
+                     *  Cadastros
+                     *     Material
+                     *          - Bloqueado     - Inviabiliza Leituras
+                     *     Kit
+                     *          - Bloqueado     - Inviabiliza Leituras
+                     *
+                     *     Fluxo Atual
+                     *          - Fecha e não pode avançar para próxima Área
+                     */
+                    Ext.Ajax.request({
+                        url: me.url,
+                        async: false,
+                        params: {
+                            action: 'select',
+                            method: 'setUnconformities',
+                            update: Ext.encode(list),
+                            params: Ext.encode(master.xdata.data)
+                        },
+                        callback: function() {
+                            view.close();
+                            me.setView(master);
+                            history.back();
+                        }
+                    });
+
+                    return false;
+                }
                 return false;
             }
+
             me.setMessageText('MSG_PROTOCOL_ERROR');
         }
     },
@@ -833,14 +865,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         //     }
         // }
 
-        switch (me.checkUnconformities()) {
-            case 1:
-                me.callSATOR_UNCONFORMITIES();
-                return false;
-                break;
-            case 2:
-                return false;
-                break;
+        if (me.checkUnconformities()) {
+            me.callSATOR_UNCONFORMITIES();
+            return false;
         }
 
         /**
@@ -1100,51 +1127,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     checkUnconformities: function () {
         var me = this,
             count = 0,
-            list = [],
-            total = 0,
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
-            if(['002','004','007','001'].indexOf(item.get('unconformities')) != -1) {
-                list.push(item.get('unconformities'));
-            }
             count += item.get('unconformities') == '001' ? 1 : 0;
         });
 
-        if( list.indexOf('001') == -1 && (
-            list.indexOf('002') != -1 ||
-            list.indexOf('004') != -1 ||
-            list.indexOf('007') != -1 )) {
-
-            total = 2;
-
-            /**
-             *  Cadastros
-             *     Material
-             *          - Bloqueado     - Inviabiliza Leituras
-             *     Kit
-             *          - Bloqueado     - Inviabiliza Leituras
-             *
-             *     Fluxo Atual
-             *          - Fecha e não pode avançar para próxima Área
-             */
-            Ext.Ajax.request({
-                url: me.url,
-                async: false,
-                params: {
-                    action: 'select',
-                    method: 'setUnconformities',
-                    params: Ext.encode(me.getView().xdata.data)
-                },
-                callback: function() {
-                    history.back();
-                }
-            });
-        }
-
-        total = (count != 0) ? 1 : total;
-
-        return total;
+        return (count != 0);
     },
 
     onSelectUnconformities: function (combo,record,eOpts) {
