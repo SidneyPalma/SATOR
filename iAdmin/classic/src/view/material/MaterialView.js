@@ -117,32 +117,32 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         fieldLabel: 'Kit ativo',
                         name: 'materialboxname'
                     }, {
-                        xtype: 'radiogroup',
-                        vertical: true,
-                        columns: 3,
-                        items: [
-                            { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
-                            { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 },
-                            { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 2 }
-                        ],
-                        listeners: {
-                            change: 'onChangeExtensionType'
-                        }
-                    }, {
-                        height: 150,
-                        layout: 'card',
-                        xtype: 'container',
-                        name: 'containercard',
-                        items: [
-                            {
-                                xtype: 'materialcycle'
-                            }, {
-                                xtype: 'materialtypeflow'
-                            }, {
-                                xtype: 'itembaseservicetype'
-                            }
-                        ]
-                    }, {
+                    //     xtype: 'radiogroup',
+                    //     vertical: true,
+                    //     columns: 3,
+                    //     items: [
+                    //         { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
+                    //         { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 },
+                    //         { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 2 }
+                    //     ],
+                    //     listeners: {
+                    //         change: 'onChangeExtensionType'
+                    //     }
+                    // }, {
+                    //     height: 150,
+                    //     layout: 'card',
+                    //     xtype: 'container',
+                    //     name: 'containercard',
+                    //     items: [
+                    //         {
+                    //             xtype: 'materialcycle'
+                    //         }, {
+                    //             xtype: 'materialtypeflow'
+                    //         }, {
+                    //             xtype: 'itembaseservicetype'
+                    //         }
+                    //     ]
+                    // }, {
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'checkboxfield',
@@ -430,6 +430,49 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         title: 'Resultado Layout',
                         iconCls: "fa fa-language",
                         xtype: 'itembaselayout'
+                    }, {
+                        tabIndex: 3,
+                        xtype: 'panel',
+                        title: 'Parâmetros de fluxos',
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [
+                            {
+                                xtype: 'radiogroup',
+                                vertical: true,
+                                columns: 3,
+                                cls: 'sub-title-label',
+                                margin: '20 20 20 20',
+                                style: 'color: blue;',
+                                items: [
+                                    { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
+                                    { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 },
+                                    { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 2 }
+                                ],
+                                listeners: {
+                                    change: 'onChangeExtensionType'
+                                }
+                            }, {
+                                flex: 1,
+                                layout: 'card',
+                                xtype: 'container',
+                                name: 'containercard',
+                                items: [
+                                    {
+                                        cls: 'update-grid',
+                                        xtype: 'materialtypeflow'
+                                    }, {
+                                        cls: 'update-grid',
+                                        xtype: 'materialcycle'
+                                    }, {
+                                        cls: 'update-grid',
+                                        xtype: 'itembaseservicetype'
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }

@@ -8,6 +8,8 @@ class itembaseservicetype extends \Smart\Data\Cache {
 
     public function selectCode(array $data) {
         $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
@@ -34,7 +36,8 @@ class itembaseservicetype extends \Smart\Data\Cache {
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
-
+            self::_setPage($start,$limit);
+            
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
             self::_setText($e->getMessage());

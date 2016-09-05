@@ -38,6 +38,15 @@ Ext.define( 'iAdmin.view.material.MaterialCycle', {
                 }
             }
         ];
-    }
+    },
+
+    dockedItems: [
+        {
+            xtype: 'pagingtoolbar',
+            store: 'materialcycle',
+            dock: 'bottom',
+            displayInfo: true
+        }
+    ]
 
 });
