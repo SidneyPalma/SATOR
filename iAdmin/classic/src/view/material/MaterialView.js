@@ -447,8 +447,8 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                 margin: '20 20 20 20',
                                 style: 'color: blue;',
                                 items: [
-                                    { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
-                                    { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 },
+                                    { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 0, checked: true },
+                                    { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 1 },
                                     { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 2 }
                                 ],
                                 listeners: {
