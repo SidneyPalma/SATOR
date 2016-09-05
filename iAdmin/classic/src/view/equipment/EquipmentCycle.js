@@ -37,6 +37,15 @@ Ext.define( 'iAdmin.view.equipment.EquipmentCycle', {
                 }
             }
         ];
-    }
+    },
+
+    dockedItems: [
+        {
+            xtype: 'pagingtoolbar',
+            store: 'equipmentcycle',
+            dock: 'bottom',
+            displayInfo: true
+        }
+    ]
 
 });

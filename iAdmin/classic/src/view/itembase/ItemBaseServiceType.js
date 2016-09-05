@@ -37,6 +37,15 @@ Ext.define( 'iAdmin.view.itembase.ItemBaseServiceType', {
                 }
             }
         ];
-    }
+    },
+
+    dockedItems: [
+        {
+            xtype: 'pagingtoolbar',
+            store: 'itembaseservicetype',
+            dock: 'bottom',
+            displayInfo: true
+        }
+    ]
 
 });

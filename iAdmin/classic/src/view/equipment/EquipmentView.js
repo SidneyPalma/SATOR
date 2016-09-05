@@ -112,29 +112,29 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                         xtype: 'textfield',
                         name: 'sterilizationname'
                     }, {
-                        xtype: 'radiogroup',
-                        vertical: true,
-                        columns: 2,
-                        items: [
-                            { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
-                            { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 1 }
-                        ],
-                        listeners: {
-                            change: 'onChangeExtensionType'
-                        }
-                    }, {
-                        height: 150,
-                        layout: 'card',
-                        xtype: 'container',
-                        name: 'containercard',
-                        items: [
-                            {
-                                xtype: 'equipmentcycle'
-                            }, {
-                                xtype: 'itembaseservicetype'
-                            }
-                        ]
-                    }, {
+                    //     xtype: 'radiogroup',
+                    //     vertical: true,
+                    //     columns: 2,
+                    //     items: [
+                    //         { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
+                    //         { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 1 }
+                    //     ],
+                    //     listeners: {
+                    //         change: 'onChangeExtensionType'
+                    //     }
+                    // }, {
+                    //     height: 150,
+                    //     layout: 'card',
+                    //     xtype: 'container',
+                    //     name: 'containercard',
+                    //     items: [
+                    //         {
+                    //             xtype: 'equipmentcycle'
+                    //         }, {
+                    //             xtype: 'itembaseservicetype'
+                    //         }
+                    //     ]
+                    // }, {
                         xtype: 'container',
                         layout: 'hbox',
                         items: [
@@ -150,12 +150,12 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                 xtype: 'checkboxfield',
                                 fieldLabel: 'Fluxo',
                                 boxLabel: 'Ativo'
-                            }, {
-                                flex: 1,
-                                name: 'validateload',
-                                xtype: 'checkboxfield',
-                                fieldLabel: 'Carga',
-                                boxLabel: 'Valida'
+                            // }, {
+                            //     flex: 1,
+                            //     name: 'validateload',
+                            //     xtype: 'checkboxfield',
+                            //     fieldLabel: 'Carga',
+                            //     boxLabel: 'Valida'
                             }
                         ]
                     }, {
@@ -394,6 +394,45 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                         title: 'Resultado Layout',
                         iconCls: "fa fa-language",
                         xtype: 'itembaselayout'
+                    }, {
+                        tabIndex: 3,
+                        xtype: 'panel',
+                        title: 'Parâmetros de fluxos',
+                        layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [
+                            {
+                                xtype: 'radiogroup',
+                                vertical: true,
+                                columns: 2,
+                                cls: 'sub-title-label',
+                                margin: '20 20 20 20',
+                                style: 'color: blue;',
+                                items: [
+                                    { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
+                                    { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 1 }
+                                ],
+                                listeners: {
+                                    change: 'onChangeExtensionType'
+                                }
+                            }, {
+                                flex: 1,
+                                layout: 'card',
+                                xtype: 'container',
+                                name: 'containercard',
+                                items: [
+                                    {
+                                        cls: 'update-grid',
+                                        xtype: 'equipmentcycle'
+                                    }, {
+                                        cls: 'update-grid',
+                                        xtype: 'itembaseservicetype'
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -401,5 +440,3 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
     }
 
 });
-
-

@@ -40,7 +40,7 @@ Ext.define( 'iAdmin.view.material.MaterialTypeFlow', {
 
         me.columns = [
             {
-                width: 100,
+                width: 200,
                 dataIndex: 'priorityleveldescription',
                 renderer: function (value,metaData,record) {
                     metaData.style = 'font-weight: bold;';
@@ -60,6 +60,15 @@ Ext.define( 'iAdmin.view.material.MaterialTypeFlow', {
                 }
             }
         ];
-    }
+    },
+
+    dockedItems: [
+        {
+            xtype: 'pagingtoolbar',
+            store: 'materialtypeflow',
+            dock: 'bottom',
+            displayInfo: true
+        }
+    ]
 
 });
