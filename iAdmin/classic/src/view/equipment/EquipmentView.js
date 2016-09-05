@@ -150,6 +150,12 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                 xtype: 'checkboxfield',
                                 fieldLabel: 'Fluxo',
                                 boxLabel: 'Ativo'
+                            }, {
+                                flex: 1,
+                                name: 'validateload',
+                                xtype: 'checkboxfield',
+                                fieldLabel: 'Carga',
+                                boxLabel: 'Valida'
                             }
                         ]
                     }, {

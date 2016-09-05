@@ -28,15 +28,15 @@ class equipment extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $equipmentstatusid;
+    private $equipmentstatus;
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getNameSearch,equipmentstatusid"}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,equipmentstatus"}
      */
-    private $equipmentstatusname;
+    private $equipmentstatusdescription;
 
     /**
      * @Policy {"nullable":false}
@@ -113,18 +113,18 @@ class equipment extends \Smart\Data\Model {
     }
 
     /**
-     * @return type integer
+     * @return type string
      */
-    public function getEquipmentstatusid() {
-        return $this->equipmentstatusid;
+    public function getEquipmentstatus() {
+        return $this->equipmentstatus;
     }
 
     /**
-     * @param type $equipmentstatusid
+     * @param type $equipmentstatus
      * @return \iAdmin\Model\equipment
      */
-    public function setEquipmentstatusid($equipmentstatusid) {
-        $this->equipmentstatusid = $equipmentstatusid;
+    public function setEquipmentstatus($equipmentstatus) {
+        $this->equipmentstatus = $equipmentstatus;
         return $this;
     }
 

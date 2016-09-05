@@ -151,10 +151,16 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         },
                         items: [
                             {
+                                flex: 1,
                                 name: 'isactive',
+                                xtype: 'checkboxfield',
+                                fieldLabel: 'Status',
                                 boxLabel: 'Ativo'
                             }, {
+                                flex: 1,
                                 name: 'isconsigned',
+                                xtype: 'checkboxfield',
+                                fieldLabel: 'Tipo',
                                 boxLabel: 'Material consignado'
                             }
                         ]
