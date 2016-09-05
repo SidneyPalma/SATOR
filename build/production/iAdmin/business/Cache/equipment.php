@@ -117,14 +117,15 @@ class equipment extends \Smart\Data\Cache {
                 pt.name as proprietaryname,
                 mf.name as manufacturername,
                 ca.name as cmeareasname,
-                es.name as equipmentstatusname
+                dbo.getEnum('equipmentstatus',e.equipmentstatus) as equipmentstatusdescription
+                --es.name as equipmentstatusname
             FROM
                 itembase ib
                 inner join equipment e on ( e.id = ib.id )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
                 inner join areas ca on ( ca.id = e.cmeareasid )
-                inner join equipmentstatus es on ( es.id = e.equipmentstatusid )
+                --inner join equipmentstatus es on ( es.id = e.equipmentstatusid )
             WHERE ib.id = :id";
 
         try {

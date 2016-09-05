@@ -158,7 +158,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
             case 'SATOR_RELATAR_CYCLE_START':
-                me.callSATOR_RELATAR_CYCLE_START();
+                me.callSATOR_RELATAR_CYCLE_START('START');
                 break;
             case 'SATOR_RELATAR_CYCLE_FINAL':
                 me.callSATOR_RELATAR_CYCLE_FINAL();
@@ -191,13 +191,49 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    callSATOR_RELATAR_CYCLE_START: function () {
-        Smart.Msg.showToast('SATOR_RELATAR_CYCLE_START');
+    callSATOR_RELATAR_CYCLE_START: function (status) {
+        var me = this,
+            view = me.getView();
+
+        console.info(view.xdata.data);
+
+        // Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
+        //     this.master = view;
+        //     this.down('textfield[name=cyclestatus]').focus(false,200);
+        //     this.down('hiddenfield[name=cyclestatus]').setValue(status);
+        //     switch(status) {
+        //         case 'START':
+        //             this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Inicio de Ciclo de Equipamento');
+        //             break;
+        //         case 'FINAL':
+        //             this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Final de Ciclo de Equipamento');
+        //             break;
+        //     }
+        // });
     },
 
     callSATOR_RELATAR_CYCLE_FINAL: function () {
         Smart.Msg.showToast('SATOR_RELATAR_CYCLE_FINAL');
     },
+
+    // callSATOR_RELATAR_CYCLE_STATUS: function (status) {
+    //     var me = this,
+    //         view = me.getView();
+    //
+    //     Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
+    //         this.master = view;
+    //         this.down('textfield[name=cyclestatus]').focus(false,200);
+    //         this.down('hiddenfield[name=cyclestatus]').setValue(status);
+    //         switch(status) {
+    //             case 'START':
+    //                 this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Inicio de Ciclo de Equipamento');
+    //                 break;
+    //             case 'FINAL':
+    //                 this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Final de Ciclo de Equipamento');
+    //                 break;
+    //         }
+    //     });
+    // },
 
     onAfterRenderDash: function () {
         var me = this,
@@ -1205,25 +1241,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
             });
         }
-    },
-
-    callSATOR_RELATAR_CYCLE_STATUS: function (status) {
-        var me = this,
-            view = me.getView();
-
-        Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
-            this.master = view;
-            this.down('textfield[name=cyclestatus]').focus(false,200);
-            this.down('hiddenfield[name=cyclestatus]').setValue(status);
-            switch(status) {
-                case 'START':
-                    this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Inicio de Ciclo de Equipamento');
-                    break;
-                case 'FINAL':
-                    this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Final de Ciclo de Equipamento');
-                    break;
-            }
-        });
     },
 
     callSATOR_INFORMAR_INSUMOS: function () {

@@ -119,12 +119,13 @@ class Report extends FPDF {
     }
 
     public function posConstruct() {
-        $this->AliasNbPages();
         $this->setAllMarginPage($this->margin);
         $this->AddFont('LucidaSans-Typewriter','','LTYPE.php');
+        $this->AliasNbPages();
         $this->AddPage();
         $this->Detail();
         $this->Output(basename(__FILE__), "I");
+        ob_clean();
     }
 
     public function __construct($orientation='P', $unit='mm', $size='A4') {
