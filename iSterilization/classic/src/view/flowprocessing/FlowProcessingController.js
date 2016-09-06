@@ -157,6 +157,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
+            case 'SATOR_VALIDA_CARGA':
+                me.callSATOR_VALIDA_CARGA();
+                break;
             case 'SATOR_RELATAR_CYCLE_START':
                 me.callSATOR_RELATAR_CYCLE_START('START');
                 break;
@@ -166,7 +169,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             default:
                 Smart.Msg.showToast('Protocolo Inválido para esta área');
         }
-
     },
     // Abrir Novo Processamento/Leitura
     callSATOR_PROCESSAR_ITENS: function () {
@@ -188,6 +190,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }).show(null,function () {
             this.down('form').reset();
             this.down('textfield[name=usercode]').focus(false,200);
+        });
+    },
+
+    callSATOR_VALIDA_CARGA: function () {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('call_SATOR_VALIDA_CARGA').show(null,function () {
+            this.master = view;
         });
     },
 
