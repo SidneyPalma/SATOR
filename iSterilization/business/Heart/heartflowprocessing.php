@@ -623,7 +623,58 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
-        /**
+    public function setValidaCargaLista(array $data) {
+        $username = $data['username'];
+        $equipmentcycleid = $data['equipmentcycleid'];
+
+        $utimestamp = microtime(true);
+        $timestamp = floor($utimestamp);
+        $milliseconds = round(($utimestamp - $timestamp) * 1000000);
+
+        $barcode = substr("L" . date("YmdHis") . $milliseconds,0,20);
+
+        $list = self::jsonToArray($data['list']);
+
+//        print_r($data);
+//        exit;
+
+//      [duration]
+//      [temperature]
+//      [timetoopen]
+
+        $charge = new \iSterilization\Coach\flowprocessingcharge();
+        $chargeitem = new \iSterilization\Coach\flowprocessingchargeitem();
+
+        try {
+            $charge->getStore()->getModel()->set('chargeflag','001');
+            $charge->getStore()->getModel()->set('barcode',$barcode);
+            $charge->getStore()->getModel()->set('chargeuser',$username);
+            $charge->getStore()->getModel()->set('equipmentcycleid',$equipmentcycleid);
+            $result = self::jsonToObject($charge->getStore()->insert());
+
+            while (list(, $item) = each($list)) {
+                extract($item);
+
+                $chargeitem->getStore()->getModel()->set('chargestatus','001');
+                $chargeitem->getStore()->getModel()->set('flowprocessingchargeid',$result->rows->id);
+                $chargeitem->getStore()->getModel()->set('flowprocessingstepid',$flowprocessingstepid);
+                $chargeitem->getStore()->insert();
+            }
+
+            unset($charge);
+            unset($chargeitem);
+
+            self::_setSuccess(true);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    /**
      *  Cadastros
      *     Material
      *          - Bloqueado     - Inviabiliza Leituras

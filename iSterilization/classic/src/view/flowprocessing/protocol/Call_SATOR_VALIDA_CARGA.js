@@ -67,6 +67,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                         fieldLabel: 'Ciclo',
                         hiddenNameId: 'equipmentcycleid',
                         xtype: 'searchcycle',
+                        name: 'cyclename',
                         listeners: {
                             select: 'onSelectCycle',
                             showclear: 'onShowClearCycle',
@@ -125,10 +126,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
             scale: 'medium',
             name: 'confirm',
             text: 'Confirmar',
-            showSmartTheme: 'green'
-            // listeners: {
-            //     click: 'relatarUsaEPI'
-            // }
+            showSmartTheme: 'green',
+            listeners: {
+                click: 'setValidaCargaLista'
+            }
         }, {
             scale: 'medium',
             text: 'Cancelar',
