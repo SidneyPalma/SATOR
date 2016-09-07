@@ -1,0 +1,231 @@
+<?php
+
+namespace iSterilization\Model;
+
+/**
+ * 
+ * @Entity {"name":"flowprocessingcharge", "logbook":true, "cache":"\\iSterilization\\Cache\\flowprocessingcharge", "event":"\\iSterilization\\Event\\flowprocessingcharge"}
+ */
+class flowprocessingcharge extends \Smart\Data\Model {
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "strategy":"AUTO", "type":"integer", "policy":false, "logallow":true, "default":""}
+     */
+    private $id;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $equipmentcycleid;
+
+    /**
+     * @Policy {"nullable":false, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $barcode;
+
+    /**
+     * @Policy {"nullable":false, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $chargeuser;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $chargedate;
+
+    /**
+     * @Policy {"nullable":false, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"1"}
+     */
+    private $chargeflag;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $cyclestart;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $cyclefinal;
+
+    /**
+     * @Policy {"nullable":true, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $cyclestartuser;
+
+    /**
+     * @Policy {"nullable":true, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $cyclefinaluser;
+
+    /**
+     * @return type integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param type $id
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setId($id) {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getEquipmentcycleid() {
+        return $this->equipmentcycleid;
+    }
+
+    /**
+     * @param type $equipmentcycleid
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setEquipmentcycleid($equipmentcycleid) {
+        $this->equipmentcycleid = $equipmentcycleid;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getBarcode() {
+        return $this->barcode;
+    }
+
+    /**
+     * @param type $barcode
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setBarcode($barcode) {
+        $this->barcode = $barcode;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getChargeuser() {
+        return $this->chargeuser;
+    }
+
+    /**
+     * @param type $chargeuser
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setChargeuser($chargeuser) {
+        $this->chargeuser = $chargeuser;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getChargedate() {
+        return $this->chargedate;
+    }
+
+    /**
+     * @param type $chargedate
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setChargedate($chargedate) {
+        $this->chargedate = $chargedate;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getChargeflag() {
+        return $this->chargeflag;
+    }
+
+    /**
+     * @param type $chargeflag
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setChargeflag($chargeflag) {
+        $this->chargeflag = $chargeflag;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getCyclestart() {
+        return $this->cyclestart;
+    }
+
+    /**
+     * @param type $cyclestart
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setCyclestart($cyclestart) {
+        $this->cyclestart = $cyclestart;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getCyclefinal() {
+        return $this->cyclefinal;
+    }
+
+    /**
+     * @param type $cyclefinal
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setCyclefinal($cyclefinal) {
+        $this->cyclefinal = $cyclefinal;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getCyclestartuser() {
+        return $this->cyclestartuser;
+    }
+
+    /**
+     * @param type $cyclestartuser
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setCyclestartuser($cyclestartuser) {
+        $this->cyclestartuser = $cyclestartuser;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getCyclefinaluser() {
+        return $this->cyclefinaluser;
+    }
+
+    /**
+     * @param type $cyclefinaluser
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setCyclefinaluser($cyclefinaluser) {
+        $this->cyclefinaluser = $cyclefinaluser;
+        return $this;
+    }
+
+}
