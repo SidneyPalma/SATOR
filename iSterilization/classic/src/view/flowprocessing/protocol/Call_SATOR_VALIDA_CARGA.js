@@ -34,6 +34,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
         me.items = [
             {
                 xtype: 'form',
+                plugins:'formenter',
                 bodyPadding: 10,
                 layout: 'anchor',
                 margin: '10 0 0 0',

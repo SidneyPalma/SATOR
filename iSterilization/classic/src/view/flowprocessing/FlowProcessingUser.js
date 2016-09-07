@@ -40,6 +40,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                 xtype: 'form',
                 plugins:'formenter',
                 bodyPadding: 10,
+                margin: '10 0 0 0',
                 layout: 'anchor',
                 defaultType: 'textfield',
                 defaults: {
@@ -67,8 +68,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                 xtype: 'hiddenfield',
                                 name: 'username'
                             }, {
+                                vtype:"password",
                                 name: 'usercode',
-                                inputType: 'password',
+                                // inputType: 'password',
                                 fieldLabel: 'Identificação',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
