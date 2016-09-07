@@ -477,9 +477,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $data['params'] = $params;
 
-//        print_r($data);
-//        exit;
-
         try {
 
             while (list(, $item) = each($params)) {

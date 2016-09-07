@@ -64,7 +64,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				fpsa.authorizedby,
 				substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
 				fp.barcode,
-				o.originplace
+				o.originplace,
+				t.targetplace
 			from
 				flowprocessingstepaction fpsa
 				inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
@@ -78,6 +79,14 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 					where a.flowprocessingid = fps.flowprocessingid
 						and a.id = fps.source
 				) o
+				outer apply (
+					select
+						a.elementname as targetplace
+					from
+						flowprocessingstep a
+					where a.flowprocessingid = fps.flowprocessingid
+						and a.id = fps.target
+				) t
 			where fpsa.flowstepaction = '002'
 				and fpsa.isactive = 1";
 
