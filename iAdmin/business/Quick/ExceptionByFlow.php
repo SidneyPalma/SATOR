@@ -48,7 +48,7 @@ class exceptionbyflow extends Report {
         $this->SetLineWidth(.2);
         $this->Cell($this->squareWidth,3, '','T',1,'C');
         $this->configStyleHeader(10);
-        $this->Cell($this->squareWidth,6, "$name v.$version",0,1,'C',false);
+        $this->Cell($this->squareWidth,6, utf8_decode("$name v.$version"),0,1,'C',false);
     }
 
     public function QrCode(&$qrCode,$qrStep) {

@@ -50,8 +50,17 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepAction', {
             name: 'originplace',
             type: 'auto'
         }, {
+            name: 'targetplace',
+            type: 'auto'
+        }, {
             name: 'authorizedby',
             type: 'auto'
+        }, {
+            name: 'sterilizationtypename',
+            type: 'auto'
+        }, {
+            name: 'version',
+            type: 'int'
         }
     ]
 

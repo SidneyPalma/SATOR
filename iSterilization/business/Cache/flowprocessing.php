@@ -159,6 +159,49 @@ class flowprocessing extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectEquipment(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @areasid int = :areasid;
+            
+            select distinct
+                ib.id,
+                ib.name as equipmentname
+            from
+                equipment e
+                inner join itembase ib on ( ib.id = e.id )
+                inner join equipmentcycle ec on ( ec.equipmentid = ib.id )
+                inner join cmesubareas csa on ( csa.cmeareasid = e.cmeareasid )
+                inner join cmeareas ca on ( ca.id = csa.cmeareasid )
+            where csa.id = @areasid
+              and ec.id not in ( 
+                    select
+                        fpc.equipmentcycleid
+                    from
+                        flowprocessingcharge fpc
+                    where fpc.equipmentcycleid = ec.id
+                      and fpc.chargeflag = '001'
+               )";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":areasid", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectDashFlow(array $data) {
         $dateof = $data['dateof'];
         $proxy = $this->getStore()->getProxy();
@@ -243,6 +286,41 @@ class flowprocessing extends \Smart\Data\Cache {
         try {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectCycle(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @equipmentid int = :equipmentid;
+            
+            select
+                c.id, 
+                c.name, 
+                c.duration, 
+                c.temperature, 
+                c.timetoopen
+            from
+                equipmentcycle ec
+                inner join cycle c on ( c.id = ec.cycleid )
+            where ec.equipmentid = @equipmentid";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":equipmentid", $query, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 

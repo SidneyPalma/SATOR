@@ -111,8 +111,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', 
                                 sortable: false,
                                 dataIndex: 'elementname',
                                 renderer: function (value,metaData,rec) {
+                                    var template = '<div style="color: red;">{0}</div><div style="font-weight: 700;">{1}</div>';
                                     metaData.style = rec.data.haspending ? 'color: red;' : '';
-                                    return value;
+                                    return Ext.String.format(template,rec.get('elementname'),rec.get('originplace'));
                                 }
                             }, {
                                 width: 60,

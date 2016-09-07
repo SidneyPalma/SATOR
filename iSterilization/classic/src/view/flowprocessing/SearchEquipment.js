@@ -1,24 +1,25 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.SearchCycle', {
+Ext.define( 'iSterilization.view.flowprocessing.SearchEquipment', {
     extend: 'Smart.form.field.ComboSearch',
 
-    xtype: 'searchcycle',
+    xtype: 'searchequipment',
 
     requires: [
         'Smart.util.Resource',
         'Smart.form.field.ComboSearch'
     ],
 
-    displayField: 'name',
+    displayField: 'equipmentname',
 
     pageSize: 0,
+    editable: false,
     showClear: true,
 
     url: '../iSterilization/business/Calls/flowprocessing.php',
 
     params: {
         action: 'select',
-        method: 'selectCycle'
+        method: 'selectEquipment'
     },
 
     fields: [
@@ -26,19 +27,9 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchCycle', {
             name: 'id',
             type: 'int'
         }, {
-            name: 'name',
-            type: 'auto'
-        }, {
-            name: 'duration',
-            type: 'int'
-        }, {
-            name: 'temperature',
-            type: 'auto'
-        }, {
-            name: 'timetoopen',
+            name: 'equipmentname',
             type: 'auto'
         }
     ]
-
 
 });
