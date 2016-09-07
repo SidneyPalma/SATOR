@@ -306,13 +306,14 @@ class flowprocessing extends \Smart\Data\Cache {
         $sql = "
             declare
                 @equipmentid int = :equipmentid;
-            
+
             select
                 c.id, 
                 c.name, 
-                c.duration, 
-                c.temperature, 
-                c.timetoopen
+                c.duration,                 
+                c.timetoopen,
+                c.temperature,
+                ec.equipmentid
             from
                 equipmentcycle ec
                 inner join cycle c on ( c.id = ec.cycleid )
@@ -321,6 +322,91 @@ class flowprocessing extends \Smart\Data\Cache {
         try {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":equipmentid", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectCharge(array $data) {
+        $areasid = $data['areasid'];
+        $cycleid = $data['cycleid'];
+        $equipmentid = $data['equipmentid'];
+
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @areasid int = :areasid,
+                @cycleid int = :cycleid,
+                @equipmentid int = :equipmentid;
+            
+            select
+                fpci.id,
+                fpci.flowprocessingstepid,
+                fpci.flowprocessingchargeid,
+                t.equipmentid,
+                t.elementname,
+                t.materialname
+            from
+                flowprocessingstep fps
+                inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )
+                left join flowprocessingchargeitem fpci on ( fpci.flowprocessingstepid = fps.id )
+                cross apply (
+                    select
+                        a.equipmentid,
+                        a.elementname,
+                        coalesce(ta.name,tb.name) as materialname
+                    from
+                        flowprocessingstep a
+                        inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                        inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid and ec.cycleid = @cycleid )
+                        outer apply (
+                            select
+                                mb.name
+                            from
+                                materialbox mb
+                            where mb.id = fp.materialboxid
+                        ) ta
+                        outer apply (
+                            select top 1
+                                ib.name
+                            from
+                                flowprocessingstepmaterial b
+                                inner join itembase ib on ( ib.id = b.materialid )
+                            where b.flowprocessingstepid = a.id
+                        ) tb
+                    where a.flowprocessingid = fps.flowprocessingid
+                        and a.id = fps.target
+                        and a.equipmentid = @equipmentid
+                ) t
+            where fps.areasid = @areasid
+              and fpsa.isactive = 1
+              and fpsa.flowstepaction = '001'
+              and fps.stepflaglist like '%016%'
+              and not exists (
+                    select
+                        a.id
+                    from
+                        flowprocessingchargeitem a
+                        inner join flowprocessingcharge b on ( b.id = a.flowprocessingchargeid )
+                    where a.flowprocessingstepid = fps.id
+                    -- and b.chargeflag = '001'
+                    -- and a.chargestatus = '001'
+              )";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":cycleid", $cycleid, \PDO::PARAM_INT);
+            $pdo->bindValue(":equipmentid", $equipmentid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 

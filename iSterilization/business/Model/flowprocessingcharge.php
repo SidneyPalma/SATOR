@@ -69,6 +69,24 @@ class flowprocessingcharge extends \Smart\Data\Model {
     private $cyclefinaluser;
 
     /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $duration;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $temperature;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $timetoopen;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -225,6 +243,54 @@ class flowprocessingcharge extends \Smart\Data\Model {
      */
     public function setCyclefinaluser($cyclefinaluser) {
         $this->cyclefinaluser = $cyclefinaluser;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getDuration() {
+        return $this->duration;
+    }
+
+    /**
+     * @param type $duration
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setDuration($duration) {
+        $this->duration = $duration;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getTemperature() {
+        return $this->temperature;
+    }
+
+    /**
+     * @param type $temperature
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setTemperature($temperature) {
+        $this->temperature = $temperature;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getTimetoopen() {
+        return $this->timetoopen;
+    }
+
+    /**
+     * @param type $timetoopen
+     * @return \iSterilization\Model\flowprocessingcharge
+     */
+    public function setTimetoopen($timetoopen) {
+        $this->timetoopen = $timetoopen;
         return $this;
     }
 
