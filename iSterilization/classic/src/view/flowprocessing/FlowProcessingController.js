@@ -738,14 +738,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('searchcycle').reset();
         view.down('searchcycle').store.removeAll();
         view.down('searchcycle').setReadColor(true);
+        view.down('gridpanel').getStore().removeAll();
     },
 
     onSelectEquipment: function (combo,record,eOpts) {
         var me = this,
             view = me.getView();
 
-        view.down('searchcycle').reset();
-        view.down('searchcycle').store.removeAll();
+        me.onShowClearEquipment();
         view.down('searchcycle').setReadColor(false);
     },
 
