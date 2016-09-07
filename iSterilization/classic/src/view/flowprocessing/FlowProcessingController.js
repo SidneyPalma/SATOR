@@ -931,6 +931,46 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             me.callSATOR_RELATAR_EXCEPTION(Ext.decode(exceptionby));
             return false;
         }
+
+        /**
+         * Encerrar Leitura
+         *
+         * Flags Diversos ...
+         *  Action
+         *      muda Status
+         *
+         *  Step
+         *      Muda Status
+         *
+         *  Material
+         *      Lança itens para Próxima Etapa
+         *
+         * Fluxo Segue
+         */
+        me.encerrarEtapa();
+    },
+
+    encerrarEtapa: function () {
+        var me = this,
+            view = me.getView();
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'setEncerrarLeitura',
+                flowprocessingid: view.xdata.get('flowprocessingid'),
+                flowprocessingstepid: view.xdata.get('id'),
+                flowprocessingstepactionid: view.xdata.get('flowprocessingstepactionid')
+            },
+            callback: function (options, success, response) {
+                console.info(response);
+                if (success) {
+                    history.back();
+                }
+            }
+        });
     },
 
     callSATOR_UNCONFORMITIES: function () {
