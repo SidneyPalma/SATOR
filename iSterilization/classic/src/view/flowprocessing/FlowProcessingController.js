@@ -1103,6 +1103,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             item.element = '';
                             item.flowexception = 0;
                             list.push(item);
+                            console.warn(item);
                         });
                         this.down('gridpanel').getStore().add(list);
                         this.down('gridpanel').getSelectionModel().select(0);
@@ -1150,30 +1151,40 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         elementname.getStore().removeAll();
 
         Ext.each(exceptiondo,function (item) {
-            switch(flowexception) {
-                case 1:
-                    if(item.typelesscode == 'A') {
-                        area.push({
-                            id: item.id,
-                            steplevel: item.steplevel,
-                            elementtype: item.elementtype,
-                            elementcode: item.elementcode,
-                            elementname: item.elementname
-                        })
-                    }
-                    break;
-                case 2:
-                    if(item.typelesscode == 'Q') {
-                        area.push({
-                            id: item.id,
-                            steplevel: item.steplevel,
-                            elementtype: item.elementtype,
-                            elementcode: item.elementcode,
-                            elementname: item.elementname
-                        })
-                    }
-                    break;
-            }
+            area.push({
+                id: item.id,
+                steplevel: item.steplevel,
+                elementtype: item.elementtype,
+                elementcode: item.elementcode,
+                elementname: item.elementname,
+                levelsource: record.get('stepsource')
+            });
+            // switch(flowexception) {
+            //     case 1:
+            //         if(item.typelesscode == 'A') {
+            //             area.push({
+            //                 id: item.id,
+            //                 steplevel: item.steplevel,
+            //                 elementtype: item.elementtype,
+            //                 elementcode: item.elementcode,
+            //                 elementname: item.elementname,
+            //                 levelsource: record.get('stepsource')
+            //             })
+            //         }
+            //         break;
+            //     case 2:
+            //         if(item.typelesscode == 'Q') {
+            //             area.push({
+            //                 id: item.id,
+            //                 steplevel: item.steplevel,
+            //                 elementtype: item.elementtype,
+            //                 elementcode: item.elementcode,
+            //                 elementname: item.elementname,
+            //                 levelsource: record.get('stepsource')
+            //             })
+            //         }
+            //         break;
+            // }
         });
 
         if(area.length == 0) {
@@ -1206,7 +1217,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             steplevel: record.get('steplevel'),
             elementtype: record.get('elementtype'),
             elementcode: record.get('elementcode'),
-            elementname: record.get('elementname')
+            elementname: record.get('elementname'),
+            levelsource: record.get('levelsource')
         }));
 
         data.commit();
@@ -1222,12 +1234,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.each(function(record) {
             var element = record.get('element');
             if(element.length) {
+                // console.info(record.data);
                 var item = Ext.decode(element);
                 list.push({
                     steplevel: item.steplevel,
                     stepchoice: item.stepchoice,
                     elementtype: item.elementtype,
-                    elementcode: item.elementcode
+                    elementcode: item.elementcode,
+                    levelsource: item.levelsource
                 })
             }
         });

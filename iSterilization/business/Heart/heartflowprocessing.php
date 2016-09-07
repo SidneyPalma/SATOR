@@ -438,6 +438,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             select
                 a.id,
                 a.name,
+                fps.id as stepsource,
                 fps.typechoice,
                 fps.stepchoice,
                 fps.flowbreach,
@@ -476,6 +477,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $data['params'] = $params;
 
+//        print_r($data);
+//        exit;
+
         try {
 
             while (list(, $item) = each($params)) {
@@ -490,6 +494,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         @target int,
                         @steplevel int = :steplevel,
                         @stepchoice int = :stepchoice,
+                        --@levelsource int = :levelsource,
                         @flowprocessingid int = :flowprocessingid;
 
                     select
@@ -502,6 +507,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                       and fps.steplevel = @steplevel
                       {$filtercode};
 
+                    update flowprocessingstep set target = @id where id = @source;
+                    update flowprocessingstep set source = @source where id = @id;
                     update flowprocessingstep set source = @id where id = @target;
                     update flowprocessingstep set stepchoice = @stepchoice where id = @id;
                     
@@ -516,6 +523,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $pdo = $this->prepare($sql);
                 $pdo->bindValue(":steplevel", $steplevel, \PDO::PARAM_INT);
                 $pdo->bindValue(":stepchoice", $stepchoice, \PDO::PARAM_INT);
+//                $pdo->bindValue(":levelsource", $levelsource, \PDO::PARAM_INT);
                 $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
                 $pdo->execute();
             }
