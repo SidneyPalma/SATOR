@@ -22,10 +22,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
 
     controller: 'flowprocessing',
 
-    // listeners: {
-    //     queryreader: 'onQueryReaderEquipment'
-    // },
-
     initComponent: function () {
         var me = this;
         me.buildItems();
@@ -76,20 +72,40 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                             beforequery: 'onBeforeQueryCycle'
                         }
                     }, {
-                        xtype: 'gridpanel',
                         height: 300,
-                        store: Ext.create('Ext.data.Store', {
-                            storeId: 'simpsonsStore',
-                            fields:[ 'name', 'email', 'phone'],
-                            data: [
-                                { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
-                                { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
-                                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
-                                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
-                            ]
-                        }),
+                        xtype: 'gridpanel',
+
+                        url: '../iSterilization/business/Calls/flowprocessing.php',
+
+                        params: {
+                            action: 'select',
+                            method: 'selectCycle'
+                        },
+
+                        fields: [
+                            {
+                                name: 'id',
+                                type: 'int'
+                            }, {
+                                name: 'elementname',
+                                type: 'auto'
+                            }
+                        ],
+                        // store: Ext.create('Ext.data.Store', {
+                        //     storeId: 'simpsonsStore',
+                        //     fields:[ 'name', 'email', 'phone'],
+                        //     data: [
+                        //         { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
+                        //         { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
+                        //         { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
+                        //         { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
+                        //     ]
+                        // }),
                         columns: [
-                            { text: 'Name', dataIndex: 'name', flex: 1 }
+                            {
+                                dataIndex: 'elementname',
+                                flex: 1
+                            }
                         ]
                     }
                 ]
