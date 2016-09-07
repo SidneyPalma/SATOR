@@ -45,17 +45,9 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchCycle', {
         '<tpl for=".">',
             '<div class="x-boundlist-item">',
                 '<div style="font-size: 18px; font-weight: 700;">{name}</div>',
-                '<div style="font-size: 14px;">Dur.: {duration} / Temp.: {temperature}</div>',
+                '<div style="font-size: 14px;">Duração: {duration} / Temp: {temperature} / Leitura: {timetoopen}</div>',
             '</div>',
         '</tpl>'
     ]
-
-    // template for the content displayField
-    // displayTpl: [
-    //     '<tpl for=".">',
-    //     '{name} - {presentationdescription}',
-    //     '</tpl>'
-    // ]
-
 
 });
