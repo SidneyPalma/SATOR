@@ -32,6 +32,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', 
         me.items = [
             {
                 xtype: 'form',
+                margin: '10 0 0 0',
                 bodyPadding: 10,
                 layout: 'anchor',
                 defaults: {
@@ -111,7 +112,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', 
                                 sortable: false,
                                 dataIndex: 'elementname',
                                 renderer: function (value,metaData,rec) {
-                                    var template = '<div style="color: red;">{0}</div><div style="font-weight: 700;">{1}</div>';
+                                    var template = '<div style="color: red; font-weight: 700;">{0}</div><div style="font-weight: 700;">{1}</div>';
                                     metaData.style = rec.data.haspending ? 'color: red;' : '';
                                     return Ext.String.format(template,rec.get('elementname'),rec.get('originplace'));
                                 }
@@ -126,7 +127,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', 
                                     return rec.data.haspending ? 'Cancelar ação!' : 'Autorizar quebra de fluxo!';
                                 },
                                 getClass: function(v, meta, rec) {
-                                    return rec.data.haspending ? "fa fa-hand-paper-o action-delete-color-font" : "fa fa-thumbs-up action-delete-color-font";
+                                    return rec.data.haspending ? "fa fa-thumbs-up action-insert-color-font" : "fa fa-hand-paper-o action-delete-color-font";
                                 }
                             }
                         ]

@@ -1151,40 +1151,40 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         elementname.getStore().removeAll();
 
         Ext.each(exceptiondo,function (item) {
-            area.push({
-                id: item.id,
-                steplevel: item.steplevel,
-                elementtype: item.elementtype,
-                elementcode: item.elementcode,
-                elementname: item.elementname,
-                levelsource: record.get('stepsource')
-            });
-            // switch(flowexception) {
-            //     case 1:
-            //         if(item.typelesscode == 'A') {
-            //             area.push({
-            //                 id: item.id,
-            //                 steplevel: item.steplevel,
-            //                 elementtype: item.elementtype,
-            //                 elementcode: item.elementcode,
-            //                 elementname: item.elementname,
-            //                 levelsource: record.get('stepsource')
-            //             })
-            //         }
-            //         break;
-            //     case 2:
-            //         if(item.typelesscode == 'Q') {
-            //             area.push({
-            //                 id: item.id,
-            //                 steplevel: item.steplevel,
-            //                 elementtype: item.elementtype,
-            //                 elementcode: item.elementcode,
-            //                 elementname: item.elementname,
-            //                 levelsource: record.get('stepsource')
-            //             })
-            //         }
-            //         break;
-            // }
+            // area.push({
+            //     id: item.id,
+            //     steplevel: item.steplevel,
+            //     elementtype: item.elementtype,
+            //     elementcode: item.elementcode,
+            //     elementname: item.elementname,
+            //     levelsource: record.get('stepsource')
+            // });
+            switch(flowexception) {
+                case 1:
+                    if(item.typelesscode == 'A') {
+                        area.push({
+                            id: item.id,
+                            steplevel: item.steplevel,
+                            elementtype: item.elementtype,
+                            elementcode: item.elementcode,
+                            elementname: item.elementname
+                            // levelsource: record.get('stepsource')
+                        })
+                    }
+                    break;
+                case 2:
+                    if(item.typelesscode == 'Q') {
+                        area.push({
+                            id: item.id,
+                            steplevel: item.steplevel,
+                            elementtype: item.elementtype,
+                            elementcode: item.elementcode,
+                            elementname: item.elementname
+                            // levelsource: record.get('stepsource')
+                        })
+                    }
+                    break;
+            }
         });
 
         if(area.length == 0) {
@@ -1217,8 +1217,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             steplevel: record.get('steplevel'),
             elementtype: record.get('elementtype'),
             elementcode: record.get('elementcode'),
-            elementname: record.get('elementname'),
-            levelsource: record.get('levelsource')
+            elementname: record.get('elementname')
+            // levelsource: record.get('levelsource')
         }));
 
         data.commit();
@@ -1240,8 +1240,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     steplevel: item.steplevel,
                     stepchoice: item.stepchoice,
                     elementtype: item.elementtype,
-                    elementcode: item.elementcode,
-                    levelsource: item.levelsource
+                    elementcode: item.elementcode
+                    // levelsource: item.levelsource
                 })
             }
         });
