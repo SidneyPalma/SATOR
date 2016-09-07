@@ -145,17 +145,22 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 fps.stepchoice,
                 fp.patientname,
                 fps.elementname,
+                fps.stepflaglist,
                 coalesce(s.flowstepaction,fpsa.flowstepaction) as flowstepaction,
                 fps.flowprocessingid,
                 c.name as clientname,
+                st.name as sterilizationtypename,
+                st.version,
                 fpsa.flowprocessingstepid,
                 substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
                 dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription,
-				o.originplace
+				o.originplace,
+				t.targetplace
             from 
                 flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid and fps.areasid = @areasid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 inner join client c on ( c.id = fp.clientid )
 				outer apply (
 					select
@@ -165,6 +170,14 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 					where a.flowprocessingid = fps.flowprocessingid
 					  and a.id = fps.source
 				) o
+				outer apply (
+					select
+						a.elementname as targetplace
+					from
+						flowprocessingstep a
+					where a.flowprocessingid = fps.flowprocessingid
+					  and a.id = fps.target
+				) t
 				outer apply (
 					select
 						a.flowstepaction

@@ -130,6 +130,24 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
 
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'selectAreaStep',
+                query: Smart.workstation.areasid
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+            }
+        });
+
         Ext.getStore('flowprocessingstepaction').setParams({
             method: 'selectArea',
             query: Smart.workstation.areasid
@@ -703,6 +721,60 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
+
+    //SATOR_VALIDA_CARGA
+    onBeforeQueryEquipment: function (queryPlan, eOpts) {
+        var combo = queryPlan.combo;
+
+        delete combo.lastQuery;
+        combo.store.removeAll();
+        queryPlan.query = Smart.workstation.areasid;
+    },
+
+    onShowClearEquipment: function (field,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('searchcycle').reset();
+        view.down('searchcycle').store.removeAll();
+        view.down('searchcycle').setReadColor(true);
+    },
+
+    onSelectEquipment: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('searchcycle').reset();
+        view.down('searchcycle').store.removeAll();
+        view.down('searchcycle').setReadColor(false);
+    },
+
+    onBeforeQueryCycle: function (queryPlan, eOpts) {
+        var me = this,
+            view = me.getView(),
+            combo = queryPlan.combo,
+            equipmentid = view.down('hiddenfield[name=equipmentid]');
+
+        delete combo.lastQuery;
+        combo.store.removeAll();
+        queryPlan.query = equipmentid.getValue();
+    },
+
+    onSelectCycle: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('gridpanel').getStore().removeAll();
+        // view.down('gridpanel').getStore().load();
+    },
+
+    onShowClearCycle: function (field,eOpts) {
+        var me = this,
+            view = me.getView();
+
+        view.down('gridpanel').getStore().removeAll();
+    },
+
     onStartReaderUnconformities: function (field, e, eOpts) {
         var me = this,
             view = me.getView(),
@@ -773,7 +845,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             me.setMessageText('MSG_PROTOCOL_ERROR');
         }
     },
-	
+
 	workProtocol: function (value) {
 	    var me = this;
 
@@ -1732,6 +1804,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             userid = record.get('username'),
             action = record.get('flowstepaction'),
             stepid = record.get('flowprocessingstepid'),
+            stepflaglist = record.get('stepflaglist'),
             doCallBack = function (rows) {
                 Ext.Ajax.request({
                     scope: me,
@@ -1762,6 +1835,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         switch(action) {
             case '001':
+
+                    if(stepflaglist.indexOf("016") != -1) {
+                        Smart.Msg.showToast('Este processo requer Validação de Carga!');
+                        return false;
+                    }
+
                     if(!userid) {
                         Ext.widget('flowprocessinguser', {
                             scope: me,

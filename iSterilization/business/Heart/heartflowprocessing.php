@@ -477,13 +477,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $data['params'] = $params;
 
         try {
-//            $step = new \iSterilization\Coach\flowprocessingstep();
-//            $action = new \iSterilization\Coach\flowprocessingstepaction();
-//
-//            // update flowprocessingstepaction
-//            $action->getStore()->getModel()->set('id', $flowprocessingstepactionid);
-//            $action->getStore()->getModel()->set('isactive', 0);
-//            $action->getStore()->update();
 
             while (list(, $item) = each($params)) {
                 extract($item);
@@ -527,73 +520,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $pdo->execute();
             }
 
-//            $step = new \iSterilization\Coach\flowprocessingstep();
-//            $action = new \iSterilization\Coach\flowprocessingstepaction();
-//
-//            // update flowprocessingstepaction
-//            $action->getStore()->getModel()->set('id', $flowprocessingstepactionid);
-//            $action->getStore()->getModel()->set('isactive', 0);
-//            $action->getStore()->update();
-//
-//            $sql = "
-//                declare
-//                    @newid int,
-//                    @flowprocessingid int = :flowprocessingid,
-//                    @flowprocessingstepid int = :flowprocessingstepid;
-//
-//                select top 1
-//                    @newid = fps.id
-//                from
-//                    flowprocessingstep fps
-//                where fps.flowprocessingid = @flowprocessingid
-//                    and fps.id > @flowprocessingstepid
-//                    and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' )
-//
-//                select @newid as newid;";
-//
-//            $pdo = $this->prepare($sql);
-//            $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
-//            $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
-//            $pdo->execute();
-//            $rows = $pdo->fetchAll();
-//            $newid = $rows[0]['newid'];
-//            unset($pdo);
-//
-//            if(count($rows) != 0) {
-//                // insert flowprocessingstepaction
-//                $action->getStore()->getModel()->set('flowprocessingstepid',$newid);
-//                $action->getStore()->getModel()->set('flowstepaction','001');
-//                $action->getStore()->getModel()->set('isactive',1);
-//                $action->getStore()->insert();
-//
-//                // update flowprocessingstep
-//                $date = date("Ymd H:i:s");
-//                $step->getStore()->getModel()->set('id',$newid);
-//                $step->getStore()->getModel()->set('datestart',$date);
-//                $step->getStore()->getModel()->set('flowstepstatus','001');
-//                $step->getStore()->update();
-//
-//                $sql = "
-//                    declare
-//                        @flowprocessingstepid int = :flowprocessingstepid;
-//
-//                    insert into
-//                          flowprocessingstepmaterial
-//                          ( flowprocessingstepid, materialid, unconformities, dateof )
-//                    select
-//                          {$newid} as flowprocessingstepid,
-//                          materialid,
-//                          '001' as unconformities,
-//                          getdate() dateof
-//                    from
-//                        flowprocessingstepmaterial
-//                    where flowprocessingstepid = @flowprocessingstepid;";
-//
-//                $pdo = $this->prepare($sql);
-//                $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
-//                $pdo->execute();
-//            }
-
             $item = [];
 
             $item['flowprocessingid'] = $flowprocessingid;
@@ -608,7 +534,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         }
 
         return self::getResultToJson();
-
     }
 
     public function setEncerrarLeitura (array $data) {
@@ -760,6 +685,12 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     /**
      * Select
      */
+
+    public function selectAreaStep(array $data) {
+        $query = $data['query'];
+
+        return self::getResultToJson();
+    }
 
     public function selectTaskName(array $data) {
         $query = $data['query'];

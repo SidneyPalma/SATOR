@@ -9,6 +9,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
         'Smart.plugins.*',
         'Ext.window.Window',
         'iSterilization.view.flowprocessing.SearchCycle',
+        'iSterilization.view.flowprocessing.SearchEquipment',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
@@ -20,6 +21,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
     showAnimate: true,
 
     controller: 'flowprocessing',
+
+    // listeners: {
+    //     queryreader: 'onQueryReaderEquipment'
+    // },
 
     initComponent: function () {
         var me = this;
@@ -49,23 +54,27 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                         text: 'Validar Carga'
                     }, {
                         margin: '20 0 0 0',
+                        showClear: true,
                         useUpperCase: true,
                         fieldLabel: 'Equipamento',
-                        xtype: 'textfield',
-                        name: 'equipmentname'
-                        // listeners: {
-                        //     specialkey: function (field, e, eOpts) {
-                        //         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                        //             var me = this,
-                        //                 button = me.up('window').down('button[name=confirm]');
-                        //             button.fireEvent('click', button);
-                        //         }
-                        //     }
-                        // }
+                        xtype: 'searchequipment',
+                        hiddenNameId: 'equipmentid',
+                        name: 'equipmentname',
+                        listeners: {
+                            select: 'onSelectEquipment',
+                            showclear: 'onShowClearEquipment',
+                            beforequery: 'onBeforeQueryEquipment'
+                        }
                     }, {
                         useReadColor: true,
                         fieldLabel: 'Ciclo',
-                        xtype: 'searchcycle'
+                        hiddenNameId: 'equipmentcycleid',
+                        xtype: 'searchcycle',
+                        listeners: {
+                            select: 'onSelectCycle',
+                            showclear: 'onShowClearCycle',
+                            beforequery: 'onBeforeQueryCycle'
+                        }
                     }, {
                         xtype: 'gridpanel',
                         height: 300,
