@@ -19,6 +19,9 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingChargeItem', {
         }, {
             name: 'flowprocessingstepid',
             type: 'int'
+        }, {
+            name: 'chargestatus',
+            type: 'auto'
         }
     ]
 

@@ -769,8 +769,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.setParams({
             action: 'select',
             method: 'selectCharge',
-            cycleid: record.get('id'),
             areasid: Smart.workstation.areasid,
+            equipmentcycleid: record.get('id'),
             equipmentid: record.get('equipmentid')
         }).load();
     },
@@ -1942,6 +1942,64 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.each(function(record) {
             if(record.get('haspending')) {
                 list.push(record);
+            }
+        });
+
+        if(list.length == 0) {
+            Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
+            return false;
+        }
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
+    },
+
+    setValidaCargaLista: function () {
+        var me = this,
+            list = [],
+            view = me.getView(),
+            store = view.down('gridpanel').getStore(),
+            doCallBack = function (rows) {
+                var back = true,
+                    data = view.down('form').getValues();
+
+                data.action = 'select';
+                data.username = rows.username;
+                data.method = 'setValidaCargaLista';
+                data.areasid = Smart.workstation.areasid;
+                data.list = Ext.encode(list);
+console.info(data);
+                Ext.Ajax.request({
+                    scope: me,
+                    url: me.url,
+                    params: data,
+                    async: false,
+                    callback: function (options, success, response) {
+                        var result = Ext.decode(response.responseText);
+
+                        if(!success || !result.success) {
+                            back = false;
+                            me.setMessageText('MSG_UNKNOWN');
+                        }
+                    }
+                });
+
+                if(back) {
+                    view.close();
+                    Ext.getStore('flowprocessingstepaction').load();
+                }
+
+                return back;
+            };
+
+        store.each(function(record) {
+            if(record.get('haspending')) {
+                list.push(record.data);
             }
         });
 

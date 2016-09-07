@@ -27,6 +27,12 @@ class flowprocessingchargeitem extends \Smart\Data\Model {
     private $flowprocessingstepid;
 
     /**
+     * @Policy {"nullable":false, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"001"}
+     */
+    private $chargestatus;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -71,6 +77,22 @@ class flowprocessingchargeitem extends \Smart\Data\Model {
      */
     public function setFlowprocessingstepid($flowprocessingstepid) {
         $this->flowprocessingstepid = $flowprocessingstepid;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getChargestatus() {
+        return $this->chargestatus;
+    }
+
+    /**
+     * @param type $chargestatus
+     * @return \iSterilization\Model\flowprocessingchargeitem
+     */
+    public function setChargestatus($chargestatus) {
+        $this->chargestatus = $chargestatus;
         return $this;
     }
 

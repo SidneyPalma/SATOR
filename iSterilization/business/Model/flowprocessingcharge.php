@@ -40,7 +40,7 @@ class flowprocessingcharge extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false, "length":3}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"1"}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":"001"}
      */
     private $chargeflag;
 

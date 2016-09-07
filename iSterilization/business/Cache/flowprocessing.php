@@ -308,7 +308,7 @@ class flowprocessing extends \Smart\Data\Cache {
                 @equipmentid int = :equipmentid;
 
             select
-                c.id, 
+                ec.id, 
                 c.name, 
                 c.duration,                 
                 c.timetoopen,
@@ -337,20 +337,20 @@ class flowprocessing extends \Smart\Data\Cache {
 
     public function selectCharge(array $data) {
         $areasid = $data['areasid'];
-        $cycleid = $data['cycleid'];
         $equipmentid = $data['equipmentid'];
+        $equipmentcycleid = $data['equipmentcycleid'];
 
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
             declare
                 @areasid int = :areasid,
-                @cycleid int = :cycleid,
-                @equipmentid int = :equipmentid;
+                @equipmentid int = :equipmentid,
+                @equipmentcycleid int = :equipmentcycleid;
             
             select
                 fpci.id,
-                fpci.flowprocessingstepid,
+                fpsa.flowprocessingstepid,
                 fpci.flowprocessingchargeid,
                 t.equipmentid,
                 t.elementname,
@@ -367,7 +367,7 @@ class flowprocessing extends \Smart\Data\Cache {
                     from
                         flowprocessingstep a
                         inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
-                        inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid and ec.cycleid = @cycleid )
+                        inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid and ec.id = @equipmentcycleid )
                         outer apply (
                             select
                                 mb.name
@@ -398,15 +398,15 @@ class flowprocessing extends \Smart\Data\Cache {
                         flowprocessingchargeitem a
                         inner join flowprocessingcharge b on ( b.id = a.flowprocessingchargeid )
                     where a.flowprocessingstepid = fps.id
-                    -- and b.chargeflag = '001'
-                    -- and a.chargestatus = '001'
+                      and a.chargestatus = '001'
+                      and b.chargeflag = '001'
               )";
 
         try {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
-            $pdo->bindValue(":cycleid", $cycleid, \PDO::PARAM_INT);
             $pdo->bindValue(":equipmentid", $equipmentid, \PDO::PARAM_INT);
+            $pdo->bindValue(":equipmentcycleid", $equipmentcycleid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
