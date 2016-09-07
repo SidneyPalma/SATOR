@@ -73,8 +73,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                             beforequery: 'onBeforeQueryCycle'
                         }
                     }, {
-                        height: 300,
+                        height: 250,
                         xtype: 'gridpanel',
+                        cls: 'update-grid',
 
                         url: '../iSterilization/business/Calls/flowprocessing.php',
 
@@ -92,20 +93,23 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                                 type: 'auto'
                             }
                         ],
-                        // store: Ext.create('Ext.data.Store', {
-                        //     storeId: 'simpsonsStore',
-                        //     fields:[ 'name', 'email', 'phone'],
-                        //     data: [
-                        //         { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
-                        //         { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
-                        //         { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
-                        //         { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
-                        //     ]
-                        // }),
                         columns: [
                             {
-                                dataIndex: 'elementname',
+                                dataIndex: 'materialname',
                                 flex: 1
+                            }, {
+                                width: 60,
+                                align: 'center',
+                                sortable: false,
+                                dataIndex: 'haspending',
+                                xtype: 'actioncolumn',
+                                handler: 'setAuthorize',
+                                getTip: function(v, meta, rec) {
+                                    return rec.data.haspending ? 'Cancelar ação!' : 'Autorizar quebra de fluxo!';
+                                },
+                                getClass: function(v, meta, rec) {
+                                    return rec.data.haspending ? "fa fa-thumbs-up action-insert-color-font" : "fa fa-hand-paper-o action-delete-color-font";
+                                }
                             }
                         ]
                     }

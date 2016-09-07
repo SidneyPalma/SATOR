@@ -762,10 +762,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onSelectCycle: function (combo,record,eOpts) {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            store = view.down('gridpanel').getStore();
 
-        view.down('gridpanel').getStore().removeAll();
-        // view.down('gridpanel').getStore().load();
+        store.removeAll();
+        store.setParams({
+            action: 'select',
+            method: 'selectCharge',
+            cycleid: record.get('id'),
+            areasid: Smart.workstation.areasid,
+            equipmentid: record.get('equipmentid')
+        }).load();
     },
 
     onShowClearCycle: function (field,eOpts) {

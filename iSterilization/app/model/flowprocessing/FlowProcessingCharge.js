@@ -40,6 +40,15 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingCharge', {
         }, {
             name: 'cyclefinaluser',
             type: 'auto'
+        }, {
+            name: 'duration',
+            type: 'auto'
+        }, {
+            name: 'temperature',
+            type: 'auto'
+        }, {
+            name: 'timetoopen',
+            type: 'auto'
         }
     ]
 
