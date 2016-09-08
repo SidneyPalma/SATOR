@@ -39,7 +39,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
                     anchor: '100%',
                     allowBlank: false,
                     fieldCls: 'smart-field-style-action'
-                    // labelCls: 'smart-field-style-action'
                 },
                 items: [
                     {
@@ -49,19 +48,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
                         xtype: 'label',
                         cls: 'title-label',
                         text: 'Status do Ciclo'
-                    // }, {
-                    //     fieldLabel: 'Status do Ciclo',
-                    //     xtype: 'textfield',
-                    //     name: 'cyclestatus',
-                    //     listeners: {
-                    //         specialkey: function (field, e, eOpts) {
-                    //             if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                    //                 var me = this,
-                    //                     button = me.up('window').down('button[name=confirm]');
-                    //                 button.fireEvent('click', button);
-                    //             }
-                    //         }
-                    //     }
                     }
                 ]
             }

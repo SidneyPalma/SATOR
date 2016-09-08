@@ -546,6 +546,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $flowprocessingstepid = $data['flowprocessingstepid'];
         $flowprocessingstepactionid = $data['flowprocessingstepactionid'];
 
+        $result = null;
+
         try {
 
             $step = new \iSterilization\Coach\flowprocessingstep();
@@ -585,7 +587,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $action->getStore()->getModel()->set('flowprocessingstepid',$newid);
                 $action->getStore()->getModel()->set('flowstepaction','001');
                 $action->getStore()->getModel()->set('isactive',1);
-                $action->getStore()->insert();
+                $result = $action->getStore()->insert();
 
                 // update flowprocessingstep
                 $date = date("Ymd H:i:s");
@@ -620,7 +622,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             self::_setText($e->getMessage());
         }
 
-        return self::getResultToJson();
+        return $result || self::getResultToJson();
     }
 
     public function setValidaCargaLista(array $data) {
@@ -660,6 +662,54 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
             unset($charge);
             unset($chargeitem);
+
+            self::_setSuccess(true);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function setStatusCiclo(array $data) {
+        $id = $data['id'];
+        $username = $data['username'];
+        $cyclestatus = $data['cyclestatus'];
+
+
+        $result = self::jsonToObject($this->setEncerrarLeitura($data));
+//        id:"5"
+//        areasid:"14"
+//        cyclestatus:"START"
+//        flowprocessingid:"1"
+//        flowprocessingstepactionid:"3"
+//        flowprocessingstepid:"9"
+//        username:"sator.etimba"
+
+        try {
+
+            $sql = "
+                declare
+                    @id int = :id,
+                    @username varchar(80) = :username,
+                    @cyclestatus varchar(5) = :cyclestatus;
+                
+                    update 
+                        flowprocessingcharge
+                    set
+                        chargeflag = '002',
+                        cyclestart = getdate(),
+                        cyclestartuser = @username
+                     where id = @id;";
+
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+            $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+            $pdo->bindValue(":cyclestatus", $cyclestatus, \PDO::PARAM_STR);
+            $pdo->execute();
+
 
             self::_setSuccess(true);
 

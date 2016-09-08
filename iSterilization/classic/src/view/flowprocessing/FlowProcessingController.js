@@ -1974,7 +1974,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                         if(!success || !result.success) {
                             back = false;
-                            me.setMessageText('MSG_UNKNOWN');
+                            Smart.Msg.showToast('Este processo não foi executado com sucesso!','info');
                         }
                     }
                 });
@@ -2009,20 +2009,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     relatarStatusCiclo: function () {
         var me = this,
-            list = [],
             view = me.getView(),
-            cyclestatus = view.down('hiddenfield[name=cyclestatus]').getValue()
+            cyclestatus = view.down('hiddenfield[name=cyclestatus]').getValue(),
             doCallBack = function (rows) {
                 var back = true,
-                    data = view.down('form').getValues();
+                    data = view.xdata.data,
+                    cyclestatus = view.down('form').getValues().cyclestatus;
 
                 data.action = 'select';
                 data.username = rows.username;
                 data.method = 'setStatusCiclo';
+                data.cyclestatus = cyclestatus;
                 data.areasid = Smart.workstation.areasid;
-                data.flowprocessingstepid = view.xdata.get('flowprocessingstepid');
-
-                // console.info(view.xdata.data,data);
 
                 Ext.Ajax.request({
                     scope: me,
@@ -2034,7 +2032,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                         if(!success || !result.success) {
                             back = false;
-                            me.setMessageText('MSG_UNKNOWN');
+                            Smart.Msg.showToast('Este processo não foi executado com sucesso!','info');
                         }
                     }
                 });
