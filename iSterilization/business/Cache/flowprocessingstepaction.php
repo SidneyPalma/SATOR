@@ -161,7 +161,9 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 --c.name as clientname,
                 st.name as sterilizationtypename,
                 st.version,
+				fps.flowprocessingid,
                 fpsa.flowprocessingstepid,
+				fpsa.id as flowprocessingstepactionid,
                 substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
                 --dbo.getEnum('flowstepaction',fpsa.flowstepaction) as flowstepactiondescription,
 				o.originplace,
@@ -225,7 +227,9 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 fpc.chargeflag as flowstepaction,
                 st.name as sterilizationtypename,
                 st.version,
+				fps.flowprocessingid,
                 fpci.flowprocessingstepid,
+				fpsa.id as flowprocessingstepactionid,
                 substring(convert(varchar(16), fpc.chargedate, 121),9,8) as timeof,
                 c.name as originplace,
                 t.targetplace,
@@ -239,6 +243,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 inner join equipmentcycle ec on ( ec.id = fpc.equipmentcycleid )
+				inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' )
                 inner join cycle c on ( c.id = ec.cycleid )
                 outer apply (
                     select
