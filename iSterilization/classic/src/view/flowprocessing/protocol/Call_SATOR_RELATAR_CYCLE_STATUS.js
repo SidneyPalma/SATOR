@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 550,
+    width: 400,
     modal: true,
     layout: 'fit',
     header: false,
@@ -33,12 +33,13 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
             {
                 xtype: 'form',
                 bodyPadding: 10,
+                margin: '10 0 0 0',
                 layout: 'anchor',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
-                    fieldCls: 'smart-field-style-action',
-                    labelCls: 'smart-field-style-action'
+                    fieldCls: 'smart-field-style-action'
+                    // labelCls: 'smart-field-style-action'
                 },
                 items: [
                     {
@@ -47,21 +48,20 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
                     }, {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Relatar Status do Ciclo'
-                    }, {
-                        margin: '20 0 0 0',
-                        fieldLabel: 'Status do Ciclo',
-                        xtype: 'textfield',
-                        name: 'cyclestatus',
-                        listeners: {
-                            specialkey: function (field, e, eOpts) {
-                                if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                    var me = this,
-                                        button = me.up('window').down('button[name=confirm]');
-                                    button.fireEvent('click', button);
-                                }
-                            }
-                        }
+                        text: 'Status do Ciclo'
+                    // }, {
+                    //     fieldLabel: 'Status do Ciclo',
+                    //     xtype: 'textfield',
+                    //     name: 'cyclestatus',
+                    //     listeners: {
+                    //         specialkey: function (field, e, eOpts) {
+                    //             if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                    //                 var me = this,
+                    //                     button = me.up('window').down('button[name=confirm]');
+                    //                 button.fireEvent('click', button);
+                    //             }
+                    //         }
+                    //     }
                     }
                 ]
             }
@@ -77,7 +77,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'relatarCycleStatus'
+                click: 'relatarStatusCiclo'
             }
         }, {
             scale: 'medium',

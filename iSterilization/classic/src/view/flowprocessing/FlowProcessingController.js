@@ -178,12 +178,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_VALIDA_CARGA':
                 me.callSATOR_VALIDA_CARGA();
                 break;
-            case 'SATOR_RELATAR_CYCLE_START':
-                me.callSATOR_RELATAR_CYCLE_START('START');
-                break;
-            case 'SATOR_RELATAR_CYCLE_FINAL':
-                me.callSATOR_RELATAR_CYCLE_FINAL();
-                break;
             default:
                 Smart.Msg.showToast('Protocolo Inválido para esta área');
         }
@@ -219,50 +213,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.master = view;
         });
     },
-
-    callSATOR_RELATAR_CYCLE_START: function (status) {
-        var me = this,
-            view = me.getView();
-
-        console.info(view.xdata.data);
-
-        // Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
-        //     this.master = view;
-        //     this.down('textfield[name=cyclestatus]').focus(false,200);
-        //     this.down('hiddenfield[name=cyclestatus]').setValue(status);
-        //     switch(status) {
-        //         case 'START':
-        //             this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Inicio de Ciclo de Equipamento');
-        //             break;
-        //         case 'FINAL':
-        //             this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Final de Ciclo de Equipamento');
-        //             break;
-        //     }
-        // });
-    },
-
-    callSATOR_RELATAR_CYCLE_FINAL: function () {
-        Smart.Msg.showToast('SATOR_RELATAR_CYCLE_FINAL');
-    },
-
-    // callSATOR_RELATAR_CYCLE_STATUS: function (status) {
-    //     var me = this,
-    //         view = me.getView();
-    //
-    //     Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
-    //         this.master = view;
-    //         this.down('textfield[name=cyclestatus]').focus(false,200);
-    //         this.down('hiddenfield[name=cyclestatus]').setValue(status);
-    //         switch(status) {
-    //             case 'START':
-    //                 this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Inicio de Ciclo de Equipamento');
-    //                 break;
-    //             case 'FINAL':
-    //                 this.down('textfield[name=cyclestatus]').setFieldLabel('Registrar Final de Ciclo de Equipamento');
-    //                 break;
-    //         }
-    //     });
-    // },
 
     onAfterRenderDash: function () {
         var me = this,
@@ -1776,30 +1726,32 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             store = Ext.getStore('flowprocessing'),
             propertygrid = view.down('propertygrid');
 
-        store.setParams({
-            method: 'selectDashStep',
-            query: record.get('flowprocessingid')
-        }).load({
-            scope: me,
-            callback: function(records, operation, success) {
-                var source = {},
-                    record = records[0],
-                    fields = [
-                        'patientname',
-                        'materialboxname',
-                        'surgicalwarning',
-                        'healthinsurance',
-                        'sterilizationtypename'
-                    ];
+        if(record.get('steptype') == 'P') {
+            store.setParams({
+                method: 'selectDashStep',
+                query: record.get('flowprocessingid')
+            }).load({
+                scope: me,
+                callback: function(records, operation, success) {
+                    var source = {},
+                        record = records[0],
+                        fields = [
+                            'patientname',
+                            'materialboxname',
+                            'surgicalwarning',
+                            'healthinsurance',
+                            'sterilizationtypename'
+                        ];
 
-                Ext.each(fields,function(item) {
-                    source[item] = record.get(item);
-                });
+                    Ext.each(fields,function(item) {
+                        source[item] = record.get(item);
+                    });
 
-                propertygrid.setSource(source);
-                propertygrid.getColumns()[0].hide();
-            }
-        });
+                    propertygrid.setSource(source);
+                    propertygrid.getColumns()[0].hide();
+                }
+            });
+        }
     },
 
     onFlowStepDeSelect: function () {
@@ -1846,6 +1798,25 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
+        /**
+         * Carga Validada aguardando Iniciar Ciclo
+         *
+         * SATOR_INICIA_CICLO
+         */
+        if(record.get('steptype') == 'C') {
+
+            switch(action) {
+                case '001':
+                    me.callSATOR_RELATAR_CYCLE_STATUS('START',record);
+                    break;
+                case '002':
+                    me.callSATOR_RELATAR_CYCLE_STATUS('FINAL',record);
+                    break;
+            }
+
+            return false;
+        }
+
         switch(action) {
             case '001':
 
@@ -1871,6 +1842,25 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return false;
                 break;
         }
+    },
+
+    callSATOR_RELATAR_CYCLE_STATUS: function (status,record) {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('call_SATOR_RELATAR_CYCLE_STATUS').show(null,function () {
+            this.master = view;
+            this.xdata = record;
+            this.down('hiddenfield[name=cyclestatus]').setValue(status);
+            switch(status) {
+                case 'START':
+                    this.down('label').setText('Relatar inicio de ciclo');
+                    break;
+                case 'FINAL':
+                    this.down('label').setText('Relatar final de ciclo');
+                    break;
+            }
+        });
     },
 
     onBeforeEditMaterialFlowStepAction: function ( editor, context, eOpts ) {
@@ -2007,6 +1997,56 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
             return false;
         }
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
+    },
+
+    relatarStatusCiclo: function () {
+        var me = this,
+            list = [],
+            view = me.getView(),
+            cyclestatus = view.down('hiddenfield[name=cyclestatus]').getValue()
+            doCallBack = function (rows) {
+                var back = true,
+                    data = view.down('form').getValues();
+
+                data.action = 'select';
+                data.username = rows.username;
+                data.method = 'setStatusCiclo';
+                data.areasid = Smart.workstation.areasid;
+                data.flowprocessingstepid = view.xdata.get('flowprocessingstepid');
+
+                // console.info(view.xdata.data,data);
+
+                Ext.Ajax.request({
+                    scope: me,
+                    url: me.url,
+                    params: data,
+                    async: false,
+                    callback: function (options, success, response) {
+                        var result = Ext.decode(response.responseText);
+
+                        if(!success || !result.success) {
+                            back = false;
+                            me.setMessageText('MSG_UNKNOWN');
+                        }
+                    }
+                });
+
+                if(back) {
+                    view.close();
+                    Ext.getStore('flowprocessingstepaction').load();
+                }
+
+                return back;
+            };
+
 
         Ext.widget('flowprocessinguser', {
             scope: me,

@@ -32,8 +32,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', 
         me.items = [
             {
                 xtype: 'form',
-                margin: '10 0 0 0',
                 bodyPadding: 10,
+                margin: '10 0 0 0',
                 layout: 'anchor',
                 defaults: {
                     anchor: '100%',

@@ -227,7 +227,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 st.version,
                 fpci.flowprocessingstepid,
                 substring(convert(varchar(16), fpc.chargedate, 121),9,8) as timeof,
-                o.originplace,
+                c.name as originplace,
                 t.targetplace,
                 items = (
                     select dbo.getLeftPad(2,'0',count(*)) from flowprocessingchargeitem where flowprocessingchargeid = fpc.id
@@ -238,14 +238,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 inner join flowprocessingstep fps on ( fps.id = fpci.flowprocessingstepid and fps.areasid = @areasid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
-                outer apply (
-                    select
-                        a.elementname as originplace
-                    from
-                        flowprocessingstep a
-                    where a.flowprocessingid = fps.flowprocessingid
-                        and a.id = fps.source
-                ) o
+                inner join equipmentcycle ec on ( ec.id = fpc.equipmentcycleid )
+                inner join cycle c on ( c.id = ec.cycleid )
                 outer apply (
                     select
                         a.elementname as targetplace
