@@ -635,9 +635,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $list = self::jsonToArray($data['list']);
 
-//        print_r($data);
-//        exit;
-
 //      [duration]
 //      [temperature]
 //      [timetoopen]

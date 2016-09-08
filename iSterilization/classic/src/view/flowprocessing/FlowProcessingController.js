@@ -1973,7 +1973,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 data.method = 'setValidaCargaLista';
                 data.areasid = Smart.workstation.areasid;
                 data.list = Ext.encode(list);
-console.info(data);
+
                 Ext.Ajax.request({
                     scope: me,
                     url: me.url,
