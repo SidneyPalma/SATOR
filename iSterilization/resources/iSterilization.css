@@ -129,7 +129,7 @@
 .step {
     float: left;
     padding: 5px;
-    height: 90px;
+    height: 80px;
     width: 300px;
     cursor: pointer;
     margin: 10px 0 0 10px;
@@ -190,6 +190,35 @@
 .step-left img {
     width: 100%;
     height: 100%;
+}
+
+.step .steptype-P {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(images/stage/MaterialReader.png);
+}
+
+.step .steptype-C {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(images/stage/ValidaCarga.png);
+}
+
+.step .steptype-items {
+    font-size: 14px;
+    font-weight: 700;
+    background: #10E8C4;
+    padding: 5px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.step .steptype-items:hover {
+    background: #EDD500;
 }
 
 .thumb-wrap {
