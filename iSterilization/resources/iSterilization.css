@@ -136,42 +136,53 @@
 
 }
 
-.step-001 {
+.step-001-P {
     border: 1px solid #6A864B;
     border-left: 8px solid #6A864B;
     background: rgba(225, 213, 213, .3);
 }
 
-.step-001:hover {
+.step-001-P:hover {
     border: 1px solid #79BE2D;
     border-left: 8px solid #79BE2D;
     background: rgba(166, 232, 94, .7);
 }
 
-/*.step {*/
-    /*position: relative;*/
-/*}*/
-
-/*.step:before {*/
-    /*position: absolute;*/
-    /*content: '';*/
-    /*border-top: 0px solid transparent;*/
-    /*border-bottom: 30px solid transparent;*/
-    /*border-right: 30px solid #3c4260;*/
-    /*right: 0px;*/
-/*}*/
-
-
-.step-002 {
+.step-002-P {
     border: 1px solid #B81D5F;
     border-left: 8px solid #B81D5F;
     background: rgba(255, 104, 113, .3);
 }
 
-.step-002:hover {
+.step-002-P:hover {
     border: 1px solid rgb(254, 99, 71);
     border-left: 8px solid rgb(254, 99, 71);
     background: rgba(254, 99, 71, .4);
+}
+
+
+.step-001-C {
+    border: 1px solid #FFFF00;
+    border-left: 8px solid #FFFF00;
+    background: rgba(255, 255, 0, .3);
+}
+
+.step-001-C:hover {
+    border: 1px solid #CCFF00;
+    border-left: 8px solid #CCFF00;
+    background: rgba(204, 255, 0, .7);
+}
+
+.step-002-T {
+    border: 1px solid #00FFFF;
+    border-left: 8px solid #00FFFF;
+    background: rgba(0, 204, 204, .3);
+}
+
+.step-002-T:hover {
+    border: 1px solid rgb(0, 255, 204);
+    border-left: 8px solid rgb(0, 255, 204);
+    background: rgba(0, 255, 204, .4);
 }
 
 .step-left {
@@ -208,6 +219,14 @@
     background-image: url(images/stage/ValidaCarga.png);
 }
 
+.step .steptype-T {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(images/stage/EncerraCiclo.png);
+}
+
 .step .steptype-items {
     font-size: 14px;
     font-weight: 700;
@@ -217,8 +236,15 @@
     float: right;
 }
 
+.step .steptype-clear {
+    font-size: 30px;
+    float: right;
+    margin-right: 10px;
+}
+
 .step .steptype-items:hover {
-    background: #EDD500;
+    color: white;
+    background: #9452FF;
 }
 
 .thumb-wrap {

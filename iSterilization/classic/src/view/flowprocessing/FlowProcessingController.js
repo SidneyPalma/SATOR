@@ -467,6 +467,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         placesearch.allowBlank = true;
 
+        if(clienttype != '004') {
+            me.insertFlow();
+            return false;
+        }
+
         if(clienttype == '004') {
             localization.show();
             placesearch.allowBlank = false;
@@ -497,6 +502,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView();
 
         view.down('hiddenfield[name=healthinsurance]').setValue(record.get('health_insurance'));
+
+        me.insertFlow();
     },
 
     insertFlow: function () {
@@ -1801,10 +1808,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * Carga Validada aguardando Iniciar Ciclo
          *
-         * SATOR_INICIA_CICLO
+         * SATOR_RELATAR_CYCLE_STATUS
          */
-        if(record.get('steptype') == 'C') {
-
+        if(['C','T'].indexOf(record.get('steptype')) != -1) {
             switch(action) {
                 case '001':
                     me.callSATOR_RELATAR_CYCLE_STATUS('START',record);
@@ -1813,7 +1819,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     me.callSATOR_RELATAR_CYCLE_STATUS('FINAL',record);
                     break;
             }
-
             return false;
         }
 

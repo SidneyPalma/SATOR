@@ -44,6 +44,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
             {
                 xtype: 'form',
                 bodyPadding: 10,
+                margin: '10 0 0 0',
                 layout: 'anchor',
                 plugins:'formenter',
                 defaultType: 'textfield',
@@ -78,6 +79,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                         cls: 'title-label',
                         text: 'Iniciar Nova Leitura'
                     }, {
+                        margin: '10 0 0 0',
                         xtype: 'fieldcontainer',
                         layout: 'anchor',
                         labelCls: 'sub-title-label',
@@ -245,7 +247,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
             scale: 'medium',
             text: 'Confirmar',
             showSmartTheme: 'blue',
-            handler: 'insertFlow'
+            listeners: {
+                click: 'insertFlow'
+            }
         }, {
             scale: 'medium',
             text: 'Fechar',
