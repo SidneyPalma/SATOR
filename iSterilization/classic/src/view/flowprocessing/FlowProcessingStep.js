@@ -5,6 +5,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
     xtype: 'flowprocessingstep',
 
     requires: [
+        'Smart.util.IonSound',
         'iSterilization.store.flowprocessing.*',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
@@ -157,6 +158,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                                 '<div class="steptype-items">{items}</div>',
                                                 '<div style="font-size: 16px; color: #900000;">{originplace}</div>',
                                                 '<div style="font-size: 14px; line-height: 18px;">{sterilizationtypename} {version}</div>',
+                                                '<div style="font-size: 14px; line-height: 18px;">{aff}</div>',
                                                 '<div style="font-size: 14px; line-height: 18px; color: #105aeb;">{targetplace}</div>',
                                                 '<div>',
                                                     '<div style="text-align: left; float: left; width: 30%;">{timeof}</div>',

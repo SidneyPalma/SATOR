@@ -656,16 +656,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         field.reset();
 
-        /**
-         * 017 - Registrar Final de Ciclo de Equipamento
-         */
-        // if(stepflaglist.indexOf('017') != -1) {
-        //     if(record.get('cyclefinal') == null) {
-        //         me.callSATOR_RELATAR_CYCLE_STATUS('FINAL');
-        //         return false;
-        //     }
-        // }
-
         if(value && value.length != 0) {
             // Sim é protocolo .. seguir workProtocol
             if(value.indexOf('SATOR') != -1) {
@@ -794,7 +784,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             update: Ext.encode(list),
                             params: Ext.encode(master.xdata.data)
                         },
-                        callback: function() {
+                        callback: function () {
+                            //PlaySound
                             view.close();
                             me.setView(master);
                             history.back();
@@ -877,6 +868,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
         store.sync({async: false});
         model.commit();
+        Smart.ion.sound.play("button_tiny");
         me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_USA_EPI');
     },
 
@@ -938,16 +930,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         }
 
-        /**
-         * 016 - Registrar Inicio de Ciclo de Equipamento
-         */
-        // if(stepflaglist.indexOf('016') != -1) {
-        //     if(record.get('cyclestart') == null) {
-        //         me.callSATOR_RELATAR_CYCLE_STATUS('START');
-        //         return false;
-        //     }
-        // }
-
         if (me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
             return false;
@@ -1001,8 +983,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 flowprocessingstepactionid: view.xdata.get('flowprocessingstepactionid')
             },
             callback: function (options, success, response) {
-                console.info(response);
                 if (success) {
+                    Smart.ion.sound.play("button_tiny");
                     history.back();
                 }
             }
@@ -1067,7 +1049,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             item.element = '';
                             item.flowexception = 0;
                             list.push(item);
-                            console.warn(item);
                         });
                         this.down('gridpanel').getStore().add(list);
                         this.down('gridpanel').getSelectionModel().select(0);
@@ -1190,8 +1171,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.each(function(record) {
             var element = record.get('element');
             if(element.length) {
-                // console.info(record.data);
                 var item = Ext.decode(element);
+
                 list.push({
                     steplevel: item.steplevel,
                     stepchoice: item.stepchoice,
@@ -1220,7 +1201,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 flowprocessingstepactionid: master.xdata.get('flowprocessingstepactionid')
             },
             callback: function (options, success, response) {
-                if(success) {
+                if (success) {
+                    Smart.ion.sound.play("button_tiny");
                     view.close();
                     me.setView(master);
                     history.back();
@@ -1327,7 +1309,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     method: 'setUnconformities',
                     params: Ext.encode(master.xdata.data)
                 },
-                success: function(response, opts) {
+                success: function (response, opts) {
+                    Smart.ion.sound.play("button_tiny");
                     view.close();
                     me.setView(master);
                     history.back();
@@ -1584,7 +1567,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
 		// Já foi lançado ?
 		// Sim -> Mensagem de duplicidade
-		if(data.get('unconformities') != '001') {
+		if (data.get('unconformities') != '001') {
+            Smart.ion.sound.play("computer_error");
 			me.setMessageText('MSG_DUPLICATED');
             model.select(data);
 			return false;
@@ -1596,6 +1580,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(stepflaglist.indexOf('019') != -1) {
             store.getAt(0);
             store.each(function (data) {
+                Smart.ion.sound.play("button_tiny");
                 data.set('unconformities','010');
                 data.store.sync({async: false});
                 data.commit();
@@ -1609,6 +1594,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         data.set('unconformities','010');
         store.sync({
             callback: function () {
+                Smart.ion.sound.play("button_tiny");
                 data.commit();
                 model.select(data);
             }
@@ -1625,7 +1611,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         // Já foi lançado ?
         // Sim -> Mensagem de duplicidade
-        if(data) {
+        if (data) {
+            Smart.ion.sound.play("computer_error");
             me.setMessageText('MSG_DUPLICATED');
             model.select(data);
             return false;
@@ -1646,10 +1633,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var result = Ext.decode(response.responseText);
 
                 if(!success || !result.success) {
+                    Smart.ion.sound.play("computer_error");
                     me.setMessageText('MSG_UNKNOWN');
                     return false;
                 }
 
+                //PlaySound
                 store.load();
             }
         });
@@ -1801,6 +1790,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             };
 
         if(!Smart.workstation) {
+            Smart.ion.sound.play("computer_error");
             Smart.Msg.showToast('Estação de Trabalho Não Configurada, Operação Não pode ser Realizada!','error');
             return false;
         }
@@ -1826,6 +1816,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case '001':
 
                     if(stepflaglist.indexOf("016") != -1) {
+                        Smart.ion.sound.play("computer_error");
                         Smart.Msg.showToast('Este processo requer Validação de Carga!');
                         return false;
                     }
@@ -1843,6 +1834,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     }
                 break;
             case '002':
+                Smart.ion.sound.play("computer_error");
                 Smart.Msg.showToast('Este processo requer autorização antes de prosseguir!');
                 return false;
                 break;
@@ -1926,7 +1918,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     item.set('authorizedby', rows.username);
                     kont += item.store.sync({async: false}) ? 1 : 0;
                 });
-                if(kont == list.length) {
+                if (kont == list.length) {
+                    Smart.ion.sound.play("button_tiny");
                     Ext.getStore('flowprocessingstepaction').load();
                     view.master.down('dataview[name=flowprocessingsteptask]').store.load();
                     view.close();
@@ -1940,7 +1933,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         });
 
-        if(list.length == 0) {
+        if (list.length == 0 || (store.getCount() != list.length)) {
+            Smart.ion.sound.play("computer_error");
             Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
             return false;
         }
@@ -1977,14 +1971,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     callback: function (options, success, response) {
                         var result = Ext.decode(response.responseText);
 
-                        if(!success || !result.success) {
+                        if (!success || !result.success) {
+                            Smart.ion.sound.play("computer_error");
                             back = false;
                             Smart.Msg.showToast('Este processo não foi executado com sucesso!','info');
                         }
                     }
                 });
 
-                if(back) {
+                if (back) {
+                    Smart.ion.sound.play("button_tiny");
                     view.close();
                     Ext.getStore('flowprocessingstepaction').load();
                 }
@@ -1998,7 +1994,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         });
 
-        if(list.length == 0) {
+        if (list.length == 0 || (store.getCount() != list.length)) {
+            Smart.ion.sound.play("computer_error");
             Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
             return false;
         }
@@ -2035,14 +2032,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     callback: function (options, success, response) {
                         var result = Ext.decode(response.responseText);
 
-                        if(!success || !result.success) {
+                        if (!success || !result.success) {
+                            Smart.ion.sound.play("computer_error");
                             back = false;
                             Smart.Msg.showToast('Este processo não foi executado com sucesso!','info');
                         }
                     }
                 });
 
-                if(back) {
+                if (back) {
+                    Smart.ion.sound.play("button_tiny");
                     view.close();
                     Ext.getStore('flowprocessingstepaction').load();
                 }
