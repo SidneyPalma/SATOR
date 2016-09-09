@@ -12,7 +12,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItemInsert', {
         'iAdmin.view.box.MaterialBoxController'
     ],
 
-    width: 350,
+    width: 450,
     modal: true,
     resizable: false,
     showAnimate: true,
@@ -49,9 +49,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItemInsert', {
                         xtype: 'hiddenfield',
                         name: 'materialboxid'
                     }, {
+                        pageSize: 5,
                         fieldLabel: 'Material',
                         xtype: 'materialboxitemsearch',
                         hiddenNameId: 'materialid',
+                        fieldCls: 'smart-field-style-action',
                         listeners: {
                             beforequery: 'onBeforeQuery'
                         }
@@ -65,7 +67,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItemInsert', {
 
     buttons: [
         {
-            iconCls: "fa fa-upload",
             text: 'Confirmar',
             showSmartTheme: 'red',
             handler: 'updateInput'

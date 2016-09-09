@@ -30,9 +30,22 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
     listen: {
         store: {
             '#material': {
+                load: 'onLoadMaterial',
                 beforeload: 'onBeforeLoadMaterial'
             }
         }
+    },
+
+    onLoadMaterial: function ( store , records , successful , operation , eOpts ) {
+        var me = this,
+            view = me.getView(),
+            totalresults = view.down('numberfield[name=totalresults]');
+
+        var nrf = store.pageSize * store.currentPage;
+        var nri = store.currentPage > 1 ? nrf - store.pageSize + 1 : 1;
+        if (nrf > store.totalCount) nrf = store.totalCount;
+        totalresults.setFieldLabel(Ext.String.format("{0} - {1} de ", nri, nrf));
+        totalresults.setValue(store.totalCount);
     },
 
     onBeforeLoadMaterial: function (store , operation , eOpts) {
@@ -41,7 +54,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
             totalresults = view.down('numberfield[name=totalresults]');
 
         if(totalresults) {
-            Ext.getStore('material').setParams({totalresults: totalresults.getValue()});
+            store.setParams({totalresults: totalresults.getValue()});
         }
     },
 
