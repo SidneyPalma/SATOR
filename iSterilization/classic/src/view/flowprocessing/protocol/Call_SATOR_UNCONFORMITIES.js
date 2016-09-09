@@ -37,6 +37,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITI
             {
                 xtype: 'form',
                 bodyPadding: 10,
+                margin: '10 0 0 0',
                 layout: 'anchor',
                 defaults: {
                     anchor: '100%',

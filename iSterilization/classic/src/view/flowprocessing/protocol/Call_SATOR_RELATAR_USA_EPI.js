@@ -33,6 +33,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
             {
                 xtype: 'form',
                 bodyPadding: 10,
+                margin: '10 0 0 0',
                 layout: 'anchor',
                 defaults: {
                     anchor: '100%',

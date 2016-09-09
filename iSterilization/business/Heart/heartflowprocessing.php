@@ -678,8 +678,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $username = $data['username'];
         $cyclestatus = $data['cyclestatus'];
 
-
-        $result = self::jsonToObject($this->setEncerrarLeitura($data));
+//		  $result = self::jsonToObject($this->setEncerrarLeitura($data));
+//
 //        id:"5"
 //        areasid:"14"
 //        cyclestatus:"START"
@@ -699,7 +699,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     update 
                         flowprocessingcharge
                     set
-                        chargeflag = '002',
+                        chargeflag = '002',			-- Carga no Ciclo
                         cyclestart = getdate(),
                         cyclestartuser = @username
                      where id = @id;";
@@ -710,6 +710,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->bindValue(":cyclestatus", $cyclestatus, \PDO::PARAM_STR);
             $pdo->execute();
 
+			unset($pdo);
 
             self::_setSuccess(true);
 
