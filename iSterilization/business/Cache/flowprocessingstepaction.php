@@ -255,7 +255,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 								b.elementname as targetplace
 							from
 								flowprocessingstep b
-							where b.source = a.target
+							where b.id = a.target
 						) ta
 					where a.source = fps.id
 					  and fpc.chargeflag = '001'

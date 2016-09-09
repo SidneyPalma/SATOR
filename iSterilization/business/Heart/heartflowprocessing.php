@@ -678,34 +678,50 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $username = $data['username'];
         $cyclestatus = $data['cyclestatus'];
 
-//		  $result = self::jsonToObject($this->setEncerrarLeitura($data));
-//
-//        id:"5"
-//        areasid:"14"
-//        cyclestatus:"START"
-//        flowprocessingid:"1"
-//        flowprocessingstepactionid:"3"
-//        flowprocessingstepid:"9"
-//        username:"sator.etimba"
-
         try {
 
             $sql = "
                 declare
                     @id int = :id,
-                    @chargeflag char(3) = '002',
                     @username varchar(80) = :username,
                     @cyclestatus varchar(5) = :cyclestatus;
+             
+                if(@cyclestatus = 'START')
+                begin
+                    update 
+                        flowprocessingcharge
+                    set
+                        chargeflag = '002',
+                        cyclestart = getdate(),
+                        cyclestartuser = @username
+                    where id = @id;
+                end
                 
-                if(@cyclestatus = 'FINAL') set @chargeflag = '003';
-                
-                update 
-                    flowprocessingcharge
-                set
-                    cyclestart = getdate(),
-                    chargeflag = @chargeflag,
-                    cyclestartuser = @username
-                 where id = @id;";
+                if(@cyclestatus = 'FINAL')
+                begin               
+                    update 
+                        flowprocessingcharge
+                    set
+                        chargeflag = '003',
+                        cyclefinal = getdate(),
+                        cyclefinaluser = @username
+                    where id = @id;
+                    
+                    update 
+                        flowprocessingstepmaterial
+                    set
+                        dateto = getdate(),
+                        unconformities = '010'
+                    where flowprocessingstepid in ( select flowprocessingstepid from flowprocessingchargeitem where flowprocessingchargeid = @id );
+                    
+                    update
+                        flowprocessingstepaction
+                    set
+                        dateto = getdate(),
+                        isactive = 0
+                    where flowstepaction = '001' 
+                      and flowprocessingstepid in ( select flowprocessingstepid from flowprocessingchargeitem where flowprocessingchargeid = @id );
+                end;";
 
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
@@ -713,7 +729,34 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->bindValue(":cyclestatus", $cyclestatus, \PDO::PARAM_STR);
             $pdo->execute();
 
-			unset($pdo);
+            if($cyclestatus == 'FINAL') {
+
+                $sql = "
+                    declare
+                        @id int = :id;
+                 
+                    select
+                        fps.flowprocessingid,
+                        fpci.flowprocessingstepid,
+                        fpsa.id as flowprocessingstepactionid
+                    from
+                        flowprocessingchargeitem fpci
+                        inner join flowprocessingstep fps on ( fps.id = fpci.flowprocessingstepid )
+                        inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )
+                    where fpci.flowprocessingchargeid = @id
+                      and fpsa.flowstepaction = '001'";
+
+                $pdo = $this->prepare($sql);
+                $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+                $pdo->execute();
+                $rows = $pdo->fetchAll();
+
+                foreach ($rows as $item) {
+                    self::jsonToObject($this->setEncerrarLeitura($item));
+                }
+
+                self::_setRows($rows);
+            }
 
             self::_setSuccess(true);
 
