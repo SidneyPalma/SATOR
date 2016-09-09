@@ -693,16 +693,19 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $sql = "
                 declare
                     @id int = :id,
+                    @chargeflag char(3) = '002',
                     @username varchar(80) = :username,
                     @cyclestatus varchar(5) = :cyclestatus;
                 
-                    update 
-                        flowprocessingcharge
-                    set
-                        chargeflag = '002',			-- Carga no Ciclo
-                        cyclestart = getdate(),
-                        cyclestartuser = @username
-                     where id = @id;";
+                if(@cyclestatus = 'FINAL') set @chargeflag = '003';
+                
+                update 
+                    flowprocessingcharge
+                set
+                    cyclestart = getdate(),
+                    chargeflag = @chargeflag,
+                    cyclestartuser = @username
+                 where id = @id;";
 
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":id", $id, \PDO::PARAM_INT);

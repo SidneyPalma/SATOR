@@ -151,10 +151,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 tpl: [
                                     '<tpl for=".">',
                                         '<div style="margin-bottom: 10px;" class="step step-{flowstepaction}-{steptype}">',
+                                            // '<i class="steptype-clear fa fa-times-circle" aria-hidden="true"></i>',
                                             '<div class="step-left steptype-{steptype}"></div>',
                                             '<div class="step-right" style="font-weight: 700;">',
                                                 '<div class="steptype-items">{items}</div>',
-                                                '<div class="steptype-clear"><i class="fa fa-times-circle" aria-hidden="true"></i></div>',
                                                 '<div style="font-size: 16px; color: #900000;">{originplace}</div>',
                                                 '<div style="font-size: 14px; line-height: 18px;">{sterilizationtypename} {version}</div>',
                                                 '<div style="font-size: 14px; line-height: 18px; color: #105aeb;">{targetplace}</div>',
