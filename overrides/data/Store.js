@@ -36,7 +36,7 @@ Ext.define( 'Ext.overrides.data.Store', {
         var me = this,
             extraParams = me.getExtraParams();
 
-        me.currentPage = 1;
+        //me.currentPage = 1;
         me.setExtraParams(Ext.Object.merge(extraParams,params));
 
         return me;

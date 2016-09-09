@@ -72,8 +72,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
             view = me.getView(),
             store = queryPlan.combo.store;
 
-        queryPlan.combo.reset();
-        store.removeAll();
+        // queryPlan.combo.reset();
+        // store.removeAll();
 
         store.setParams({ packingid: view.data.get('packingid') });
     },
