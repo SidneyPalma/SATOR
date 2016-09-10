@@ -159,6 +159,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 fpsa.flowprocessingstepid,
 				fpsa.id as flowprocessingstepactionid,
                 substring(convert(varchar(16), fp.dateof, 121),9,8) as timeof,
+                m.materialname,
 				o.originplace,
 				t.targetplace,
                 items = (
@@ -194,6 +195,29 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 					  and a.flowstepaction = '002'
 					  and a.isactive = 1
 				) s
+                cross apply (
+                    select
+						coalesce(ta.name,tb.name) as materialname
+                    from
+						flowprocessing a
+                        inner join flowprocessingstep b on ( b.flowprocessingid = a.id and b.id = fps.id )
+                        outer apply (
+                            select
+                                mb.name
+                            from
+                                materialbox mb
+                            where mb.id = a.materialboxid
+                        ) ta
+                        outer apply (
+                            select top 1
+                                ib.name
+                            from
+                                flowprocessingstepmaterial b
+                                inner join itembase ib on ( ib.id = b.materialid )
+                            where b.flowprocessingstepid = b.id
+                        ) tb
+                    where a.id = fp.id
+                ) m
             where fpsa.isactive = 1
 			  and fpsa.flowstepaction = '001'
               and not exists (
@@ -223,6 +247,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.flowprocessingstepid,
 				t.flowprocessingstepactionid,
 				t.timeof,
+				null as materialname,
 				t.originplace,
 				t.targetplace,
 				dbo.getLeftPad(2,'0',count(*)) as items
@@ -294,6 +319,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.flowprocessingstepid,
 				t.flowprocessingstepactionid,
 				t.timeof,
+				null as materialname,
 				t.originplace,
 				t.targetplace,
 				dbo.getLeftPad(2,'0',count(*)) as items
