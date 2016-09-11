@@ -51,12 +51,6 @@ class materialboxitem extends \Smart\Data\Model {
     private $observation;
 
     /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
-     */
-    private $isactive;
-
-    /**
      * @return type integer
      */
     public function getId() {
@@ -133,22 +127,6 @@ class materialboxitem extends \Smart\Data\Model {
      */
     public function setObservation($observation) {
         $this->observation = $observation;
-        return $this;
-    }
-
-    /**
-     * @return type boolean
-     */
-    public function getIsactive() {
-        return $this->isactive;
-    }
-
-    /**
-     * @param type $isactive
-     * @return \iAdmin\Model\input
-     */
-    public function setIsactive($isactive) {
-        $this->isactive = $isactive;
         return $this;
     }
 
