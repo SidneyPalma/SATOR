@@ -710,7 +710,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onSelectCycle: function (combo,record,eOpts) {
         var me = this,
             view = me.getView(),
-            store = view.down('gridpanel').getStore();
+            store = view.down('gridpanel').getStore(),
+            duration = view.down('hiddenfield[name=duration]'),
+            timetoopen = view.down('hiddenfield[name=timetoopen]'),
+            temperature = view.down('hiddenfield[name=temperature]');
+
+        duration.setValue(record.get('duration'));
+        timetoopen.setValue(record.get('timetoopen'));
+        temperature.setValue(record.get('temperature'));
 
         store.removeAll();
         store.setParams({
@@ -724,8 +731,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onShowClearCycle: function (field,eOpts) {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            duration = view.down('hiddenfield[name=duration]'),
+            timetoopen = view.down('hiddenfield[name=timetoopen]'),
+            temperature = view.down('hiddenfield[name=temperature]');
 
+        duration.reset();
+        timetoopen.reset();
+        temperature.reset();
         view.down('gridpanel').getStore().removeAll();
     },
 
@@ -1758,6 +1771,30 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         store.removeAll();
         propertygrid.setSource({});
+    },
+
+    onFlowStepRemove: function (viewView,store) {
+        var me = this,
+            record = viewView.getSelectionModel().getSelection()[0];
+
+        Ext.Msg.confirm('Excluir carga', 'Confirma a exclusão da carga selecionada?',
+            function (choice) {
+                if (choice === 'yes') {
+                    Ext.Ajax.request({
+                        scope: me,
+                        url: me.url,
+                        params: {
+                            id: record.get('id'),
+                            action: 'select',
+                            method: 'setRemoveCargaLista'
+                        },
+                        success: function() {
+                            store.load();
+                        }
+                    });
+                }
+            }
+        );
     },
 
     onFlowStepAction: function ( viewView, record, item, index, e, eOpts ) {
