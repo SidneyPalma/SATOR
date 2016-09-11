@@ -1814,7 +1814,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         switch(action) {
             case '001':
-
                     if(stepflaglist.indexOf("016") != -1) {
                         Smart.ion.sound.play("computer_error");
                         Smart.Msg.showToast('Este processo requer Validação de Carga!');
@@ -1880,6 +1879,25 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             portrait.beFileData(record.get('filetype'));
             portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
         }
+    },
+
+    onItemDblClickMaterial: function ( viewView, record, item, index, e, eOpts ) {
+        var me = this,
+            doCallBack = function (rows) {
+                me.setMessageText('MSG_PROTOCOL',Ext.String.format('Código do material consultado {0}', record.get('barcode')));
+                return true;
+            };
+
+        console.info(record.data);
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
+
     },
 
     onFlowTaskAction: function ( viewView, record, item, index, e, eOpts ) {

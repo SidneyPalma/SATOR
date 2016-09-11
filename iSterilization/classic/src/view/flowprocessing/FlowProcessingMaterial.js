@@ -18,8 +18,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
 
     listeners: {
         beforeedit: 'onBeforeEditMaterialFlowStepAction',
-        select: 'onSelectMaterialFlowStepAction'
-    },
+        select: 'onSelectMaterialFlowStepAction',
+        itemdblclick: 'onItemDblClickMaterial'
+},
 
     selType: 'cellmodel',
 
