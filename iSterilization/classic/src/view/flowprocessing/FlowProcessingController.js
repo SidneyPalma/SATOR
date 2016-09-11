@@ -296,31 +296,40 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        Ext.Ajax.request({
-            scope: me,
-            url: me.url,
-            params: {
-                action: 'select',
-                method: 'selectUserCode',
-                query: field.getValue()
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
+        me.selectUserFlow();
 
-                if(!success || !result.success) {
-                    return false;
-                }
-
-                form.down('hiddenfield[name=id]').setValue(result.rows[0].id);
-                form.down('textfield[name=fullname]').setValue(result.rows[0].fullname);
-                form.down('hiddenfield[name=username]').setValue(result.rows[0].username);
-            }
-        });
+        // Ext.Ajax.request({
+        //     scope: me,
+        //     url: me.url,
+        //     params: {
+        //         action: 'select',
+        //         // method: 'selectUserCode',
+        //         // query: field.getValue()
+        //         method: 'selectUserFlow',
+        //         usercode: field.getValue()
+        //     },
+        //     callback: function (options, success, response) {
+        //         var result = Ext.decode(response.responseText);
+        //
+        //         console.info(result);
+        //
+        //         if(!success || !result.success) {
+        //             Smart.Msg.showToast(result.text);
+        //             return false;
+        //         }
+        //
+        //         me.selectUserFlow();
+        //
+        //         // form.down('hiddenfield[name=id]').setValue(result.rows[0].id);
+        //         // form.down('textfield[name=fullname]').setValue(result.rows[0].fullname);
+        //         // form.down('hiddenfield[name=username]').setValue(result.rows[0].username);
+        //     }
+        // });
     },
 
-    selectUserFlow: function (btn) {
+    selectUserFlow: function () {
         var me = this,
-            view = btn.up('window'),
+            view = me.getView(),
             form = view.down('form');
 
         if(!form.isValid()) {
@@ -350,6 +359,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.setLoading(false);
 
+        if(!result.success) {
+            Smart.Msg.showToast(result.text);
+        }
+
         if(result.success) {
 
             if(!Smart.workstation) {
@@ -370,7 +383,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.setLoading(false);
         Smart.Msg.showToast(action.result.text,'info');
-        view.down('textfield[name=password]').focus(false,200);
+        // view.down('textfield[name=password]').focus(false,200);
     },
 
     selectDatePicker: function (datePicker, date, eOpts) {

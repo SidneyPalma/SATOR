@@ -22,6 +22,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
 
     listeners: {
         selectusercode: 'onSelectUserCode'
+
     },
 
     doCallBack: Ext.emptyFn,
@@ -68,9 +69,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                 xtype: 'hiddenfield',
                                 name: 'username'
                             }, {
+                                margin: '20 0 0 0',
                                 name: 'usercode',
                                 inputType: 'password',
-                                fieldLabel: 'Identificação',
+                                // fieldLabel: 'Identificação',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
@@ -79,24 +81,24 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                         }
                                     }
                                 }
-                            }, {
-                                name: 'password',
-                                vtype: 'alphanum',
-                                inputType: 'password',
-                                fieldLabel: 'Senha',
-                                listeners: {
-                                    specialkey: function (field, e, eOpts) {
-                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                            var win = field.up('window'),
-                                                button = win.down('button');
-                                            button.fireEvent('click', button);
-                                        }
-                                    }
-                                }
-                            }, {
-                                name: 'fullname',
-                                useReadColor: true,
-                                fieldLabel: 'Nome'
+                            // }, {
+                            //     name: 'password',
+                            //     vtype: 'alphanum',
+                            //     inputType: 'password',
+                            //     fieldLabel: 'Senha',
+                            //     listeners: {
+                            //         specialkey: function (field, e, eOpts) {
+                            //             if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                            //                 var win = field.up('window'),
+                            //                     button = win.down('button');
+                            //                 button.fireEvent('click', button);
+                            //             }
+                            //         }
+                            //     }
+                            // }, {
+                            //     name: 'fullname',
+                            //     useReadColor: true,
+                            //     fieldLabel: 'Nome'
                             }
                         ]
                     }
@@ -109,13 +111,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
 
     buttons: [
         {
-            scale: 'medium',
-            text: 'Confirmar',
-            showSmartTheme: 'green',
-            listeners: {
-                click: 'selectUserFlow'
-            }
-        }, {
+        //     scale: 'medium',
+        //     text: 'Confirmar',
+        //     showSmartTheme: 'green',
+        //     listeners: {
+        //         click: 'selectUserFlow'
+        //     }
+        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',
