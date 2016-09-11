@@ -927,26 +927,48 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     }
 
     public function selectUserFlow(array $data) {
-        $id = $data['id'];
-        $username = $data['username'];
-        $password = $data['password'];
+//        $id = $data['id'];
+//        $username = $data['username'];
+//        $password = $data['password'];
+        $usercode = str_replace('HAM-','',$data['usercode']);
+        $userfail = "Sua tentativa fracassou, o usuário NÂO foi Autenticado!";
 
-        $sql = "select username, password from users where id = :id and username = :username";
+//        $sql = "select username, password from users where id = :id and username = :username";
+
+        $sql = "
+            select
+                u.username,
+                u.password
+            from
+                collaborator c
+                inner join users u on ( u.id = c.usersid )
+            where c.registration = :usercode";
+
+
+        self::_setSuccess(false);
+
+        if(!is_numeric($usercode)) {
+            self::_setText($userfail);
+            return self::getResultToJson();
+        }
 
         try {
             $pdo = $this->prepare($sql);
-            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
-            $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+//            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+//            $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+            $pdo->bindValue(":usercode", $usercode, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
-            $passwordUser = (count($rows) != 0) ? $rows[0]['password'] : '';
-            $success = self::tryHash($password,$passwordUser);
-            $rows[0]['password'] = '';
+//            $passwordUser = (count($rows) != 0) ? $rows[0]['password'] : '';
+//            $success = self::tryHash($password,$passwordUser);
+            $success = (count($rows) != 0);
+
+//            $rows[0]['password'] = '';
 
             self::_setRows($rows);
             self::_setSuccess($success);
-            self::_setText($success ? 'Autenticado com sucesso!' : 'Sua tentativa fracassou, o usuário NÂO foi Autenticado!');
+            self::_setText($success ? 'Autenticado com sucesso!' : $userfail);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
