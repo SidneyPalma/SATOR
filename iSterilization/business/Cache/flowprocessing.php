@@ -348,7 +348,7 @@ class flowprocessing extends \Smart\Data\Cache {
                 @equipmentid int = :equipmentid,
                 @equipmentcycleid int = :equipmentcycleid;
             
-            select
+            select distinct
                 fpci.id,
                 fpsa.flowprocessingstepid,
                 fpci.flowprocessingchargeid,
@@ -368,6 +368,7 @@ class flowprocessing extends \Smart\Data\Cache {
                         flowprocessingstep a
                         inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                         inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid and ec.id = @equipmentcycleid )
+                        inner join materialcycle mc on ( mc.cycleid = ec.cycleid )
                         outer apply (
                             select
                                 mb.name
@@ -388,19 +389,19 @@ class flowprocessing extends \Smart\Data\Cache {
                         and a.equipmentid = @equipmentid
                 ) t
             where fps.areasid = @areasid
-              and fpsa.isactive = 1
-              and fpsa.flowstepaction = '001'
-              and fps.stepflaglist like '%016%'
-              and not exists (
+                and fpsa.isactive = 1
+                and fpsa.flowstepaction = '001'
+                and fps.stepflaglist like '%016%'
+                and not exists (
                     select
                         a.id
                     from
                         flowprocessingchargeitem a
                         inner join flowprocessingcharge b on ( b.id = a.flowprocessingchargeid )
                     where a.flowprocessingstepid = fps.id
-                      and a.chargestatus = '001'
-                      and b.chargeflag = '001'
-              )";
+                        and a.chargestatus = '001'
+                        and b.chargeflag = '001'
+                )";
 
         try {
             $pdo = $proxy->prepare($sql);
