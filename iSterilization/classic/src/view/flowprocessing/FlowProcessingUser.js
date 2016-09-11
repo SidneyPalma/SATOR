@@ -68,7 +68,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                 xtype: 'hiddenfield',
                                 name: 'username'
                             }, {
-                                // vtype:"password",
                                 name: 'usercode',
                                 inputType: 'password',
                                 fieldLabel: 'Identificação',

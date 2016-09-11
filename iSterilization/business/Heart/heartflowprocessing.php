@@ -625,8 +625,33 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return $result || self::getResultToJson();
     }
 
+    public function setRemoveCargaLista(array $data) {
+        $id = $data['id'];
+
+        $charge = new \iSterilization\Coach\flowprocessingcharge();
+
+        $charge->getStore()->getModel()->set('id',$id);
+        $charge->getStore()->getModel()->set('chargeflag','004');
+        $result = $charge->getStore()->update();
+
+        try {
+
+            return $result;
+
+        } catch ( \PDOException $e ) {
+
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+            return self::getResultToJson();
+
+        }
+    }
+
     public function setValidaCargaLista(array $data) {
         $username = $data['username'];
+        $duration = $data['duration'];
+        $timetoopen = $data['timetoopen'];
+        $temperature = $data['temperature'];
         $equipmentcycleid = $data['equipmentcycleid'];
 
         $utimestamp = microtime(true);
@@ -637,17 +662,16 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $list = self::jsonToArray($data['list']);
 
-//      [duration]
-//      [temperature]
-//      [timetoopen]
-
         $charge = new \iSterilization\Coach\flowprocessingcharge();
         $chargeitem = new \iSterilization\Coach\flowprocessingchargeitem();
 
         try {
             $charge->getStore()->getModel()->set('chargeflag','001');
             $charge->getStore()->getModel()->set('barcode',$barcode);
+            $charge->getStore()->getModel()->set('duration',$duration);
             $charge->getStore()->getModel()->set('chargeuser',$username);
+            $charge->getStore()->getModel()->set('timetoopen',$timetoopen);
+            $charge->getStore()->getModel()->set('temperature',$temperature);
             $charge->getStore()->getModel()->set('equipmentcycleid',$equipmentcycleid);
             $result = self::jsonToObject($charge->getStore()->insert());
 

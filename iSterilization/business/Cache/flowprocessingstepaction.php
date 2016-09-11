@@ -247,7 +247,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.flowprocessingstepid,
 				t.flowprocessingstepactionid,
 				t.timeof,
-				null as materialname,
+				t.materialname,
 				t.originplace,
 				t.targetplace,
 				dbo.getLeftPad(2,'0',count(*)) as items
@@ -268,6 +268,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						null as flowprocessingstepid,
 						null as flowprocessingstepactionid,
 						substring(convert(varchar(16), fpc.chargedate, 121),9,8) as timeof,
+						('T.' + convert(varchar,fpc.temperature) + 'º D.' + convert(varchar,fpc.duration) + 'm A.' + convert(varchar,fpc.timetoopen) +'m' ) as materialname,
 						a.elementname as originplace,
 						ta.targetplace
 					from
@@ -300,6 +301,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.flowprocessingstepid,
 				t.flowprocessingstepactionid,
 				t.timeof,
+				t.materialname,
 				t.originplace,
 				t.targetplace
 
@@ -319,7 +321,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.flowprocessingstepid,
 				t.flowprocessingstepactionid,
 				t.timeof,
-				null as materialname,
+				t.materialname,
 				t.originplace,
 				t.targetplace,
 				dbo.getLeftPad(2,'0',count(*)) as items
@@ -340,6 +342,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						null as flowprocessingstepid,
 						null as flowprocessingstepactionid,
 						substring(convert(varchar(16), fpc.cyclestart, 121),9,8) as timeof,
+						('T.' + convert(varchar,fpc.temperature) + ' D.' + convert(varchar,fpc.duration) + ' A.' + convert(varchar,fpc.timetoopen) ) as materialname,
 						a.elementname as originplace,
 						ta.targetplace
 					from
@@ -372,6 +375,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.flowprocessingstepid,
 				t.flowprocessingstepactionid,
 				t.timeof,
+				t.materialname,
 				t.originplace,
 				t.targetplace			
 

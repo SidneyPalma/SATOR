@@ -7,6 +7,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
     requires: [
         'Smart.util.IonSound',
         'iSterilization.store.flowprocessing.*',
+        'iSterilization.view.flowprocessing.FlowProcessingDataView',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
@@ -142,38 +143,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 name: 'labelareas'
                             }, {
                                 flex: 1,
-                                xtype: 'dataview',
-                                trackOver: true,
-                                autoScroll: true,
-                                multiSelect: false,
-                                name: 'flowprocessingstepaction',
-                                store: 'flowprocessingstepaction',
-                                itemSelector: 'div.step',
-                                tpl: [
-                                    '<tpl for=".">',
-                                        '<div style="margin-bottom: 10px;" class="step step-{flowstepaction}-{steptype}">',
-                                            // '<i class="steptype-clear fa fa-times-circle" aria-hidden="true"></i>',
-                                            '<div class="step-left steptype-{steptype}"></div>',
-                                            '<div class="step-right" style="font-weight: 700;">',
-                                                '<div class="steptype-items">{items}</div>',
-                                                '<div style="font-size: 16px; color: #900000;">{originplace}</div>',
-                                                '<div style="font-size: 14px; line-height: 18px;">{sterilizationtypename} {version}</div>',
-                                                '<div style="font-size: 14px; line-height: 18px;">{materialname}</div>',
-                                                '<div style="font-size: 14px; line-height: 18px; color: #105aeb;">{targetplace}</div>',
-                                                '<div>',
-                                                    '<div style="text-align: left; float: left; width: 30%;">{timeof}</div>',
-                                                    '<div style="text-align: right; float: right; width: 70%;">{barcode}</div>',
-                                                '</div>',
-                                            '</div>',
-                                        '</div>',
-                                    '</tpl>'
-                                ],
+                                xtype: 'flowprocessingdataview',
                                 listeners: {
                                     select: 'onFlowStepSelect',
                                     deselect: 'onFlowStepDeSelect',
-                                    itemdblclick: 'onFlowStepAction'
-                                },
-                                emptyText: '<h4 style="text-align: center; line-height: 40px;" class="insert-record">Nenhum processo na etapa...</h4>'
+                                    itemdblclick: 'onFlowStepAction',
+                                    removerecord: 'onFlowStepRemove'
+                                }
                             }
                         ]
                     }, {

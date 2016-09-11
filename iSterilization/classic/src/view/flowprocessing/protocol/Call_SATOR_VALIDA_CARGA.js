@@ -50,6 +50,15 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                         cls: 'title-label',
                         text: 'Validar Carga'
                     }, {
+                        xtype: 'hiddenfield',
+                        name: 'temperature'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'duration'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'timetoopen'
+                    }, {
                         margin: '20 0 0 0',
                         showClear: true,
                         useUpperCase: true,
