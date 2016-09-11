@@ -1480,10 +1480,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             me.informarInsumo();
         }
     },
-        
+
+    /**
+     * Imprmir etiqueta
+     *
+     * Em seguida:
+     * stepsettings
+        {
+           "serviceequipment":"",
+           "inputpresentation":"",
+           "serviceareas":"",
+           "tagprinterdescription":"Etiqueta Grande",
+           "tagprinter":"001"
+        }
+     *
+     * Chamar: callSATOR_ENCERRAR_LEITURA
+     */
     callSATOR_IMPRIMIR_ETIQUETA: function () {
-        var me = this;
-        console.info(me);
+        var me = this,
+            view = me.getView();
+
+        console.info(view.xdata.data);
     },
 
     callSATOR_CANCELAR_LEITURAS: function () {
