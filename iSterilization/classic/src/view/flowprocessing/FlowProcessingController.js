@@ -12,6 +12,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     listen: {
         store: {
+            '#flowprocessingstepaction': {
+                load: 'onLoadStepAction'
+            },
             '#flowprocessingstepmaterial': {
                 datachanged: 'onChangedMaterial'
             }
@@ -19,6 +22,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+
+    onLoadStepAction: function (store, records, successful, operation, eOpts) {
+
+        store.each(function (item) {
+            var steptype = item.get('steptype');
+            // console.info(item.data);
+        });
+    },
 
     fetchField: function (search, button) {
         Ext.getStore('flowprocessing').setParams({
@@ -225,22 +236,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         traceability.setValue(0);
         datepicker.setValue(date);
         me.selectDatePicker(datepicker,datepicker.getValue());
-
-        // view.keyMap = new Ext.util.KeyMap({
-        //     target: view.getEl(),
-        //     binding: [
-        //         {
-        //             key: [
-        //                 Ext.event.Event.HOME,
-        //                 Ext.event.Event.PAGE_UP
-        //             ],
-        //             fn: function(){
-        //                 me.flowProcessingRead();
-        //             }
-        //         }
-        //     ],
-        //     scope: me
-        // });
     },
 
     onAfterRenderView: function () {
@@ -297,34 +292,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         me.selectUserFlow();
-
-        // Ext.Ajax.request({
-        //     scope: me,
-        //     url: me.url,
-        //     params: {
-        //         action: 'select',
-        //         // method: 'selectUserCode',
-        //         // query: field.getValue()
-        //         method: 'selectUserFlow',
-        //         usercode: field.getValue()
-        //     },
-        //     callback: function (options, success, response) {
-        //         var result = Ext.decode(response.responseText);
-        //
-        //         console.info(result);
-        //
-        //         if(!success || !result.success) {
-        //             Smart.Msg.showToast(result.text);
-        //             return false;
-        //         }
-        //
-        //         me.selectUserFlow();
-        //
-        //         // form.down('hiddenfield[name=id]').setValue(result.rows[0].id);
-        //         // form.down('textfield[name=fullname]').setValue(result.rows[0].fullname);
-        //         // form.down('hiddenfield[name=username]').setValue(result.rows[0].username);
-        //     }
-        // });
     },
 
     selectUserFlow: function () {
@@ -1499,11 +1466,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_IMPRIMIR_ETIQUETA: function () {
         var me = this,
             view = me.getView(),
-            stepsettings = view.xdata.get('stepsettings');
+            record = view.xdata,
+            stepsettings = record.get('stepsettings');
 
         stepsettings = stepsettings ? Ext.decode(stepsettings) : null;
 
-        if(stepsettings && stepsettings.tagprinter == '001') {
+        if(!stepsettings && record.get(steptype) == 'T') {
+            stepsettings = {
+                tagprinter: '200'
+            }
+        }
+
+        if(stepsettings && ['001','002'].indexOf(stepsettings.tagprinter) != -1) {
             Ext.Ajax.request({
                 scope: me,
                 url: me.url,
@@ -1512,7 +1486,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     method: 'imprimeEtiqueta',
                     id: view.xdata.get('id'),
                     printlocate: Smart.workstation.printlocate,
-                    stepsettings: view.xdata.get('stepsettings')
+                    stepsettings: Ext.encode(stepsettings)
                 },
                 callback: function (options, success, response) {
                     var result = Ext.decode(response.responseText);
