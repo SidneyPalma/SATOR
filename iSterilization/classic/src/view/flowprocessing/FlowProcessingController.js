@@ -1523,7 +1523,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         return false;
                     }
 
-                    me.encerrarEtapa();
+                    if(stepsettings.tagprinter == '002') {
+                        me.encerrarEtapa();
+                    }
                 }
             });
         }
@@ -2152,6 +2154,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 if (back) {
+                    if(cyclestatus == 'FINAL') {
+                        me.callSATOR_IMPRIMIR_ETIQUETA();
+                    }
                     Smart.ion.sound.play("button_tiny");
                     view.close();
                     Ext.getStore('flowprocessingstepaction').load();
@@ -2159,7 +2164,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 return back;
             };
-
 
         Ext.widget('flowprocessinguser', {
             scope: me,
