@@ -798,9 +798,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	    var me = this;
 
         switch(value) {
-            case 'SATOR_PROCESSAR_ITENS':
-                me.callSATOR_PROCESSAR_ITENS();
-                break;
+            // case 'SATOR_PROCESSAR_ITENS':
+            //     me.callSATOR_PROCESSAR_ITENS();
+            //     break;
             case 'SATOR_RELATAR_USA_EPI':
                 me.callSATOR_RELATAR_USA_EPI();
                 break;
@@ -822,9 +822,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_LANCAMENTO_MANUAL':
                 me.callSATOR_LANCAMENTO_MANUAL();
                 break;
-            case 'SATOR_CONSULTAR_MATERIAL':
-                me.callSATOR_CONSULTAR_MATERIAL();
-                break;
+            // case 'SATOR_CONSULTAR_MATERIAL':
+            //     me.callSATOR_CONSULTAR_MATERIAL();
+            //     break;
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.callSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
@@ -927,13 +927,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             me.callSATOR_UNCONFORMITIES();
             return false;
         }
-
-        /**
-         * 004 - Libera Kit Incompleto
-         */
-        // if (stepflaglist.indexOf('004') != -1) {
-        //     //return false;
-        // }
 
         /**
          * Registrar exceções
