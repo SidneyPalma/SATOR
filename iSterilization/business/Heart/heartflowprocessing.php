@@ -1142,7 +1142,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         inner join proprietary p on ( p.id = ib.proprietaryid )
                     where fpsm.flowprocessingstepid = fps.id
                 ) t
-            where fps.id = :id";
+            where fps.id = @id";
 
         try {
             $pdo = $this->prepare($sql);
@@ -1212,7 +1212,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 inner join equipmentcycle ec on ( ec.id = fpc.equipmentcycleid )
                 inner join itembase ib on ( ib.id = ec.equipmentid )
                 inner join flowprocessingchargeitem fpci on ( fpci.flowprocessingchargeid = fpc.id )
-            where fpc.id = :id";
+            where fpc.id = @id";
 
         try {
             $pdo = $this->prepare($sql);
