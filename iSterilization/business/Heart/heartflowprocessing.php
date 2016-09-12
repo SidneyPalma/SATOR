@@ -1096,18 +1096,50 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
-    public function printerFlowItem(array $data) {
-        $datetime = date("d/m/Y H:i");
+    public function imprimeEtiqueta(array $data) {
         $printlocate = isset($data['printlocate']) ? $data['printlocate'] : null;
-        
+
+
 		$ph = $printlocate ? printer_open($printlocate) : null;
+
+        $sql = "
+            declare
+                @id int = :id;
+                 
+            select
+                fp.barcode,
+                t.proprietaryname,
+                st.name as sterilizationtypename,
+                fps.username,
+                fp.dateof,
+                st.validity as days,
+                dateadd(day,st.validity,fp.dateof) as validity,
+                coalesce(mb.name,t.materialname) as materialboxname,
+                entityname = ( select top 1 name from entity ),
+                quantity = ( select count(*) from flowprocessingstepmaterial where flowprocessingstepid = fps.id )
+            from
+                flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
+                left join materialbox mb on ( mb.id = fp.materialboxid )
+                cross apply (
+                    select top 1
+                        ib.name as materialname,
+                        p.name as proprietaryname
+                    from
+                        flowprocessingstepmaterial fpsm
+                        inner join itembase ib on ( ib.id = fpsm.materialid )
+                        inner join proprietary p on ( p.id = ib.proprietaryid )
+                    where fpsm.flowprocessingstepid = fps.id
+                ) t
+            where fps.id = :id";
 
         $tpl = "
             ^XA
             ^CF0,20
             ^FO70,050^FD$entityname^FS
             ^FO420,050^FD$proprietaryname^FS
-            ^FO70,080^FDPREPARADO EM: $datetime^FS
+            ^FO70,080^FDPREPARADO EM: $dateof^FS
             ^FO70,110^FDOP: $username^FS
             ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
             ^FO70,170^FDVALIDADE: $validity ($days)^FS

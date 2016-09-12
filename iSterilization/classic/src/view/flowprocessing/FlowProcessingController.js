@@ -1498,9 +1498,35 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      */
     callSATOR_IMPRIMIR_ETIQUETA: function () {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            stepsettings = view.xdata.get('stepsettings');
 
-        console.info(view.xdata.data);
+        stepsettings = stepsettings ? Ext.decode(stepsettings) : null;
+
+        if(stepsettings && stepsettings.tagprinter == '001') {
+            Ext.Ajax.request({
+                scope: me,
+                url: me.url,
+                params: {
+                    action: 'select',
+                    method: 'imprimeEtiqueta',
+                    id: view.xdata.get('id'),
+                    printlocate: Smart.workstation.printlocate,
+                    stepsettings: view.xdata.get('stepsettings')
+                },
+                callback: function (options, success, response) {
+                    var result = Ext.decode(response.responseText);
+
+                    if(!success || !result.success) {
+                        Smart.ion.sound.play("computer_error");
+                        Smart.Msg.showToast('Não foi possivel completar a sua solicitação!');
+                        return false;
+                    }
+
+                    me.encerrarEtapa();
+                }
+            });
+        }
     },
 
     callSATOR_CANCELAR_LEITURAS: function () {

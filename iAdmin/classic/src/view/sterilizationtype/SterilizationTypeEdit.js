@@ -73,8 +73,31 @@ Ext.define( 'iAdmin.view.sterilizationtype.SterilizationTypeEdit', {
                                 name: 'name',
                                 fieldLabel: 'Nome'
                             }, {
-                                name: 'description',
-                                fieldLabel: 'Descrição'
+                                xtype: 'container',
+                                layout: 'hbox',
+                                labelCls: 'sub-title-label',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    anchor: '100%',
+                                    allowBlank: false,
+                                    fieldStyle: { fontSize: '16px;' }
+                                },
+                                items: [
+                                    {
+                                        flex: 3,
+                                        name: 'description',
+                                        fieldLabel: 'Descrição'
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 2,
+                                        minValue: 1,
+                                        hideTrigger: true,
+                                        fieldLabel: 'Validade',
+                                        xtype: 'numberfield',
+                                        name: 'validity'
+                                    }
+                                ]
                             }, {
                                 name: 'isactive',
                                 xtype: 'checkboxfield',
