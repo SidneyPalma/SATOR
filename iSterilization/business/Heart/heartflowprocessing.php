@@ -1097,10 +1097,20 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     }
 
     public function imprimeEtiqueta(array $data) {
+        $stepsettings = isset($data['stepsettings']) ? $data['stepsettings'] : null;
+
+        $stepsettings = self::jsonToObject($stepsettings);
+
+        $return = ($stepsettings->tagprinter == '001') ? $this->imprimeEtiqueta001($data) : $this->imprimeEtiqueta002($data);
+
+        return $return;
+    }
+
+    public function imprimeEtiqueta001(array $data) {
+        $id = $data['id'];
         $printlocate = isset($data['printlocate']) ? $data['printlocate'] : null;
 
-
-		$ph = $printlocate ? printer_open($printlocate) : null;
+        $ph = $printlocate ? printer_open($printlocate) : null;
 
         $sql = "
             declare
@@ -1134,28 +1144,138 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 ) t
             where fps.id = :id";
 
-        $tpl = "
-            ^XA
-            ^CF0,20
-            ^FO70,050^FD$entityname^FS
-            ^FO420,050^FD$proprietaryname^FS
-            ^FO70,080^FDPREPARADO EM: $dateof^FS
-            ^FO70,110^FDOP: $username^FS
-            ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
-            ^FO70,170^FDVALIDADE: $validity ($days)^FS
-            ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
-            ^FO70,230^FDMATERIAL: $materialboxname ($quantity Itens)^FS
-            ^FO260,260^BXN,3,200^FD$barcode^FS^
-            ^FO70,275^FD$barcode^FS^
-            ^XZ";
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
 
-        if($ph) {
-            printer_set_option($ph, PRINTER_MODE, "RAW");
-            printer_write($ph, $tpl);
-            printer_close($ph);
-        }  else {
-            //"Couldn't connect..."
+            $entityname = $rows[0]['entityname'];
+            $proprietaryname = $rows[0]['proprietaryname'];
+            $dateof = $rows[0]['dateof'];
+            $username = $rows[0]['username'];
+            $sterilizationtypename = $rows[0]['sterilizationtypename'];
+            $validity = $rows[0]['validity'];
+            $days = $rows[0]['days'];
+            $materialboxname = $rows[0]['materialboxname'];
+            $quantity = $rows[0]['quantity'];
+            $barcode = $rows[0]['barcode'];
+
+            if($ph) {
+                $tpl = "
+                    ^XA
+                    ^CF0,20
+                    ^FO70,050^FD$entityname^FS
+                    ^FO420,050^FD$proprietaryname^FS
+                    ^FO70,080^FDPREPARADO EM: $dateof^FS
+                    ^FO70,110^FDOP: $username^FS
+                    ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
+                    ^FO70,170^FDVALIDADE: $validity ($days)^FS
+                    ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
+                    ^FO70,230^FDMATERIAL: $materialboxname ($quantity Itens)^FS
+                    ^FO260,260^BXN,3,200^FD$barcode^FS^
+                    ^FO70,275^FD$barcode^FS^
+                    ^XZ";
+
+                printer_set_option($ph, PRINTER_MODE, "RAW");
+                printer_write($ph, $tpl);
+                printer_close($ph);
+            }  else {
+                throw new \PDOException('A impressora não pode ser selecionada corretamente!');
+            }
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
         }
+
+        return self::getResultToJson();
+    }
+
+    public function imprimeEtiqueta002(array $data) {
+        $id = $data['id'];
+        $printlocate = isset($data['printlocate']) ? $data['printlocate'] : null;
+
+        $ph = $printlocate ? printer_open($printlocate) : null;
+
+        $sql = "
+            declare
+                @id int = :id;
+                 
+            select
+                fp.barcode,
+                t.proprietaryname,
+                st.name as sterilizationtypename,
+                fps.username,
+                fp.dateof,
+                st.validity as days,
+                dateadd(day,st.validity,fp.dateof) as validity,
+                coalesce(mb.name,t.materialname) as materialboxname,
+                entityname = ( select top 1 name from entity ),
+                quantity = ( select count(*) from flowprocessingstepmaterial where flowprocessingstepid = fps.id )
+            from
+                flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
+                left join materialbox mb on ( mb.id = fp.materialboxid )
+                cross apply (
+                    select top 1
+                        ib.name as materialname,
+                        p.name as proprietaryname
+                    from
+                        flowprocessingstepmaterial fpsm
+                        inner join itembase ib on ( ib.id = fpsm.materialid )
+                        inner join proprietary p on ( p.id = ib.proprietaryid )
+                    where fpsm.flowprocessingstepid = fps.id
+                ) t
+            where fps.id = :id";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            $entityname = $rows[0]['entityname'];
+            $proprietaryname = $rows[0]['proprietaryname'];
+            $dateof = $rows[0]['dateof'];
+            $username = $rows[0]['username'];
+            $sterilizationtypename = $rows[0]['sterilizationtypename'];
+            $validity = $rows[0]['validity'];
+            $days = $rows[0]['days'];
+            $materialboxname = $rows[0]['materialboxname'];
+            $quantity = $rows[0]['quantity'];
+            $barcode = $rows[0]['barcode'];
+
+            if($ph) {
+                $tpl = "
+                    ^XA
+                    ^CF0,20
+                    ^FO70,050^FD$entityname^FS
+                    ^FO420,050^FD$proprietaryname^FS
+                    ^FO70,080^FDPREPARADO EM: $dateof^FS
+                    ^FO70,110^FDOP: $username^FS
+                    ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
+                    ^FO70,170^FDVALIDADE: $validity ($days)^FS
+                    ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
+                    ^FO70,230^FDMATERIAL: $materialboxname ($quantity Itens)^FS
+                    ^FO260,260^BXN,3,200^FD$barcode^FS^
+                    ^FO70,275^FD$barcode^FS^
+                    ^XZ";
+
+                printer_set_option($ph, PRINTER_MODE, "RAW");
+                printer_write($ph, $tpl);
+                printer_close($ph);
+            }  else {
+                throw new \PDOException('A impressora não pode ser selecionada corretamente!');
+            }
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
 
     }
 
