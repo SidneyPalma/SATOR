@@ -1232,9 +1232,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     $cyclefinaluser = $item['cyclefinaluser'];
 
                     $pos += ( $col == 1 ) ? 0 : 280;
-
                     $pos = str_pad($pos, 3, '0', STR_PAD_LEFT);
-
                     $col++;
 
                     $tpl = "
