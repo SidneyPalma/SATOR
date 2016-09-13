@@ -35,6 +35,10 @@ Ext.define( 'iSterilization.view.main.Main', {
             preload: true,
             volume: 1.0
         });
+    },
+
+    listeners: {
+        render: 'onRenderMainForm'
     }
 
 });

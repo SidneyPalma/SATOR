@@ -12,6 +12,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     listen: {
         store: {
+            '#flowprocessingstepaction': {
+                load: 'onLoadStepAction'
+            },
             '#flowprocessingstepmaterial': {
                 datachanged: 'onChangedMaterial'
             }
@@ -19,6 +22,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+
+    onLoadStepAction: function (store, records, successful, operation, eOpts) {
+
+        store.each(function (item) {
+            var steptype = item.get('steptype');
+            // console.info(item.data);
+        });
+    },
 
     fetchField: function (search, button) {
         Ext.getStore('flowprocessing').setParams({
@@ -225,22 +236,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         traceability.setValue(0);
         datepicker.setValue(date);
         me.selectDatePicker(datepicker,datepicker.getValue());
-
-        // view.keyMap = new Ext.util.KeyMap({
-        //     target: view.getEl(),
-        //     binding: [
-        //         {
-        //             key: [
-        //                 Ext.event.Event.HOME,
-        //                 Ext.event.Event.PAGE_UP
-        //             ],
-        //             fn: function(){
-        //                 me.flowProcessingRead();
-        //             }
-        //         }
-        //     ],
-        //     scope: me
-        // });
     },
 
     onAfterRenderView: function () {
@@ -297,34 +292,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         me.selectUserFlow();
-
-        // Ext.Ajax.request({
-        //     scope: me,
-        //     url: me.url,
-        //     params: {
-        //         action: 'select',
-        //         // method: 'selectUserCode',
-        //         // query: field.getValue()
-        //         method: 'selectUserFlow',
-        //         usercode: field.getValue()
-        //     },
-        //     callback: function (options, success, response) {
-        //         var result = Ext.decode(response.responseText);
-        //
-        //         console.info(result);
-        //
-        //         if(!success || !result.success) {
-        //             Smart.Msg.showToast(result.text);
-        //             return false;
-        //         }
-        //
-        //         me.selectUserFlow();
-        //
-        //         // form.down('hiddenfield[name=id]').setValue(result.rows[0].id);
-        //         // form.down('textfield[name=fullname]').setValue(result.rows[0].fullname);
-        //         // form.down('hiddenfield[name=username]').setValue(result.rows[0].username);
-        //     }
-        // });
     },
 
     selectUserFlow: function () {
@@ -831,9 +798,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	    var me = this;
 
         switch(value) {
-            case 'SATOR_PROCESSAR_ITENS':
-                me.callSATOR_PROCESSAR_ITENS();
-                break;
+            // case 'SATOR_PROCESSAR_ITENS':
+            //     me.callSATOR_PROCESSAR_ITENS();
+            //     break;
             case 'SATOR_RELATAR_USA_EPI':
                 me.callSATOR_RELATAR_USA_EPI();
                 break;
@@ -855,9 +822,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_LANCAMENTO_MANUAL':
                 me.callSATOR_LANCAMENTO_MANUAL();
                 break;
-            case 'SATOR_CONSULTAR_MATERIAL':
-                me.callSATOR_CONSULTAR_MATERIAL();
-                break;
+            // case 'SATOR_CONSULTAR_MATERIAL':
+            //     me.callSATOR_CONSULTAR_MATERIAL();
+            //     break;
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.callSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
@@ -946,27 +913,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Fazer checagens de encerramento
          */
 
-        /**
-         * 011 - Exige uso de EPI na Leitura de Entrada
-         */
-        if(stepflaglist.indexOf('011') != -1) {
-            if(record.get('useppe') == null) {
-                me.callSATOR_RELATAR_USA_EPI();
-                return false;
-            }
-        }
+        // /**
+        //  * 011 - Exige uso de EPI na Leitura de Entrada
+        //  */
+        // if(stepflaglist.indexOf('011') != -1) {
+        //     if(record.get('useppe') == null) {
+        //         me.callSATOR_RELATAR_USA_EPI();
+        //         return false;
+        //     }
+        // }
 
         if (me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
             return false;
         }
-
-        /**
-         * 004 - Libera Kit Incompleto
-         */
-        // if (stepflaglist.indexOf('004') != -1) {
-        //     //return false;
-        // }
 
         /**
          * Registrar exceções
@@ -1499,11 +1459,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_IMPRIMIR_ETIQUETA: function () {
         var me = this,
             view = me.getView(),
-            stepsettings = view.xdata.get('stepsettings');
+            record = view.xdata,
+            stepsettings = record.get('stepsettings');
 
         stepsettings = stepsettings ? Ext.decode(stepsettings) : null;
 
-        if(stepsettings && stepsettings.tagprinter == '001') {
+        if(!stepsettings && (record.get('steptype') == 'T') && (record.get('cyclestatus') == 'FINAL')) {
+            stepsettings = {
+                tagprinter: '002'
+            }
+        }
+
+        if(stepsettings && ['001','002'].indexOf(stepsettings.tagprinter) != -1) {
             Ext.Ajax.request({
                 scope: me,
                 url: me.url,
@@ -1512,7 +1479,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     method: 'imprimeEtiqueta',
                     id: view.xdata.get('id'),
                     printlocate: Smart.workstation.printlocate,
-                    stepsettings: view.xdata.get('stepsettings')
+                    stepsettings: Ext.encode(stepsettings)
                 },
                 callback: function (options, success, response) {
                     var result = Ext.decode(response.responseText);
@@ -1537,7 +1504,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
-            if(item.get('unconformities') != '001'){
+            if(item.get('unconformities') != '001') {
                 data.push(item);
             }
         },me);
@@ -1607,6 +1574,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             model = view.down('flowprocessingmaterial').getSelectionModel(),
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
+
+        /**
+         * 011 - Exige uso de EPI na Leitura de Entrada
+         */
+        if(stepflaglist.indexOf('011') != -1) {
+            if(record.get('useppe') == null) {
+                me.callSATOR_RELATAR_USA_EPI();
+                return false;
+            }
+        }
 
 		/**
           * - Verificar é Kit ?
@@ -1982,8 +1959,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.setMessageText('MSG_PROTOCOL',Ext.String.format('Código do material consultado {0}', record.get('barcode')));
                 return true;
             };
-
-        console.info(record.data);
 
         Ext.widget('flowprocessinguser', {
             scope: me,

@@ -63,6 +63,12 @@ class sterilizationtype extends \Smart\Data\Model {
     private $version;
 
     /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":"1"}
+     */
+    private $validity;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -203,6 +209,22 @@ class sterilizationtype extends \Smart\Data\Model {
      */
     public function setVersion($version) {
         $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getValidity() {
+        return $this->validity;
+    }
+
+    /**
+     * @param type $validity
+     * @return \iAdmin\Model\sterilizationtype
+     */
+    public function setValidity($validity) {
+        $this->validity = $validity;
         return $this;
     }
 

@@ -1164,7 +1164,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             if($ph) {
                 $tpl = "
                     ^XA
-                    ^CF0,20
+                    ^CF0,25
                     ^FO70,050^FD$entityname^FS
                     ^FO420,050^FD$proprietaryname^FS
                     ^FO70,080^FDPREPARADO EM: $dateof^FS
@@ -1206,10 +1206,12 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 fpc.barcode,
                 fpc.cyclefinal,
                 fpc.cyclefinaluser,
-                ib.name as equipmentname
+                ib.name as equipmentname,
+                c.name as cyclename
             from
                 flowprocessingcharge fpc
                 inner join equipmentcycle ec on ( ec.id = fpc.equipmentcycleid )
+                inner join cycle c on ( c.id = ec.cycleid )
                 inner join itembase ib on ( ib.id = ec.equipmentid )
                 inner join flowprocessingchargeitem fpci on ( fpci.flowprocessingchargeid = fpc.id )
             where fpc.id = @id";
@@ -1223,31 +1225,42 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             if($ph) {
 
                 $col = 1;
-                $pos = 20;
+                $pos = 00; //20;
+
+                $tpl = "";
 
                 foreach ($rows as $item) {
                     $barcode = $item['barcode'];
                     $cyclefinal = $item['cyclefinal'];
                     $equipmentname = $item['equipmentname'];
                     $cyclefinaluser = $item['cyclefinaluser'];
+                    $cyclename = $item['cyclename'];
 
                     $pos += ( $col == 1 ) ? 0 : 280;
                     $pos = str_pad($pos, 3, '0', STR_PAD_LEFT);
                     $col++;
 
-                    $tpl = "
+                    $tpl .= "
                         ^XA
                         ~SD25
-                        ^CF0,30
+                        ^CF0,25
                         ^FO0$pos,050^FDLOTE: $barcode^FS
                         ^FO0$pos,080^FD$cyclefinal^FS
-                        ^FO0$pos,100^FD$equipmentname^FS
+                        ^FO0$pos,100^FD$equipmentname ($cyclename)^FS
                         ^FO0$pos,120^FD$cyclefinaluser^FS
                         ^XZ";
 
+                    if ($col > 3) {
+                        printer_set_option($ph, PRINTER_MODE, "RAW");
+                        printer_write($ph, $tpl);
+                        printer_close($ph);
+                        $tpl = "";
+                    }
                     $col = $col > 3 ? 1 : $col;
                     $pos = ( $col == 1 ) ? 20 : $pos;
 
+                }
+                if ($tpl != "") {
                     printer_set_option($ph, PRINTER_MODE, "RAW");
                     printer_write($ph, $tpl);
                     printer_close($ph);
