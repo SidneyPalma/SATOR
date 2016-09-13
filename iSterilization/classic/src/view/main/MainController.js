@@ -9,6 +9,16 @@ Ext.define( 'iSterilization.view.main.MainController', {
         'iAdmin.view.person.client.ClientEdit'
     ],
 
-    url: '../iAdmin/business/Calls/users.php'
+    url: '../iAdmin/business/Calls/users.php',
+
+    onRenderMainForm: function (view) {
+        var me = this,
+            ctrll = Smart.app.getController('App'),
+            button = view.down('button[toggleHandler=onToggleMicro]');
+
+        me.onToggleMicro(button,true);
+
+        ctrll.onMainPageView({ xtype: 'flowprocessingstep' });
+    }
 
 });
