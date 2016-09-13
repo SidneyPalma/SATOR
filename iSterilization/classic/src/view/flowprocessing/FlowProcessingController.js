@@ -1950,8 +1950,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return true;
             };
 
-        console.info(record.data);
-
         Ext.widget('flowprocessinguser', {
             scope: me,
             doCallBack: doCallBack

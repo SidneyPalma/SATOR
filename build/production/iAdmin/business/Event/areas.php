@@ -27,12 +27,13 @@ class areas extends \Smart\Data\Event {
         Session::hasProfile('','');
 
         if($model->getWorkstation() == 'update') {
+            $guid = '';
 
-            if($this->checUpdatekWorkstation($model)) {
+            if($this->checUpdatekWorkstation($model,$guid)) {
                 throw new \PDOException("Para esta Área já existe uma Estação Configurada!!");
             }
-
-            $model->set('workstation',strtoupper(md5($model->getName())));
+            $model->set('workstation',$guid);
+//            $model->set('workstation',strtoupper(md5($model->getName())));
         }
 
         if($model->getWorkstation() == 'delete') {
@@ -57,15 +58,16 @@ class areas extends \Smart\Data\Event {
         return (count($rows) == 0);
     }
 
-    public function checUpdatekWorkstation($model) {
+    public function checUpdatekWorkstation($model,&$guid) {
         $id = $model->getId();
 
-        $pdo = $this->getProxy()->prepare("select workstation, printlocate from areas where id = :id");
+        $pdo = $this->getProxy()->prepare("select workstation, printlocate, newid() as guid from areas where id = :id");
         $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
 
         $pdo->execute();
         $rows = $pdo->fetchAll();
         $data = $rows[0];
+        $guid = $data['guid'];
         $workstation = $data['workstation'];
 
         return (strlen($workstation) != 0);
