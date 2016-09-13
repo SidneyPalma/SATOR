@@ -913,15 +913,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Fazer checagens de encerramento
          */
 
-        /**
-         * 011 - Exige uso de EPI na Leitura de Entrada
-         */
-        if(stepflaglist.indexOf('011') != -1) {
-            if(record.get('useppe') == null) {
-                me.callSATOR_RELATAR_USA_EPI();
-                return false;
-            }
-        }
+        // /**
+        //  * 011 - Exige uso de EPI na Leitura de Entrada
+        //  */
+        // if(stepflaglist.indexOf('011') != -1) {
+        //     if(record.get('useppe') == null) {
+        //         me.callSATOR_RELATAR_USA_EPI();
+        //         return false;
+        //     }
+        // }
 
         if (me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
@@ -1574,6 +1574,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             model = view.down('flowprocessingmaterial').getSelectionModel(),
             materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
 			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
+
+        /**
+         * 011 - Exige uso de EPI na Leitura de Entrada
+         */
+        if(stepflaglist.indexOf('011') != -1) {
+            if(record.get('useppe') == null) {
+                me.callSATOR_RELATAR_USA_EPI();
+                return false;
+            }
+        }
 
 		/**
           * - Verificar é Kit ?
