@@ -1464,9 +1464,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         stepsettings = stepsettings ? Ext.decode(stepsettings) : null;
 
-        if(!stepsettings && record.get(steptype) == 'T') {
+        if(!stepsettings && (record.get('steptype') == 'T') && (record.get('cyclestatus') == 'FINAL')) {
             stepsettings = {
-                tagprinter: '200'
+                tagprinter: '002'
             }
         }
 
@@ -1504,7 +1504,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
-            if(item.get('unconformities') != '001'){
+            if(item.get('unconformities') != '001') {
                 data.push(item);
             }
         },me);
