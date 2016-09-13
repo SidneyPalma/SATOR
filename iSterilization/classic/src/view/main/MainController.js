@@ -14,11 +14,16 @@ Ext.define( 'iSterilization.view.main.MainController', {
     onRenderMainForm: function (view) {
         var me = this,
             ctrll = Smart.app.getController('App'),
-            button = view.down('button[toggleHandler=onToggleMicro]');
+            button = view.down('button[toggleHandler=onToggleMicro]'),
+            first = ctrll.onMainPageView({ xtype: 'flowprocessingstep' });
 
         me.onToggleMicro(button,true);
 
-        ctrll.onMainPageView({ xtype: 'flowprocessingstep' });
+        first.searchToogle();
+
+        Ext.defer(function () {
+            first.down('textfield[name=search]').focus(false,200);
+        },1000);
     }
 
 });
