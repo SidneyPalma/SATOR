@@ -1100,8 +1100,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $stepsettings = isset($data['stepsettings']) ? $data['stepsettings'] : null;
 
         $stepsettings = self::jsonToObject($stepsettings);
+        $tagprinter = 'imprimeEtiqueta' . $stepsettings->tagprinter;
 
-        $return = ($stepsettings->tagprinter == '001') ? $this->imprimeEtiqueta001($data) : $this->imprimeEtiqueta002($data);
+        $return = $this->$tagprinter($data);
 
         return $return;
     }
@@ -1172,7 +1173,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
                     ^FO70,170^FDVALIDADE: $validity ($days)^FS
                     ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
-                    ^FO70,230^FDMATERIAL: $materialboxname ($quantity Itens)^FS
+                    ^FO70,230^FDMATERIAL: $materialboxname ($quantity itens)^FS
                     ^FO260,260^BXN,3,200^FD$barcode^FS^
                     ^FO70,275^FD$barcode^FS^
                     ^XZ";
@@ -1225,7 +1226,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             if($ph) {
 
                 $col = 1;
-                $pos = 00; //20;
+                $pos = 00;
 
                 $tpl = "";
 
@@ -1243,8 +1244,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     $tpl .= "
                         ^XA
                         ~SD25
-                        ^CF0,25
+                        ^CF0,23
                         ^FO0$pos,050^FDLOTE: $barcode^FS
+                        ^CF0,20
                         ^FO0$pos,080^FD$cyclefinal^FS
                         ^FO0$pos,100^FD$equipmentname ($cyclename)^FS
                         ^FO0$pos,120^FD$cyclefinaluser^FS
@@ -1257,7 +1259,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         $tpl = "";
                     }
                     $col = $col > 3 ? 1 : $col;
-                    $pos = ( $col == 1 ) ? 20 : $pos;
+                    $pos = ( $col == 1 ) ? 0 : $pos;
 
                 }
                 if ($tpl != "") {
