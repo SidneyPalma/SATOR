@@ -239,45 +239,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $this->newFlowStep($step);
             }
 
-//            if($result->success) {
-//                $sql = "
-//                    declare
-//                        @id int = :id;
-//
-//                    select
-//						fps.id,
-//                        'P' as steptype,
-//                        fps.stepflaglist,
-//                        fps.username,
-//                        fpsa.flowstepaction,
-//                        fpsa.flowprocessingstepid
-//                    from
-//                        flowprocessing fp
-//						inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
-//                        inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' )
-//                    where fp.id = @id";
-//
-////                print_r($result->rows);
-////                exit;
-//                unset($pdo);
-//                unset($rows);
-//
-//                $pdo = $this->prepare($sql);
-//                $pdo->bindValue(":id", $result->rows->id, \PDO::PARAM_INT);
-//                $pdo->execute();
-//                $rows = $pdo->fetchAll();
-//
-////                print_r($rows);
-////                exit;
-//
-//                self::_setRows($rows[0]);
-//
-//                $result = self::getResultToJson();
-////                print_r($result);
-////                exit;
-//
-//            }
-
             $result = self::objectToJson($result);
 
         } catch ( \PDOException $e ) {
