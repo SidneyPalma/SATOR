@@ -149,18 +149,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                     deselect: 'onFlowStepDeSelect',
                                     itemdblclick: 'onFlowStepAction',
                                     removerecord: 'onFlowStepRemove'
-                                    // afterrender: function () {
-                                    //     var dom = Ext.dom.Query.select('.steptype-P');
-                                    //     var el = Ext.get(dom[0]);
-                                    //     console.info(dom);
-                                    // }
-                                     // element: 'el',
-                                     // delegate: 'div.steptype-P',
-                                     // painted: function (el, eOpts) {
-                                     //     console.info(el);
-                                     //     //console.info(Ext.getCmp(this.id));
-                                     //     //alert('insert-record');
-                                     // }
                                 }
                             }
                         ]
