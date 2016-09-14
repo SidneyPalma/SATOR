@@ -24,10 +24,28 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
     onLoadStepAction: function (store, records, successful, operation, eOpts) {
+        var me = this;
+
+        me.setCycleStart(store);
+    },
+
+    setCycleStart: function (store) {
+        var dom = Ext.dom.Query.select('div.steptype-panel');
 
         store.each(function (item) {
-            var steptype = item.get('steptype');
-            // console.info(item.data);
+            if(item.get('steptype') == 'T') {
+                var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
+                Ext.each(dom,function (node) {
+                    var el = Ext.get(node);
+                    if(el.id == ('step-' + item.get('id'))) {
+                        el.removeCls('step-hide');
+                        el.timeout = window.setInterval(function () {
+                            var date2 = new Date();
+                            el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
+                        });
+                    }
+                });
+            }
         });
     },
 
@@ -79,10 +97,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        // if (dataview) {
-        //     dataview.store.load();
-        // }
-
         Ext.Ajax.request({
             scope: me,
             url: store.getUrl(),
@@ -102,6 +116,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 if(result.rows) {
                     store.loadData(result.rows);
+                    me.setCycleStart(store);
                 }
             }
         });
@@ -913,15 +928,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Fazer checagens de encerramento
          */
 
-        // /**
-        //  * 011 - Exige uso de EPI na Leitura de Entrada
-        //  */
-        // if(stepflaglist.indexOf('011') != -1) {
-        //     if(record.get('useppe') == null) {
-        //         me.callSATOR_RELATAR_USA_EPI();
-        //         return false;
-        //     }
-        // }
+         /**
+          * 011 - Exige uso de EPI na Leitura de Entrada
+          */
+         if(stepflaglist.indexOf('011') != -1) {
+             if(record.get('useppe') == null) {
+                 me.callSATOR_RELATAR_USA_EPI();
+                 return false;
+             }
+         }
 
         if (me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
@@ -1447,11 +1462,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      * Em seguida:
      * stepsettings
         {
-           "serviceequipment":"",
-           "inputpresentation":"",
+           "serviceequipment": "",
+           "inputpresentation": "",
            "serviceareas":"",
-           "tagprinterdescription":"Etiqueta Grande",
-           "tagprinter":"001"
+           "tagprinterdescription": ["Etiqueta Grande","Etiqueta Pequena"],
+           "tagprinter": ["001","002"]
         }
      *
      * Chamar: callSATOR_ENCERRAR_LEITURA
@@ -1581,7 +1596,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(stepflaglist.indexOf('011') != -1) {
             if(record.get('useppe') == null) {
                 me.callSATOR_RELATAR_USA_EPI();
-                return false;
+                //return false;
             }
         }
 

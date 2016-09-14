@@ -23,6 +23,7 @@ Ext.define( 'iSterilization.view.main.MainController', {
 
         Ext.defer(function () {
             first.down('textfield[name=search]').focus(false,200);
+            first.down('label[name=labelitem]').setText('Consultar');
         },1000);
     }
 
