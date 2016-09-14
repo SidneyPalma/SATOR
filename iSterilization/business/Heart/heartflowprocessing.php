@@ -213,12 +213,12 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             }
 
             if($query->clienttype == '004') {
-                $coach->getStore()->getModel()->set('placeid',$query->placeid);
-                $coach->getStore()->getModel()->set('flowingid',$query->flowingid);
+//                $coach->getStore()->getModel()->set('placeid',$query->placeid);
+//                $coach->getStore()->getModel()->set('flowingid',$query->flowingid);
                 $coach->getStore()->getModel()->set('patientname',$query->patientname);
                 $coach->getStore()->getModel()->set('healthinsurance',$query->healthinsurance);
                 $coach->getStore()->getModel()->set('surgicalwarning',$query->surgicalwarning);
-                $coach->getStore()->getModel()->set('instrumentatorid',$query->instrumentatorid);
+//                $coach->getStore()->getModel()->set('instrumentatorid',$query->instrumentatorid);
             }
 
             $model = $coach->getStore()->getModel();
@@ -238,6 +238,45 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             if($result->success) {
                 $this->newFlowStep($step);
             }
+
+//            if($result->success) {
+//                $sql = "
+//                    declare
+//                        @id int = :id;
+//
+//                    select
+//						fps.id,
+//                        'P' as steptype,
+//                        fps.stepflaglist,
+//                        fps.username,
+//                        fpsa.flowstepaction,
+//                        fpsa.flowprocessingstepid
+//                    from
+//                        flowprocessing fp
+//						inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+//                        inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' )
+//                    where fp.id = @id";
+//
+////                print_r($result->rows);
+////                exit;
+//                unset($pdo);
+//                unset($rows);
+//
+//                $pdo = $this->prepare($sql);
+//                $pdo->bindValue(":id", $result->rows->id, \PDO::PARAM_INT);
+//                $pdo->execute();
+//                $rows = $pdo->fetchAll();
+//
+////                print_r($rows);
+////                exit;
+//
+//                self::_setRows($rows[0]);
+//
+//                $result = self::getResultToJson();
+////                print_r($result);
+////                exit;
+//
+//            }
 
             $result = self::objectToJson($result);
 
