@@ -54,6 +54,9 @@ Ext.define( 'iAdmin.model.itembase.Material', {
         }, {
             name: 'materialboxname',
             type: 'auto'
+        }, {
+            name: 'colorschema',
+            type: 'auto'
         }
     ]
 
