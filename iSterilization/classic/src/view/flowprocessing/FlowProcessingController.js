@@ -182,7 +182,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onQueryReaderView: function (field, e, eOpts) {
         var me = this,
-            value = field.getValue();
+            value = field.getValue(),
+            items = new RegExp(/(C\d{6})\w+/g);
 
         field.reset();
 
@@ -192,9 +193,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return false;
             }
 
-            // var barcode = new RegExp(/(C[0-9])\w+/g);
-            var barcode = new RegExp(/(C\d{6})\w+/g);
-            if(barcode.test(value)) {
+            if(items.test(value)) {
                 me.areaMaterial(value);
                 return false;
             }

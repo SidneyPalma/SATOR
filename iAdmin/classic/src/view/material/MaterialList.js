@@ -67,7 +67,7 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                 },
                 columns: [
                     {
-                        width: 150,
+                        width: 120,
                         sortable: false,
                         text: 'Código',
                         dataIndex: 'barcode'
@@ -75,6 +75,21 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         flex: 1,
                         text: 'Nome do Material',
                         dataIndex: 'name'
+                    }, {
+                        width: 100,
+                        text: 'Schema',
+                        renderer: function (value, metaData, record) {
+                            var colorpallet = '',
+                                colorschema = record.get('colorschema').split(","),
+                                coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 1px solid black; border-radius: 50%"></div>';
+
+                            Ext.each(colorschema,function (color) {
+                                console.info(color);
+                                colorpallet += Ext.String.format(coloritem,color);
+                            });
+
+                            return colorpallet;
+                        }
                     }, {
                         width: 180,
                         text: 'Kit',
