@@ -444,4 +444,42 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectTask(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @id int = :id;
+
+            select
+                fps.id,
+                'P' as steptype,
+                fps.stepflaglist,
+                fps.username,
+                fpsa.flowstepaction,
+                fpsa.flowprocessingstepid
+            from
+                flowprocessing fp
+                inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+                inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' )
+            where fp.id = @id";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }

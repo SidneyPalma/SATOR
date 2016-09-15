@@ -254,17 +254,18 @@
 .step .steptype-panel {
     width: 60px;
     float: left;
-    color: white;
+    color: red;
+    font-size: 22px;
+    font-weight: 700;
     line-height: 25px;
     text-align: center;
-    background: dodgerblue;
 }
 
 .step .step-hide-P {
     display: none;
 }
 
-.step .step-hide-T {
+.step .step-hide {
     display: none;
 }
 

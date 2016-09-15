@@ -163,7 +163,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                             {
                                 xtype: 'label',
                                 cls: 'processing-field-font',
-                                text: 'Detalhamento',
+                                text: 'Consultar',
                                 name: 'labelitem'
                             }, {
                                 hidden: true,
