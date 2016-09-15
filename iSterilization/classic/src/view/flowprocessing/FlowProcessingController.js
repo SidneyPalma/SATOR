@@ -198,11 +198,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return false;
             }
         }
-
     },
 
     areaMaterial: function (value) {
-        console.info(value);
+        var me = this,
+            store = Ext.getStore('flowprocessingstepaction');
+
+        store.setParams({
+            method: 'selectTaskArea',
+            barcode: value,
+            areasid: Smart.workstation.areasid
+        }).load({
+            callback: function(records, operation, success) {
+                var record = records[0];
+                me.onFlowStepAction(null,record);
+                store.removeAll();
+            }
+        });
     },
 
     areaProtocol: function (value) {

@@ -81,7 +81,7 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         renderer: function (value, metaData, record) {
                             var colorpallet = '',
                                 colorschema = record.get('colorschema').split(","),
-                                coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 1px solid black; border-radius: 50%"></div>';
+                                coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
 
                             Ext.each(colorschema,function (color) {
                                 console.info(color);

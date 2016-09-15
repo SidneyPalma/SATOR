@@ -482,4 +482,46 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
+    public function selectTaskArea(array $data) {
+        $barcode = $data['barcode'];
+        $areasid = $data['areasid'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @areasid int = :areasid,
+                @barcode varchar(20) = :barcode;
+                            
+            select
+                fps.id,
+                'P' as steptype,
+                fps.stepflaglist,
+                fps.username,
+                fpsa.flowstepaction,
+                fpsa.flowprocessingstepid
+            from
+                flowprocessing fp
+                inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id and fps.areasid = @areasid )
+                inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' )
+                inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
+                inner join itembase ib on ( ib.id = fpsm.materialid and ib.barcode = @barcode )";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
 }

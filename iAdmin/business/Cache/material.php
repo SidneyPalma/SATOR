@@ -54,7 +54,7 @@ class material extends \Smart\Data\Cache {
                                             materialboxtarge mbt
                                             inner join targecolor tc on ( tc.id = mbt.targecolorid )
                                         where mbt.materialboxid = mb.id
-                                        order by mbt.targeorderby desc
+                                        order by mbt.targeorderby asc
                                         for xml path ('')
                                     ) ,1,1,''
                                 )                
