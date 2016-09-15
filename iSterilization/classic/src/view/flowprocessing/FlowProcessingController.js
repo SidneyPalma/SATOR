@@ -191,7 +191,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.areaProtocol(value);
                 return false;
             }
+
+            // var barcode = new RegExp(/(C[0-9])\w+/g);
+            var barcode = new RegExp(/(C\d{6})\w+/g);
+            if(barcode.test(value)) {
+                me.areaMaterial(value);
+                return false;
+            }
         }
+
+    },
+
+    areaMaterial: function (value) {
+        console.info(value);
     },
 
     areaProtocol: function (value) {
