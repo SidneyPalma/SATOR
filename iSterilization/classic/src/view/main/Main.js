@@ -51,6 +51,8 @@ Ext.define( 'iSterilization.view.main.Main', {
             first.down('textfield[name=search]').focus(false,200);
             first.down('label[name=labelitem]').setText('Consultar');
         },1000);
+
+        history.pushState({}, "pg1", "#flowprocessingstep");
     }
 
 });
