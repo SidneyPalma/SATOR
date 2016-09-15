@@ -79,6 +79,10 @@ Ext.define( 'Smart.ux.app.Application', {
                         Ext.getBody().getById('marquee').show();
                     }
 
+                    if(workstation) {
+                        main.doStart(main);
+                    }
+
                 } else {
                     Ext.create({xtype:'login'});
                 }
