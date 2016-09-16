@@ -1771,11 +1771,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(stepflaglist.indexOf('019') != -1) {
             store.getAt(0);
             store.each(function (data) {
-                Smart.ion.sound.play("button_tiny");
                 data.set('unconformities','010');
                 data.store.sync({async: false});
                 data.commit();
             });
+            Smart.ion.sound.play("button_tiny");
             me.setMessageText('MSG_PROTOCOL','Leitura única realizada!');
             return false;
         }
