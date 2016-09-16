@@ -1751,14 +1751,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var data = store.findRecord('barcode',value);
 
 		// Não foi encontrado no Kit || Não é  ?
-		if(!data && value.indexOf('P') == -1) {
+		if(data && !data && value.indexOf('P') == -1) {
 			me.setMessageText('MSG_UNKNOWN');
 			return false;
 		}
 
 		// Já foi lançado ?
 		// Sim -> Mensagem de duplicidade
-		if (data.get('unconformities') != '001') {
+		if (data && data.get('unconformities') != '001') {
             Smart.ion.sound.play("computer_error");
 			me.setMessageText('MSG_DUPLICATED');
             model.select(data);
@@ -1782,14 +1782,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         // Já foi lançado ?
         // Não -> Update Status do Item na Lista
-        data.set('unconformities','010');
-        store.sync({
-            callback: function () {
-                data.commit();
-                model.select(data);
-                Smart.ion.sound.play("button_tiny");
-            }
-        });
+        if(data) {
+            data.set('unconformities','010');
+            store.sync({
+                callback: function () {
+                    data.commit();
+                    model.select(data);
+                    Smart.ion.sound.play("button_tiny");
+                }
+            });
+        }
     },
 
     setIsntMaterialBox: function (value) {
