@@ -251,7 +251,7 @@
     margin-left: 17px;
 }
 
-.step .steptype-panel {
+.step .steptype-clock {
     width: 60px;
     float: left;
     color: red;
@@ -261,9 +261,9 @@
     text-align: center;
 }
 
-.step .step-hide-P {
-    display: none;
-}
+/*.step .step-hide-P {*/
+    /*display: none;*/
+/*}*/
 
 .step .step-hide {
     display: none;
