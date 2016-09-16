@@ -35,7 +35,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.each(function (item) {
             var id = item.get('id');
             var steptype = item.get('steptype');
-            if(['C','T'].indexOf(steptype)) {
+            if(['C','T'].indexOf(steptype) != -1) {
                 Ext.each(dom,function (node) {
                     var el = Ext.get(node);
 
