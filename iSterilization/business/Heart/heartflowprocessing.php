@@ -193,7 +193,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->bindValue(":dateof", $dateof, \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();
-            $barcode = $dateof . $rows[0]['newcode'];
+            $barcode = "P". $dateof . $rows[0]['newcode'];
             unset($pdo);
             unset($rows);
 
