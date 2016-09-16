@@ -7,6 +7,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     routes: {
         'flowprocessingview/:id': {
             action: 'getFlowProcessingId'
+        },
+        'flowprocessingview/:id/:barcode': {
+            action: 'getFlowProcessingId'
         }
     },
 
@@ -54,25 +57,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             if (steptype == 'C') {
                 Ext.each(clear,function (node) {
                     var el = Ext.get(node);
-                    if(el.id == ('clear-' + id) && steptype == 'C') {
+                    if(el.id == ('clear-' + id)) {
                         el.removeCls('step-hide');
                     }
                 });
             }
-
-            // if(item.get('steptype') == 'T') {
-            //     var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
-            //     Ext.each(dom,function (node) {
-            //         var el = Ext.get(node);
-            //         if(el.id == ('panel-' + item.get('id'))) {
-            //             el.removeCls('step-hide');
-            //             el.timeout = window.setInterval(function () {
-            //                 var date2 = new Date();
-            //                 el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
-            //             });
-            //         }
-            //     });
-            // }
         });
     },
 
@@ -83,10 +72,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     //routes ===================================>>
-    getFlowProcessingId: function (id) {
+    getFlowProcessingId: function (id, barcode) {
         var me = this,
             app = Smart.app.getController('App');
-
+        console.info(barcode);
         Ext.getStore('flowprocessingstep').setParams({
             method: 'selectStep',
             query: id
@@ -98,7 +87,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     return false;
                 }
 
-                app.onMainPageView({xtype: 'flowprocessingview', xdata: records[0]});
+                app.onMainPageView({xtype: 'flowprocessingview', xdata: records[0], barcode: barcode});
             }
         });
     },
@@ -212,7 +201,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onQueryReaderView: function (field, e, eOpts) {
         var me = this,
             value = field.getValue(),
-            items = new RegExp(/(C\d{6})\w+/g);
+            itemC = new RegExp(/(C\d{6})\w+/g),
+            itemP = new RegExp(/(P\d{6})\w+/g);
 
         field.reset();
 
@@ -222,7 +212,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return false;
             }
 
-            if(items.test(value)) {
+            if(itemC.test(value) || itemP.test(value)) {
                 me.areaMaterial(value);
                 return false;
             }
@@ -262,7 +252,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.callSATOR_CONSULTAR_MATERIAL();
                 break;
             default:
-                Smart.Msg.showToast('Protocolo Inválido para esta área');
+                Smart.Msg.showToast('Protocolo inválido para esta área');
         }
     },
     // Abrir Novo Processamento/Leitura
@@ -315,6 +305,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             list = '',
             view = me.getView(),
             data = view.xdata,
+            barcode = view.barcode,
             text = 'Material ({0})',
             colorschema = data.get('colorschema').split(","),
             schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
@@ -324,10 +315,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             method: 'selectTree'
         }).load();
 
-        Ext.getStore('flowprocessingstepmaterial').setParams({
-            method: 'selectCode',
-            query: data.get('id')
-        }).load();
+        // Ext.getStore('flowprocessingstepmaterial').setParams({
+        //     method: 'selectCode',
+        //     query: data.get('id')
+        // }).load();
 
         Ext.getStore('flowprocessingstepmessage').setParams({
             method: 'selectCode',
@@ -352,6 +343,24 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('textfield[name=sterilizationtypename]').setValue(data.get('sterilizationtypeversion'));
         view.down('textfield[name=priorityleveldescription]').setValue(data.get('priorityleveldescription'));
         view.down('label[name=materialboxname]').setText(Ext.String.format(text,data.get('materialboxname')));
+
+        Ext.getStore('flowprocessingstepmaterial').setParams({
+            method: 'selectCode',
+            query: data.get('id')
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+
+                if( !success || records.length == 0 || !barcode ) {
+                    return false;
+                }
+
+                if(barcode.indexOf('C') != -1) {
+                    me.workReadArea(barcode);
+                }
+            }
+        });
+
     },
 
     onSelectUserCode: function (win,field,eOpts) {
@@ -1712,7 +1721,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(stepflaglist.indexOf('011') != -1) {
             if(record.get('useppe') == null) {
                 me.callSATOR_RELATAR_USA_EPI();
-                //return false;
+                return false;
             }
         }
 
@@ -1967,6 +1976,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onFlowStepAction: function ( viewView, record, item, index, e, eOpts ) {
         var me = this,
             userid = record.get('username'),
+            barcode = record.get('barcode'),
+            donetype = record.get('donetype'),
             action = record.get('flowstepaction'),
             stepid = record.get('flowprocessingstepid'),
             stepflaglist = record.get('stepflaglist'),
@@ -1986,7 +1997,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         if(!success || !result.success) {
                             return false;
                         }
-                        me.redirectTo( 'flowprocessingview/' + stepid );
+
+                        //http://stackoverflow.com/questions/34527993/extjs-routers-pass-multiple-parameters
+                        me.redirectTo( 'flowprocessingview/' + stepid + (donetype == 'B' ? '/' + barcode : ''));
                     }
                 });
 
@@ -2033,7 +2046,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             this.down('textfield[name=usercode]').focus(false,200);
                         });
                     } else {
-                        me.redirectTo( 'flowprocessingview/' + stepid);
+                        me.redirectTo( 'flowprocessingview/' + stepid + (donetype == 'B' ? '/' + barcode : ''));
                     }
                 break;
             case '002':
