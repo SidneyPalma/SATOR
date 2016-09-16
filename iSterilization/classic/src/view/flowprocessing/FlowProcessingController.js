@@ -364,7 +364,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
             }
         });
-
     },
 
     onSelectUserCode: function (win,field,eOpts) {
