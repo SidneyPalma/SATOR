@@ -491,10 +491,12 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
             declare
                 @areasid int = :areasid,
                 @barcode varchar(20) = :barcode;
-                            
+     
             select
                 fps.id,
+                @barcode as barcode,
                 'P' as steptype,
+                'B' as donetype,
                 fps.stepflaglist,
                 fps.username,
                 fpsa.flowstepaction,
@@ -504,7 +506,9 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id and fps.areasid = @areasid )
                 inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' and fpsa.isactive = 1 )
                 inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
-                inner join itembase ib on ( ib.id = fpsm.materialid and ib.barcode = @barcode )";
+                inner join itembase ib on ( ib.id = fpsm.materialid )
+            where ( ib.barcode = @barcode
+                 or fp.barcode = @barcode )";
 
         try {
             $pdo = $proxy->prepare($sql);
