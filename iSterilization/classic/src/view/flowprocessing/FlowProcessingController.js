@@ -1721,7 +1721,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(stepflaglist.indexOf('011') != -1) {
             if(record.get('useppe') == null) {
                 me.callSATOR_RELATAR_USA_EPI();
-                return false;
+                // return false;
             }
         }
 
