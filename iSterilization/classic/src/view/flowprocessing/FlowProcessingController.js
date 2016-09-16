@@ -1750,7 +1750,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
           */
         var data = store.findRecord('barcode',value);
 
-		// Não foi encontrado no Kit ?
+		// Não foi encontrado no Kit || Não é  ?
 		if(!data && value.indexOf('P') == -1) {
 			me.setMessageText('MSG_UNKNOWN');
 			return false;
