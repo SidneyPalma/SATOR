@@ -154,6 +154,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
+        view.searchToogle();
+
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
 
         Ext.Ajax.request({
@@ -210,9 +212,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             areasid: Smart.workstation.areasid
         }).load({
             callback: function(records, operation, success) {
-                var record = records[0];
-                me.onFlowStepAction(null,record);
-                store.removeAll();
+                if(records.length != 0) {
+                    var record = records[0];
+                    me.onFlowStepAction(null,record);
+                    store.removeAll();
+                }
             }
         });
     },
@@ -226,6 +230,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 break;
             case 'SATOR_VALIDA_CARGA':
                 me.callSATOR_VALIDA_CARGA();
+                break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
                 break;
             default:
                 Smart.Msg.showToast('Protocolo Inválido para esta área');
@@ -455,11 +462,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             type = view.down('clientsearch');
 
-        Ext.getStore('client').setParams({
+        Ext.getStore('client').load({
             scope: me,
-            method: 'selectCode',
-            rows: Ext.encode({id: 1})
-        }).load({
+            params: {
+                method: 'selectCode',
+                rows: Ext.encode({id: 1})
+            },
             callback: function (records, operation, success) {
                 var record = records[0];
                 type.setValue(record.get('id'));
@@ -1625,7 +1633,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 	
     callSATOR_CONSULTAR_MATERIAL: function () {
-        console.info(this);
+        var me = this;
+        Ext.widget('call_SATOR_CONSULTAR_MATERIAL').show(null,function () {
+            this.master = me.getView();
+            this.down('searchmaterial').focus(false,200);
+        });
     },
 
     callSATOR_PREPARAR_LOTE_CUBA: function () {

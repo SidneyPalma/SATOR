@@ -19,13 +19,6 @@ Ext.define( 'iSterilization.view.main.MainController', {
 
         me.onToggleMicro(button,true);
 
-        first.searchToogle();
-
-        Ext.defer(function () {
-            first.down('textfield[name=search]').focus(false,200);
-            first.down('label[name=labelitem]').setText('Consultar');
-        },1000);
-
         history.pushState({}, "pg1", "#flowprocessingstep");
     },
 
