@@ -30,42 +30,33 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     setCycleStart: function (store) {
-        var dom = Ext.dom.Query.select('div.steptype-panel');
+        var clock = Ext.dom.Query.select('div.steptype-clock');
+        var clear = Ext.dom.Query.select('div.steptype-clear');
 
         store.each(function (item) {
             var id = item.get('id');
             var steptype = item.get('steptype');
-            var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
-            if(['C','T'].indexOf(steptype) != -1) {
-                Ext.each(dom,function (node) {
+
+            if (steptype == 'T') {
+                var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
+                Ext.each(clock,function (node) {
                     var el = Ext.get(node);
-
-                    // el.removeCls('step-hide');
-                    // if(el.id == ('clear-' + id) && steptype == 'C') {
-                    //     el.removeCls('step-hide');
-                    // }
-
-                    if(el.id == ('clear-' + id) && steptype == 'C') {
-                        el.removeCls('step-hide');
-                    }
-
-                    if(el.id == ('panel-' + id) && steptype == 'T') {
+                    if(el.id == ('clock-' + id)) {
                         el.removeCls('step-hide');
                         el.timeout = window.setInterval(function () {
                             var date2 = new Date();
                             el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
                         });
                     }
-                    // if(el.id == ('clear-' + id) && steptype == 'T') {
-                    //     var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
-                        // el.removeCls('step-hide');
-                        // if(el.id == ('panel-' + id)) {
-                        //     el.timeout = window.setInterval(function () {
-                        //         var date2 = new Date();
-                        //         el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
-                        //     });
-                        // }
-                    // }
+                });
+            }
+
+            if (steptype == 'C') {
+                Ext.each(clear,function (node) {
+                    var el = Ext.get(node);
+                    if(el.id == ('clear-' + id) && steptype == 'C') {
+                        el.removeCls('step-hide');
+                    }
                 });
             }
 

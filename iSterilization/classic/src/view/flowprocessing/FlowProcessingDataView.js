@@ -21,7 +21,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDataView', {
                 '<div class="step-left">',
                     '<div class="steptype-{steptype}"></div>',
                     '<div class="steptype-clear step-hide fa fa-times-circle" id="clear-{id}"></div>',
-                    '<div class="steptype-panel step-hide" id="panel-{id}"></div>',
+                    '<div class="steptype-clock step-hide" id="clock-{id}"></div>',
                 '</div>',
                 '<div class="step-right" style="font-weight: 700;">',
                     '<div class="steptype-items">{items}</div>',
