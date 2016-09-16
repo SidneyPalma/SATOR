@@ -33,19 +33,43 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var dom = Ext.dom.Query.select('div.steptype-panel');
 
         store.each(function (item) {
-            if(item.get('steptype') == 'T') {
-                var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
+            var id = item.get('id');
+            var steptype = item.get('steptype');
+            if(['C','T'].indexOf(steptype)) {
                 Ext.each(dom,function (node) {
                     var el = Ext.get(node);
-                    if(el.id == ('step-' + item.get('id'))) {
-                        el.removeCls('step-hide');
-                        el.timeout = window.setInterval(function () {
-                            var date2 = new Date();
-                            el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
-                        });
+
+                    el.removeCls('step-hide');
+                    // if(el.id == ('clear-' + id) && steptype == 'C') {
+                    //     el.removeCls('step-hide');
+                    // }
+
+                    if(el.id == ('clear-' + id) && steptype == 'T') {
+                        var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
+                        // el.removeCls('step-hide');
+                        if(el.id == ('panel-' + id)) {
+                            el.timeout = window.setInterval(function () {
+                                var date2 = new Date();
+                                el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
+                            });
+                        }
                     }
                 });
             }
+
+            // if(item.get('steptype') == 'T') {
+            //     var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
+            //     Ext.each(dom,function (node) {
+            //         var el = Ext.get(node);
+            //         if(el.id == ('panel-' + item.get('id'))) {
+            //             el.removeCls('step-hide');
+            //             el.timeout = window.setInterval(function () {
+            //                 var date2 = new Date();
+            //                 el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
+            //             });
+            //         }
+            //     });
+            // }
         });
     },
 
