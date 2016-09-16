@@ -14,13 +14,14 @@ Ext.define( 'iSterilization.view.main.MainController', {
     doStart: function (view) {
         var me = this,
             ctrll = Smart.app.getController('App'),
-            button = view.down('button[toggleHandler=onToggleMicro]'),
-            first = ctrll.onMainPageView({ xtype: 'flowprocessingstep' });
+            button = view.down('button[toggleHandler=onToggleMicro]');
 
         me.onToggleMicro(button,true);
 
+        ctrll.onMainPageView({ xtype: 'flowprocessingstep' });
+
         history.pushState({}, "pg1", "#flowprocessingstep");
-    },
+    }
 
 
 });
