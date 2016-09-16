@@ -19,14 +19,21 @@ class flowprocessing extends \Smart\Data\Cache {
                 ib.name,
                 ib.barcode,
                 ib.description,
-                b.materialboxid,
+                a.materialboxid,
+                a.materialboxname,
+                a.colorschema,
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo,
                 st.version,
+                pk.name as packingname,
+                pt.name as proprietaryname,
                 mf.name as manufacturername,
                 -- tipo de fluxo e prioridade
                 mtf.sterilizationtypeid,
                 st.name as sterilizationtypename,
+				m.materialstatus,
+				dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
+				dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
                 mtf.prioritylevel,
                 dbo.getEnum('prioritylevel',mtf.prioritylevel) as priorityleveldescription,
                 st.name +' ('+ dbo.getEnum('prioritylevel',mtf.prioritylevel) +')' as sterilizationpriority
@@ -34,15 +41,37 @@ class flowprocessing extends \Smart\Data\Cache {
                 itembase ib
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
                 inner join material m on ( m.id = ib.id )
+				inner join packing pk on ( pk.id = m.packingid )
+                inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join materialtypeflow mtf on ( mtf.materialid = m.id and mtf.prioritylevel = 'N' )
                 inner join sterilizationtype st on ( st.id = mtf.sterilizationtypeid )
                 outer apply (
-					select top 1
-						mbi.materialboxid
-					from
-						materialboxitem mbi
-					where mbi.materialid = ib.id
-				) b
+                    SELECT
+                        mbi.materialboxid,
+						mb.name as materialboxname,
+                        colorschema = (
+                            select stuff
+                                (
+                                    (
+                                        select
+                                            ',#' + tc.colorschema
+                                        from
+                                            materialboxtarge mbt
+                                            inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                        where mbt.materialboxid = mb.id
+                                        order by mbt.targeorderby asc
+                                        for xml path ('')
+                                    ) ,1,1,''
+                                )                
+                        )
+                    FROM
+                        materialbox mb
+                    inner join materialboxitem mbi on ( 
+                                    mbi.materialboxid = mb.id
+                                AND mbi.materialid = m.id
+                                AND mbi.boxitemstatus = 'A' )
+                    inner join itembase ibt on ( ibt.id = mbi.materialid )
+                ) a
             where ib.isactive = 1
               and (
                     ib.barcode = :barcode OR

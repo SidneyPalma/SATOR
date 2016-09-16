@@ -154,6 +154,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
+        view.searchToogle();
+
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
 
         Ext.Ajax.request({
@@ -210,9 +212,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             areasid: Smart.workstation.areasid
         }).load({
             callback: function(records, operation, success) {
-                var record = records[0];
-                me.onFlowStepAction(null,record);
-                store.removeAll();
+                if(records.length != 0) {
+                    var record = records[0];
+                    me.onFlowStepAction(null,record);
+                    store.removeAll();
+                }
             }
         });
     },
@@ -226,6 +230,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 break;
             case 'SATOR_VALIDA_CARGA':
                 me.callSATOR_VALIDA_CARGA();
+                break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
                 break;
             default:
                 Smart.Msg.showToast('Protocolo Inválido para esta área');
@@ -455,11 +462,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             type = view.down('clientsearch');
 
-        Ext.getStore('client').setParams({
+        Ext.getStore('client').load({
             scope: me,
-            method: 'selectCode',
-            rows: Ext.encode({id: 1})
-        }).load({
+            params: {
+                method: 'selectCode',
+                rows: Ext.encode({id: 1})
+            },
             callback: function (records, operation, success) {
                 var record = records[0];
                 type.setValue(record.get('id'));
@@ -903,9 +911,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_LANCAMENTO_MANUAL':
                 me.callSATOR_LANCAMENTO_MANUAL();
                 break;
-            // case 'SATOR_CONSULTAR_MATERIAL':
-            //     me.callSATOR_CONSULTAR_MATERIAL();
-            //     break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
+                break;
+            case 'SATOR_PREPARAR_LOTE_CUBA':
+                me.callSATOR_PREPARAR_LOTE_CUBA();
+                break;
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.callSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
@@ -1622,7 +1633,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 	
     callSATOR_CONSULTAR_MATERIAL: function () {
-        console.info(this);
+        var me = this;
+        Ext.widget('call_SATOR_CONSULTAR_MATERIAL').show(null,function () {
+            this.master = me.getView();
+            this.down('searchmaterial').focus(false,200);
+        });
+    },
+
+    callSATOR_PREPARAR_LOTE_CUBA: function () {
+        var me = this;
+        Ext.widget('call_SATOR_PREPARAR_LOTE_CUBA').show(null,function () {
+            this.master = me.getView();
+            this.down('textfield[name=equipmentname]').focus(false,200);
+        });
     },
 
     callSATOR_CANCELAR_ULTIMA_LEITURA: function () {
@@ -1794,6 +1817,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Cancelar Leituras Relizadas             SATOR_CANCELAR_LEITURAS
      *          -   Imprimir Etiquetas                      SATOR_IMPRIMIR_ETIQUETA
      *          -   Consultar Material                      SATOR_CONSULTAR_MATERIAL
+     *          -   Preparar Lote de cubas                  SATOR_PREPARAR_LOTE_CUBA
      *          -   Cancelar Ultima Leitura                 SATOR_CANCELAR_ULTIMA_LEITURA
      *          -   Relatar uso de EPI				        SATOR_RELATAR_USA_EPI
      *              -   SATOR_SIM

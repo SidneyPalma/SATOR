@@ -502,7 +502,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
             from
                 flowprocessing fp
                 inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id and fps.areasid = @areasid )
-                inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' )
+                inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' and fpsa.isactive = 1 )
                 inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
                 inner join itembase ib on ( ib.id = fpsm.materialid and ib.barcode = @barcode )";
 

@@ -15,5 +15,5 @@ Ext.define( 'iSterilization.Application', {
     ],
 
     url: '../iAdmin/business/Calls/users.php'
-
+    
 });
