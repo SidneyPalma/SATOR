@@ -1751,7 +1751,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var data = store.findRecord('barcode',value);
 
 		// Não foi encontrado no Kit ?
-		if(!data) {
+		if(!data && value.indexOf('P') == -1) {
 			me.setMessageText('MSG_UNKNOWN');
 			return false;
 		}
@@ -1785,9 +1785,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         data.set('unconformities','010');
         store.sync({
             callback: function () {
-                Smart.ion.sound.play("button_tiny");
                 data.commit();
                 model.select(data);
+                Smart.ion.sound.play("button_tiny");
             }
         });
     },
