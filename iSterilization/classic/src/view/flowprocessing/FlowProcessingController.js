@@ -903,9 +903,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_LANCAMENTO_MANUAL':
                 me.callSATOR_LANCAMENTO_MANUAL();
                 break;
-            // case 'SATOR_CONSULTAR_MATERIAL':
-            //     me.callSATOR_CONSULTAR_MATERIAL();
-            //     break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
+                break;
+            case 'SATOR_PREPARAR_LOTE_CUBA':
+                me.callSATOR_PREPARAR_LOTE_CUBA();
+                break;
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.callSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
@@ -1625,6 +1628,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         console.info(this);
     },
 
+    callSATOR_PREPARAR_LOTE_CUBA: function () {
+        var me = this;
+        Ext.widget('call_SATOR_PREPARAR_LOTE_CUBA').show(null,function () {
+            this.master = me.getView();
+            this.down('textfield[name=equipmentname]').focus(false,200);
+        });
+    },
+
     callSATOR_CANCELAR_ULTIMA_LEITURA: function () {
         var me = this,
             data = null,
@@ -1794,6 +1805,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *          -   Cancelar Leituras Relizadas             SATOR_CANCELAR_LEITURAS
      *          -   Imprimir Etiquetas                      SATOR_IMPRIMIR_ETIQUETA
      *          -   Consultar Material                      SATOR_CONSULTAR_MATERIAL
+     *          -   Preparar Lote de cubas                  SATOR_PREPARAR_LOTE_CUBA
      *          -   Cancelar Ultima Leitura                 SATOR_CANCELAR_ULTIMA_LEITURA
      *          -   Relatar uso de EPI				        SATOR_RELATAR_USA_EPI
      *              -   SATOR_SIM

@@ -21,7 +21,7 @@ Ext.define( 'Smart.ux.app.Application', {
         me.setDefaultToken(Ext.manifest.name.toLowerCase());
     },
 
-    launch: function (a) {
+    launch: function () {
         var me = this,
             workstation = localStorage.getItem('workstation'),
             loggedIn = localStorage.getItem(Ext.manifest.name + 'In');
@@ -77,10 +77,6 @@ Ext.define( 'Smart.ux.app.Application', {
 
                     if(result.isTest == true) {
                         Ext.getBody().getById('marquee').show();
-                    }
-
-                    if(workstation) {
-                        main.doStart(main);
                     }
 
                 } else {
