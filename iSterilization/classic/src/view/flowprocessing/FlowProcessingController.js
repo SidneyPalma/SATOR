@@ -355,6 +355,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     return false;
                 }
 
+                if(barcode.indexOf('P') != -1) {
+                    me.workReadArea(barcode);
+                }
+
                 if(barcode.indexOf('C') != -1) {
                     me.workReadArea(barcode);
                 }
