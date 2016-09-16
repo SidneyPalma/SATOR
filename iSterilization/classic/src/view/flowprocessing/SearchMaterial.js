@@ -87,7 +87,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
                 '<div style="float: left; height: 80px; width: 120px; margin-right: 10px;">',
                     '<img src="{filetype}" style="height: 100%; width: 100%;">',
                 '</div>',
-                '<div style="font-size: 22px; line-height: 40px; background-color: rgba(231, 242, 225, 1); color: black;">{name}</div>',
+                '<div style="font-size: 18px; line-height: 40px; background-color: rgba(231, 242, 225, 1); color: black;">{name}</div>',
                 '<div style="font-size: 16px; line-height: 20px; background-color: rgba(250, 241, 210, .4);">{manufacturername}</div>',
                 '<div style="font-size: 14px; line-height: 20px; background-color: rgba(250, 241, 210, .4);">Código de Barras: <a style="color: red;">{barcode}</a></div>',
             '</div>',
