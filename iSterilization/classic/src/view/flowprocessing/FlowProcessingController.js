@@ -59,20 +59,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     }
                 });
             }
-
-            // if(item.get('steptype') == 'T') {
-            //     var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
-            //     Ext.each(dom,function (node) {
-            //         var el = Ext.get(node);
-            //         if(el.id == ('panel-' + item.get('id'))) {
-            //             el.removeCls('step-hide');
-            //             el.timeout = window.setInterval(function () {
-            //                 var date2 = new Date();
-            //                 el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
-            //             });
-            //         }
-            //     });
-            // }
         });
     },
 
