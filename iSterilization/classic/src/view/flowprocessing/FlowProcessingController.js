@@ -35,6 +35,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         store.each(function (item) {
             var id = item.get('id');
             var steptype = item.get('steptype');
+            var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
             if(['C','T'].indexOf(steptype) != -1) {
                 Ext.each(dom,function (node) {
                     var el = Ext.get(node);
@@ -44,8 +45,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     //     el.removeCls('step-hide');
                     // }
 
-                    if(el.id == ('clear-' + id) && steptype == 'T') {
-                        var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
+                    // if(el.id == ('clear-' + id) && steptype == 'T') {
+                    //     var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
                         // el.removeCls('step-hide');
                         if(el.id == ('panel-' + id)) {
                             el.timeout = window.setInterval(function () {
@@ -53,7 +54,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                 el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
                             });
                         }
-                    }
+                    // }
                 });
             }
 
