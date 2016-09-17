@@ -59,9 +59,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                     materialdetail = view.down('form[name=materialdetail]');
 
                                 materialdetail.update({
+                                    'Kit:':'',
                                     'Grupo:': '',
                                     'Status:':'',
-                                    'Kit:':'',
                                     'Embalagem:':'',
                                     'Proprietario': ''
                                 });
@@ -104,9 +104,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                 tpl: [
                                     '<div style="font-size: 14px; font-family: Monda;">',
                                         '<div style="margin-top: 16px;">{colorschema} </div><br/>',
+                                        '<p><b>Kit:</b> {materialboxname}</p>',
                                         '<p><b>Grupo:</b> {itemgroupdescription}</p>',
                                         '<p><b>Status:</b> {materialstatusdescription}</p>',
-                                        '<p><b>Kit:</b> {materialboxname}</p>',
                                         '<p><b>Embalagem:</b> {packingname}</p>',
                                         '<p><b style="color: red;">Proprietario:</b> {proprietaryname}</p>',
                                         '<p><b style="color: blue;">Código de Barras:</b> {barcode}</p>',
