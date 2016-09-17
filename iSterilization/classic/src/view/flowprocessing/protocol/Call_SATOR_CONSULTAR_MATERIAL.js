@@ -65,6 +65,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                     'Embalagem:':'',
                                     'Proprietario': ''
                                 });
+
                                 if(portrait) {
                                     portrait.beFileData();
                                 }
@@ -73,6 +74,15 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                 var view = combo.up('window'),
                                     portrait = view.down('portrait'),
                                     materialdetail = view.down('form[name=materialdetail]');
+                                var colorpallet = '',
+                                    colorschema = record.get('colorschema').split(","),
+                                    coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
+
+                                Ext.each(colorschema,function (color) {
+                                    colorpallet += Ext.String.format(coloritem,color);
+                                });
+
+                                record.set('colorschema',colorpallet);
 
                                 materialdetail.update(record.data);
 
@@ -86,27 +96,28 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                         layout: 'hbox',
                         items: [
                             {
-                                flex: 1,
-                                height: 200,
+                                flex: 3,
+                                height: 250,
                                 layout: 'anchor',
                                 xtype: 'form',
                                 name: 'materialdetail',
                                 tpl: [
-                                    '<div style="font-size: 16px; font-family: Monda;">',
+                                    '<div style="font-size: 14px; font-family: Monda;">',
+                                        '<div style="margin-top: 16px;">{colorschema} </div><br/>',
                                         '<p><b>Grupo:</b> {itemgroupdescription}</p>',
                                         '<p><b>Status:</b> {materialstatusdescription}</p>',
                                         '<p><b>Kit:</b> {materialboxname}</p>',
                                         '<p><b>Embalagem:</b> {packingname}</p>',
                                         '<p><b style="color: red;">Proprietario:</b> {proprietaryname}</p>',
-                                        '<p><b style="color: blue; font-size: 22px;">Código de Barras:</b> {barcode}</p>',
+                                        '<p><b style="color: blue;">Código de Barras:</b> {barcode}</p>',
                                     '</div>'
                                 ]
                             }, {
                                 xtype: 'splitter'
                             }, {
+                                flex: 2,
                                 height: 200,
-                                margin: '20 0 0 0',
-                                flex: 1,
+                                margin: '16 0 0 0',
                                 hideButtons: true,
                                 xtype: 'portrait'
                             }
