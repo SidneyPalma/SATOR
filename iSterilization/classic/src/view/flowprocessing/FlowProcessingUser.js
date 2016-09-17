@@ -11,6 +11,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
+    controller: 'flowprocessing',
+
     width: 300,
     modal: true,
     layout: 'fit',
@@ -18,11 +20,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
     resizable: false,
     showAnimate: true,
 
-    controller: 'flowprocessing',
-
     listeners: {
         selectusercode: 'onSelectUserCode'
-
     },
 
     doCallBack: Ext.emptyFn,

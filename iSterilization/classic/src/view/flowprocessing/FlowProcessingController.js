@@ -968,10 +968,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	callSATOR_RELATAR_USA_EPI: function () {
         var me = this,
             view = me.getView();
+
         Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
             this.master = view;
             this.down('textfield[name=userprotected]').focus(false,200);
         });
+
     },
 
     relatarUsaEPI: function () {
