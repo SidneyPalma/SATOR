@@ -932,9 +932,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_RELATAR_USA_EPI':
                 me.callSATOR_RELATAR_USA_EPI();
                 break;
-            case 'SATOR_INICIAR_LEITURA':
-                me.callSATOR_INICIAR_LEITURA();
-                break;
+            // case 'SATOR_INICIAR_LEITURA':
+            //     me.callSATOR_INICIAR_LEITURA();
+            //     break;
             case 'SATOR_ENCERRAR_LEITURA':
                 me.callSATOR_ENCERRAR_LEITURA();
                 break;
@@ -973,7 +973,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.master = view;
             this.down('textfield[name=userprotected]').focus(false,200);
         });
-
     },
 
     relatarUsaEPI: function () {

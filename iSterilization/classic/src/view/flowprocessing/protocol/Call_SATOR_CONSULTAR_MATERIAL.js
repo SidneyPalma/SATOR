@@ -51,21 +51,51 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                         fieldLabel: 'Material',
                         xtype: 'searchmaterial',
                         hiddenNameId: 'materialid',
-                        name: 'materialname'
+                        name: 'materialname',
+                        listeners: {
+                            select: function (combo,record,eOpts) {
+                                var view = combo.up('window'),
+                                    portrait = view.down('portrait'),
+                                    materialdetail = view.down('form[name=materialdetail]');
+
+                                materialdetail.update(record.data);
+
+                                if(portrait) {
+                                    portrait.beFileData(record.get('filetype'));
+                                }
+                            },
+                            deselect: function (combo,record,eOpts) {
+                                var materialdetail = combo.up('window').down('form[name=materialdetail]');
+                                materialdetail.update('');
+                            }
+                        }
                     }, {
                         xtype: 'panel',
                         layout: 'hbox',
                         items: [
                             {
-                                flex: 2
+                                flex: 2,
+                                height: 200,
+                                layout: 'anchor',
+                                xtype: 'form',
+                                name: 'materialdetail',
+                                tpl: [
+                                    '<div style="font-size: 16px; font-family: Monda;">',
+                                        '<p><b>Grupo:</b> {itemgroupdescription}</p>',
+                                        '<p><b>Status:</b> {materialstatusdescription}</p>',
+                                        '<p><b>Kit:</b> {materialboxname}</p>',
+                                        '<p><b>Embalagem:</b> {packingname}</p>',
+                                        '<p><b style="color: red;">Proprietario:</b> {proprietaryname}</p>',
+                                    '</div>'
+                                ]
                             }, {
                                 xtype: 'splitter'
                             }, {
-                                flex: 1
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1
+                                height: 200,
+                                margin: '20 0 0 0',
+                                flex: 2,
+                                hideButtons: true,
+                                xtype: 'portrait'
                             }
                         ]
                     }
