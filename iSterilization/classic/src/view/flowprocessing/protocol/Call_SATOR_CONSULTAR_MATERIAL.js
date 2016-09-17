@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 550,
+    width: 650,
     modal: true,
     layout: 'fit',
     header: false,
@@ -53,6 +53,22 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                         hiddenNameId: 'materialid',
                         name: 'materialname',
                         listeners: {
+                            showclear: function (combo) {
+                                var view = combo.up('window'),
+                                    portrait = view.down('portrait'),
+                                    materialdetail = view.down('form[name=materialdetail]');
+
+                                materialdetail.update({
+                                    'Grupo:': '',
+                                    'Status:':'',
+                                    'Kit:':'',
+                                    'Embalagem:':'',
+                                    'Proprietario': ''
+                                });
+                                if(portrait) {
+                                    portrait.beFileData();
+                                }
+                            },
                             select: function (combo,record,eOpts) {
                                 var view = combo.up('window'),
                                     portrait = view.down('portrait'),
@@ -63,10 +79,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                 if(portrait) {
                                     portrait.beFileData(record.get('filetype'));
                                 }
-                            },
-                            deselect: function (combo,record,eOpts) {
-                                var materialdetail = combo.up('window').down('form[name=materialdetail]');
-                                materialdetail.update('');
                             }
                         }
                     }, {
@@ -74,7 +86,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                         layout: 'hbox',
                         items: [
                             {
-                                flex: 2,
+                                flex: 1,
                                 height: 200,
                                 layout: 'anchor',
                                 xtype: 'form',
@@ -86,6 +98,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                         '<p><b>Kit:</b> {materialboxname}</p>',
                                         '<p><b>Embalagem:</b> {packingname}</p>',
                                         '<p><b style="color: red;">Proprietario:</b> {proprietaryname}</p>',
+                                        '<p><b style="color: blue; font-size: 22px;">Código de Barras:</b> {barcode}</p>',
                                     '</div>'
                                 ]
                             }, {
@@ -93,7 +106,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                             }, {
                                 height: 200,
                                 margin: '20 0 0 0',
-                                flex: 2,
+                                flex: 1,
                                 hideButtons: true,
                                 xtype: 'portrait'
                             }
