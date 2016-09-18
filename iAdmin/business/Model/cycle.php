@@ -21,6 +21,12 @@ class cycle extends \Smart\Data\Model {
     private $name;
 
     /**
+     * @Policy {"nullable":false, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $barcode;
+
+    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -79,6 +85,22 @@ class cycle extends \Smart\Data\Model {
      */
     public function setName($name) {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getBarcode() {
+        return $this->barcode;
+    }
+
+    /**
+     * @param type $barcode
+     * @return \iAdmin\Model\cycle
+     */
+    public function setBarcode($barcode) {
+        $this->barcode = $barcode;
         return $this;
     }
 

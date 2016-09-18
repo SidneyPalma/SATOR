@@ -241,6 +241,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     areaProtocol: function (value) {
         var me = this;
 //SATOR_ENCERRAR_LEITURA
+//Equipamento: SATOR-E005 (Termodesinfectora)
         switch(value) {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();

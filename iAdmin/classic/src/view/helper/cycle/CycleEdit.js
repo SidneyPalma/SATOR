@@ -16,7 +16,7 @@ Ext.define( 'iAdmin.view.helper.cycle.CycleEdit', {
 
     constrain: true,
 
-    width: 450,
+    width: 550,
     resizable: false,
     showAnimate: true,
     layout: 'fit',
@@ -57,9 +57,25 @@ Ext.define( 'iAdmin.view.helper.cycle.CycleEdit', {
                         cls: 'sub-title-label',
                         text: 'Ciclo'
                     }, {
-                        xtype: 'textfield',
-                        name: 'name',
-                        fieldLabel: 'Nome'
+                        xtype: 'container',
+                        layout: 'hbox',
+                        defaultType: 'textfield',
+                        defaults: {
+                            allowBlank: false
+                        },
+                        items: [
+                            {
+                                flex: 2,
+                                margin: '0 5 0 0',
+                                name: 'name',
+                                fieldLabel: 'Nome'
+                            }, {
+                                flex: 1,
+                                margin: '0 0 0 5',
+                                name: 'barcode',
+                                fieldLabel: 'Código de Barra'
+                            }
+                        ]
                     }, {
                         xtype: 'container',
                         layout: 'hbox',
@@ -69,25 +85,36 @@ Ext.define( 'iAdmin.view.helper.cycle.CycleEdit', {
                         },
                         items: [
                             {
+                                flex: 2,
+                                margin: '0 5 0 0',
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    allowBlank: false
+                                },
+                                items: [
+                                    {
+                                        flex: 1,
+                                        name: 'duration',
+                                        fieldLabel: 'Duração',
+                                        plugins: 'textmask',
+                                        mask: 'Min #0,00',
+                                        money: true
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 1,
+                                        name: 'temperature',
+                                        fieldLabel: 'Temperatura',
+                                        plugins: 'textmask',
+                                        mask: 'ºC #0,00',
+                                        money: true
+                                    }
+                                ]
+                            }, {
                                 flex: 1,
-                                name: 'duration',
-                                fieldLabel: 'Duração',
-                                plugins: 'textmask',
-                                mask: 'Min #0,00',
-                                money: true
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
-                                name: 'temperature',
-                                fieldLabel: 'Temperatura',
-                                plugins: 'textmask',
-                                mask: 'ºC #0,00',
-                                money: true
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
+                                margin: '0 0 0 5',
                                 name: 'timetoopen',
                                 fieldLabel: 'Abertura',
                                 plugins: 'textmask',
