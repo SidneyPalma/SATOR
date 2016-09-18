@@ -242,6 +242,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this;
 //SATOR_ENCERRAR_LEITURA
 //Equipamento: SATOR-E005 (Termodesinfectora)
+//Ciclo: SATOR-C006 (Termo instrumental)
         switch(value) {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
@@ -285,6 +286,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         Ext.widget('call_SATOR_VALIDA_CARGA').show(null,function () {
             this.master = view;
+            this.down('textfield[name=equipmentname]').focus(false,200);
         });
     },
 
@@ -777,78 +779,168 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
+    onReaderEquipment: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            value = field.getValue();
 
-    //SATOR_VALIDA_CARGA
-    onBeforeQueryEquipment: function (queryPlan, eOpts) {
-        var combo = queryPlan.combo;
+        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+            e.stopEvent();
 
-        delete combo.lastQuery;
-        combo.store.removeAll();
-        queryPlan.query = Smart.workstation.areasid;
+            if(!value || value.length == 0) {
+                return false;
+            }
+
+            Ext.Ajax.request({
+                url: me.url,
+                params: {
+                    action: 'select',
+                    method: 'selectEquipment',
+                    barcode: field.getValue(),
+                    areasid: Smart.workstation.areasid
+                },
+                callback: function (options, success, response) {
+                    var result = Ext.decode(response.responseText);
+
+                    if (success && result.success) {
+                        field.setValue(result.rows.equipmentname);
+                        view.down('gridpanel').getStore().removeAll();
+                        view.down('textfield[name=cyclename]').reset();
+                        view.down('textfield[name=cyclename]').setReadColor(false);
+                        view.down('textfield[name=materialboxname]').reset();
+                        view.down('textfield[name=materialboxname]').setReadColor(true);
+                        view.down('hiddenfield[name=equipmentid]').setValue(result.rows.id);
+                        view.down('textfield[name=cyclename]').focus(false,200);
+                    }
+
+                }
+            });
+        }
     },
 
     onShowClearEquipment: function (field,eOpts) {
         var me = this,
             view = me.getView();
 
-        view.down('searchcycle').reset();
-        view.down('searchcycle').store.removeAll();
-        view.down('searchcycle').setReadColor(true);
+        view.down('hiddenfield[name=equipmentid]').reset();
+        view.down('textfield[name=equipmentname]').reset();
+
+        view.down('textfield[name=cyclename]').reset();
+        view.down('hiddenfield[name=equipmentcycleid]').reset();
+        view.down('textfield[name=cyclename]').setReadColor(true);
+        view.down('textfield[name=materialboxname]').reset();
+        view.down('textfield[name=materialboxname]').setReadColor(true);
         view.down('gridpanel').getStore().removeAll();
     },
 
-    onSelectEquipment: function (combo,record,eOpts) {
-        var me = this,
-            view = me.getView();
-
-        me.onShowClearEquipment();
-        view.down('searchcycle').setReadColor(false);
-    },
-
-    onBeforeQueryCycle: function (queryPlan, eOpts) {
+    onReaderCycle: function (field, e, eOpts) {
         var me = this,
             view = me.getView(),
-            combo = queryPlan.combo,
+            value = field.getValue(),
             equipmentid = view.down('hiddenfield[name=equipmentid]');
 
-        delete combo.lastQuery;
-        combo.store.removeAll();
-        queryPlan.query = equipmentid.getValue();
-    },
+        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+            e.stopEvent();
 
-    onSelectCycle: function (combo,record,eOpts) {
-        var me = this,
-            view = me.getView(),
-            store = view.down('gridpanel').getStore(),
-            duration = view.down('hiddenfield[name=duration]'),
-            timetoopen = view.down('hiddenfield[name=timetoopen]'),
-            temperature = view.down('hiddenfield[name=temperature]');
+            if(!value || value.length == 0) {
+                return false;
+            }
 
-        duration.setValue(record.get('duration'));
-        timetoopen.setValue(record.get('timetoopen'));
-        temperature.setValue(record.get('temperature'));
+            Ext.Ajax.request({
+                url: me.url,
+                params: {
+                    action: 'select',
+                    method: 'selectCycleList',
+                    barcode: field.getValue(),
+                    equipmentid: equipmentid.getValue()
+                },
+                callback: function (options, success, response) {
+                    var result = Ext.decode(response.responseText);
 
-        store.removeAll();
-        store.setParams({
-            action: 'select',
-            method: 'selectCharge',
-            areasid: Smart.workstation.areasid,
-            equipmentcycleid: record.get('id'),
-            equipmentid: record.get('equipmentid')
-        }).load();
+                    if (success && result.success) {
+                        field.setValue(result.rows.cyclename);
+                        view.down('gridpanel').getStore().removeAll();
+                        view.down('textfield[name=materialboxname]').setReadColor(false);
+                        view.down('hiddenfield[name=equipmentcycleid]').setValue(result.rows.id);
+
+                        view.down('hiddenfield[name=duration]').setValue(result.rows.duration);
+                        view.down('hiddenfield[name=timetoopen]').setValue(result.rows.timetoopen);
+                        view.down('hiddenfield[name=temperature]').setValue(result.rows.temperature);
+
+                        view.down('textfield[name=materialboxname]').focus(false,200);
+                    }
+
+                }
+            });
+        }
     },
 
     onShowClearCycle: function (field,eOpts) {
         var me = this,
-            view = me.getView(),
-            duration = view.down('hiddenfield[name=duration]'),
-            timetoopen = view.down('hiddenfield[name=timetoopen]'),
-            temperature = view.down('hiddenfield[name=temperature]');
+            view = me.getView();
 
-        duration.reset();
-        timetoopen.reset();
-        temperature.reset();
         view.down('gridpanel').getStore().removeAll();
+        view.down('hiddenfield[name=duration]').reset();
+        view.down('hiddenfield[name=timetoopen]').reset();
+        view.down('hiddenfield[name=temperature]').reset();
+        view.down('textfield[name=materialboxname]').reset();
+        view.down('textfield[name=materialboxname]').setReadColor(true);
+    },
+
+    onReaderMaterialBoxName: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            value = field.getValue(),
+            store = view.down('gridpanel').getStore(),
+            equipmentid = view.down('hiddenfield[name=equipmentid]'),
+            equipmentcycleid = view.down('hiddenfield[name=equipmentcycleid]');
+
+        if(!form.isValid()){
+            return false;
+        }
+        
+        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+            e.stopEvent();
+
+            field.reset();
+
+            if (!value || value.length == 0) {
+                return false;
+            }
+
+            Ext.Ajax.request({
+                url: me.url,
+                params: {
+                    action: 'select',
+                    method: 'selectCycleItem',
+                    barcode: value,
+                    areasid: Smart.workstation.areasid,
+                    equipmentid: equipmentid.getValue(),
+                    equipmentcycleid: equipmentcycleid.getValue()
+                },
+                callback: function (options, success, response) {
+                    var result = Ext.decode(response.responseText);
+
+                    if (success && result.success) {
+                        var find = store.findRecord('barcode',result.rows.barcode);
+
+                        if(find) {
+                            Smart.ion.sound.play("computer_error");
+                            Smart.Msg.showToast('O material/kit <b>já encontra-se lançado</b> no lote atual!');
+                            return false;
+                        }
+
+                        store.add(result.rows);
+                        Smart.ion.sound.play("button_tiny");
+                        return false;
+                    }
+
+                    Smart.ion.sound.play("computer_error");
+                    Smart.Msg.showToast('O material/kit <b>não foi encontrado</b> entre os processos atuais!');
+                }
+            });
+        }
     },
 
     onStartReaderUnconformities: function (field, e, eOpts) {
@@ -1507,7 +1599,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
             }
         );
-
     },
 
     onShowClearSearchElement: function () {
@@ -2139,12 +2230,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    setAuthorize: function(grid, rowIndex, colIndex) {
-        var record = grid.getStore().getAt(rowIndex);
+    setDeleteChargeItem: function(grid, rowIndex, colIndex) {
+        var store = grid.getStore(),
+            record = store.getAt(rowIndex);
 
-        record.set('haspending',!record.get('haspending'));
-        record.commit();
+        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    store.remove(record);
+                }
+            }
+        );
     },
+
     // Autorizar Quebra de Fluxo
     setAuthorizeList: function () {
         var me = this,
@@ -2158,22 +2256,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     item.set('authorizedby', rows.username);
                     kont += item.store.sync({async: false}) ? 1 : 0;
                 });
-                if (kont == list.length) {
-                    Smart.ion.sound.play("button_tiny");
-                    Ext.getStore('flowprocessingstepaction').load();
-                    view.master.down('dataview[name=flowprocessingsteptask]').store.load();
-                    view.close();
-                }
-                return (kont == list.length);
+
+                Smart.ion.sound.play("button_tiny");
+                Ext.getStore('flowprocessingstepaction').load();
+                view.master.down('dataview[name=flowprocessingsteptask]').store.load();
+                view.close();
+
+                return (kont != 0);
             };
 
-        store.each(function(record) {
-            if(record.get('haspending')) {
-                list.push(record);
-            }
-        });
-
-        if (list.length == 0 || (store.getCount() != list.length)) {
+        if (store.getCount() == 0) {
             Smart.ion.sound.play("computer_error");
             Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
             return false;
@@ -2198,10 +2290,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     data = view.down('form').getValues();
 
                 data.action = 'select';
+                data.list = Ext.encode(list);
                 data.username = rows.username;
                 data.method = 'setValidaCargaLista';
                 data.areasid = Smart.workstation.areasid;
-                data.list = Ext.encode(list);
 
                 Ext.Ajax.request({
                     scope: me,
@@ -2214,7 +2306,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         if (!success || !result.success) {
                             Smart.ion.sound.play("computer_error");
                             back = false;
-                            Smart.Msg.showToast('Este processo não foi executado com sucesso!','info');
+                            Smart.Msg.showToast('O processo não foi executado com sucesso!','info');
                         }
                     }
                 });
@@ -2229,14 +2321,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             };
 
         store.each(function(record) {
-            if(record.get('haspending')) {
-                list.push(record.data);
-            }
+            list.push(record.data);
         });
 
-        if (list.length == 0 || (store.getCount() != list.length)) {
+        if (store.getCount() == 0) {
             Smart.ion.sound.play("computer_error");
-            Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
+            Smart.Msg.showToast('O processo requer selecionar antes de prosseguir!','info');
             return false;
         }
 

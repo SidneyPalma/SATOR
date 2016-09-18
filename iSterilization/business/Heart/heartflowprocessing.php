@@ -860,6 +860,192 @@ class heartflowprocessing extends \Smart\Data\Proxy {
      * Select
      */
 
+    public function selectEquipment(array $data) {
+        $areasid = $data['areasid'];
+        $barcode = $data['barcode'];
+
+        $sql = "
+            declare
+                @areasid int = :areasid,
+                @barcode varchar(20) = :barcode;
+            
+            select distinct
+                ib.id,
+                ib.name as equipmentname
+            from
+                equipment e
+                inner join itembase ib on ( ib.id = e.id )
+                inner join equipmentcycle ec on ( ec.equipmentid = ib.id )
+                inner join cmesubareas csa on ( csa.cmeareasid = e.cmeareasid )
+                inner join cmeareas ca on ( ca.id = csa.cmeareasid )
+            where csa.id = @areasid
+              and ib.barcode = @barcode
+              and ec.id not in ( 
+                    select
+                        fpc.equipmentcycleid
+                    from
+                        flowprocessingcharge fpc
+                    where fpc.equipmentcycleid = ec.id
+                      and fpc.chargeflag = '001'
+               )";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setSuccess(count($rows) != 0);
+
+            if(count($rows) != 0) {
+                self::_setRows($rows[0]);
+            }
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectCycleList(array $data) {
+        $barcode = $data['barcode'];
+        $equipmentid = $data['equipmentid'];
+
+        $sql = "
+            declare
+                @equipmentid int = :equipmentid,
+				@barcode varchar(20) = :barcode;
+
+            select
+                ec.id, 
+                c.name as cyclename, 
+                c.duration,                 
+                c.timetoopen,
+                c.temperature,
+                ec.equipmentid
+            from
+                equipmentcycle ec
+                inner join cycle c on ( c.id = ec.cycleid )
+            where c.barcode = @barcode
+              and ec.equipmentid = @equipmentid";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->bindValue(":equipmentid", $equipmentid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setSuccess(count($rows) != 0);
+
+            if(count($rows) != 0) {
+                self::_setRows($rows[0]);
+            }
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectCycleItem(array $data) {
+        $areasid = $data['areasid'];
+        $barcode = $data['barcode'];
+        $equipmentid = $data['equipmentid'];
+        $equipmentcycleid = $data['equipmentcycleid'];
+
+        $sql = "
+            declare
+                @areasid int = :areasid,
+                @equipmentid int = :equipmentid,
+                @barcode varchar(20) = :barcode,
+                @equipmentcycleid int = :equipmentcycleid;
+            
+            select distinct
+                fpci.id,
+                fpsa.flowprocessingstepid,
+                fpci.flowprocessingchargeid,
+				t.barcode,
+                t.equipmentid,
+                t.materialname
+            from
+                flowprocessingstep fps
+                inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )
+                left join flowprocessingchargeitem fpci on ( fpci.flowprocessingstepid = fps.id )
+                cross apply (
+                    select
+						fp.barcode,
+                        a.equipmentid,
+                        a.elementname,
+                        coalesce(ta.name,tb.name) as materialname
+                    from
+						flowprocessing fp
+						inner join flowprocessingstep a on ( a.flowprocessingid = fp.id )
+                        inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid and ec.id = @equipmentcycleid )
+                        inner join materialcycle mc on ( mc.cycleid = ec.cycleid )
+						inner join itembase ib on ( ib.id = mc.materialid )
+                        outer apply (
+                            select
+                                mb.name
+                            from
+                                materialbox mb
+                            where mb.id = fp.materialboxid
+                        ) ta
+                        outer apply (
+                            select top 1
+                                ib.name
+                            from
+                                flowprocessingstepmaterial b
+                                inner join itembase ib on ( ib.id = b.materialid )
+                            where b.flowprocessingstepid = a.id
+                        ) tb
+                    where a.flowprocessingid = fps.flowprocessingid
+                      and a.id = fps.target
+                      and a.equipmentid = @equipmentid
+					  and ( ib.barcode = @barcode or fp.barcode = @barcode )
+                ) t
+            where fps.areasid = @areasid
+              and fpsa.flowstepaction = '001'
+              and fps.stepflaglist like '%016%'
+              and not exists (
+                  select
+                      a.id
+                  from
+                      flowprocessingchargeitem a
+                      inner join flowprocessingcharge b on ( b.id = a.flowprocessingchargeid )
+                  where a.flowprocessingstepid = fps.id
+                    and a.chargestatus = '001'
+                    and b.chargeflag = '001'
+            )";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->bindValue(":equipmentid", $equipmentid, \PDO::PARAM_INT);
+            $pdo->bindValue(":equipmentcycleid", $equipmentcycleid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setSuccess(count($rows) != 0);
+
+            if(count($rows) != 0) {
+                self::_setRows($rows[0]);
+            }
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectAreaStep(array $data) {
         $query = $data['query'];
 

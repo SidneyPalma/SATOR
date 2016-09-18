@@ -34,12 +34,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
         me.items = [
             {
                 xtype: 'form',
-                plugins:'formenter',
+                // plugins:'formenter',
                 bodyPadding: 10,
                 layout: 'anchor',
                 margin: '10 0 0 0',
+                defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
+                    showClear: true,
                     allowBlank: false,
                     fieldCls: 'smart-field-style-action'
                     // labelCls: 'smart-field-style-action'
@@ -59,31 +61,47 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                         xtype: 'hiddenfield',
                         name: 'timetoopen'
                     }, {
+                        xtype: 'hiddenfield',
+                        name: 'equipmentid'
+                    }, {
+                        xtype: 'hiddenfield',
+                        name: 'equipmentcycleid'
+                    }, {
                         margin: '20 0 0 0',
                         showClear: true,
                         useUpperCase: true,
-                        fieldLabel: 'Equipamento',
-                        xtype: 'searchequipment',
-                        hiddenNameId: 'equipmentid',
                         name: 'equipmentname',
+                        fieldLabel: 'Equipamento',
+                        //SATOR_VALIDA_CARGA
+                        //Equipamento: SATOR-E005 (Termodesinfectora)
+                        //Ciclo: SATOR-C006 (Termo instrumental)
+                        //Material: C0003669 P201609000001
                         listeners: {
-                            select: 'onSelectEquipment',
-                            showclear: 'onShowClearEquipment',
-                            beforequery: 'onBeforeQueryEquipment'
+                            specialkey: 'onReaderEquipment',
+                            showclear: 'onShowClearEquipment'
                         }
                     }, {
+                        showClear: true,
+                        useUpperCase: true,
                         useReadColor: true,
-                        fieldLabel: 'Ciclo',
-                        hiddenNameId: 'equipmentcycleid',
-                        xtype: 'searchcycle',
                         name: 'cyclename',
+                        fieldLabel: 'Ciclo',
                         listeners: {
-                            select: 'onSelectCycle',
-                            showclear: 'onShowClearCycle',
-                            beforequery: 'onBeforeQueryCycle'
+                            specialkey: 'onReaderCycle',
+                            showclear: 'onShowClearCycle'
                         }
                     }, {
-                        height: 250,
+                        fieldLabel: 'Consulta',
+                        allowBlank: true,
+                        xtype: 'textfield',
+                        useUpperCase: true,
+                        useReadColor: true,
+                        name: 'materialboxname',
+                        listeners: {
+                            specialkey: 'onReaderMaterialBoxName'
+                        }
+                    }, {
+                        height: 200,
                         xtype: 'gridpanel',
                         cls: 'update-grid',
 
@@ -99,7 +117,13 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                                 name: 'id',
                                 type: 'int'
                             }, {
-                                name: 'elementname',
+                                name: 'barcode',
+                                type: 'auto'
+                            }, {
+                                name: 'flowprocessingstepid',
+                                type: 'int'
+                            }, {
+                                name: 'materialname',
                                 type: 'auto'
                             }
                         ],
@@ -113,12 +137,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                                 sortable: false,
                                 dataIndex: 'haspending',
                                 xtype: 'actioncolumn',
-                                handler: 'setAuthorize',
+                                handler: 'setDeleteChargeItem',
                                 getTip: function(v, meta, rec) {
-                                    return rec.data.haspending ? 'Cancelar ação!' : 'Autorizar quebra de fluxo!';
+                                    return 'Remover permissão do menu!';
                                 },
                                 getClass: function(v, meta, rec) {
-                                    return rec.data.haspending ? "fa fa-thumbs-up action-insert-color-font" : "fa fa-hand-paper-o action-delete-color-font";
+                                    return "fa fa-minus-circle action-delete-color-font";
                                 }
                             }
                         ]
