@@ -1310,7 +1310,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 fps.username,
                 fp.dateof,
                 st.validity as days,
-                c.name as cyclename,
                 dateadd(day,st.validity,fp.dateof) as validity,
                 coalesce(mb.name,t.materialname) as materialboxname,
                 entityname = ( select top 1 name from entity ),
@@ -1321,7 +1320,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 left join materialbox mb on ( mb.id = fp.materialboxid )
 				inner join equipmentcycle ec on ( ec.equipmentid = fps.equipmentid )
-				inner join cycle c on ( c.id = ec.cycleid )
 				inner join flowprocessingcharge fpc on ( fpc.equipmentcycleid =  ec.id )
                 cross apply (
                     select top 1
@@ -1345,7 +1343,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $proprietaryname = $rows[0]['proprietaryname'];
             $dateof = $rows[0]['dateof'];
             $username = $rows[0]['username'];
-            $cyclename = $rows[0]['cyclename'];
             $sterilizationtypename = $rows[0]['sterilizationtypename'];
             $validity = $rows[0]['validity'];
             $days = $rows[0]['days'];
@@ -1361,13 +1358,12 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     ^FO420,050^FD$proprietaryname^FS
                     ^FO70,080^FDPREPARADO EM: $dateof^FS
                     ^FO70,110^FDOP: $username^FS
-                    ^FO70,140^FDCICOO: $cyclename^FS
-                    ^FO70,170^FDPROCESSO: $sterilizationtypename^FS
-                    ^FO70,200^FDVALIDADE: $validity ($days)^FS
-                    ^FO130,230^FDVIDE ETIQUETA DE LOTE^FS
-                    ^FO70,260^FDMATERIAL: $materialboxname ($quantity itens)^FS
-                    ^FO260,290^BXN,3,200^FD$barcode^FS^
-                    ^FO70,315^FD$barcode^FS^
+                    ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
+                    ^FO70,170^FDVALIDADE: $validity ($days)^FS
+                    ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
+                    ^FO70,230^FDMATERIAL: $materialboxname ($quantity itens)^FS
+                    ^FO260,260^BXN,3,200^FD$barcode^FS^
+                    ^FO70,290^FD$barcode^FS^
                     ^XZ";
 
                 printer_set_option($ph, PRINTER_MODE, "RAW");
