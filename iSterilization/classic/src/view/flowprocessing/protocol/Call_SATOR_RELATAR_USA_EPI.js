@@ -1,7 +1,7 @@
 //@charset UTF-8
 Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_EPI', {
     extend: 'Ext.window.Window',
-
+    
     xtype: 'call_SATOR_RELATAR_USA_EPI',
 
     requires: [
@@ -11,6 +11,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
+    controller: 'flowprocessing',
+
     width: 450,
     modal: true,
     layout: 'fit',
@@ -18,7 +20,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
     resizable: false,
     showAnimate: true,
 
-    controller: 'flowprocessing',
+    doCallBack: Ext.emptyFn,
 
     initComponent: function () {
         var me = this;

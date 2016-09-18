@@ -17,6 +17,9 @@ Ext.define( 'iAdmin.model.helper.Cycle', {
             name: 'name',
             type: 'auto'
         }, {
+            name: 'barcode',
+            type: 'auto'
+        }, {
             name: 'description',
             type: 'auto'
         }, {

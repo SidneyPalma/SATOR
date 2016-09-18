@@ -240,7 +240,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     areaProtocol: function (value) {
         var me = this;
-
+//SATOR_ENCERRAR_LEITURA
+//Equipamento: SATOR-E005 (Termodesinfectora)
         switch(value) {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
@@ -932,9 +933,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_RELATAR_USA_EPI':
                 me.callSATOR_RELATAR_USA_EPI();
                 break;
-            case 'SATOR_INICIAR_LEITURA':
-                me.callSATOR_INICIAR_LEITURA();
-                break;
+            // case 'SATOR_INICIAR_LEITURA':
+            //     me.callSATOR_INICIAR_LEITURA();
+            //     break;
             case 'SATOR_ENCERRAR_LEITURA':
                 me.callSATOR_ENCERRAR_LEITURA();
                 break;
@@ -968,6 +969,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	callSATOR_RELATAR_USA_EPI: function () {
         var me = this,
             view = me.getView();
+
         Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
             this.master = view;
             this.down('textfield[name=userprotected]').focus(false,200);
