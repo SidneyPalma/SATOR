@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARAR_LOTE_CUBA', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARA_LOTE_AVULSO', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_SATOR_PREPARAR_LOTE_CUBA',
+    xtype: 'call_SATOR_PREPARA_LOTE_AVULSO',
 
     requires: [
         'Ext.form.Panel',
@@ -32,13 +32,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARAR_LOT
         me.items = [
             {
                 xtype: 'form',
-                plugins:'formenter',
+                // plugins:'formenter',
                 bodyPadding: 10,
                 layout: 'anchor',
                 margin: '10 0 0 0',
                 defaults: {
                     anchor: '100%',
-                    allowBlank: false,
                     fieldCls: 'smart-field-style-action'
                     // labelCls: 'smart-field-style-action'
                 },
@@ -46,25 +45,23 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARAR_LOT
                     {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Preparar Lote'
-                    }, {
-                        xtype: 'hiddenfield',
-                        name: 'equipmentid'
+                        text: 'Prepara lote avulso'
                     }, {
                         margin: '20 0 0 0',
-                        showClear: true,
-                        fieldLabel: 'Equipamento',
+                        fieldLabel: 'Consulta',
                         xtype: 'textfield',
-                        name: 'equipmentname',
+                        useUpperCase: true,
+                        name: 'materialboxname',
                         listeners: {
-                            showclear: 'onShowClearEquipment'
+                            specialkey: 'onReaderMaterialBoxName'
                         }
                     }, {
-                        height: 250,
+                        height: 300,
                         xtype: 'gridpanel',
                         cls: 'update-grid',
 
-                        url: '../iSterilization/business/Calls/flowprocessing.php',
+                        // url: '../iSterilization/business/Calls/flowprocessing.php',
+                        url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
                         params: {
                             action: 'select',
@@ -76,10 +73,17 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARAR_LOT
                                 name: 'id',
                                 type: 'int'
                             }, {
+                                name: 'barcode',
+                                type: 'auto'
+                            }, {
+                                name: 'flowprocessingstepid',
+                                type: 'int'
+                            }, {
                                 name: 'materialname',
                                 type: 'auto'
                             }
                         ],
+
                         columns: [
                             {
                                 dataIndex: 'materialname',
@@ -90,12 +94,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARAR_LOT
                                 sortable: false,
                                 dataIndex: 'haspending',
                                 xtype: 'actioncolumn',
-                                handler: 'setAuthorize',
+                                handler: 'setDeleteChargeItem',
                                 getTip: function(v, meta, rec) {
-                                    return rec.data.haspending ? 'Cancelar ação!' : 'Autorizar quebra de fluxo!';
+                                    return 'Remover material do menu!';
                                 },
                                 getClass: function(v, meta, rec) {
-                                    return rec.data.haspending ? "fa fa-thumbs-up action-insert-color-font" : "fa fa-hand-paper-o action-delete-color-font";
+                                    return "fa fa-minus-circle action-delete-color-font";
                                 }
                             }
                         ]

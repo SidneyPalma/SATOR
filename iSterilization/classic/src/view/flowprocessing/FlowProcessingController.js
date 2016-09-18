@@ -250,6 +250,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_VALIDA_CARGA':
                 me.callSATOR_VALIDA_CARGA();
                 break;
+            case 'SATOR_PREPARA_LOTE_AVULSO':
+                me.callSATOR_PREPARA_LOTE_AVULSO();
+                break;
             case 'SATOR_CONSULTAR_MATERIAL':
                 me.callSATOR_CONSULTAR_MATERIAL();
                 break;
@@ -257,6 +260,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 Smart.Msg.showToast('Protocolo inválido para esta área');
         }
     },
+
+    callSATOR_PREPARA_LOTE_AVULSO: function () {
+        var me = this;
+        Ext.widget('call_SATOR_PREPARA_LOTE_AVULSO').show(null,function () {
+            this.master = me.getView();
+            this.down('textfield[name=materialboxname]').focus(false,200);
+        });
+    },
+
     // Abrir Novo Processamento/Leitura
     callSATOR_PROCESSAR_ITENS: function () {
         var me = this,
@@ -1046,9 +1058,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_CONSULTAR_MATERIAL':
                 me.callSATOR_CONSULTAR_MATERIAL();
                 break;
-            case 'SATOR_PREPARAR_LOTE_CUBA':
-                me.callSATOR_PREPARAR_LOTE_CUBA();
-                break;
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.callSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
@@ -1769,14 +1778,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.widget('call_SATOR_CONSULTAR_MATERIAL').show(null,function () {
             this.master = me.getView();
             this.down('searchmaterial').focus(false,200);
-        });
-    },
-
-    callSATOR_PREPARAR_LOTE_CUBA: function () {
-        var me = this;
-        Ext.widget('call_SATOR_PREPARAR_LOTE_CUBA').show(null,function () {
-            this.master = me.getView();
-            this.down('textfield[name=equipmentname]').focus(false,200);
         });
     },
 

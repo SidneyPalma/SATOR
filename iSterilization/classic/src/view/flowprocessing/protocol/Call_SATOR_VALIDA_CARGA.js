@@ -93,7 +93,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                     }, {
                         fieldLabel: 'Consulta',
                         allowBlank: true,
-                        xtype: 'textfield',
                         useUpperCase: true,
                         useReadColor: true,
                         name: 'materialboxname',
@@ -105,7 +104,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                         xtype: 'gridpanel',
                         cls: 'update-grid',
 
-                        url: '../iSterilization/business/Calls/flowprocessing.php',
+                        // url: '../iSterilization/business/Calls/flowprocessing.php',
+                        url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
                         params: {
                             action: 'select',
@@ -139,7 +139,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                                 xtype: 'actioncolumn',
                                 handler: 'setDeleteChargeItem',
                                 getTip: function(v, meta, rec) {
-                                    return 'Remover permissão do menu!';
+                                    return 'Remover material do menu!';
                                 },
                                 getClass: function(v, meta, rec) {
                                     return "fa fa-minus-circle action-delete-color-font";
