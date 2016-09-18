@@ -965,30 +965,32 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 @equipmentid int = :equipmentid,
                 @barcode varchar(20) = :barcode,
                 @equipmentcycleid int = :equipmentcycleid;
-            
+
             select distinct
                 fpci.id,
                 fpsa.flowprocessingstepid,
                 fpci.flowprocessingchargeid,
-				t.barcode,
+                t.barcode,
                 t.equipmentid,
                 t.materialname
             from
                 flowprocessingstep fps
                 inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )
+                inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
                 left join flowprocessingchargeitem fpci on ( fpci.flowprocessingstepid = fps.id )
                 cross apply (
-                    select
-						fp.barcode,
+                    select 
+                        fp.barcode,
                         a.equipmentid,
                         a.elementname,
                         coalesce(ta.name,tb.name) as materialname
-                    from
-						flowprocessing fp
-						inner join flowprocessingstep a on ( a.flowprocessingid = fp.id )
+                    from 
+                        flowprocessing fp
+                        inner join flowprocessingstep a on ( a.flowprocessingid = fp.id )
                         inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid and ec.id = @equipmentcycleid )
                         inner join materialcycle mc on ( mc.cycleid = ec.cycleid )
-						inner join itembase ib on ( ib.id = mc.materialid )
+                        inner join itembase ib on ( ib.id = mc.materialid )
+                        inner join flowprocessingstepmaterial c on ( c.flowprocessingstepid = fps.id and c.materialid = ib.id )     
                         outer apply (
                             select
                                 mb.name
@@ -1007,7 +1009,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     where a.flowprocessingid = fps.flowprocessingid
                       and a.id = fps.target
                       and a.equipmentid = @equipmentid
-					  and ( ib.barcode = @barcode or fp.barcode = @barcode )
+                      and ( ib.barcode = @barcode or fp.barcode = @barcode )
                 ) t
             where fps.areasid = @areasid
               and fpsa.flowstepaction = '001'
