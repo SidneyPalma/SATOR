@@ -1319,8 +1319,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 left join materialbox mb on ( mb.id = fp.materialboxid )
-				inner join equipmentcycle ec on ( ec.equipmentid = fps.equipmentid )
-				inner join flowprocessingcharge fpc on ( fpc.equipmentcycleid =  ec.id )
+				--inner join equipmentcycle ec on ( ec.equipmentid = fps.equipmentid )
+				--inner join flowprocessingcharge fpc on ( fpc.equipmentcycleid =  ec.id )
                 cross apply (
                     select top 1
                         ib.name as materialname,
