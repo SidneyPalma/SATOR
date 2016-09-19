@@ -697,6 +697,48 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function setValidaCargaAreas(array $data) {
+        $username = $data['username'];
+
+        $utimestamp = microtime(true);
+        $timestamp = floor($utimestamp);
+        $milliseconds = round(($utimestamp - $timestamp) * 1000000);
+
+        $barcode = substr("L" . date("YmdHis") . $milliseconds,0,20);
+
+        $list = self::jsonToArray($data['list']);
+
+        $charge = new \iSterilization\Coach\flowprocessingcharge();
+        $chargeitem = new \iSterilization\Coach\flowprocessingchargeitem();
+
+        try {
+            $charge->getStore()->getModel()->set('chargeflag','005');
+            $charge->getStore()->getModel()->set('barcode',$barcode);
+            $charge->getStore()->getModel()->set('chargeuser',$username);
+            $result = self::jsonToObject($charge->getStore()->insert());
+
+            while (list(, $item) = each($list)) {
+                extract($item);
+
+                $chargeitem->getStore()->getModel()->set('chargestatus','001');
+                $chargeitem->getStore()->getModel()->set('flowprocessingchargeid',$result->rows->id);
+                $chargeitem->getStore()->getModel()->set('flowprocessingstepid',$flowprocessingstepid);
+                $chargeitem->getStore()->insert();
+            }
+
+            unset($charge);
+            unset($chargeitem);
+
+            self::_setSuccess(true);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function setStatusCiclo(array $data) {
         $id = $data['id'];
         $username = $data['username'];
@@ -1031,6 +1073,56 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
             $pdo->bindValue(":equipmentid", $equipmentid, \PDO::PARAM_INT);
             $pdo->bindValue(":equipmentcycleid", $equipmentcycleid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setSuccess(count($rows) != 0);
+
+            if(count($rows) != 0) {
+                self::_setRows($rows[0]);
+            }
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectCycleLote(array $data) {
+        $areasid = $data['areasid'];
+        $barcode = $data['barcode'];
+
+        $sql = "
+            declare
+                @areasid int = :areasid,
+                @barcode varchar(20) = :barcode;
+
+            select distinct
+                fp.id,
+                fpsm.flowprocessingstepid,
+                fp.barcode,
+                coalesce(tb.name,ib.name) as materialname
+            from
+                flowprocessing fp
+                inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+                inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
+                inner join itembase ib on ( ib.id = fpsm.materialid )
+                outer apply (
+                    select
+                        mb.name
+                    from
+                        materialbox mb
+                    where mb.id = fp.materialboxid
+                ) tb
+            where fps.areasid = @areasid
+              and ( fp.barcode = @barcode or ib.barcode = @barcode )";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 

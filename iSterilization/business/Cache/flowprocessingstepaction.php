@@ -228,7 +228,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                         inner join flowprocessingcharge b on ( b.id = a.flowprocessingchargeid )
                     where a.flowprocessingstepid = fps.id
                       and a.chargestatus = '001'
-                      and b.chargeflag in ('001','002')
+                      and b.chargeflag in ('001','002','005','006')
               )
 
             union all
@@ -378,6 +378,54 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.materialname,
 				t.originplace,
 				t.targetplace			
+
+
+			union all
+
+			select
+				fpc.id,
+				'C' as steptype,
+				fpc.chargedate as dateof, 
+				fpc.barcode,
+				fpc.cyclestartuser as username, 
+				null as stepflaglist,
+				fpc.chargeflag as flowstepaction, 
+				st.name as sterilizationtypename,	
+				st.version,
+				null as flowprocessingid,
+				null as flowprocessingstepid,
+				null as flowprocessingstepactionid,
+				substring(convert(varchar(16), fpc.chargedate, 121),9,8) as timeof,
+				'Lote Avulso' as materialname,
+				fps.elementname as originplace,
+				ta.targetplace,
+				dbo.getLeftPad(2,'0',count(*)) as items
+			from
+				flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
+				inner join flowprocessingchargeitem fpci on ( fpci.flowprocessingstepid = fps.id )
+				inner join flowprocessingcharge fpc on ( fpc.id =  fpci.flowprocessingchargeid )
+				outer apply (
+					select top 1
+						b.elementname as targetplace
+					from
+						flowprocessingstep b
+					where b.id = fps.target
+				) ta
+			where fps.areasid = @areasid
+			  and fpc.chargeflag = '005'
+			group by
+				fpc.id,
+				fpc.chargedate, 
+				fpc.barcode,
+				fpc.cyclestartuser, 
+				fpc.chargeflag, 
+				st.name,
+				st.version,
+				fpc.chargedate,
+				fps.elementname,
+				ta.targetplace
 
             order by 3 desc";
 
