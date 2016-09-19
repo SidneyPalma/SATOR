@@ -837,12 +837,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('hiddenfield[name=equipmentid]').reset();
         view.down('textfield[name=equipmentname]').reset();
 
+        view.down('gridpanel').getStore().removeAll();
         view.down('textfield[name=cyclename]').reset();
         view.down('hiddenfield[name=equipmentcycleid]').reset();
         view.down('textfield[name=cyclename]').setReadColor(true);
         view.down('textfield[name=materialboxname]').reset();
         view.down('textfield[name=materialboxname]').setReadColor(true);
-        view.down('gridpanel').getStore().removeAll();
     },
 
     onReaderCycle: function (field, e, eOpts) {
@@ -897,6 +897,58 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('hiddenfield[name=temperature]').reset();
         view.down('textfield[name=materialboxname]').reset();
         view.down('textfield[name=materialboxname]').setReadColor(true);
+    },
+
+    onReaderMaterialBoxLote: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            value = field.getValue(),
+            store = view.down('gridpanel').getStore();
+
+        if(!form.isValid()){
+            return false;
+        }
+
+        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+            e.stopEvent();
+
+            field.reset();
+
+            if (!value || value.length == 0) {
+                return false;
+            }
+
+            Ext.Ajax.request({
+                url: me.url,
+                params: {
+                    action: 'select',
+                    method: 'selectCycleLote',
+                    barcode: value,
+                    areasid: Smart.workstation.areasid
+                },
+                callback: function (options, success, response) {
+                    var result = Ext.decode(response.responseText);
+
+                    if (success && result.success) {
+                        var find = store.findRecord('barcode',result.rows.barcode);
+
+                        if(find) {
+                            Smart.ion.sound.play("computer_error");
+                            Smart.Msg.showToast('O material/kit <b>já encontra-se lançado</b> no lote atual!');
+                            return false;
+                        }
+
+                        store.add(result.rows);
+                        Smart.ion.sound.play("button_tiny");
+                        return false;
+                    }
+
+                    Smart.ion.sound.play("computer_error");
+                    Smart.Msg.showToast('O material/kit <b>não foi encontrado</b> entre os processos atuais!');
+                }
+            });
+        }
     },
 
     onReaderMaterialBoxName: function (field, e, eOpts) {
@@ -2124,6 +2176,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 case '002':
                     me.callSATOR_RELATAR_CYCLE_STATUS('FINAL',record);
                     break;
+                case '005':
+                    me.callSATOR_RELATAR_CYCLE_STATUS('PRINT',record);
+                    break;
             }
             return false;
         }
@@ -2170,6 +2225,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     break;
                 case 'FINAL':
                     this.down('label').setText('Relatar final de ciclo');
+                    break;
+                case 'PRINT':
+                    this.down('label').setText('Imprimir lote avulso');
                     break;
             }
         });
@@ -2281,6 +2339,65 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    setValidaCargaAreas: function () {
+        var me = this,
+            list = [],
+            view = me.getView(),
+            store = view.down('gridpanel').getStore(),
+            doCallBack = function (rows) {
+                var back = true,
+                    data = view.down('form').getValues();
+
+                data.action = 'select';
+                data.list = Ext.encode(list);
+                data.username = rows.username;
+                data.method = 'setValidaCargaAreas';
+                data.areasid = Smart.workstation.areasid;
+
+                Ext.Ajax.request({
+                    scope: me,
+                    url: me.url,
+                    params: data,
+                    async: false,
+                    callback: function (options, success, response) {
+                        var result = Ext.decode(response.responseText);
+
+                        if (!success || !result.success) {
+                            Smart.ion.sound.play("computer_error");
+                            back = false;
+                            Smart.Msg.showToast('O processo não foi executado com sucesso!','info');
+                        }
+                    }
+                });
+
+                if (back) {
+                    Smart.ion.sound.play("button_tiny");
+                    view.close();
+                    Ext.getStore('flowprocessingstepaction').load();
+                }
+
+                return back;
+            };
+
+        store.each(function(record) {
+            list.push(record.data);
+        });
+
+        if (store.getCount() == 0) {
+            Smart.ion.sound.play("computer_error");
+            Smart.Msg.showToast('O processo requer selecionar antes de prosseguir!','info');
+            return false;
+        }
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
+    },
+    
     setValidaCargaLista: function () {
         var me = this,
             list = [],
@@ -2343,7 +2460,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     relatarStatusCiclo: function () {
         var me = this,
             view = me.getView(),
-            cyclestatus = view.down('hiddenfield[name=cyclestatus]').getValue(),
             doCallBack = function (rows) {
                 var back = true,
                     data = view.xdata.data,
@@ -2354,6 +2470,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 data.method = 'setStatusCiclo';
                 data.cyclestatus = cyclestatus;
                 data.areasid = Smart.workstation.areasid;
+                data.printlocate = Smart.workstation.printlocate;
 
                 Ext.Ajax.request({
                     scope: me,
@@ -2372,9 +2489,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 if (back) {
-                    if(cyclestatus == 'FINAL') {
-                        me.callSATOR_IMPRIMIR_ETIQUETA();
-                    }
+                    // if(['FINAL','PRINT'].indexOf(cyclestatus) != -1) {
+                    //     me.callSATOR_IMPRIMIR_ETIQUETA(cyclestatus);
+                    // }
                     Smart.ion.sound.play("button_tiny");
                     view.close();
                     Ext.getStore('flowprocessingstepaction').load();

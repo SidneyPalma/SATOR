@@ -53,7 +53,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARA_LOTE
                         useUpperCase: true,
                         name: 'materialboxname',
                         listeners: {
-                            specialkey: 'onReaderMaterialBoxName'
+                            specialkey: 'onReaderMaterialBoxLote'
                         }
                     }, {
                         height: 300,
@@ -118,7 +118,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARA_LOTE
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'setValidaCargaLista'
+                click: 'setValidaCargaAreas'
             }
         }, {
             scale: 'medium',

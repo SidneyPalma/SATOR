@@ -48,6 +48,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
                         xtype: 'label',
                         cls: 'title-label',
                         text: 'Status do Ciclo'
+                    }, {
+                        height: 10,
+                        xtype: 'container'
                     }
                 ]
             }
