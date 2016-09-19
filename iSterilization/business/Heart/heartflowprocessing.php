@@ -749,6 +749,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $sql = "
                 declare
                     @id int = :id,
+                    @chargeflag varchar(3) = '002',
                     @username varchar(80) = :username,
                     @cyclestatus varchar(5) = :cyclestatus;
              
@@ -757,21 +758,25 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     update 
                         flowprocessingcharge
                     set
-                        chargeflag = '002',
+                        chargeflag = @chargeflag,
                         cyclestart = getdate(),
                         cyclestartuser = @username
                     where id = @id;
-                end
+                end               
                 
-                if(@cyclestatus = 'FINAL')
-                begin               
+                if((@cyclestatus = 'FINAL') or (@cyclestatus = 'PRINT'))
+                begin                              
+                   
+                    if(@cyclestatus = 'FINAL') set @chargeflag = '003';
+                    if(@cyclestatus = 'PRINT') set @chargeflag = '006';
+                               
                     update 
                         flowprocessingcharge
                     set
-                        chargeflag = '003',
+                        chargeflag = @chargeflag,
                         cyclefinal = getdate(),
                         cyclefinaluser = @username
-                    where id = @id;
+                    where id = @id;                   
                     
                     update 
                         flowprocessingstepmaterial
@@ -795,7 +800,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->bindValue(":cyclestatus", $cyclestatus, \PDO::PARAM_STR);
             $pdo->execute();
 
-            if($cyclestatus == 'FINAL') {
+            if(($cyclestatus == 'FINAL') || ($cyclestatus == 'PRINT')) {
 
                 $sql = "
                     declare
@@ -822,6 +827,12 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 }
 
                 self::_setRows($rows);
+
+                $tagprinter['tagprinter'] = $cyclestatus == 'FINAL' ? '002' : '003';
+
+                $data['stepsettings'] = self::arrayToJson($tagprinter);
+
+                $this->imprimeEtiqueta($data);
             }
 
             self::_setSuccess(true);
@@ -1529,6 +1540,86 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         ^CF0,20
                         ^FO0$pos,080^FD$cyclefinal^FS
                         ^FO0$pos,100^FD$equipmentname ($cyclename)^FS
+                        ^FO0$pos,120^FD$cyclefinaluser^FS
+                        ^XZ";
+
+                    if ($col > 3) {
+                        printer_set_option($ph, PRINTER_MODE, "RAW");
+                        printer_write($ph, $tpl);
+                        printer_close($ph);
+                        $tpl = "";
+                    }
+                    $col = $col > 3 ? 1 : $col;
+                    $pos = ( $col == 1 ) ? 0 : $pos;
+
+                }
+                if ($tpl != "") {
+                    printer_set_option($ph, PRINTER_MODE, "RAW");
+                    printer_write($ph, $tpl);
+                    printer_close($ph);
+                }
+
+            }  else {
+                throw new \PDOException('A impressora não pode ser selecionada corretamente!');
+            }
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+
+    }
+
+    public function imprimeEtiqueta003(array $data) {
+        $id = $data['id'];
+        $printlocate = isset($data['printlocate']) ? $data['printlocate'] : null;
+
+        $ph = $printlocate ? printer_open($printlocate) : null;
+
+        $sql = "
+            declare
+                @id int = :id;
+                 
+            select
+                fpc.barcode,
+                fpc.cyclefinal,
+                fpc.cyclefinaluser
+            from
+                flowprocessingcharge fpc
+                inner join flowprocessingchargeitem fpci on ( fpci.flowprocessingchargeid = fpc.id )
+            where fpc.id = @id";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            if($ph) {
+
+                $col = 1;
+                $pos = 00;
+
+                $tpl = "";
+
+                foreach ($rows as $item) {
+                    $barcode = $item['barcode'];
+                    $cyclefinal = $item['cyclefinal'];
+                    $cyclefinaluser = $item['cyclefinaluser'];
+
+                    $pos += ( $col == 1 ) ? 0 : 280;
+                    $pos = str_pad($pos, 3, '0', STR_PAD_LEFT);
+                    $col++;
+
+                    $tpl .= "
+                        ^XA
+                        ~SD25
+                        ^CF0,23
+                        ^FO0$pos,050^FDLOTE: $barcode^FS
+                        ^CF0,20
+                        ^FO0$pos,080^FD$cyclefinal^FS
                         ^FO0$pos,120^FD$cyclefinaluser^FS
                         ^XZ";
 

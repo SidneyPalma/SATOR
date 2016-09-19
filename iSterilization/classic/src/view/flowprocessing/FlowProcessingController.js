@@ -2176,6 +2176,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 case '002':
                     me.callSATOR_RELATAR_CYCLE_STATUS('FINAL',record);
                     break;
+                case '005':
+                    me.callSATOR_RELATAR_CYCLE_STATUS('PRINT',record);
+                    break;
             }
             return false;
         }
@@ -2222,6 +2225,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     break;
                 case 'FINAL':
                     this.down('label').setText('Relatar final de ciclo');
+                    break;
+                case 'PRINT':
+                    this.down('label').setText('Imprimir lote avulso');
                     break;
             }
         });
@@ -2454,7 +2460,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     relatarStatusCiclo: function () {
         var me = this,
             view = me.getView(),
-            cyclestatus = view.down('hiddenfield[name=cyclestatus]').getValue(),
             doCallBack = function (rows) {
                 var back = true,
                     data = view.xdata.data,
@@ -2465,6 +2470,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 data.method = 'setStatusCiclo';
                 data.cyclestatus = cyclestatus;
                 data.areasid = Smart.workstation.areasid;
+                data.printlocate = Smart.workstation.printlocate;
 
                 Ext.Ajax.request({
                     scope: me,
@@ -2483,9 +2489,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 if (back) {
-                    if(cyclestatus == 'FINAL') {
-                        me.callSATOR_IMPRIMIR_ETIQUETA();
-                    }
+                    // if(['FINAL','PRINT'].indexOf(cyclestatus) != -1) {
+                    //     me.callSATOR_IMPRIMIR_ETIQUETA(cyclestatus);
+                    // }
                     Smart.ion.sound.play("button_tiny");
                     view.close();
                     Ext.getStore('flowprocessingstepaction').load();
