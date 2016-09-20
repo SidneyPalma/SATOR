@@ -380,6 +380,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             callback: function(records, operation, success) {
 
                 if( !success || records.length == 0 || !barcode ) {
+                    if(data.get('stepflaglist').indexOf('011') != -1) {
+                        me.callSATOR_RELATAR_USA_EPI();
+                    }
                     return false;
                 }
 
@@ -389,6 +392,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 if(barcode.indexOf('C') != -1) {
                     me.workReadArea(barcode);
+                }
+
+                if(data.get('stepflaglist').indexOf('011') != -1) {
+                    me.callSATOR_RELATAR_USA_EPI();
                 }
             }
         });
@@ -1880,12 +1887,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * 011 - Exige uso de EPI na Leitura de Entrada
          */
-        if(stepflaglist.indexOf('011') != -1) {
-            if(record.get('useppe') == null) {
-                me.callSATOR_RELATAR_USA_EPI();
-                return false;
-            }
-        }
+        // if(stepflaglist.indexOf('011') != -1) {
+        //     if(record.get('useppe') == null) {
+        //         me.callSATOR_RELATAR_USA_EPI();
+        //         return false;
+        //     }
+        // }
 
 		/**
           * - Verificar é Kit ?
@@ -2031,13 +2038,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onChangedMaterial: function (store, eOpts) {
         var me = this,
             count = 0,
-            score = '{0}/{1}';
+            score = '{0}/{1}',
+            materialaccount = me.getView().down('label[name=materialaccount]');
 
         store.each(function (item) {
             count += item.get('unconformities') == '010' ? 1 : 0;
         });
 
-        me.getView().down('label[name=materialaccount]').setText(Ext.String.format(score,count,store.getCount()));
+        if(materialaccount) materialaccount.setText(Ext.String.format(score,count,store.getCount()));
     },
 
     onSelectDataView: function (view,record,eOpts) {
