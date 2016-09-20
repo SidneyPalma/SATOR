@@ -556,12 +556,14 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $sql = "
                 declare
                     @newid int,
+                    @oldid int,
                     @flowprocessingid int = :flowprocessingid,
                     @flowprocessingstepid int = :flowprocessingstepid,
                     @flowstepaction varchar(3);
 
                 select top 1
                     @newid = fps.id,
+					@oldid = fpsa.id,
 					@flowstepaction = ta.flowstepaction
                 from
                     flowprocessingstep fps
@@ -587,6 +589,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->execute();
             $rows = $pdo->fetchAll();
             $newid = $rows[0]['newid'];
+            $oldid = $rows[0]['oldid'];
             $flowstepaction = $rows[0]['flowstepaction'];
             unset($pdo);
 
@@ -604,6 +607,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     $action->getStore()->getModel()->set('flowstepaction','001');
                     $action->getStore()->getModel()->set('isactive',1);
                     $result = $action->getStore()->insert();
+                }
+
+                if($flowstepaction == '005') {
+                    $action->getStore()->getModel()->set('id',$oldid);
+                    $action->getStore()->getModel()->set('flowstepaction','001');
+                    $action->getStore()->getModel()->set('isactive',1);
+                    $result = $action->getStore()->update();
                 }
 
                 // update flowprocessingstep
