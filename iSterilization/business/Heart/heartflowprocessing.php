@@ -553,26 +553,33 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $step = new \iSterilization\Coach\flowprocessingstep();
             $action = new \iSterilization\Coach\flowprocessingstepaction();
 
-            // update flowprocessingstepaction
-            $action->getStore()->getModel()->set('id', $flowprocessingstepactionid);
-            $action->getStore()->getModel()->set('isactive', 0);
-            $action->getStore()->update();
-
             $sql = "
                 declare
                     @newid int,
                     @flowprocessingid int = :flowprocessingid,
-                    @flowprocessingstepid int = :flowprocessingstepid;
-                                    
+                    @flowprocessingstepid int = :flowprocessingstepid,
+                    @flowstepaction varchar(3);
+
                 select top 1
-                    @newid = fps.id
+                    @newid = fps.id,
+					@flowstepaction = ta.flowstepaction
                 from
                     flowprocessingstep fps
+					outer apply (
+						select
+							fpsa.id,
+							fpsa.flowstepaction
+						from
+							flowprocessingstepaction fpsa
+						where fpsa.flowprocessingstepid = fps.id
+						  and fpsa.flowstepaction = '005'
+						  and fpsa.isactive = 0
+					) ta
                 where fps.flowprocessingid = @flowprocessingid
                     and fps.id > @flowprocessingstepid
                     and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' )                
-                
-                select @newid as newid;";
+
+                select @newid as newid, @flowstepaction as flowstepaction;";
 
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
@@ -580,14 +587,24 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo->execute();
             $rows = $pdo->fetchAll();
             $newid = $rows[0]['newid'];
+            $flowstepaction = $rows[0]['flowstepaction'];
             unset($pdo);
 
+            // update flowprocessingstepaction
+            $action->getStore()->getModel()->set('id', $flowprocessingstepactionid);
+            $action->getStore()->getModel()->set('isactive', 0);
+            $action->getStore()->update();
+
             if(count($rows) != 0) {
+
                 // insert flowprocessingstepaction
-                $action->getStore()->getModel()->set('flowprocessingstepid',$newid);
-                $action->getStore()->getModel()->set('flowstepaction','001');
-                $action->getStore()->getModel()->set('isactive',1);
-                $result = $action->getStore()->insert();
+                if($flowstepaction != '005') {
+                    $action->getStore()->getModel()->set('id','');
+                    $action->getStore()->getModel()->set('flowprocessingstepid',$newid);
+                    $action->getStore()->getModel()->set('flowstepaction','001');
+                    $action->getStore()->getModel()->set('isactive',1);
+                    $result = $action->getStore()->insert();
+                }
 
                 // update flowprocessingstep
                 $date = date("Ymd H:i:s");
@@ -612,9 +629,11 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         flowprocessingstepmaterial
                     where flowprocessingstepid = @flowprocessingstepid;";
 
-                $pdo = $this->prepare($sql);
-                $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
-                $pdo->execute();
+                if($flowstepaction != '005') {
+                    $pdo = $this->prepare($sql);
+                    $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
+                    $pdo->execute();
+                }
             }
 
         } catch ( \PDOException $e ) {
@@ -697,39 +716,23 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
-    public function setValidaCargaAreas(array $data) {
+    public function setReverteEtapaArea(array $data) {
         $username = $data['username'];
 
-        $utimestamp = microtime(true);
-        $timestamp = floor($utimestamp);
-        $milliseconds = round(($utimestamp - $timestamp) * 1000000);
+        $list = self::jsonToObject($data['list']);
 
-        $barcode = substr("L" . date("YmdHis") . $milliseconds,0,20);
-
-        $list = self::jsonToArray($data['list']);
-
-        $charge = new \iSterilization\Coach\flowprocessingcharge();
-        $chargeitem = new \iSterilization\Coach\flowprocessingchargeitem();
+        $action = new \iSterilization\Coach\flowprocessingstepaction();
 
         try {
-            $charge->getStore()->getModel()->set('chargeflag','005');
-            $charge->getStore()->getModel()->set('barcode',$barcode);
-            $charge->getStore()->getModel()->set('chargeuser',$username);
-            $result = self::jsonToObject($charge->getStore()->insert());
 
-            while (list(, $item) = each($list)) {
-                extract($item);
-
-                $chargeitem->getStore()->getModel()->set('chargestatus','001');
-                $chargeitem->getStore()->getModel()->set('flowprocessingchargeid',$result->rows->id);
-                $chargeitem->getStore()->getModel()->set('flowprocessingstepid',$flowprocessingstepid);
-                $chargeitem->getStore()->insert();
+            foreach ($list as $item) {
+                $action->getStore()->getModel()->set('id',$item->flowprocessingstepactionid);
+                $action->getStore()->getModel()->set('toreversedby',$username);
+                $action->getStore()->getModel()->set('flowstepaction','004');
+                $action->getStore()->update();
             }
 
-            unset($charge);
-            unset($chargeitem);
-
-            self::_setSuccess(true);
+            unset($action);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
@@ -1113,11 +1116,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             select distinct
                 fp.id,
                 fpsm.flowprocessingstepid,
+                fpsa.id as flowprocessingstepactionid,
                 fp.barcode,
                 coalesce(tb.name,ib.name) as materialname
             from
                 flowprocessing fp
                 inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+                inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id and fpsa.flowstepaction = '001' )
                 inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
                 inner join itembase ib on ( ib.id = fpsm.materialid )
                 outer apply (

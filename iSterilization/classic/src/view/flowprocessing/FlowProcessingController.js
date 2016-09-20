@@ -247,6 +247,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
+            case 'SATOR_REVERTE_FASE':
+                me.callSATOR_REVERTE_FASE();
+                break;
             case 'SATOR_VALIDA_CARGA':
                 me.callSATOR_VALIDA_CARGA();
                 break;
@@ -289,6 +292,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }).show(null,function () {
             this.down('form').reset();
             this.down('textfield[name=usercode]').focus(false,200);
+        });
+    },
+
+    callSATOR_REVERTE_FASE: function () {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('call_SATOR_REVERTE_FASE').show(null,function () {
+            this.master = view;
+            this.down('textfield[name=materialboxname]').focus(false,200);
         });
     },
 
@@ -2290,16 +2303,26 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     setDeleteChargeItem: function(grid, rowIndex, colIndex) {
-        var store = grid.getStore(),
-            record = store.getAt(rowIndex);
+        var me = this,
+            store = grid.getStore(),
+            record = store.getAt(rowIndex),
+            view = me.getView();
 
         Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
             function (choice) {
                 if (choice === 'yes') {
                     store.remove(record);
+                    view.down('textfield[name=materialboxname]').focus(false,200);
                 }
             }
         );
+    },
+
+    setAuthorize: function(grid, rowIndex, colIndex) {
+        var record = grid.getStore().getAt(rowIndex);
+
+        record.set('haspending',!record.get('haspending'));
+        record.commit();
     },
 
     // Autorizar Quebra de Fluxo
@@ -2311,22 +2334,92 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             doCallBack = function (rows) {
                 var kont = 0;
                 Ext.each(list,function (item) {
-                    item.set('isactive', 'AUTHORIZE');
+                    var flowstepaction = item.get('flowstepaction');
                     item.set('authorizedby', rows.username);
+                    item.set('isactive', (flowstepaction == '002' ? 'AUTHORIZE' : 'TOREVERSE'));
                     kont += item.store.sync({async: false}) ? 1 : 0;
                 });
-
-                Smart.ion.sound.play("button_tiny");
-                Ext.getStore('flowprocessingstepaction').load();
-                view.master.down('dataview[name=flowprocessingsteptask]').store.load();
-                view.close();
-
-                return (kont != 0);
+                if (kont == list.length) {
+                    Smart.ion.sound.play("button_tiny");
+                    Ext.getStore('flowprocessingstepaction').load();
+                    view.master.down('dataview[name=flowprocessingsteptask]').store.load();
+                    view.close();
+                }
+                return (kont == list.length);
             };
+
+        store.each(function(record) {
+            if(record.get('haspending')) {
+                list.push(record);
+            }
+        });
+
+        if (list.length == 0 || (store.getCount() != list.length)) {
+            Smart.ion.sound.play("computer_error");
+            Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
+            return false;
+        }
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
+    },
+
+    setReverteEtapaItem: function () {
+        var me = this,
+            list = [],
+            view = me.getView(),
+            store = view.down('gridpanel').getStore(),
+            doCallBack = function (rows) {
+                var back = true,
+                    data = view.down('form').getValues();
+
+                data.action = 'select';
+                data.list = Ext.encode(list);
+                data.username = rows.username;
+                data.method = 'setReverteEtapaArea';
+                data.areasid = Smart.workstation.areasid;
+
+                // console.info(data);
+                //
+                // return false;
+
+                Ext.Ajax.request({
+                    scope: me,
+                    url: me.url,
+                    params: data,
+                    async: false,
+                    callback: function (options, success, response) {
+                        var result = Ext.decode(response.responseText);
+
+                        if (!success || !result.success) {
+                            Smart.ion.sound.play("computer_error");
+                            back = false;
+                            Smart.Msg.showToast('O processo não foi executado com sucesso!','info');
+                        }
+                    }
+                });
+
+                if (back) {
+                    Smart.ion.sound.play("button_tiny");
+                    view.close();
+                    Ext.getStore('flowprocessingstepaction').load();
+                }
+
+                return back;
+            };
+
+        store.each(function(record) {
+            list.push(record.data);
+        });
 
         if (store.getCount() == 0) {
             Smart.ion.sound.play("computer_error");
-            Smart.Msg.showToast('Este processo requer selecionar antes de prosseguir!','info');
+            Smart.Msg.showToast('O processo requer selecionar antes de prosseguir!','info');
             return false;
         }
 

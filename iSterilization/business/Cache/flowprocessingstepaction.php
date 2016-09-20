@@ -14,7 +14,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				count(*) as rows
 			from
 				flowprocessingstepaction
-			where flowstepaction = '002' and isactive = 1";
+			where flowstepaction in ('002','004') and isactive = 1";
 
         try {
             $rows = $proxy->query($sql)->fetchAll();
@@ -24,7 +24,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 //            if(intval($rows[0]['rows']) != 0 ) {
                 $list[0]['taskrows'] = str_pad($rows[0]['rows'], 2, '0', STR_PAD_LEFT);
                 $list[0]['taskcode'] = '001';
-                $list[0]['taskname'] = 'Autorizar Processos';
+                $list[0]['taskname'] = 'Liberar Processos';
 //            }
 
             $list[1]['taskrows'] = '';
@@ -87,7 +87,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 					where a.flowprocessingid = fps.flowprocessingid
 						and a.id = fps.target
 				) t
-			where fpsa.flowstepaction = '002'
+			where fpsa.flowstepaction in ('002','004')
 				and fpsa.isactive = 1";
 
 		try {
@@ -219,7 +219,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                     where a.id = fp.id
                 ) m
             where fpsa.isactive = 1
-			  and fpsa.flowstepaction = '001'
+			  and fpsa.flowstepaction in ('001','004')
               and not exists (
                     select
                         a.id

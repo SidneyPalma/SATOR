@@ -45,13 +45,13 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', 
                     {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Processos pendentes'
+                        text: 'Autorizar processos'
                     }, {
                         height: 20,
                         xtype: 'container'
                     }, {
                         xtype: 'label',
-                        text: 'Exceções ... quebra de fluxo!',
+                        text: 'Processos bloqueados!',
                         style: 'color: blue;',
                         cls: 'sub-title-label'
                     }, {
@@ -115,7 +115,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_AUTHORIZE', 
                                 sortable: false,
                                 dataIndex: 'elementname',
                                 renderer: function (value,metaData,rec) {
-                                    var template = '<div style="color: red; font-weight: 700;">{0}</div><div style="font-weight: 700;">{1}</div>';
+                                    // var template = '<div style="color: red; font-weight: 700;">{0}</div><div style="font-weight: 700;">{1}</div>';
+                                    var template = '<div style="color: red;">{0}</div><div">{1}</div>';
                                     metaData.style = rec.data.haspending ? 'color: red;' : '';
                                     return Ext.String.format(template,rec.get('elementname'),rec.get('targetplace'));
                                 }

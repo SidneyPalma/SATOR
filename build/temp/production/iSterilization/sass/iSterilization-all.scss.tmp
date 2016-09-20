@@ -1286,6 +1286,7 @@ $include-isterilization-view-flowprocessing-protocol-call_sator_prepara_lote_avu
 $include-isterilization-view-flowprocessing-protocol-call_sator_relatar_cycle_status: dynamic(true);;
 $include-isterilization-view-flowprocessing-protocol-call_sator_relatar_exception: dynamic(true);;
 $include-isterilization-view-flowprocessing-protocol-call_sator_relatar_usa_epi: dynamic(true);;
+$include-isterilization-view-flowprocessing-protocol-call_sator_reverte_fase: dynamic(true);;
 $include-isterilization-view-flowprocessing-protocol-call_sator_unconformities: dynamic(true);;
 $include-isterilization-view-flowprocessing-protocol-call_sator_valida_carga: dynamic(true);;
 $include-isterilization-view-login-login: dynamic(true);;

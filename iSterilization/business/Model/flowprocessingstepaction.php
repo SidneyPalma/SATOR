@@ -51,6 +51,12 @@ class flowprocessingstepaction extends \Smart\Data\Model {
     private $authorizedby;
 
     /**
+     * @Policy {"nullable":true, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $toreversedby;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -162,4 +168,19 @@ class flowprocessingstepaction extends \Smart\Data\Model {
         return $this;
     }
 
+    /**
+     * @return type string
+     */
+    public function getToreversedby() {
+        return $this->toreversedby;
+    }
+
+    /**
+     * @param type $toreversedby
+     * @return \iSterilization\Model\flowprocessingstepaction
+     */
+    public function setToreversedby($toreversedby) {
+        $this->toreversedby = $toreversedby;
+        return $this;
+    }
 }

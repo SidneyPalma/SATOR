@@ -135,7 +135,7 @@
     margin: 10px 0 0 10px;
 
 }
-
+/*Processo aguardando leitura*/
 .step-001-P {
     border: 1px solid #6A864B;
     border-left: 8px solid #6A864B;
@@ -147,11 +147,26 @@
     border-left: 8px solid #79BE2D;
     background: rgba(166, 232, 94, .7);
 }
-
+/*Bloqueado Aguadando autorizar quebra de fluxo*/
 .step-002-P {
     border: 1px solid #B81D5F;
     border-left: 8px solid #B81D5F;
     background: rgba(255, 104, 113, .3);
+}
+
+.step-002-P:after {
+    color: #EDD500;
+    content: 'BLOQUEADO';
+    font-family: Monda;
+    position: absolute;
+    line-height: 86px;
+    font-size: 34px;
+    font-weight: 700;
+
+    transform: rotate(15deg);
+    -o-transform: rotate(15deg);
+    -ms-transform: rotate(15deg);
+    -webkit-transform: rotate(15deg);
 }
 
 .step-002-P:hover {
@@ -160,6 +175,34 @@
     background: rgba(254, 99, 71, .4);
 }
 
+/*Bloqueado Aguadando reverter processo*/
+.step-004-P {
+    border: 1px solid #172D3A;
+    border-left: 8px solid #172D3A;
+    background: rgba(75, 97, 111, .3);
+}
+
+.step-004-P:after {
+    color: #EDD500;
+    content: 'BLOQUEADO';
+    font-family: Monda;
+    position: absolute;
+    line-height: 86px;
+    font-size: 34px;
+    font-weight: 700;
+
+    transform: rotate(15deg);
+    -o-transform: rotate(15deg);
+    -ms-transform: rotate(15deg);
+    -webkit-transform: rotate(15deg);
+}
+
+.step-004-P:hover {
+    border: 1px solid #6970C2;
+    border-left: 8px solid #6970C2;
+    background: rgba(23, 45, 58, .1);
+}
+/*Carga preparada Aguadando iniciar ciclo*/
 .step-001-C {
     border: 1px solid #FFFF00;
     border-left: 8px solid #FFFF00;
@@ -171,7 +214,7 @@
     border-left: 8px solid #CCFF00;
     background: rgba(204, 255, 0, .7);
 }
-
+/*Carga preparada Ciclo iniciado*/
 .step-002-T {
     border: 1px solid #00FFFF;
     border-left: 8px solid #00FFFF;
@@ -183,7 +226,7 @@
     border-left: 8px solid rgb(0, 255, 204);
     background: rgba(0, 255, 204, .4);
 }
-
+/*Lote Avulso preparado aguardando impressão*/
 .step-005-C {
     border: 1px solid #BAB9AF;
     border-left: 8px solid #BAB9AF;
