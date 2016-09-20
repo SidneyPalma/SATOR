@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARA_LOTE_AVULSO', {
+Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_REVERTE_FASE', {
     extend: 'Ext.window.Window',
 
-    xtype: 'call_SATOR_PREPARA_LOTE_AVULSO',
+    xtype: 'call_SATOR_REVERTE_FASE',
 
     requires: [
         'Ext.form.Panel',
@@ -45,7 +45,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARA_LOTE
                     {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Prepara lote avulso'
+                        text: 'Reverter processos'
                     }, {
                         margin: '20 0 0 0',
                         fieldLabel: 'Consulta',
@@ -77,6 +77,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARA_LOTE
                                 type: 'auto'
                             }, {
                                 name: 'flowprocessingstepid',
+                                type: 'int'
+                            }, {
+                                name: 'flowprocessingstepactionid',
                                 type: 'int'
                             }, {
                                 name: 'materialname',
@@ -118,7 +121,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_PREPARA_LOTE
             text: 'Confirmar',
             showSmartTheme: 'green',
             listeners: {
-                click: 'setValidaCargaAreas'
+                click: 'setReverteEtapaItem'
             }
         }, {
             scale: 'medium',

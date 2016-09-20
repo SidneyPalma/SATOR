@@ -75,7 +75,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                     portrait = view.down('portrait'),
                                     materialdetail = view.down('form[name=materialdetail]');
                                 var colorpallet = '',
-                                    colorschema = record.get('colorschema').split(","),
+                                    colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
                                     coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
 
                                 Ext.each(colorschema,function (color) {
