@@ -563,7 +563,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
                 select top 1
                     @newid = fps.id,
-					@oldid = fpsa.id,
+					@oldid = ta.id,
 					@flowstepaction = ta.flowstepaction
                 from
                     flowprocessingstep fps
@@ -581,7 +581,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     and fps.id > @flowprocessingstepid
                     and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' )                
 
-                select @newid as newid, @flowstepaction as flowstepaction;";
+                select @newid as newid, @oldid as oldid, @flowstepaction as flowstepaction;";
 
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":flowprocessingid", $flowprocessingid, \PDO::PARAM_INT);
