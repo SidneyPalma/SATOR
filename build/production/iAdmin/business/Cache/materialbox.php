@@ -14,16 +14,31 @@ class materialbox extends \Smart\Data\Cache {
 
         $sql = "
 			select
-			  mb.*,
-			  dbo.getEnum('statusbox',mb.statusbox) as statusboxdescription,
-			  materialboxitems = (
-			    SELECT
-			      COUNT(mbi.id)
-			    FROM
-			      materialboxitem mbi
-			    WHERE mbi.materialboxid = mb.id
-			      AND mbi.boxitemstatus = 'A'
-			  )
+                mb.*,
+                dbo.getEnum('statusbox',mb.statusbox) as statusboxdescription,
+                materialboxitems = (
+                    SELECT
+                      COUNT(mbi.id)
+                    FROM
+                      materialboxitem mbi
+                    WHERE mbi.materialboxid = mb.id
+                      AND mbi.boxitemstatus = 'A'
+                ),
+                colorschema = (
+                    select stuff
+                        (
+                            (
+                                select
+                                    ',#' + tc.colorschema
+                                from
+                                    materialboxtarge mbt
+                                    inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                where mbt.materialboxid = mb.id
+                                order by mbt.targeorderby asc
+                                for xml path ('')
+                            ) ,1,1,''
+                        )                
+                )
 			from
 				materialbox mb
 			where mb.name like :name";

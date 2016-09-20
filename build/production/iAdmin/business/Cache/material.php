@@ -28,19 +28,9 @@ class material extends \Smart\Data\Cache {
                 ib.itemgroup,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
                 dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
-                materialboxname = (
-                  SELECT TOP 1
-                    mb.name
-                  FROM
-                    materialbox mb
-                    inner join materialboxitem mbi on ( 
-                                            mbi.materialboxid = mb.id
-                                        AND mbi.materialid = m.id
-                                        AND mbi.boxitemstatus = 'A' )
-                    inner join itembase ibt on ( ibt.id = mbi.materialid )
-                ),
+                a.materialboxname,
+                a.colorschema,
                 m.*,
-                --ms.name as materialstatusname,
                 dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
                 pk.name as packingname,
                 pt.name as proprietaryname,
@@ -48,10 +38,35 @@ class material extends \Smart\Data\Cache {
             FROM
                 itembase ib
                 inner join material m on ( m.id = ib.id )
-                --inner join materialstatus ms on ( ms.id = m.materialstatusid )
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+                outer apply (
+                    SELECT
+                        mb.name as materialboxname,
+                        colorschema = (
+                            select stuff
+                                (
+                                    (
+                                        select
+                                            ',#' + tc.colorschema
+                                        from
+                                            materialboxtarge mbt
+                                            inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                        where mbt.materialboxid = mb.id
+                                        order by mbt.targeorderby asc
+                                        for xml path ('')
+                                    ) ,1,1,''
+                                )                
+                        )
+                    FROM
+                        materialbox mb
+                    inner join materialboxitem mbi on ( 
+                                    mbi.materialboxid = mb.id
+                                AND mbi.materialid = m.id
+                                AND mbi.boxitemstatus = 'A' )
+                    inner join itembase ibt on ( ibt.id = mbi.materialid )
+                ) a
             WHERE ib.name COLLATE Latin1_General_CI_AI LIKE :name
                OR ib.barcode COLLATE Latin1_General_CI_AI LIKE :barcode
                OR ib.description COLLATE Latin1_General_CI_AI LIKE :description";
@@ -113,7 +128,6 @@ class material extends \Smart\Data\Cache {
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ),
                 m.*,
-                --ms.name as materialstatusname,
                 dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
                 pk.name as packingname,
                 pt.name as proprietaryname,
@@ -121,7 +135,6 @@ class material extends \Smart\Data\Cache {
             FROM
                 itembase ib
                 inner join material m on ( m.id = ib.id )
-                --inner join materialstatus ms on ( ms.id = m.materialstatusid )
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )

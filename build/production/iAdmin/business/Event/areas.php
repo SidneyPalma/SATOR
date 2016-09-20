@@ -33,7 +33,6 @@ class areas extends \Smart\Data\Event {
                 throw new \PDOException("Para esta Área já existe uma Estação Configurada!!");
             }
             $model->set('workstation',$guid);
-//            $model->set('workstation',strtoupper(md5($model->getName())));
         }
 
         if($model->getWorkstation() == 'delete') {
