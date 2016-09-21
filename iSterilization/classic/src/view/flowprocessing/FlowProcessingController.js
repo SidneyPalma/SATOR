@@ -1263,6 +1263,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Fluxo Segue
          */
         me.encerrarEtapa();
+
+        // Ext.Msg.confirm('Registrar inconformidades', '<b>Deseja registrar inconformidades?</b>',
+        //     function (choice) {
+        //         if (choice === 'yes') {
+        //             me.callSATOR_UNCONFORMITIES();
+        //             me.encerrarEtapa();
+        //         } else {
+        //             me.encerrarEtapa();
+        //         }
+        //     }
+        // );
     },
 
     encerrarEtapa: function () {
