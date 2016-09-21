@@ -1061,6 +1061,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     }
                 });
 
+                /**
+                 * Encerra leitura
+                 */
                 if( data.indexOf('001') == -1 && (
                     data.indexOf('002') != -1 ||
                     data.indexOf('004') != -1 ||
@@ -1097,7 +1100,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                     return false;
                 }
-                return false;
+
+                return true;
             }
 
             me.setMessageText('MSG_PROTOCOL_ERROR');
@@ -1224,15 +1228,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Fazer checagens de encerramento
          */
 
-         /**
-          * 011 - Exige uso de EPI na Leitura de Entrada
-          */
-         if(stepflaglist.indexOf('011') != -1) {
-             if(record.get('useppe') == null) {
-                 me.callSATOR_RELATAR_USA_EPI();
-                 return false;
-             }
-         }
+        /**
+        * 011 - Exige uso de EPI na Leitura de Entrada
+        */
+        if(stepflaglist.indexOf('011') != -1) {
+            if(record.get('useppe') == null) {
+                me.callSATOR_RELATAR_USA_EPI();
+                return false;
+            }
+        }
 
         if (me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
