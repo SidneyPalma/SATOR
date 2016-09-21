@@ -335,7 +335,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             data = view.xdata,
             barcode = view.barcode,
             text = 'Material ({0})',
-            colorschema = data.get('colorschema').split(","),
+            colorschema = data.get('colorschema') ? data.get('colorschema').split(",") : null,
             schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
 
         Ext.getStore('flowprocessingstepinputtree').setParams({
@@ -1061,6 +1061,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     }
                 });
 
+                /**
+                 * Encerra leitura
+                 */
                 if( data.indexOf('001') == -1 && (
                     data.indexOf('002') != -1 ||
                     data.indexOf('004') != -1 ||
@@ -1097,7 +1100,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                     return false;
                 }
-                return false;
+
+                return true;
             }
 
             me.setMessageText('MSG_PROTOCOL_ERROR');
@@ -1224,15 +1228,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Fazer checagens de encerramento
          */
 
-         /**
-          * 011 - Exige uso de EPI na Leitura de Entrada
-          */
-         if(stepflaglist.indexOf('011') != -1) {
-             if(record.get('useppe') == null) {
-                 me.callSATOR_RELATAR_USA_EPI();
-                 return false;
-             }
-         }
+        /**
+        * 011 - Exige uso de EPI na Leitura de Entrada
+        */
+        if(stepflaglist.indexOf('011') != -1) {
+            if(record.get('useppe') == null) {
+                me.callSATOR_RELATAR_USA_EPI();
+                return false;
+            }
+        }
 
         if (me.checkUnconformities()) {
             me.callSATOR_UNCONFORMITIES();
@@ -1897,8 +1901,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             stepflaglist = record.get('stepflaglist'),
             store = view.down('flowprocessingmaterial').getStore(),
             model = view.down('flowprocessingmaterial').getSelectionModel(),
-            materialboxid = view.down('hiddenfield[name=materialboxid]').getValue(),
-			isMaterialBox = ( materialboxid && materialboxid.length != 0 );
+            materialboxid = view.down('hiddenfield[name=materialboxid]').getValue();
 
         /**
          * 011 - Exige uso de EPI na Leitura de Entrada
@@ -1917,8 +1920,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
           *              Sim -> Mensagem de duplicidade
           *              Não -> Pesquisa e Insert (Depende do Status do Material)
           */
-		if(!isMaterialBox) {
-            me.setIsntMaterialBox();
+		if(!materialboxid) {
+            me.setIsntMaterialBox(value);
             return false;
 		}
 
@@ -1986,7 +1989,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         // Já foi lançado ?
         // Sim -> Mensagem de duplicidade
-        if (data) {
+        if (data && data.get('unconformities') == '010') {
             Smart.ion.sound.play("computer_error");
             me.setMessageText('MSG_DUPLICATED');
             model.select(data);
@@ -2013,8 +2016,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     return false;
                 }
 
-                //PlaySound
-                store.load();
+                if(data) {
+                    data.set('unconformities','010');
+                    store.sync({
+                        callback: function () {
+                            data.commit();
+                            model.select(data);
+                            Smart.ion.sound.play("button_tiny");
+                        }
+                    });
+                }
             }
         });
     },
