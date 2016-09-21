@@ -381,8 +381,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 if( !success || records.length == 0 || !barcode ) {
                     if(data.get('stepflaglist').indexOf('011') != -1) {
-                        me.callSATOR_RELATAR_USA_EPI();
+                        if(data.get('useppe') == null) {
+                            me.callSATOR_RELATAR_USA_EPI();
+                        }
                     }
+
                     return false;
                 }
 
@@ -395,7 +398,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
 
                 if(data.get('stepflaglist').indexOf('011') != -1) {
-                    me.callSATOR_RELATAR_USA_EPI();
+                    if(data.get('useppe') == null) {
+                        me.callSATOR_RELATAR_USA_EPI();
+                    }
                 }
             }
         });
