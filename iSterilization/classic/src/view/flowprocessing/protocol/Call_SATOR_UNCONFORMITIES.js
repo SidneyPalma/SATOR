@@ -11,6 +11,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITI
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
+    controller: 'flowprocessing',
+
     width: 800,
     modal: true,
     layout: 'fit',
@@ -18,7 +20,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITI
     resizable: false,
     showAnimate: true,
 
-    controller: 'flowprocessing',
+    doCallBack: Ext.emptyFn,
 
     listeners: {
         startreaderunconformities: 'onStartReaderUnconformities'
