@@ -30,7 +30,7 @@ Ext.define( 'Smart.form.Portrait', {
         var me = this,
             fileData = image || Smart.Rss.getFileImage(me.fileImage);
 
-        me.down('image').setSrc(fileData);
+        me.down('image').setSrc(fileData ? fileData : null);
     },
 
     initComponent: function () {
