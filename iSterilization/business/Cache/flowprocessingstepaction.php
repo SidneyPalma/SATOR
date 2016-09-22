@@ -214,7 +214,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                             from
                                 flowprocessingstepmaterial b
                                 inner join itembase ib on ( ib.id = b.materialid )
-                            where b.flowprocessingstepid = b.id
+                            where b.flowprocessingstepid = fps.id
                         ) tb
                     where a.id = fp.id
                 ) m
