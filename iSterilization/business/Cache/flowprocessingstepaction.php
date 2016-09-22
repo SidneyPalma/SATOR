@@ -212,9 +212,9 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                             select top 1
                                 ib.name
                             from
-                                flowprocessingstepmaterial b
-                                inner join itembase ib on ( ib.id = b.materialid )
-                            where b.flowprocessingstepid = fps.id
+                                flowprocessingstepmaterial mb
+                                inner join itembase ib on ( ib.id = mb.materialid )
+                            where mb.flowprocessingstepid = b.id
                         ) tb
                     where a.id = fp.id
                 ) m
