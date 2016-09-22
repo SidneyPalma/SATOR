@@ -75,7 +75,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     getFlowProcessingId: function (id, barcode) {
         var me = this,
             app = Smart.app.getController('App');
-        console.info(barcode);
+
         Ext.getStore('flowprocessingstep').setParams({
             method: 'selectStep',
             query: id
