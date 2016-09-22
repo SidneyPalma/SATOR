@@ -735,7 +735,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $barcode = substr("L" . date("YmdHis") . $milliseconds,0,20);
 
-        $list = self::jsonToObject($data['list']);
+        $list = self::jsonToArray($data['list']);
 
         $charge = new \iSterilization\Coach\flowprocessingcharge();
         $chargeitem = new \iSterilization\Coach\flowprocessingchargeitem();
