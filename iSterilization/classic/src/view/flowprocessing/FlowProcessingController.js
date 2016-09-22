@@ -1062,9 +1062,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 /**
-                 * Encerra leitura
+                 * Encerra leitura com bloqueio
+                 * se não houver mais amarelos '001' ...
                  */
-                if( data.indexOf('001') == -1 && (
+                if( data.indexOf('001') == -1 && ( 
                     data.indexOf('002') != -1 ||
                     data.indexOf('004') != -1 ||
                     data.indexOf('007') != -1 ) ) {
@@ -2418,10 +2419,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 data.username = rows.username;
                 data.method = 'setReverteEtapaArea';
                 data.areasid = Smart.workstation.areasid;
-
-                // console.info(data);
-                //
-                // return false;
 
                 Ext.Ajax.request({
                     scope: me,
