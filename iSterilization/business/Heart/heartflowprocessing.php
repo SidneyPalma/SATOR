@@ -735,13 +735,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $barcode = substr("L" . date("YmdHis") . $milliseconds,0,20);
 
-        $list = self::jsonToArray($data['list']);
+        $list = self::jsonToObject($data['list']);
 
         $charge = new \iSterilization\Coach\flowprocessingcharge();
         $chargeitem = new \iSterilization\Coach\flowprocessingchargeitem();
 
         try {
-            $charge->getStore()->getModel()->set('chargeflag','001');
+            $charge->getStore()->getModel()->set('chargeflag','005');
             $charge->getStore()->getModel()->set('barcode',$barcode);
             $charge->getStore()->getModel()->set('chargeuser',$username);
             $result = self::jsonToObject($charge->getStore()->insert());
