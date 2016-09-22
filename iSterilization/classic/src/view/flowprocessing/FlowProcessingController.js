@@ -242,7 +242,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this;
 //SATOR_ENCERRAR_LEITURA
 //Equipamento: SATOR-E005 (Termodesinfectora)
-//Ciclo: SATOR-C006 (Termo instrumental)
+//Ciclo: SATOR-C006 (Termo instrumental) // C0114689
         switch(value) {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();

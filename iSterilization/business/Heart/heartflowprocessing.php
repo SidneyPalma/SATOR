@@ -741,7 +741,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $chargeitem = new \iSterilization\Coach\flowprocessingchargeitem();
 
         try {
-            $charge->getStore()->getModel()->set('chargeflag','001');
+            $charge->getStore()->getModel()->set('chargeflag','005');
             $charge->getStore()->getModel()->set('barcode',$barcode);
             $charge->getStore()->getModel()->set('chargeuser',$username);
             $result = self::jsonToObject($charge->getStore()->insert());
