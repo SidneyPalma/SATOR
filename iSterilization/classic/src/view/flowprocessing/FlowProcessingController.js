@@ -240,9 +240,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     areaProtocol: function (value) {
         var me = this;
-//SATOR_ENCERRAR_LEITURA
-//Equipamento: SATOR-E005 (Termodesinfectora)
-//Ciclo: SATOR-C006 (Termo instrumental) // C0114689
+
+        //SATOR_ENCERRAR_LEITURA
+        //Equipamento: SATOR-E005 (Termodesinfectora)
+        //Ciclo: SATOR-C006 (Termo instrumental) // C0114689
+
         switch(value) {
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
@@ -1032,83 +1034,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    onStartReaderUnconformities: function (field, e, eOpts) {
-        var me = this,
-            view = me.getView(),
-            master = view.master,
-            value = field.getValue();
-
-        field.reset();
-
-        if(value && value.length != 0) {
-            if(value.indexOf('SATOR-U') != -1) {
-                var list = [],
-                    data = [],
-                    grid = view.down('flowprocessingmaterial'),
-                    sm = grid.getSelectionModel(),
-                    md = sm.getSelection()[0];
-
-                value = value.replace('SATOR-U','');
-                md.set('unconformities',value);
-                md.store.sync({async: false});
-                md.commit();
-                sm.select(md);
-
-                md.store.each(function (item) {
-                    data.push(item.get('unconformities'));
-                    if(['002','004','007'].indexOf(item.get('unconformities')) != -1) {
-                        list.push(item.get('materialid'));
-                    }
-                });
-
-                /**
-                 * Encerra leitura com bloqueio
-                 * se não houver mais amarelos '001' ...
-                 */
-                if( data.indexOf('001') == -1 && ( 
-                    data.indexOf('002') != -1 ||
-                    data.indexOf('004') != -1 ||
-                    data.indexOf('007') != -1 ) ) {
-
-                    /**
-                     * SATOR-U00, SATOR_ENCERRAR_LEITURA
-                     *
-                     *  Cadastros
-                     *     Material
-                     *          - Bloqueado     - Inviabiliza Leituras
-                     *     Kit
-                     *          - Bloqueado     - Inviabiliza Leituras
-                     *
-                     *     Fluxo Atual
-                     *          - Fecha e não pode avançar para próxima Área
-                     */
-                    Ext.Ajax.request({
-                        url: me.url,
-                        async: false,
-                        params: {
-                            action: 'select',
-                            method: 'setUnconformities',
-                            update: Ext.encode(list),
-                            params: Ext.encode(master.xdata.data)
-                        },
-                        callback: function () {
-                            //PlaySound
-                            view.close();
-                            me.setView(master);
-                            history.back();
-                        }
-                    });
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            me.setMessageText('MSG_PROTOCOL_ERROR');
-        }
-    },
-
 	workProtocol: function (value) {
 	    var me = this;
 
@@ -1239,7 +1164,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         }
 
-        if (me.checkUnconformities()) {
+        if (me.checkUnconformities('001')) {
             me.callSATOR_UNCONFORMITIES();
             return false;
         }
@@ -1251,6 +1176,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             me.callSATOR_RELATAR_EXCEPTION(Ext.decode(exceptionby));
             return false;
         }
+
+        // if (me.checkUnconformities('010')) {
+        //     me.callSATOR_ALLOW_DENY('UNCONFORMITIES_SET');
+        //     return false;
+        // }
 
         /**
          * Encerrar Leitura
@@ -1268,17 +1198,41 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * Fluxo Segue
          */
         me.encerrarEtapa();
+    },
 
-        // Ext.Msg.confirm('Registrar inconformidades', '<b>Deseja registrar inconformidades?</b>',
-        //     function (choice) {
-        //         if (choice === 'yes') {
-        //             me.callSATOR_UNCONFORMITIES();
-        //             me.encerrarEtapa();
-        //         } else {
-        //             me.encerrarEtapa();
-        //         }
-        //     }
-        // );
+    //SATOR_ENCERRAR_LEITURA
+    callSATOR_ALLOW_DENY: function (dialogType) {
+        var me = this,
+            view = me.getView(),
+            doCallBack = function (dialog,field,scope) {
+                var me = scope;
+
+                // if(field.getValue() === 'SATOR_NAO') {
+                //     me.encerrarEtapa();
+                //     return false;
+                // }
+
+                switch (dialog.dialogType) {
+                    case 'UNCONFORMITIES_SET':
+                        me.callSATOR_UNCONFORMITIES(dialog.master);
+                        break;
+                }
+            };
+
+        Ext.widget('call_SATOR_ALLOW_DENY', {
+            scope: me,
+            master: view,
+            dialogType: dialogType,
+            doCallBack: doCallBack
+        }).show(null, function () {
+            this.down('label').setText('Registrar inconformidades');
+            this.down('textfield[name=satorprotocol]').focus(false, 200);
+        });
+    },
+
+    setOptionDialog: function (dialog,field,eOpts) {
+        var me = this;
+        dialog.doCallBack(dialog,field,me);
     },
 
     encerrarEtapa: function () {
@@ -1304,17 +1258,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    callSATOR_UNCONFORMITIES: function () {
+    callSATOR_UNCONFORMITIES: function (scope) {
         var me = this,
             view = me.getView();
 
-        Ext.widget('call_SATOR_UNCONFORMITIES').show(null, function () {
+        Ext.widget('call_SATOR_UNCONFORMITIES', {
+            master: scope
+        }).show(null, function () {
             var list = [],
                 grid = this.down('flowprocessingmaterial'),
                 sm = grid.getSelectionModel();
 
             grid.store.each(function(data) {
-                if(data.get('unconformities') == '001') {
+                if(['001','010'].indexOf(data.get('unconformities')) != -1) {
                     list.push(data);
                 }
             });
@@ -1327,6 +1283,83 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
             this.master = view;
         });
+    },
+
+    onStartReaderUnconformities: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            master = view.master,
+            value = field.getValue();
+
+        field.reset();
+
+        if(value && value.length != 0) {
+            if(value.indexOf('SATOR-U') != -1) {
+                var list = [],
+                    data = [],
+                    grid = view.down('flowprocessingmaterial'),
+                    sm = grid.getSelectionModel(),
+                    md = sm.getSelection()[0];
+
+                value = value.replace('SATOR-U','');
+                md.set('unconformities',value);
+                md.store.sync({async: false});
+                md.commit();
+                sm.select(md);
+
+                md.store.each(function (item) {
+                    data.push(item.get('unconformities'));
+                    if(['002','004','007'].indexOf(item.get('unconformities')) != -1) {
+                        list.push(item.get('materialid'));
+                    }
+                });
+
+                /**
+                 * Encerra leitura com bloqueio
+                 * se não houver mais amarelos '001' ...
+                 */
+                if( data.indexOf('001') == -1 && (
+                    data.indexOf('002') != -1 ||
+                    data.indexOf('004') != -1 ||
+                    data.indexOf('007') != -1 ) ) {
+
+                    /**
+                     * SATOR-U00, SATOR_ENCERRAR_LEITURA
+                     *
+                     *  Cadastros
+                     *     Material
+                     *          - Bloqueado     - Inviabiliza Leituras
+                     *     Kit
+                     *          - Bloqueado     - Inviabiliza Leituras
+                     *
+                     *     Fluxo Atual
+                     *          - Fecha e não pode avançar para próxima Área
+                     */
+                    Ext.Ajax.request({
+                        url: me.url,
+                        async: false,
+                        params: {
+                            action: 'select',
+                            method: 'setUnconformities',
+                            update: Ext.encode(list),
+                            params: Ext.encode(master.xdata.data)
+                        },
+                        callback: function () {
+                            //PlaySound
+                            view.close();
+                            me.setView(master);
+                            history.back();
+                        }
+                    });
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            me.setMessageText('MSG_PROTOCOL_ERROR');
+        }
     },
 
     callSATOR_RELATAR_EXCEPTION: function (exceptionby) {
@@ -1548,13 +1581,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.setView(master);
     },
 
-    checkUnconformities: function () {
+    checkUnconformities: function (value) {
         var me = this,
             count = 0,
             store = Ext.getStore('flowprocessingstepmaterial');
 
         store.each(function (item) {
-            count += item.get('unconformities') == '001' ? 1 : 0;
+            count += item.get('unconformities') == value ? 1 : 0;
         });
 
         return (count != 0);
@@ -2283,14 +2316,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onBeforeEditMaterialFlowStepAction: function ( editor, context, eOpts ) {
-        var list = ['010'],
-            grid = context.grid,
+        var grid = context.grid,
             data = context.record,
             unconformities = data.get('unconformities');
 
-        grid.getSelectionModel().select(data);
+        if(data) {
+            grid.getSelectionModel().select(data);
+        }
 
-        return (context.grid.editable) && (list.indexOf(unconformities) == -1);
+        return (context.grid.editable) && (['001','010'].indexOf(unconformities) != -1);
     },
 
     onSelectMaterialFlowStepAction: function ( rowModel, record, index, eOpts) {
