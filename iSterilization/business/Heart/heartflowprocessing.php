@@ -415,9 +415,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         try {
             $pdo = $this->prepare("update flowprocessingstepmaterial set unconformities = '001' where flowprocessingstepid = :id");
             $pdo->bindValue(":id", $flowprocessingstepid, \PDO::PARAM_INT);
-
             $pdo->execute();
-
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
             self::_setText($e->getMessage());
