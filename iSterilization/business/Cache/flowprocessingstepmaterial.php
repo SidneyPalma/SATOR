@@ -11,6 +11,9 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @flowprocessingstepid int = :flowprocessingstepid;
+                
             select
                 fpm.id, 
                 fpm.flowprocessingstepid, 
@@ -28,7 +31,7 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
                 flowprocessingstepmaterial fpm
                 inner join itembase ib on ( ib.id = fpm.materialid )
                 inner join proprietary p on ( p.id = ib.proprietaryid ) 
-            where fpm.flowprocessingstepid = :flowprocessingstepid";
+            where fpm.flowprocessingstepid = @flowprocessingstepid";
 
         try {
             $pdo = $proxy->prepare($sql);
