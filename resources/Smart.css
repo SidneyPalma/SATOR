@@ -68,6 +68,9 @@
     border-color: transparent;
 }
 
+.header-hide .x-window-default {
+    border: none !important;
+}
 
 .x-tree-icon {
     height: 26px !important;
