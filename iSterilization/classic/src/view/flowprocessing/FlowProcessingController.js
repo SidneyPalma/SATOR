@@ -188,7 +188,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 if(!success || !result.success) {
                     return false;
                 }
-
             }
         });
 
@@ -240,10 +239,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     areaProtocol: function (value) {
         var me = this;
-
-        //SATOR_ENCERRAR_LEITURA
-        //Equipamento: SATOR-E005 (Termodesinfectora)
-        //Ciclo: SATOR-C006 (Termo instrumental) // C0114689
 
         switch(value) {
             case 'SATOR_PROCESSAR_ITENS':
@@ -345,11 +340,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             method: 'selectTree'
         }).load();
 
-        // Ext.getStore('flowprocessingstepmaterial').setParams({
-        //     method: 'selectCode',
-        //     query: data.get('id')
-        // }).load();
-
         Ext.getStore('flowprocessingstepmessage').setParams({
             method: 'selectCode',
             query: data.get('id')
@@ -385,7 +375,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     if(data.get('stepflaglist').indexOf('011') != -1) {
                         if(data.get('useppe') == null) {
                             me.callSATOR_ALLOW_DENY('EPI');
-                            // me.callSATOR_RELATAR_USA_EPI();
                         }
                     }
 
@@ -403,7 +392,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 if(data.get('stepflaglist').indexOf('011') != -1) {
                     if(data.get('useppe') == null) {
                         me.callSATOR_ALLOW_DENY('EPI');
-                        // me.callSATOR_RELATAR_USA_EPI();
                     }
                 }
             }
@@ -523,7 +511,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('hiddenfield[name=materialboxid]').setValue(record.get('materialboxid'));
         view.down('hiddenfield[name=sterilizationtypeid]').setValue(record.get('sterilizationtypeid'));
 
-        // clientsearch.doQuery('CENTRO CIRURGICO');
         clientsearch.expand();
     },
 
@@ -560,12 +547,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         });
 
-        //type.focus(false, 200);
-        //type.setValue('CENTRO CIRURGICO');
-        //type.doQuery('CENTRO CIRURGICO');
-        // SATOR_PROCESSAR_ITENS
-        //type.select(type.selection);
-        //type.collapse();
     },
 
     onSelectSterilization: function (combo,record,eOpts) {
@@ -591,17 +572,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             view = me.getView(),
             clienttype = record.get('clienttype'),
-            //placesearch = view.down('placesearch'),
             searchpatient = view.down('searchpatient');
-            //localization = view.down('fieldcontainer[name=localization]');
-
-        // localization.hide();
-        // localization.setDisabled(true);
-        //
-        // placesearch.reset();
-        // placesearch.setReadColor(clienttype != '004');
-        //
-        // placesearch.allowBlank = true;
 
         if(clienttype != '004') {
             me.insertFlow();
@@ -613,29 +584,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         if (clienttype == '004') {
             view.down('searchpatient').focus(false, 200);
-            //localization.show();
-            //placesearch.allowBlank = false;
-            //localization.setDisabled(false);
         }
 
-        //placesearch.validate();
         view.down('hiddenfield[name=clienttype]').setValue(clienttype);
     },
 
     showClearClient: function (field, eOpts) {
         var me = this,
             view = me.getView(),
-            //placesearch = view.down('placesearch'),
             searchpatient = view.down('searchpatient');
-            //localization = view.down('fieldcontainer[name=localization]');
-
-        // placesearch.allowBlank = true;
-        // localization.setDisabled(true);
-        // placesearch.setReadColor(true);
-        //
-        // localization.hide();
-        // placesearch.reset();
-        // placesearch.validate();
 
         searchpatient.reset();
         searchpatient.setReadColor(true);        
@@ -686,7 +643,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
 
                 view.close();
-                // SATOR_PROCESSAR_ITENS
 
                 store.setParams({
                     method: 'selectTask',
@@ -809,7 +765,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         field.reset();
 
         if(value && value.length != 0) {
-            // Sim é protocolo .. seguir workProtocol
             if(value.indexOf('SATOR') != -1) {
                 me.workProtocol(value);
 				return false;
@@ -1040,16 +995,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 	    var me = this;
 
         switch(value) {
-            // case 'SATOR_PROCESSAR_ITENS':
-            //     me.callSATOR_PROCESSAR_ITENS();
-            //     break;
             case 'SATOR_RELATAR_USA_EPI':
                 me.callSATOR_ALLOW_DENY('EPI');
-                // me.callSATOR_RELATAR_USA_EPI();
                 break;
-            // case 'SATOR_INICIAR_LEITURA':
-            //     me.callSATOR_INICIAR_LEITURA();
-            //     break;
             case 'SATOR_ENCERRAR_LEITURA':
                 me.callSATOR_ENCERRAR_LEITURA();
                 break;
@@ -1085,28 +1033,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.master = view;
             this.down('textfield[name=userprotected]').focus(false,200);
         });
-    },
-
-    relatarUsaEPI: function () {
-        var me = this,
-            // view = me.getView(),
-            // master = view.master,
-            // useppe = ['SATOR_SIM','SATOR_NAO'],
-            store = Ext.getStore('flowprocessingstep'),
-            model = store.getAt(0),
-            value = view.down('textfield[name=userprotected]').getValue();
-
-        // if(!value || value.length == 0 || useppe.indexOf(value) == -1) {
-        //     return false;
-        // }
-
-        // view.close();
-        // me.setView(master);
-        model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
-        store.sync({async: false});
-        model.commit();
-        Smart.ion.sound.play("button_tiny");
-        me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_USA_EPI');
     },
 
     callSATOR_INICIAR_LEITURA: function () {
@@ -1199,7 +1125,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.encerrarEtapa();
     },
 
-    //SATOR_ENCERRAR_LEITURA
     callSATOR_ALLOW_DENY: function (dialogType) {
         var me = this,
             view = me.getView(),
@@ -1309,7 +1234,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView();
 
         Ext.widget('call_SATOR_UNCONFORMITIES', {
-            // scope: me,
             master: view
         }).show(null, function () {
             var list = [],
@@ -1327,8 +1251,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 sm.select(item);
                 grid.plugins[0].startEditByPosition({row: grid.store.indexOf(item), column: 1});
             }
-
-            // this.master = view;
         });
     },
 
@@ -1865,16 +1787,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     /**
      * Imprmir etiqueta
      *
-     * Em seguida:
-     * stepsettings
-        {
-           "serviceequipment": "",
-           "inputpresentation": "",
-           "serviceareas":"",
-           "tagprinterdescription": ["Etiqueta Grande","Etiqueta Pequena"],
-           "tagprinter": ["001","002"]
-        }
-     *
      * Chamar: callSATOR_ENCERRAR_LEITURA
      */
     callSATOR_IMPRIMIR_ETIQUETA: function () {
@@ -2082,6 +1994,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
+        console.info(view.xdata.data);
+//P201609000001
         // Já foi lançado ?
         // Não -> Pesquisa e Insert (Depende do Status do Material)
         Ext.Ajax.request({
@@ -2091,7 +2005,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 action: 'select',
                 method: 'insertItem',
                 barcode: value,
-                flowprocessingstepid: view.xdata.get('flowprocessingstepid')
+                flowprocessingstepid: view.xdata.get('id')
             },
             callback: function (options, success, response) {
                 var result = Ext.decode(response.responseText);
@@ -2299,8 +2213,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         /**
          * Carga Validada aguardando Iniciar Ciclo
-         *
-         * SATOR_RELATAR_CYCLE_STATUS
          */
         if(['C','T'].indexOf(record.get('steptype')) != -1) {
             switch(action) {

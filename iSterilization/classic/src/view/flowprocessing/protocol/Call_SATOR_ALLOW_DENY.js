@@ -85,14 +85,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_ALLOW_DENY',
 
     buttons: [
         {
-        //     scale: 'medium',
-        //     name: 'confirm',
-        //     text: 'Confirmar',
-        //     showSmartTheme: 'green'
-        //     // listeners: {
-        //     //     click: 'relatarUsaEPI'
-        //     // }
-        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',
