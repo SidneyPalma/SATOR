@@ -84,6 +84,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     showClear: true,
                     useUpperCase: true,
                     xtype: 'textfield',
+                    inputType: 'password',
                     listeners: {
                         scope: this,
                         specialkey: function(field, e){

@@ -1404,10 +1404,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
 
                 if(md.store.getCount() === id) {
-                    e.stopEvent();
+                    // e.stopEvent();
                     me.setView(view.master);
                     view.close();
                     me.callSATOR_ENCERRAR_LEITURA();
+                    e.stopEvent();
                 }
 
                 return true;
