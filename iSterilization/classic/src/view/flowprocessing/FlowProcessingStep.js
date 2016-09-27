@@ -172,6 +172,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 xtype: 'textfield',
                                 useUpperCase: true,
                                 useReadColor: false,
+                                inputType: 'password',
                                 cls: 'processing-field',
                                 labelCls: 'processing-field-font',
                                 listeners: {
