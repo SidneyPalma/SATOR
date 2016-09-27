@@ -384,7 +384,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 if( !success || records.length == 0 || !barcode ) {
                     if(data.get('stepflaglist').indexOf('011') != -1) {
                         if(data.get('useppe') == null) {
-                            me.callSATOR_RELATAR_USA_EPI();
+                            me.callSATOR_ALLOW_DENY('EPI');
+                            // me.callSATOR_RELATAR_USA_EPI();
                         }
                     }
 
@@ -401,7 +402,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 if(data.get('stepflaglist').indexOf('011') != -1) {
                     if(data.get('useppe') == null) {
-                        me.callSATOR_RELATAR_USA_EPI();
+                        me.callSATOR_ALLOW_DENY('EPI');
+                        // me.callSATOR_RELATAR_USA_EPI();
                     }
                 }
             }
@@ -1042,7 +1044,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             //     me.callSATOR_PROCESSAR_ITENS();
             //     break;
             case 'SATOR_RELATAR_USA_EPI':
-                me.callSATOR_RELATAR_USA_EPI();
+                me.callSATOR_ALLOW_DENY('EPI');
+                // me.callSATOR_RELATAR_USA_EPI();
                 break;
             // case 'SATOR_INICIAR_LEITURA':
             //     me.callSATOR_INICIAR_LEITURA();
@@ -1086,19 +1089,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     relatarUsaEPI: function () {
         var me = this,
-            view = me.getView(),
-            master = view.master,
-            useppe = ['SATOR_SIM','SATOR_NAO'],
+            // view = me.getView(),
+            // master = view.master,
+            // useppe = ['SATOR_SIM','SATOR_NAO'],
             store = Ext.getStore('flowprocessingstep'),
             model = store.getAt(0),
             value = view.down('textfield[name=userprotected]').getValue();
 
-        if(!value || value.length == 0 || useppe.indexOf(value) == -1) {
-            return false;
-        }
+        // if(!value || value.length == 0 || useppe.indexOf(value) == -1) {
+        //     return false;
+        // }
 
-        view.close();
-        me.setView(master);
+        // view.close();
+        // me.setView(master);
         model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
         store.sync({async: false});
         model.commit();
@@ -1151,21 +1154,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             stepflaglist = record.get('stepflaglist');
 
         /**
-         * Fazer checagens de encerramento
-         */
-
-        /**
         * 011 - Exige uso de EPI na Leitura de Entrada
         */
         if(stepflaglist.indexOf('011') != -1) {
             if(record.get('useppe') == null) {
-                me.callSATOR_RELATAR_USA_EPI();
+                me.callSATOR_ALLOW_DENY('EPI_ENCERRAR');
                 return false;
             }
         }
 
         if (me.checkUnconformities('001')) {
             me.callSATOR_UNCONFORMITIES();
+            return false;
+        }
+
+        if (me.checkUnconformities('010')) {
+            me.callSATOR_ALLOW_DENY('UNCONFORMITIES');
             return false;
         }
 
@@ -1176,11 +1180,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             me.callSATOR_RELATAR_EXCEPTION(Ext.decode(exceptionby));
             return false;
         }
-
-        // if (me.checkUnconformities('010')) {
-        //     me.callSATOR_ALLOW_DENY('UNCONFORMITIES_SET');
-        //     return false;
-        // }
 
         /**
          * Encerrar Leitura
@@ -1204,19 +1203,41 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_ALLOW_DENY: function (dialogType) {
         var me = this,
             view = me.getView(),
+            typeQuestion = {
+                'EPI': 'Relatar uso de  EPI',
+                'UNCONFORMITIES': 'Registrar inconformidades'
+            },
             doCallBack = function (dialog,field,scope) {
-                var me = scope;
+                var me = scope,
+                    value = field.getValue(),
+                    dialogType = dialog.dialogType.replace('_ENCERRAR','');
 
-                // if(field.getValue() === 'SATOR_NAO') {
-                //     me.encerrarEtapa();
-                //     return false;
-                // }
+                me.setView(dialog.master);
 
-                switch (dialog.dialogType) {
-                    case 'UNCONFORMITIES_SET':
-                        me.callSATOR_UNCONFORMITIES(dialog.master);
+                switch (dialogType) {
+                    case 'EPI':
+                        var store = Ext.getStore('flowprocessingstep'),
+                            model = store.getAt(0);
+
+                        model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
+                        store.sync({async: false});
+                        model.commit();
+                        Smart.ion.sound.play("button_tiny");
+                        me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_USA_EPI');
+                        if(dialog.dialogType === 'EPI_ENCERRAR') {
+                            me.callSATOR_ENCERRAR_LEITURA();
+                        }
+                        break;
+                    case 'UNCONFORMITIES':
+                        if(value === 'SATOR_NAO') {
+                            me.encerrarEtapa();
+                            return false;
+                        }
+                        me.callSATOR_UNCONFORMITIES();
                         break;
                 }
+
+                dialog.close();
             };
 
         Ext.widget('call_SATOR_ALLOW_DENY', {
@@ -1225,7 +1246,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             dialogType: dialogType,
             doCallBack: doCallBack
         }).show(null, function () {
-            this.down('label').setText('Registrar inconformidades');
+            this.down('label').setText(typeQuestion[dialogType.replace('_ENCERRAR','')]);
             this.down('textfield[name=satorprotocol]').focus(false, 200);
         });
     },
@@ -1258,12 +1279,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    callSATOR_UNCONFORMITIES: function (scope) {
+    callSATOR_UNCONFORMITIES: function () {
         var me = this,
             view = me.getView();
 
         Ext.widget('call_SATOR_UNCONFORMITIES', {
-            master: scope
+            scope: me,
+            master: view
         }).show(null, function () {
             var list = [],
                 grid = this.down('flowprocessingmaterial'),
@@ -1281,7 +1303,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 grid.plugins[0].startEditByPosition({row: grid.store.indexOf(item), column: 1});
             }
 
-            this.master = view;
+            // this.master = view;
         });
     },
 
@@ -1299,7 +1321,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     data = [],
                     grid = view.down('flowprocessingmaterial'),
                     sm = grid.getSelectionModel(),
-                    md = sm.getSelection()[0];
+                    md = sm.getSelection()[0],
+                    id = md.store.indexOf(md) +1;
 
                 value = value.replace('SATOR-U','');
                 md.set('unconformities',value);
@@ -1355,6 +1378,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     return false;
                 }
 
+                if(md.store.getCount() === id) {
+                    e.stopEvent();
+                    me.setView(view.master);
+                    view.close();
+                    me.callSATOR_ENCERRAR_LEITURA();
+                }
+
                 return true;
             }
 
@@ -1388,7 +1418,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             callback: function (options, success, response) {
                 if (success) {
                     var rows = Ext.decode(response.responseText).rows;
-                    // SATOR_ENCERRAR_LEITURA
                     Ext.widget('call_SATOR_RELATAR_EXCEPTION').show(null, function () {
                         this.master = view;
                         Ext.each(rows, function (item) {
@@ -1421,7 +1450,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             flowexception: parseInt(record.get('flowexception'))
         });
     },
-    // SATOR_ENCERRAR_LEITURA
+
     onChangeTypeException: function (field,newValue,OldValue,eOpts) {
         var me = this,
             area = [],
@@ -1529,7 +1558,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         });
 
-        // SATOR_ENCERRAR_LEITURA SATOR_PROCESSAR_ITENS
         if(list.length != store.getCount()) {
             Smart.Msg.showToast('Favor configurar todas a exceções antes de prosseguir!');
             return false;
@@ -1590,7 +1618,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             count += item.get('unconformities') == value ? 1 : 0;
         });
 
-        return (count != 0);
+        switch (value) {
+            case '001':
+                return (count != 0);
+                break;
+            case '010':
+                return (count == store.getCount());
+                break;
+        }
+
+        return false;
     },
 
     onSelectUnconformities: function (combo,record,eOpts) {

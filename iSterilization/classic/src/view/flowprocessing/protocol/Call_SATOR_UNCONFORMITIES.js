@@ -20,6 +20,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITI
     resizable: false,
     showAnimate: true,
 
+    overCls: 'header-hide',
+
     doCallBack: Ext.emptyFn,
 
     listeners: {

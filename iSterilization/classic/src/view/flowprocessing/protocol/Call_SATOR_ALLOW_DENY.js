@@ -46,8 +46,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_ALLOW_DENY',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
-                    fieldCls: 'smart-field-style-action'
-                    // labelCls: 'smart-field-style-action'
+                    fieldCls: 'smart-field-style-action',
+                    labelCls: 'smart-field-style-action'
                 },
                 items: [
                     {
