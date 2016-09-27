@@ -60,6 +60,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_ALLOW_DENY',
                         fieldLabel: 'Confirma Sim/Não?',
                         xtype: 'textfield',
                         name: 'satorprotocol',
+                        inputType: 'password',
                         listeners: {
                             specialkey: function (field, e, eOpts) {
                                 if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
