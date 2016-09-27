@@ -1211,7 +1211,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var me = scope,
                     value = field.getValue(),
                     dialogType = dialog.dialogType.replace('_ENCERRAR','');
-console.info(dialog.master.xdata);
+
                 me.setView(dialog.master);
 
                 switch (dialogType) {
@@ -1231,15 +1231,14 @@ console.info(dialog.master.xdata);
                     case 'UNCONFORMITIES':
                         if(value === 'SATOR_NAO') {
                             var exceptionby = dialog.master.xdata.get('exceptionby');
-                            console.info(exceptionby);
                             /**
                              * Registrar exceções
                              */
                             if(exceptionby != null) {
                                 me.callSATOR_RELATAR_EXCEPTION(Ext.decode(exceptionby));
+                                dialog.close();
                                 return false;
                             }
-
                             /**
                              * Encerrar Leitura
                              *
@@ -1256,6 +1255,7 @@ console.info(dialog.master.xdata);
                              * Fluxo Segue
                              */
                             me.encerrarEtapa();
+                            dialog.close();
                             return false;
                         }
                         me.callSATOR_UNCONFORMITIES();
