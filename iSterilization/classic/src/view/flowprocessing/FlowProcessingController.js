@@ -1211,7 +1211,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var me = scope,
                     value = field.getValue(),
                     dialogType = dialog.dialogType.replace('_ENCERRAR','');
-
+console.info(dialog.master.xdata);
                 me.setView(dialog.master);
 
                 switch (dialogType) {
