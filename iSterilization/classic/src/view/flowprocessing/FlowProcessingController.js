@@ -1309,7 +1309,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView();
 
         Ext.widget('call_SATOR_UNCONFORMITIES', {
-            scope: me,
+            // scope: me,
             master: view
         }).show(null, function () {
             var list = [],
