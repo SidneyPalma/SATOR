@@ -1994,8 +1994,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        console.info(view.xdata.data);
-//P201609000001
         // Já foi lançado ?
         // Não -> Pesquisa e Insert (Depende do Status do Material)
         Ext.Ajax.request({
