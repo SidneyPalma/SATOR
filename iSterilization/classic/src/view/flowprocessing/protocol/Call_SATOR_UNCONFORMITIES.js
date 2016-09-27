@@ -69,14 +69,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_UNCONFORMITI
 
     buttons: [
         {
-        //     scale: 'medium',
-        //     name: 'confirm',
-        //     text: 'Confirmar',
-        //     showSmartTheme: 'green',
-        //     listeners: {
-        //         click: 'setUnconformities'
-        //     }
-        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',

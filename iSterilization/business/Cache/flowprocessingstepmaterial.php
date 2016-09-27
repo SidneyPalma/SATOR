@@ -53,20 +53,42 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
-            SELECT
-                ib.id,
-				ib.isactive,
-				ib.id as materialid,
-				ib.name as materialname
-            FROM
-                itembase ib
-                inner join material m on ( m.id = ib.id )
-            WHERE ib.barcode COLLATE Latin1_General_CI_AI = :barcode
-              and ib.isactive = 1";
+            declare
+                @barcode varchar(20) = :barcode,
+                @flowprocessingstepid int = :flowprocessingstepid;
+            
+                if(left(@barcode, 1) = 'C')
+                begin
+                    select
+                        ib.id,
+                        ib.isactive,
+                        m.materialstatus
+                    from
+                        itembase ib
+                        inner join material m on ( m.id = ib.id )
+                    where ib.barcode = @barcode
+                end
+            
+                if(left(@barcode, 1) = 'P')
+                begin
+                    select
+                        ib.id,
+                        ib.isactive,
+                        m.materialstatus
+                    from
+                        flowprocessing fp
+                        inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+                        inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
+                        inner join itembase ib on ( ib.id = fpsm.materialid )
+                        inner join material m on ( m.id = ib.id )
+                    where fp.barcode = @barcode
+                      and fps.id = @flowprocessingstepid
+                end";
 
         try {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
