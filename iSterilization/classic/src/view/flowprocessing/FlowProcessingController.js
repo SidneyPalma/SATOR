@@ -1385,8 +1385,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             radiogroup = view.down('radiogroup'),
             exceptiondo = Ext.decode(record.get('exceptiondo')),
-            elementname = view.down('combobox[name=elementname]'),
-            record = view.down('gridpanel').getSelectionModel().getSelection()[0];
+            elementname = view.down('combobox[name=elementname]');
+            // record = view.down('gridpanel').getSelectionModel().getSelection()[0];
 
         elementname.reset();
         elementname.setReadColor(true);
@@ -1994,8 +1994,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        console.info(view.xdata.data);
-//P201609000001
         // Já foi lançado ?
         // Não -> Pesquisa e Insert (Depende do Status do Material)
         Ext.Ajax.request({
