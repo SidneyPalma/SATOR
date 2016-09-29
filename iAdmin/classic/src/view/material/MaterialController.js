@@ -195,6 +195,8 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         Ext.getStore('itembaseservicetype').setParams({
             query: xdata.get('id')
         }).load();
+
+        view.down('panel[tabIndex=3]').setDisabled(false);
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {
@@ -254,9 +256,24 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
 
         me._success = function (form, action) {
             grid.setDisabled(false);
+            view.down('panel[tabIndex=3]').setDisabled(false);
             if(action.result.crud == 'insert') {
                 view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
+
                 Ext.getStore('materialtypeflow').setParams({
+                    query: action.result.rows.id
+                }).load();
+
+                grid.getStore().setParams({
+                    method: 'selectData',
+                    query: action.result.rows.id
+                }).load();
+
+                Ext.getStore('materialcycle').setParams({
+                    query: action.result.rows.id
+                }).load();
+
+                Ext.getStore('itembaseservicetype').setParams({
                     query: action.result.rows.id
                 }).load();
             }
@@ -272,7 +289,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
             grid = view.down('itembaselayout');
 
         view.reset();
-
+        view.down('panel[tabIndex=3]').setDisabled(true);
         grid.setDisabled(true);
         grid.getStore().removeAll();
         view.down('tabpanel').setActiveTab(0);

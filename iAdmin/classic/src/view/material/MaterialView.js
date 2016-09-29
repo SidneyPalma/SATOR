@@ -418,6 +418,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         xtype: 'itembaselayout'
                     }, {
                         tabIndex: 3,
+                        disabled: true,
                         xtype: 'panel',
                         title: 'Parâmetros de fluxos',
                         layout: {
