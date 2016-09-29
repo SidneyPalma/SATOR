@@ -288,7 +288,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
             form = view.down('form'),
             params = form.getValues();
 
-        Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
+        Ext.Msg.confirm('Duplicar registro', 'Confirma a duplicação do registro selecionado?',
             function (choice) {
                 if (choice === 'yes') {
 
