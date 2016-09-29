@@ -2,6 +2,7 @@
 
 namespace iAdmin\Cache;
 
+use Smart\Utils\Session;
 use iAdmin\Model\material as Model;
 
 class material extends \Smart\Data\Cache {
@@ -149,6 +150,144 @@ class material extends \Smart\Data\Cache {
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function insertCopy(array $data) {
+        $id = $data['id'];
+        $username = $this->session->username;
+        $proxy = $this->getStore()->getProxy();
+
+
+        $sql = "
+            SET XACT_ABORT ON
+            SET NOCOUNT ON
+            SET ANSI_NULLS ON
+            SET ANSI_WARNINGS ON
+            
+            declare
+                @nw int,
+                @id int = {$id},
+                @barcode varchar(20), 
+                @error_code int = 0, 
+                @error_text nvarchar(200),
+                @username varchar(80) = '{$username}';
+            
+            BEGIN TRY
+            
+                BEGIN TRAN setCloneItem;
+            
+                    insert into itembase
+                        (
+                            name, barcode, description, resultfield, proprietaryid,
+                            manufacturerid, dateacquisition, patrimonialcode,
+                            registrationanvisa, itembasetype, filedata, fileinfo, isactive, itemgroup
+                        )
+                    select
+                        ib.name + ' (clone)', 
+                        '(clone)' as barcode,
+                        ib.description, 
+                        ib.resultfield, 
+                        ib.proprietaryid, 
+                        ib.manufacturerid, 
+                        ib.dateacquisition, 
+                        ib.patrimonialcode, 
+                        ib.registrationanvisa, 
+                        ib.itembasetype, 
+                        ib.filedata, 
+                        ib.fileinfo, 
+                        ib.isactive, 
+                        ib.itemgroup
+                    from
+                        itembase ib
+                    where ib.id = @id;
+            
+                    set @nw = ( select @@identity );
+            
+                    insert into material
+                        (
+                            id, materialstatus, packingid, numberproceedings, 
+                            datedisposal, isconsigned, itemsize, itemlength, 
+                            itemcubiclength, cloned, clonedate, cloneusername
+                        )
+                    select
+                        @nw as id,
+                        m.materialstatus, 
+                        m.packingid, 
+                        m.numberproceedings, 
+                        m.datedisposal, 
+                        m.isconsigned, 
+                        m.itemsize, 
+                        m.itemlength, 
+                        m.itemcubiclength, 
+                        1 as cloned, 
+                        getdate() as clonedate, 
+                        @username as cloneusername
+                    from
+                        material m
+                    where m.id = @id;
+            
+                    set @barcode = 'C' + dbo.getLeftPad(7,'0',@nw);
+            
+                    update itembase set barcode = @barcode where id= @nw;
+            
+                    insert into itembaseservicetype ( itembaseid, servicetype )
+                    select
+                        @nw as itembaseid, servicetype
+                    from
+                        itembaseservicetype ist
+                    where ist.itembaseid = @id;
+            
+                    insert into materialcycle ( materialid, cycleid )
+                    select
+                        @nw as materialid, cycleid
+                    from
+                        materialcycle mc
+                    where mc.materialid = @id;
+            
+                    insert into materialtypeflow ( materialid, sterilizationtypeid, prioritylevel )
+                    select
+                        @nw as materialid, sterilizationtypeid, prioritylevel
+                    from
+                        materialtypeflow mtf
+                    where mtf.materialid = @id;
+            
+                COMMIT TRAN setCloneItem;
+            
+                set @error_code = 0;
+                set @error_text = 'Atualizacoes realizadas com sucesso!';
+            
+            END TRY
+            
+            BEGIN CATCH
+                ROLLBACK TRAN setCloneItem;
+                set @error_code = error_number();
+                set @error_text = ' # ' +error_message() + ', ' + cast(error_line() as varchar);
+            END CATCH
+            
+            select @nw as id, @error_code as error_code, @error_text as error_text;";
+
+        try {
+            $rows = $proxy->query($sql)->fetchAll();
+
+            $message = $rows[0]['error_text'];
+            $success = intval($rows[0]['error_code']) == 0;
+
+            if($success == true) {
+                $data['query'] = $rows[0]['id'];
+                $this->selectCode($data);
+                return $this->selectCode($data);
+            }
+
+            self::_setRows($rows);
+            self::_setText($message);
+            self::_setSuccess($success);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);

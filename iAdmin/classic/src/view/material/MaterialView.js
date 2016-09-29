@@ -92,7 +92,8 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                 defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
-                    allowBlank: false
+                    allowBlank: false,
+                    useLabelBold: true
                 },
                 items: [
                     {
@@ -117,32 +118,6 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         fieldLabel: 'Kit ativo',
                         name: 'materialboxname'
                     }, {
-                    //     xtype: 'radiogroup',
-                    //     vertical: true,
-                    //     columns: 3,
-                    //     items: [
-                    //         { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
-                    //         { boxLabel: 'Fluxo', name: 'extensiontype', inputValue: 1 },
-                    //         { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 2 }
-                    //     ],
-                    //     listeners: {
-                    //         change: 'onChangeExtensionType'
-                    //     }
-                    // }, {
-                    //     height: 150,
-                    //     layout: 'card',
-                    //     xtype: 'container',
-                    //     name: 'containercard',
-                    //     items: [
-                    //         {
-                    //             xtype: 'materialcycle'
-                    //         }, {
-                    //             xtype: 'materialtypeflow'
-                    //         }, {
-                    //             xtype: 'itembaseservicetype'
-                    //         }
-                    //     ]
-                    // }, {
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'checkboxfield',
@@ -161,11 +136,23 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                 name: 'isconsigned',
                                 xtype: 'checkboxfield',
                                 fieldLabel: 'Tipo',
-                                boxLabel: 'Material consignado'
+                                boxLabel: 'Consignado'
+                            }, {
+                                flex: 1,
+                                name: 'cloned',
+                                disabled: true,
+                                xtype: 'checkboxfield',
+                                fieldLabel: 'Duplicado',
+                                boxLabel: 'Clone'
                             }
                         ]
-                    }, {
-                        margin: '20 0 0 0',
+                    }
+                ],
+
+                dockedItems: [
+                    {
+                        dock: 'bottom',
+                        margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'button',
@@ -190,12 +177,11 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                disabled: true,
-                                name: 'pendent',
-                                iconCls: "fa fa-check",
-                                text: 'Concluir',
-                                handler: 'updateFlux',
-                                showSmartTheme: ''
+                                name: 'copymaterial',
+                                iconCls: "fa fa-files-o",
+                                text: 'Duplicar',
+                                handler: 'insertCopy',
+                                showSmartTheme: 'blue'
                             }
                         ]
                     }
