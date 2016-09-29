@@ -57,6 +57,16 @@ Ext.define( 'iAdmin.model.itembase.Material', {
         }, {
             name: 'colorschema',
             type: 'auto'
+        }, {
+            name: 'cloned',
+            type: 'boolean'
+        }, {
+            name: 'clonedate',
+            type: 'auto',
+            serializeType: 'date'
+        }, {
+            name: 'cloneusername',
+            type: 'auto'
         }
     ]
 

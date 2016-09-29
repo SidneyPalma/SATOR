@@ -280,6 +280,40 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         portrait.beFileData();
 
         Ext.getStore('materialtypeflow').removeAll();
+    },
+
+    insertCopy: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            params = form.getValues();
+
+        Ext.Msg.confirm('Duplicar registro', 'Confirma a duplicação do registro selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+
+                    params.action = 'select';
+                    params.method = 'insertCopy';
+
+                    Ext.Ajax.request({
+                        scope: me,
+                        url: me.url,
+                        params: params,
+                        callback: function (options, success, response) {
+                            var result = Ext.decode(response.responseText);
+
+                            if(!success || !result.success) {
+                                return false;
+                            }
+
+                            view.xdata.set(result.rows[0]);
+                            me.onAfterRenderView(view);
+                        }
+                    });
+                }
+            }
+        );
+
     }
 
 });
