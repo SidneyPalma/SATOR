@@ -54,6 +54,10 @@ Ext.define( 'Ext.overrides.form.field.ComboBox', {
             comp.add(Ext.widget('hiddenfield', { name: name }));
         }
 
+        if (combo.configStoreListeners) {
+            combo.store.setListeners(combo.configStoreListeners);
+        }
+
 		if(me.configPaging) {
 			try {
 				var toolbar = me.getPicker().pagingToolbar;
@@ -75,6 +79,8 @@ Ext.define( 'Ext.overrides.form.field.ComboBox', {
 		
     },
     
+    // configStoreListeners: false,
+
     setValue: function (value, doSelect) {
         var me = this.callParent(arguments);
 
