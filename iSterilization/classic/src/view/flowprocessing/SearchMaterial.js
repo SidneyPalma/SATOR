@@ -47,6 +47,9 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             name: 'manufacturername',
             type: 'auto'
         }, {
+            name: 'materialboxitems',
+            type: 'int'
+        }, {
             name: 'filedata',
             type: 'auto',
             convert: function (value,record) {

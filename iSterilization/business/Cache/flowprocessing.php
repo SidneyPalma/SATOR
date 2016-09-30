@@ -22,6 +22,7 @@ class flowprocessing extends \Smart\Data\Cache {
                 a.materialboxid,
                 a.materialboxname,
                 a.colorschema,
+                a.materialboxitems,
                 dbo.binary2base64(ib.filedata) as filedata,
                 ib.fileinfo,
                 st.version,
@@ -47,6 +48,14 @@ class flowprocessing extends \Smart\Data\Cache {
                 inner join sterilizationtype st on ( st.id = mtf.sterilizationtypeid )
                 outer apply (
                     SELECT
+						materialboxitems = (
+							SELECT
+							    COUNT(mbi.id)
+							FROM
+							    materialboxitem mbi
+							WHERE mbi.materialboxid = mb.id
+							  AND mbi.boxitemstatus = 'A'
+						),
                         mbi.materialboxid,
 						mb.name as materialboxname,
                         colorschema = (

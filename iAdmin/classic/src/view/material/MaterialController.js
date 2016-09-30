@@ -258,23 +258,23 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
             grid.setDisabled(false);
             view.down('panel[tabIndex=3]').setDisabled(false);
             if(action.result.crud == 'insert') {
-                view.down('hiddenfield[name=id]').setValue(action.result.rows.id);
+                view.down('hiddenfield[name=id]').setValue(action.result.rows[0].id);
 
                 Ext.getStore('materialtypeflow').setParams({
-                    query: action.result.rows.id
+                    query: action.result.rows[0].id
                 }).load();
 
                 grid.getStore().setParams({
                     method: 'selectData',
-                    query: action.result.rows.id
+                    query: action.result.rows[0].id
                 }).load();
 
                 Ext.getStore('materialcycle').setParams({
-                    query: action.result.rows.id
+                    query: action.result.rows[0].id
                 }).load();
 
                 Ext.getStore('itembaseservicetype').setParams({
-                    query: action.result.rows.id
+                    query: action.result.rows[0].id
                 }).load();
             }
         }
