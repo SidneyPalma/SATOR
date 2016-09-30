@@ -190,7 +190,7 @@ class material extends \Smart\Data\Cache {
                             registrationanvisa, itembasetype, filedata, fileinfo, isactive, itemgroup
                         )
                     select
-                        ib.name + ' (clone)', 
+                        '(clone) ' + ib.name, 
                         '(clone)' as barcode,
                         ib.description, 
                         ib.resultfield, 
