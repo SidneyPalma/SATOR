@@ -271,7 +271,7 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                                         flex: 1,
                                         value: '001',
                                         margin: '0 0 0 5',
-                                        useReadColor: true,
+                                        // useReadColor: true,
                                         fieldLabel: 'Status',
                                         xtype: 'comboenum',
                                         name: 'materialstatusdescription'
