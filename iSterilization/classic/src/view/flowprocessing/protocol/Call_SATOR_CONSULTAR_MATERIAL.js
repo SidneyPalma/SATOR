@@ -126,7 +126,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                         '<p><b>Status:</b> {materialstatusdescription}</p>',
                                         '<p><b>Embalagem:</b> {packingname}</p>',
                                         '<p><b style="color: red;">Proprietario:</b> {proprietaryname}</p>',
-                                        '<p><b style="color: blue;">Código de Barras:</b> {barcode} itens no kit: {materialboxitems}</p>',
+                                        '<p><b style="color: blue;">Código de Barras:</b> {barcode} <b style="color: red;">({materialboxitems} itens)</b></p>',
                                     '</div>'
                                 ]
                             }, {
