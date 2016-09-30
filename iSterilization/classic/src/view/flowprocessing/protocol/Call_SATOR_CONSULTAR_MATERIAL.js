@@ -26,6 +26,27 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
         me.callParent();
     },
 
+    showData: function (record) {
+        var view = this,
+            portrait = view.down('portrait'),
+            materialdetail = view.down('form[name=materialdetail]');
+        var colorpallet = '',
+            colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
+            coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
+
+        Ext.each(colorschema,function (color) {
+            colorpallet += Ext.String.format(coloritem,color);
+        });
+
+        record.set('colorpallet',colorpallet);
+
+        materialdetail.update(record.data);
+
+        if(portrait) {
+            portrait.beFileData(record.get('filetype'));
+        }
+    },
+
     buildItems: function () {
         var me = this;
 
@@ -50,8 +71,19 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                         margin: '20 0 0 0',
                         fieldLabel: 'Material',
                         xtype: 'searchmaterial',
+                        readerBarCode: true,
                         hiddenNameId: 'materialid',
                         name: 'materialname',
+                        configStoreListeners: {
+                            load: function (store, records , successful , operation , eOpts) {
+                                if(records.length == 1) {
+                                    var record = records[0];
+                                    me.showData(record);
+                                    me.down('searchmaterial').collapse();
+                                    me.down('searchmaterial').setRawValue(record.get('name'));
+                                }
+                            }
+                        },
                         listeners: {
                             showclear: function (combo) {
                                 var view = combo.up('window'),
@@ -71,24 +103,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                 }
                             },
                             select: function (combo,record,eOpts) {
-                                var view = combo.up('window'),
-                                    portrait = view.down('portrait'),
-                                    materialdetail = view.down('form[name=materialdetail]');
-                                var colorpallet = '',
-                                    colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
-                                    coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
+                                var view = combo.up('window');
 
-                                Ext.each(colorschema,function (color) {
-                                    colorpallet += Ext.String.format(coloritem,color);
-                                });
-
-                                record.set('colorschema',colorpallet);
-
-                                materialdetail.update(record.data);
-
-                                if(portrait) {
-                                    portrait.beFileData(record.get('filetype'));
-                                }
+                                view.showData(record);
                             }
                         }
                     }, {
@@ -103,7 +120,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                 name: 'materialdetail',
                                 tpl: [
                                     '<div style="font-size: 14px; font-family: Monda;">',
-                                        '<div style="margin-top: 16px;">{colorschema} </div><br/>',
+                                        '<div style="margin-top: 16px;">{colorpallet} </div><br/>',
                                         '<p><b>Kit:</b> {materialboxname}</p>',
                                         '<p><b>Grupo:</b> {itemgroupdescription}</p>',
                                         '<p><b>Status:</b> {materialstatusdescription}</p>',

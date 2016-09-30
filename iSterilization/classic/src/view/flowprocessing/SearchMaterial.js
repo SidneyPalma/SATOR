@@ -78,8 +78,14 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
         }, {
             name: 'sterilizationpriority',
             type: 'auto'
+        }, {
+            name: 'colorpallet',
+            type: 'auto'
         }
     ],
+
+    storeListeners: {
+    },
 
     tpl: [
         '<tpl for=".">',
@@ -115,7 +121,6 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
 
         me.setListeners({
             expand: function (field, eOpts) {
-                
                 if(field.getStore().getCount()) {
                     field.picker.getSelectionModel().select(0);
                     field.fireEvent('nextfield',field,eOpts);
