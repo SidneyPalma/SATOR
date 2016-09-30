@@ -200,15 +200,15 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
     },
 
     onEditTypeFlow: function (editor, context, eOpts) {
-        var gd = context.grid;
-            // store = gd.getStore(),
-            var record = context.record;
+        var gd = context.grid,
+            store = gd.getStore(),
+            record = context.record;
 
         record.set('sterilizationtypeid',context.value);
 
-        record.store.sync({
+        store.sync({
             success: function () {
-                record.store.load({
+                store.load({
                     callback: function () {
                         gd.getSelectionModel().select(context.rowIdx);
                     }
