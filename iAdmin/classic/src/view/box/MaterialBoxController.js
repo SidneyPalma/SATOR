@@ -303,6 +303,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
                             var result = Ext.decode(response.responseText);
 
                             if(!success || !result.success) {
+                                Ext.Msg.alert('Failure', result.text);
                                 return false;
                             }
 

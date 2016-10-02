@@ -321,6 +321,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
                             var result = Ext.decode(response.responseText);
 
                             if(!success || !result.success) {
+                                Ext.Msg.alert('Failure', result.text);
                                 return false;
                             }
 

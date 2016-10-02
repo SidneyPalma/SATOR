@@ -235,7 +235,7 @@ class material extends \Smart\Data\Cache {
             
                     set @barcode = 'C' + dbo.getLeftPad(7,'0',@nw);
             
-                    update itembase set barcode = @barcode where id= @nw;
+                    update materialbox set barcode = @barcode, clonedid = @id where id= @nw;
             
                     insert into itembaseservicetype ( itembaseid, servicetype )
                     select
@@ -274,22 +274,28 @@ class material extends \Smart\Data\Cache {
             select @nw as id, @error_code as error_code, @error_text as error_text;";
 
         try {
+            $proxy->beginTransaction();
             $rows = $proxy->query($sql)->fetchAll();
 
             $message = $rows[0]['error_text'];
             $success = intval($rows[0]['error_code']) == 0;
 
             if($success == true) {
+                $proxy->commit();
                 $data['query'] = $rows[0]['id'];
-                $this->selectCode($data);
-                return $this->selectCode($data);
+                $result = $this->selectCode($data);
+                return $result;
             }
 
             self::_setRows($rows);
             self::_setText($message);
             self::_setSuccess($success);
 
+            if($success == false) {
+                throw new \PDOException($rows[0]['error_text']);
+            }
         } catch ( \PDOException $e ) {
+            $proxy->rollBack();
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
