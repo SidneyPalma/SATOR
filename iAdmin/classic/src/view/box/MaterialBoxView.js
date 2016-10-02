@@ -86,7 +86,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                 defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
-                    allowBlank: false
+                    allowBlank: false,
+                    useLabelBold: true
                 },
                 items: [
                     {
@@ -140,7 +141,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                         cls: 'sub-title-label',
                         text: 'Esquema de cores'
                     }, {
-                        height: 128,
+                        height: 132,
                         disabled: true,
                         margin: '10 0 0 0',
                         xtype: 'materialboxtarge'
@@ -166,8 +167,13 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                                 boxLabel: 'Obrigatório'
                             }
                         ]
-                    }, {
-                        margin: '20 0 0 0',
+                    }
+                ],
+
+                dockedItems: [
+                    {
+                        dock: 'bottom',
+                        margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'button',
@@ -192,12 +198,18 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                disabled: true,
-                                name: 'pendent',
-                                iconCls: "fa fa-check",
-                                text: 'Finalizar',
-                                handler: 'updateBox',
-                                showSmartTheme: ''
+                                name: 'copymaterial',
+                                iconCls: "fa fa-files-o",
+                                text: 'Duplicar',
+                                handler: 'insertCopy',
+                                showSmartTheme: 'blue'
+                                // flex: 1,
+                                // disabled: true,
+                                // name: 'pendent',
+                                // iconCls: "fa fa-check",
+                                // text: 'Finalizar',
+                                // handler: 'updateBox',
+                                // showSmartTheme: 'blue'
                             }
                         ]
                     }

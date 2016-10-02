@@ -208,6 +208,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
 
         store.sync({
             success: function () {
+                record.commit();
                 store.load({
                     callback: function () {
                         gd.getSelectionModel().select(context.rowIdx);
