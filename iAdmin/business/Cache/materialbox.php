@@ -2,6 +2,7 @@
 
 namespace iAdmin\Cache;
 
+use Smart\Utils\Session;
 use iAdmin\Model\materialbox as Model;
 
 class materialbox extends \Smart\Data\Cache {
@@ -103,17 +104,17 @@ class materialbox extends \Smart\Data\Cache {
                     where mb.id = @id;
             
                     set @nw = ( select @@identity );            
-            
-                    set @barcode = 'K' + dbo.getLeftPad(7,'0',@nw);
-            
-                    update materialbox set barcode = @barcode where id= @nw;
-            
+                       
                     insert into materialboxtarge ( materialboxid, targecolorid, targeorderby )
                     select
                         @nw as materialboxid, mbi.targecolorid, mbi.targeorderby
                     from
                         materialboxtarge mbi
                     where mbi.materialboxid = @id;            
+            
+                    set @barcode = 'K' + dbo.getLeftPad(7,'0',@nw);
+            
+                    update materialbox set barcode = @barcode where id= @nw;            
             
                 COMMIT TRAN setCloneItem;
             
@@ -131,12 +132,15 @@ class materialbox extends \Smart\Data\Cache {
             select @nw as id, @error_code as error_code, @error_text as error_text;";
 
         try {
+            $proxy->beginTransaction();
+
             $rows = $proxy->query($sql)->fetchAll();
 
             $message = $rows[0]['error_text'];
             $success = intval($rows[0]['error_code']) == 0;
 
             if($success == true) {
+                $proxy->commit();
                 $data['query'] = $rows[0]['id'];
                 $this->selectCode($data);
                 return $this->selectCode($data);
@@ -146,7 +150,11 @@ class materialbox extends \Smart\Data\Cache {
             self::_setText($message);
             self::_setSuccess($success);
 
+            if($success == false) {
+                throw new \PDOException($rows[0]['error_text']);
+            }
         } catch ( \PDOException $e ) {
+            $proxy->rollBack();
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
