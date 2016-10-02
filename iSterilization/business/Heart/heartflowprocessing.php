@@ -1391,6 +1391,10 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $query = $data['query'];
 
         $sql = "
+			declare
+				@barcode varchar(20) = :barcode,
+				@name varchar(80) = :name;
+
             select
                 ib.id,
                 ib.name as materialname,
@@ -1422,13 +1426,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             where ib.isactive = 1
               and (
                     ib.barcode = :barcode OR
-                    ib.name COLLATE Latin1_General_CI_AI LIKE :name
+                    ib.name COLLATE Latin1_General_CI_AI LIKE @name
               )";
 
         try {
             $pdo = $this->prepare($sql);
-            $pdo->bindValue(":barcode", $query, \PDO::PARAM_INT);
-            $pdo->bindValue(":name", "{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
