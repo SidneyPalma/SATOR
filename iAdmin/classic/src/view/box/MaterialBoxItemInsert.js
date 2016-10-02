@@ -12,7 +12,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItemInsert', {
         'iAdmin.view.box.MaterialBoxController'
     ],
 
-    width: 450,
+    width: 550,
     modal: true,
     resizable: false,
     showAnimate: true,
@@ -49,7 +49,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItemInsert', {
                         xtype: 'hiddenfield',
                         name: 'materialboxid'
                     }, {
-                        pageSize: 5,
                         fieldLabel: 'Material',
                         xtype: 'materialboxitemsearch',
                         hiddenNameId: 'materialid',
