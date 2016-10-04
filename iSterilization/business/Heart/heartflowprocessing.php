@@ -1110,7 +1110,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                             from
                                 flowprocessingstepmaterial b
                                 inner join itembase ib on ( ib.id = b.materialid )
-                            where b.flowprocessingstepid = a.id
+                            where b.flowprocessingstepid = fpsa.flowprocessingstepid
                         ) tb
                     where a.flowprocessingid = fps.flowprocessingid
                       and a.id = fps.target
