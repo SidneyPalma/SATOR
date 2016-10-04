@@ -220,19 +220,31 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     areaMaterial: function (value) {
         var me = this,
+            view = me.getView(),
             store = Ext.getStore('flowprocessingstepaction');
 
-        store.setParams({
-            method: 'selectTaskArea',
-            barcode: value,
-            areasid: Smart.workstation.areasid
-        }).load({
-            callback: function(records, operation, success) {
-                if(records.length != 0) {
-                    var record = records[0];
-                    me.onFlowStepAction(null,record);
-                    store.removeAll();
+        view.setLoading('Consultando materiais...');
+
+        Ext.Ajax.request({
+            scope: me,
+            url: store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'selectTaskArea',
+                barcode: value,
+                areasid: Smart.workstation.areasid
+            },
+            callback: function (options, success, response) {
+                view.setLoading(false);
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
+                    return false;
                 }
+
+                var record = Ext.create('iSterilization.model.flowprocessing.FlowProcessingStepAction', result.rows[0]);
+                me.onFlowStepAction(null,record);
             }
         });
     },
