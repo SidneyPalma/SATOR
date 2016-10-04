@@ -109,6 +109,9 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @flowprocessingstepid int = :flowprocessingstepid;
+                
             select
                 fps.username,
                 fps.elementname,
@@ -118,7 +121,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
             from 
                 flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )
-            where fpsa.flowprocessingstepid = :flowprocessingstepid";
+            where fpsa.flowprocessingstepid = @flowprocessingstepid";
 
         try {
             $pdo = $proxy->prepare($sql);
@@ -451,6 +454,9 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 		$proxy = $this->getStore()->getProxy();
 		
         $sql = "
+            declare
+                @actionid int = :actionid;
+                
             select
                 fps.id,
                 fps.username,
@@ -474,7 +480,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 left join itembase ib on ( ib.id = fps.equipmentid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 inner join client c on ( c.id = fp.clientid )
-            where fpsa.id = :actionid";
+            where fpsa.id = @actionid";
 
         try {
 			$pdo = $proxy->prepare($sql);
@@ -540,7 +546,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                 @areasid int = :areasid,
                 @barcode varchar(20) = :barcode;
      
-            select
+            select distinct
                 fps.id,
                 @barcode as barcode,
                 'P' as steptype,
