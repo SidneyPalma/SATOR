@@ -18,9 +18,8 @@ Ext.define( 'iSterilization.view.main.MainController', {
 
         me.onToggleMicro(button,true);
 
-        ctrll.onMainPageView({ xtype: 'flowprocessingstep' });
+        ctrll.onMainPageView({ xtype: "flowprocessingstep" });
         history.pushState({}, "route", "#flowprocessingstep");
     }
-
 
 });
