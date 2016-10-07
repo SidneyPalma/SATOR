@@ -111,12 +111,12 @@ Ext.define( 'iAdmin.view.helper.areas.CMESubAreasEdit', {
                                 xtype: 'checkboxfield',
                                 fieldLabel: 'Fluxo',
                                 boxLabel: 'Ativo'
-                            // }, {
-                            //     flex: 1,
-                            //     name: 'validateload',
-                            //     xtype: 'checkboxfield',
-                            //     fieldLabel: 'Ciclo',
-                            //     boxLabel: 'Registra'
+                            }, {
+                                flex: 1,
+                                name: 'hasstock',
+                                xtype: 'checkboxfield',
+                                fieldLabel: 'Arsenal',
+                                boxLabel: 'Possui'
                             }
                         ]
                     }

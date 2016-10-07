@@ -151,8 +151,12 @@ Ext.define( 'iAdmin.view.users.UsersView', {
                                 boxLabel: 'Recebe notificações'
                             }
                         ]
-                    }, {
-                        margin: '20 0 0 0',
+                    }
+                ],
+                dockedItems: [
+                    {
+                        dock: 'bottom',
+                        margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'button',

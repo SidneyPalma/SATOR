@@ -81,6 +81,24 @@ class material extends \Smart\Data\Model {
     private $itemcubiclength;
 
     /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     */
+    private $cloned;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"date", "policy":true, "logallow":true, "default":""}
+     */
+    private $clonedate;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $cloneusername;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -220,6 +238,54 @@ class material extends \Smart\Data\Model {
      */
     public function setItemcubiclength($itemcubiclength) {
         $this->itemcubiclength = $itemcubiclength;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getCloned() {
+        return $this->cloned;
+    }
+
+    /**
+     * @param type $cloned
+     * @return \iAdmin\Model\material
+     */
+    public function setCloned($cloned) {
+        $this->cloned = $cloned;
+        return $this;
+    }
+
+    /**
+     * @return type date
+     */
+    public function getClonedate() {
+        return $this->clonedate;
+    }
+
+    /**
+     * @param type $clonedate
+     * @return \iAdmin\Model\material
+     */
+    public function setClonedate($clonedate) {
+        $this->clonedate = $clonedate;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getCloneusername() {
+        return $this->cloneusername;
+    }
+
+    /**
+     * @param type $cloneusername
+     * @return \iAdmin\Model\material
+     */
+    public function setCloneusername($cloneusername) {
+        $this->cloneusername = $cloneusername;
         return $this;
     }
 

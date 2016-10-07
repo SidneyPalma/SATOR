@@ -67,7 +67,6 @@ Ext.Loader.setConfig({
         'iAdmin.view.person.client': '../iAdmin/classic/src/view/person/client',
         'iAdmin.view.person.proprietary': '../iAdmin/classic/src/view/person/proprietary',
         'iAdmin.view.helper.manufacturer': '../iAdmin/classic/src/view/helper/manufacturer',
-        'iAdmin.view.helper.materialstatus': '../iAdmin/classic/src/view/helper/materialstatus',
         'iAdmin.view.helper.unitmeasurement': '../iAdmin/classic/src/view/helper/unitmeasurement'
     }
 });

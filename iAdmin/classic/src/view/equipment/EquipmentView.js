@@ -88,7 +88,8 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                 defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
-                    allowBlank: false
+                    allowBlank: false,
+                    useLabelBold: true
                 },
                 items: [
                     {
@@ -112,29 +113,6 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                         xtype: 'textfield',
                         name: 'sterilizationname'
                     }, {
-                    //     xtype: 'radiogroup',
-                    //     vertical: true,
-                    //     columns: 2,
-                    //     items: [
-                    //         { boxLabel: 'Ciclo', name: 'extensiontype', inputValue: 0, checked: true },
-                    //         { boxLabel: 'Serviço', name: 'extensiontype', inputValue: 1 }
-                    //     ],
-                    //     listeners: {
-                    //         change: 'onChangeExtensionType'
-                    //     }
-                    // }, {
-                    //     height: 150,
-                    //     layout: 'card',
-                    //     xtype: 'container',
-                    //     name: 'containercard',
-                    //     items: [
-                    //         {
-                    //             xtype: 'equipmentcycle'
-                    //         }, {
-                    //             xtype: 'itembaseservicetype'
-                    //         }
-                    //     ]
-                    // }, {
                         xtype: 'container',
                         layout: 'hbox',
                         items: [
@@ -150,16 +128,14 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                 xtype: 'checkboxfield',
                                 fieldLabel: 'Fluxo',
                                 boxLabel: 'Ativo'
-                            // }, {
-                            //     flex: 1,
-                            //     name: 'validateload',
-                            //     xtype: 'checkboxfield',
-                            //     fieldLabel: 'Carga',
-                            //     boxLabel: 'Valida'
                             }
                         ]
-                    }, {
-                        margin: '20 0 0 0',
+                    }
+                ],
+                dockedItems: [
+                    {
+                        dock: 'bottom',
+                        margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'button',
@@ -328,7 +304,7 @@ Ext.define( 'iAdmin.view.equipment.EquipmentView', {
                                         name: 'cmeareasname'
                                     }, {
                                         width: 150,
-                                        margin: '0 5 0 0',
+                                        margin: '0 0 0 5',
                                         xtype: 'comboenum',
                                         queryFilter: 'E',
                                         fieldLabel: 'Grupo do Item',

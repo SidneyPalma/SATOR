@@ -1,6 +1,6 @@
 {
     "name": "iSterilization",
-    "version": "1.0.0.234",
+    "version": "1.0.0.235",
     "indexHtmlPath": "index.html",
     "classpath": [
         "app",
@@ -28,7 +28,6 @@
         "${app.dir}/../iAdmin/classic/src/view/helper/provider",
         "${app.dir}/../iAdmin/classic/src/view/helper/manufacturer",
         "${app.dir}/../iAdmin/classic/src/view/helper/instrumentator",
-        "${app.dir}/../iAdmin/classic/src/view/helper/materialstatus",
         "${app.dir}/../iAdmin/classic/src/view/helper/unitmeasurement"
     ],
     "overrides": [
@@ -216,6 +215,6 @@
     "buildby": {
         "application": "production",
         "logusername": "DSADES21",
-        "lastdateapp": "2016-10-02 19:48"
+        "lastdateapp": "2016-10-06 18:06"
     }
 }

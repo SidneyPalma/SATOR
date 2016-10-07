@@ -22,8 +22,6 @@ Ext.define( 'iAdmin.view.main.MainController', {
         'iAdmin.view.helper.classcouncil.ClassCouncilEdit',
         'iAdmin.view.helper.manufacturer.ManufacturerEdit',
         'iAdmin.view.helper.instrumentator.InstrumentatorEdit',
-        'iAdmin.view.helper.materialstatus.MaterialStatusEdit',
-        'iAdmin.view.helper.equipmentstatus.EquipmentStatusEdit',
         'iAdmin.view.helper.unitmeasurement.UnitMeasurementEdit'
     ],
 

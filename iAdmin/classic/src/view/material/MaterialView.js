@@ -20,7 +20,6 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
         'iAdmin.view.person.proprietary.ProprietarySearch',
         'iAdmin.view.helper.manufacturer.ManufacturerSearch',
         'iAdmin.view.sterilizationtype.SterilizationTypeSearch'
-        // 'iAdmin.view.helper.materialstatus.MaterialStatusSearch'
     ],
 
     layout: 'border',
