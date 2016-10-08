@@ -174,27 +174,38 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
 
-        Ext.Ajax.request({
-            scope: me,
-            url: me.url,
-            params: {
-                action: 'select',
-                method: 'selectAreaStep',
-                query: Smart.workstation.areasid
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-            }
-        });
+        // Ext.Ajax.request({
+        //     scope: me,
+        //     url: me.url,
+        //     params: {
+        //         action: 'select',
+        //         method: 'selectAreaStep',
+        //         query: Smart.workstation.areasid
+        //     },
+        //     callback: function (options, success, response) {
+        //         var result = Ext.decode(response.responseText);
+        //
+        //         if(!success || !result.success) {
+        //             return false;
+        //         }
+        //     }
+        // });
 
         Ext.getStore('flowprocessingstepaction').setParams({
             method: 'selectArea',
             query: Smart.workstation.areasid
         }).load();
+    },
+
+    onAfterRenderHold: function () {
+        var me = this,
+            view = me.getView();
+
+        if(!Smart.workstation) {
+            return false;
+        }
+
+        view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
     },
 
     onQueryReaderView: function (field, e, eOpts) {
