@@ -447,7 +447,7 @@
     font-size: 16px;
     color: rgb(255, 255, 255);
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
-     background-color: transparent !important;
+    background-color: transparent !important;
 }
 
 .flowprocessingstep .x-grid-item:hover {
@@ -457,6 +457,7 @@
 .flowprocessingstep .x-grid-empty {
     display: none;
 }
+
 
 /*<span class="notification-icon icon-comment" aria-hidden=""></span>*/
 /*.unread .notification-icon {*/
@@ -469,3 +470,25 @@
     /*font-size: 19px;*/
     /*transition: color .1s;*/
 /*}*/
+
+.flowprocessinghold .x-grid-item {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+    background-color: transparent !important;
+}
+
+.flowprocessinghold .x-grid-item:hover {
+    color: rgb(251, 228, 0);
+}
+
+.flowprocessinghold .x-grid-empty {
+    display: none;
+}
+
+.flowprocessinghold .x-grid-item-focused {
+    font-size: 16px;
+    color: rgb(251, 228, 0);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+    background-color: transparent !important;
+}

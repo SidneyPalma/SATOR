@@ -47,8 +47,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
     },
 
     listeners: {
-        selectaction: 'onSelectAction',
-        queryreader: 'onQueryReaderView',
+        queryreader: 'onHoldDoQuery',
         afterrender: 'onAfterRenderHold'
     },
 
@@ -111,11 +110,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
         var me = this;
 
         Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInput');
+        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
+        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInput');
         Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepAction');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepMaterial');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInputTree');
+        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepMaterial');
+        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInputTree');
 
         me.items = [
             {
@@ -128,7 +127,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                 },
                 items: [
                     {
-                        flex: 3,
+                        flex: 4,
                         xtype: 'container',
                         layout: {
                             type: 'vbox',
@@ -141,18 +140,86 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 text: 'Estação de Trabalho Não Configurada',
                                 name: 'labelareas'
                             }, {
-                                flex: 1,
-                                xtype: 'flowprocessingdataview',
-                                listeners: {
-                                    select: 'onFlowStepSelect',
-                                    deselect: 'onFlowStepDeSelect',
-                                    itemdblclick: 'onFlowStepAction',
-                                    removerecord: 'onFlowStepRemove'
-                                }
+                                xtype: 'gridpanel',
+                                rowLines: true,
+                                // cls: 'flowprocessinghold',
+                                // bodyStyle: 'background:transparent;',
+                                //
+                                // url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+                                //
+                                // params: {
+                                //     action: 'select',
+                                //     method: 'selectCycle'
+                                // },
+                                //
+                                // fields: [
+                                //     {
+                                //         name: 'id',
+                                //         type: 'int'
+                                //     }, {
+                                //         name: 'barcode',
+                                //         type: 'auto'
+                                //     }, {
+                                //         name: 'flowprocessingstepid',
+                                //         type: 'int'
+                                //     }, {
+                                //         name: 'materialname',
+                                //         type: 'auto'
+                                //     }
+                                // ],
+                                // columns: [
+                                //     {
+                                //         dataIndex: 'materialname',
+                                //         flex: 1
+                                //     }, {
+                                //         width: 60,
+                                //         align: 'center',
+                                //         sortable: false,
+                                //         dataIndex: 'haspending',
+                                //         xtype: 'actioncolumn',
+                                //         handler: 'setDeleteChargeItem',
+                                //         getTip: function(v, meta, rec) {
+                                //             return 'Remover material do menu!';
+                                //         },
+                                //         getClass: function(v, meta, rec) {
+                                //             return "fa fa-minus-circle action-delete-color-font";
+                                //         }
+                                //     }
+                                // ]
+
+                                cls: 'flowprocessinghold',
+                                bodyStyle: 'background:transparent;',
+                                store: 'flowprocessingstepaction',
+                                columns: [
+                                    {
+                                        width: 80,
+                                        height: 60,
+                                        renderer: function (value,metaData,record) {
+                                            var url = record.store.getUrl(),
+                                                img =  '<div style="margin-top: 6px;"><img src="{0}?action=select&method=renderCode&barCode={1}" id="SATOR-{2}" /></div>';
+                                            return Ext.String.format(img,url,record.get('barcode'),record.get('id'));
+                                        }
+                                    }, {
+                                        flex: 1,
+                                        dataIndex: 'materialname',
+                                        renderer: function (value,metaData,record) {
+                                            var barcode = record.get('barcode'),
+                                                clientname = record.get('clientname'),
+                                                materialname = record.get('materialname'),
+                                                strRow =    '<div style="font-weight: 700; font-size: 16px; line-height: 24px;">' +
+                                                    '<div>{0}</div><div>{1}</div><div>{2}</div>' +
+                                                    '</div>';
+                                            return Ext.String.format(strRow,clientname,materialname,barcode);
+                                        }
+                                    }
+                                ]
                             }
                         ]
                     }, {
-                        flex: 2,
+                        flex: 1,
+                        xtype: 'container'
+                    }, {
+                        width: 350,
                         xtype: 'container',
                         layout: {
                             type: 'vbox',
@@ -162,83 +229,114 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                             {
                                 xtype: 'label',
                                 cls: 'processing-field-font',
-                                text: 'Consultar',
+                                text: 'Aguardando ...',
                                 name: 'labelitem'
                             }, {
-                                hidden: true,
-                                name: 'search',
-                                showClear: true,
-                                xtype: 'textfield',
-                                useUpperCase: true,
-                                useReadColor: false,
-                                inputType: 'password',
-                                cls: 'processing-field',
-                                labelCls: 'processing-field-font',
-                                listeners: {
-                                    specialkey: function (field, e, eOpts) {
-                                        var view = field.up('flowprocessingstep');
-                                        if ([e.ENTER].indexOf(e.getKey()) != -1) {
-                                            view.fireEvent('queryreader', field, e, eOpts);
-                                        }
-                                    }
-                                }
-                            }, {
-                                source: {},
-                                autoHeight: true,
-                                columnLines: false,
-                                xtype: 'propertygrid',
-                                defaults: { readOnly: true },
-                                disableSelection: true,
-                                cls: 'flowprocessingstep',
-                                frame: false,
-                                border: false,
+                                xtype: 'gridpanel',
+                                rowLines: true,
+                                cls: 'flowprocessinghold',
                                 bodyStyle: 'background:transparent;',
-                                listeners: {
-                                    beforeedit: function (e) { return false; },
-                                    itemkeydown: function ( tableView, td, cellIndex, record, e, eOpts ) {
-                                        if(e.keyCode == 27) {
-                                            tableView.up('flowprocessingstep').searchToogle();
+                                store: 'flowprocessingstepaction',
+                                columns: [
+                                    {
+                                        width: 80,
+                                        height: 60,
+                                        renderer: function (value,metaData,record) {
+                                            var url = record.store.getUrl(),
+                                                img =  '<div style="margin-top: 6px;"><img src="{0}?action=select&method=renderCode&barCode={1}" id="SATOR-{2}" /></div>';
+                                            return Ext.String.format(img,url,record.get('barcode'),record.get('id'));
+                                        }
+                                    }, {
+                                        flex: 1,
+                                        dataIndex: 'materialname',
+                                        renderer: function (value,metaData,record) {
+                                            var barcode = record.get('barcode'),
+                                                clientname = record.get('clientname'),
+                                                materialname = record.get('materialname'),
+                                                strRow =    '<div style="font-weight: 700; font-size: 16px; line-height: 24px;">' +
+                                                                '<div>{0}</div><div>{1}</div><div>{2}</div>' +
+                                                            '</div>';
+                                            return Ext.String.format(strRow,clientname,materialname,barcode);
                                         }
                                     }
-                                }
+                                ]
+                            // }, {
+                            //     xtype: 'pagingtoolbar',
+                            //     store: 'flowprocessingstepaction',
+                            //     dock: 'bottom',
+                            //     displayInfo: true
+                            // .x-toolbar-default {
+                            //     padding: 6px 0 6px 8px;
+                            //     /* border-style: solid; */
+                            //     border-color: #d0d0d0;
+                            //     border-width: 1px;
+                            //     background-image: none;
+                            //     /* background-color: #fff; */
+                            // }
                             }
                         ]
                     }
                 ]
             }, {
-                height: 150,
-                xtype: 'dataview',
-                trackOver: true,
-                autoScroll: true,
-                multiSelect: false,
-                name: 'flowprocessingsteptask',
-
-                url: '../iSterilization/business/Calls/flowprocessingstepaction.php',
-
-                params: {
-                    action: 'select',
-                    method: 'actionTask'
+                // height: 150,
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
                 },
-
-                fields: [ 'taskcode', 'taskname', 'taskrows' ],
-
-                itemSelector: 'div.thumb-wrap',
-                tpl: [
-                    '<tpl for=".">',
-                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                    '<div class="thumb-task-{taskcode}">',
-                    '<a class="authorize">{taskrows}</a>',
-                    '</div>',
-                    '<span><a style="font-size: 14px;">{taskname}</a></span>',
-                    '</div>',
-                    '</tpl>'
-                ],
-                listeners: {
-                    render: function () {
-                        this.getStore().load();
-                    },
-                    itemdblclick: 'onFlowTaskAction'
-                }
+                items: [
+                    {
+                    //     xtype: 'radiogroup',
+                    //     fieldLabel: 'Tipo de Consulta',
+                    //     columns: 3,
+                    //     vertical: false,
+                    //     items: [
+                    //         { boxLabel: 'Item 1', name: 'rb', inputValue: '1', checked: true },
+                    //         { boxLabel: 'Item 2', name: 'rb', inputValue: '2' },
+                    //         { boxLabel: 'Item 3', name: 'rb', inputValue: '3' }
+                    //     ]
+                    // }, {
+                        // flex: 1,
+                        flex: 4,
+                        name: 'search',
+                        showClear: true,
+                        xtype: 'textfield',
+                        useUpperCase: true,
+                        useReadColor: false,
+                        inputType: 'password',
+                        cls: 'processing-field',
+                        labelCls: 'processing-field-font',
+                        listeners: {
+                            specialkey: function (field, e, eOpts) {
+                                var view = field.up('flowprocessinghold');
+                                if ([e.ENTER].indexOf(e.getKey()) != -1) {
+                                    view.fireEvent('queryreader', field, e, eOpts);
+                                }
+                            }
+                        }
+                    }, {
+                        // xtype: 'splitter'
+                        flex: 1,
+                        xtype: 'container'
+                    }, {
+                        width: 350,
+                        margin: '5 0 0 0',
+                        xtype: 'segmentedbutton',
+                        allowMultiple: true,
+                        defaults: {
+                            height: 39,
+                            scale: 'medium',
+                            showSmartTheme: 'green'
+                        },
+                        items: [
+                            {
+                                text: 'Segment Item 2',
+                                tooltip: 'My custom tooltip'
+                            }, {
+                                text: 'Segment Item 3'
+                            }
+                        ]
+                    }
+                ]
             }
         ];
     }

@@ -49,7 +49,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
     listeners: {
         selectaction: 'onSelectAction',
-        queryreader: 'onQueryReaderView',
+        queryreader: 'onStepDoQuery',
         afterrender: 'onAfterRenderStep'
     },
 
@@ -129,7 +129,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                 },
                 items: [
                     {
-                        flex: 3,
+                        flex: 1,
                         xtype: 'container',
                         layout: {
                             type: 'vbox',
@@ -153,7 +153,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                             }
                         ]
                     }, {
-                        flex: 2,
+                        width: 350,
                         xtype: 'container',
                         layout: {
                             type: 'vbox',

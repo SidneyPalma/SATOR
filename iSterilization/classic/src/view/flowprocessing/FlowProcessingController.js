@@ -205,10 +205,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
+        view.down('textfield[name=search]').focus(false,200);
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
+
+        Ext.getStore('flowprocessingstepaction').setParams({
+            method: 'selectHold',
+            query: Smart.workstation.areasid
+        }).load();
     },
 
-    onQueryReaderView: function (field, e, eOpts) {
+    onStepDoQuery: function (field, e, eOpts) {
         var me = this,
             value = field.getValue(),
             itemC = new RegExp(/(C\d{6})\w+/g),
@@ -218,18 +224,54 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         if(value && value.length != 0) {
             if(value.indexOf('SATOR') != -1) {
-                me.areaProtocol(value);
+                me.stepProtocol(value);
                 return false;
             }
 
             if(itemC.test(value) || itemP.test(value)) {
-                me.areaMaterial(value);
+                me.stepMaterial(value);
                 return false;
             }
         }
     },
 
-    areaMaterial: function (value) {
+    onHoldDoQuery: function (field, e, eOpts) {
+        var me = this,
+            value = field.getValue(),
+            itemC = new RegExp(/(C\d{6})\w+/g),
+            itemP = new RegExp(/(P\d{6})\w+/g);
+
+        field.reset();
+
+        if(value && value.length != 0) {
+            if(value.indexOf('SATOR') != -1) {
+                me.holdProtocol(value);
+                return false;
+            }
+
+            if(itemC.test(value) || itemP.test(value)) {
+                me.holdMaterial(value);
+                return false;
+            }
+        }
+    },
+
+    holdProtocol: function (value) {
+        var me = this;
+
+        switch(value) {
+            case 'SATOR_MOVIMENTO_OF':
+                me.callSATOR_MOVIMENTO_OF();
+                break;
+            case 'SATOR_MOVIMENTO_TO':
+                me.callSATOR_MOVIMENTO_TO();
+                break;
+            default:
+                Smart.Msg.showToast('Protocolo inválido para esta área');
+        }
+    },
+
+    holdMaterial: function (value) {
         var me = this,
             view = me.getView(),
             store = Ext.getStore('flowprocessingstepaction');
@@ -260,7 +302,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    areaProtocol: function (value) {
+    callSATOR_MOVIMENTO_OF: function () {
+        var me = this;
+        Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
+            this.master = me.getView();
+        });
+    },
+
+    callSATOR_MOVIMENTO_TO: function () {
+        var me = this;
+        Ext.widget('call_SATOR_MOVIMENTO_TO').show(null,function () {
+            this.master = me.getView();
+        });
+    },
+
+    stepProtocol: function (value) {
         var me = this;
 
         switch(value) {
@@ -282,6 +338,37 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             default:
                 Smart.Msg.showToast('Protocolo inválido para esta área');
         }
+    },
+
+    stepMaterial: function (value) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('flowprocessingstepaction');
+
+        view.setLoading('Consultando materiais...');
+
+        Ext.Ajax.request({
+            scope: me,
+            url: store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'selectTaskArea',
+                barcode: value,
+                areasid: Smart.workstation.areasid
+            },
+            callback: function (options, success, response) {
+                view.setLoading(false);
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
+                    return false;
+                }
+
+                var record = Ext.create('iSterilization.model.flowprocessing.FlowProcessingStepAction', result.rows[0]);
+                me.onFlowStepAction(null,record);
+            }
+        });
     },
 
     callSATOR_PREPARA_LOTE_AVULSO: function () {
