@@ -492,3 +492,18 @@
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
     background-color: transparent !important;
 }
+
+.flowprocessinghold .x-form-cb-label {
+    font-size: 18px;
+    font-weight: 700 !important;
+}
+
+.flowprocessinghold .x-form-radio-default:before {
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
+.flowprocessinghold .x-form-cb-label-default.x-form-cb-label-after {
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}

@@ -127,7 +127,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                 },
                 items: [
                     {
-                        flex: 4,
+                        flex: 5,
                         xtype: 'container',
                         layout: {
                             type: 'vbox',
@@ -140,6 +140,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 text: 'Estação de Trabalho Não Configurada',
                                 name: 'labelareas'
                             }, {
+                                flex: 1,
+                                margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 rowLines: true,
                                 // cls: 'flowprocessinghold',
@@ -213,6 +215,35 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                         }
                                     }
                                 ]
+                            }, {
+                                height: 50,
+                                columns: 2,
+                                vertical: false,
+                                xtype: 'radiogroup',
+                                fieldLabel: 'Consulta',
+                                cls: 'flowprocessinghold',
+                                labelCls: 'processing-field-font',
+                                items: [
+                                    { boxLabel: 'Movimentação', name: 'rb', inputValue: '1', checked: true },
+                                    { boxLabel: 'Rastreabilidade', name: 'rb', inputValue: '2' }
+                                ]
+                            }, {
+                                name: 'search',
+                                showClear: true,
+                                xtype: 'textfield',
+                                useUpperCase: true,
+                                useReadColor: false,
+                                inputType: 'password',
+                                cls: 'processing-field',
+                                labelCls: 'processing-field-font',
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        var view = field.up('flowprocessinghold');
+                                        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+                                            view.fireEvent('queryreader', field, e, eOpts);
+                                        }
+                                    }
+                                }
                             }
                         ]
                     }, {
@@ -232,6 +263,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 text: 'Aguardando ...',
                                 name: 'labelitem'
                             }, {
+                                margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 rowLines: true,
                                 cls: 'flowprocessinghold',
@@ -273,66 +305,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                             //     background-image: none;
                             //     /* background-color: #fff; */
                             // }
-                            }
-                        ]
-                    }
-                ]
-            }, {
-                // height: 150,
-                xtype: 'container',
-                layout: {
-                    type: 'hbox'
-                },
-                items: [
-                    {
-                    //     xtype: 'radiogroup',
-                    //     fieldLabel: 'Tipo de Consulta',
-                    //     columns: 3,
-                    //     vertical: false,
-                    //     items: [
-                    //         { boxLabel: 'Item 1', name: 'rb', inputValue: '1', checked: true },
-                    //         { boxLabel: 'Item 2', name: 'rb', inputValue: '2' },
-                    //         { boxLabel: 'Item 3', name: 'rb', inputValue: '3' }
-                    //     ]
-                    // }, {
-                        // flex: 1,
-                        flex: 4,
-                        name: 'search',
-                        showClear: true,
-                        xtype: 'textfield',
-                        useUpperCase: true,
-                        useReadColor: false,
-                        inputType: 'password',
-                        cls: 'processing-field',
-                        labelCls: 'processing-field-font',
-                        listeners: {
-                            specialkey: function (field, e, eOpts) {
-                                var view = field.up('flowprocessinghold');
-                                if ([e.ENTER].indexOf(e.getKey()) != -1) {
-                                    view.fireEvent('queryreader', field, e, eOpts);
-                                }
-                            }
-                        }
-                    }, {
-                        // xtype: 'splitter'
-                        flex: 1,
-                        xtype: 'container'
-                    }, {
-                        width: 350,
-                        margin: '5 0 0 0',
-                        xtype: 'segmentedbutton',
-                        allowMultiple: true,
-                        defaults: {
-                            height: 39,
-                            scale: 'medium',
-                            showSmartTheme: 'green'
-                        },
-                        items: [
-                            {
-                                text: 'Segment Item 2',
-                                tooltip: 'My custom tooltip'
-                            }, {
-                                text: 'Segment Item 3'
                             }
                         ]
                     }
