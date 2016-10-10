@@ -16,12 +16,39 @@ Ext.define( 'iSterilization.view.main.MainController', {
             ctrll = Smart.app.getController('App'),
             button = view.down('button[toggleHandler=onToggleMicro]');
 
-        me.onToggleMicro(button,true);
+        // me.onToggleMicro(button,true);
 
-        ctrll.onMainPageView({ xtype: 'flowprocessingstep' });
+        ctrll.setFlowProcessingType();
 
-        history.pushState({}, "pg1", "#flowprocessingstep");
+        // if(Smart.workstation) {
+        //     Ext.Ajax.request({
+        //         scope: me,
+        //         url: '../iAdmin/business/Calls/Areas.php',
+        //         params: {
+        //             action: 'select',
+        //             method: 'selectCode',
+        //             rows: Ext.encode({id: Smart.workstation.areasid})
+        //         },
+        //         callback: function (options, success, response) {
+        //             var result = Ext.decode(response.responseText);
+        //
+        //             if(!success || !result.success) {
+        //                 return false;
+        //             }
+        //
+        //             var data = result.rows[0];
+        //
+        //             if(data.hasstock == 1) {
+        //                 ctrll.onMainPageView({ xtype: "flowprocessinghold" });
+        //                 history.pushState({}, "start", "#flowprocessinghold");
+        //                 return false;
+        //             }
+        //
+        //             ctrll.onMainPageView({ xtype: "flowprocessingstep" });
+        //             history.pushState({}, "start", "#flowprocessingstep");
+        //         }
+        //     });
+        // }
     }
-
 
 });

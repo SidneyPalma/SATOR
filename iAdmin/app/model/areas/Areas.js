@@ -49,6 +49,11 @@ Ext.define( 'iAdmin.model.areas.Areas', {
             type: 'int',
             persist: true,
             critical: true
+        }, {
+            name: 'hasstock',
+            type: 'int',
+            persist: true,
+            critical: true
         }
     ]
 

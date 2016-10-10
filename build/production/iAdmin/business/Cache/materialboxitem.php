@@ -59,21 +59,35 @@ class materialboxitem extends \Smart\Data\Cache {
 		$proxy = $this->getStore()->getProxy();
 
 		$sql = "
-			select
+			declare
+				@barcode varchar(20) = :barcode,
+				@packingid int = :packingid,
+				@name varchar(80) = :name;
+
+			select top 7
 				ib.id,
-				ib.name
+				ib.name,
+				ib.barcode,
+				ib.description,
+				mf.name as manufacturername,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo
 			from
 				itembase ib
-				inner join material m on ( m.id = ib.id and m.packingid = :packingid )
+				inner join material m on ( m.id = ib.id and m.packingid = @packingid )
+				inner join manufacturer mf on ( mf.id = ib.manufacturerid )
 			where ib.id not in ( select materialid from materialboxitem where boxitemstatus = 'A' )
-			  and ib.name like :name";
+			  and ib.isactive = 1
+              and (
+                    ib.barcode = @barcode OR
+                    ib.name COLLATE Latin1_General_CI_AI LIKE @name
+              )";
 
 		try {
-			$query = "%{$query}%";
-
 			$pdo = $proxy->prepare($sql);
 
-			$pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+			$pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
+			$pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
 			$pdo->bindValue(":packingid", $packingid, \PDO::PARAM_INT);
 
 			$pdo->execute();

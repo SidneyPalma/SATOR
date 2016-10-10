@@ -25,8 +25,8 @@ Ext.define( 'iSterilization.controller.App', {
         'flowprocessingdash': {
             action: 'setFlowprocessingDash'
         },
-        'flowprocessingstep': {
-            action: 'setFlowProcessingStep'
+        'flowprocessingtype': {
+            action: 'setFlowProcessingType'
         }
     },
 
@@ -74,11 +74,38 @@ Ext.define( 'iSterilization.controller.App', {
         return me.onMainPageView({ xtype: 'flowprocessingdash', iconCls: rc.get("iconCls") });
     },
 
-    setFlowProcessingStep: function () {
+    setFlowProcessingType: function () {
         var me = this,
             rc = me.getMainTree().getSelection();
 
-        return me.onMainPageView({ xtype: 'flowprocessingstep', iconCls: rc ? rc.get("iconCls") : null });
+        if(!Smart.workstation) {
+            Smart.Msg.showToast('Estação de Trabalho Não Configurada!','error');
+            return false;
+        }
+
+        Ext.Ajax.request({
+            scope: me,
+            async: false,
+            url: '../iAdmin/business/Calls/Areas.php',
+            params: {
+                action: 'select',
+                method: 'selectCode',
+                rows: Ext.encode({id: Smart.workstation.areasid})
+            },
+            callback: function (options, success, response) {
+                var report = 'flowprocessingstep',
+                    result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+                var data = result.rows[0];
+
+                report = (data.hasstock == 1) ? 'flowprocessinghold' : report;
+                return me.onMainPageView({ xtype: report, iconCls: (rc) ? rc.get("iconCls") : null });
+            }
+        });
+
     }
 
     //routes ========================>

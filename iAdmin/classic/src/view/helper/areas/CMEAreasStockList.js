@@ -60,7 +60,7 @@ Ext.define( 'iAdmin.view.areas.CMEAreasStockList', {
                 store: 'cmeareasstock',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
 
                 columns: [
                     {
@@ -114,13 +114,6 @@ Ext.define( 'iAdmin.view.areas.CMEAreasStockList', {
                                 name: 'search',
                                 reference: 'search',
                                 showFetch: true
-                            // }, {
-                            //     xtype: 'splitter'
-                            // }, {
-                            //     xtype: 'button',
-                            //     iconCls: "fa fa-file-o",
-                            //     handler: 'insertViewNew',
-                            //     tooltip: 'Novo cadastro!'
                             }
                         ]
                     }, {

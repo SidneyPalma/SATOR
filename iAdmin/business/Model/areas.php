@@ -79,7 +79,13 @@ class areas extends \Smart\Data\Model {
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $orderby;
-	
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"0"}
+     */
+    private $hasstock;
+
     /**
      * @return type integer
      */
@@ -253,6 +259,22 @@ class areas extends \Smart\Data\Model {
      */
     public function setIsactive($isactive) {
         $this->isactive = $isactive;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getHasstock() {
+        return $this->hasstock;
+    }
+
+    /**
+     * @param type $hasstock
+     * @return \iAdmin\Model\areas
+     */
+    public function setHasstock($hasstock) {
+        $this->hasstock = $hasstock;
         return $this;
     }
 

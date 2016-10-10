@@ -84,7 +84,8 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                 layout: 'anchor',
                 defaultType: 'textfield',
                 defaults: {
-                    anchor: '100%'
+                    anchor: '100%',
+                    useLabelBold: true
                 },
                 items: [
                     {
@@ -118,8 +119,12 @@ Ext.define( 'iAdmin.view.enums.EnumTypeView', {
                             'color': '#C02942;',
                             'fontSize': '14px;'
                         }
-                    }, {
-                        margin: '20 0 0 0',
+                    }
+                ],
+                dockedItems: [
+                    {
+                        dock: 'bottom',
+                        margin: '10 0 0 0',
                         xtype: 'container',
                         layout: 'hbox',
                         defaultType: 'button',

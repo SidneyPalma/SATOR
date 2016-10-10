@@ -60,7 +60,7 @@ Ext.define( 'iAdmin.view.input.InputList', {
                 store: 'input',
                 hideHeaders: false,
                 headerBorders: false,
-                cls: 'search-grid',
+                cls: 'update-grid',
                 listeners: {
                     itemdblclick: 'onViewEdit'
                 },
