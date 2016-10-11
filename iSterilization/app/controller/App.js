@@ -3,7 +3,9 @@ Ext.define( 'iSterilization.controller.App', {
     extend: 'Smart.ux.app.ApplicationController',
 
     requires: [
-        'Smart.ux.app.ApplicationController'
+        'Smart.ux.app.ApplicationController',
+        'iSterilization.view.flowprocessing.FlowProcessingStep',
+        'iSterilization.view.flowprocessing.FlowProcessingHold'
     ],
 
     routes: {
