@@ -38,6 +38,12 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovement', {
         }, {
             name: 'movementtypedescription',
             type: 'auto'
+        }, {
+            name: 'releasestype',
+            type: 'auto'
+        }, {
+            name: 'releasestypedescription',
+            type: 'auto'
         }
     ]
 

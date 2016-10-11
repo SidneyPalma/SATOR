@@ -51,6 +51,18 @@ class armorymovement extends \Smart\Data\Model {
     private $movementtypedescription;
 
     /**
+     * @Policy {"nullable":false, "length":1}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $releasestype;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,releasestype"}
+     */
+    private $releasestypedescription;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -127,6 +139,22 @@ class armorymovement extends \Smart\Data\Model {
      */
     public function setMovementtype($movementtype) {
         $this->movementtype = $movementtype;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getReleasestype() {
+        return $this->releasestype;
+    }
+
+    /**
+     * @param type $releasestype
+     * @return \iSterilization\Model\armorymovement
+     */
+    public function setReleasestype($releasestype) {
+        $this->releasestype = $releasestype;
         return $this;
     }
 
