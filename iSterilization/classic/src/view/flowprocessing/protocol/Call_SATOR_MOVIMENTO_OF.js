@@ -12,7 +12,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
     ],
 
     controller: 'flowprocessing',
-
+    
     width: 850,
     modal: true,
     header: false,
