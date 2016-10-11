@@ -1230,6 +1230,9 @@ $include-iadmin-view-users-userssearch: dynamic(true);;
 $include-iadmin-view-users-usersview: dynamic(true);;
 $include-isterilization-application: dynamic(true);;
 $include-isterilization-controller-app: dynamic(true);;
+$include-isterilization-model-armory-armorymovement: dynamic(true);;
+$include-isterilization-model-armory-armorymovementitem: dynamic(true);;
+$include-isterilization-model-armory-armorystock: dynamic(true);;
 $include-isterilization-model-flowprocessing-flowprocessing: dynamic(true);;
 $include-isterilization-model-flowprocessing-flowprocessingcharge: dynamic(true);;
 $include-isterilization-model-flowprocessing-flowprocessingchargeitem: dynamic(true);;
@@ -1241,6 +1244,9 @@ $include-isterilization-model-flowprocessing-flowprocessingstepmaterial: dynamic
 $include-isterilization-model-flowprocessing-flowprocessingstepmessage: dynamic(true);;
 $include-isterilization-model-service-serviceitembase: dynamic(true);;
 $include-isterilization-model-service-serviceregistration: dynamic(true);;
+$include-isterilization-store-armory-armorymovement: dynamic(true);;
+$include-isterilization-store-armory-armorymovementitem: dynamic(true);;
+$include-isterilization-store-armory-armorystock: dynamic(true);;
 $include-isterilization-store-flowprocessing-flowprocessing: dynamic(true);;
 $include-isterilization-store-flowprocessing-flowprocessingcharge: dynamic(true);;
 $include-isterilization-store-flowprocessing-flowprocessingchargeitem: dynamic(true);;
@@ -1252,6 +1258,7 @@ $include-isterilization-store-flowprocessing-flowprocessingstepmaterial: dynamic
 $include-isterilization-store-flowprocessing-flowprocessingstepmessage: dynamic(true);;
 $include-isterilization-store-service-serviceitembase: dynamic(true);;
 $include-isterilization-store-service-serviceregistration: dynamic(true);;
+$include-isterilization-view-flowprocessing-armorymovementnew: dynamic(true);;
 $include-isterilization-view-flowprocessing-flowprocessingcontroller: dynamic(true);;
 $include-isterilization-view-flowprocessing-flowprocessingdash: dynamic(true);;
 $include-isterilization-view-flowprocessing-flowprocessingdataview: dynamic(true);;

@@ -43,7 +43,7 @@ Ext.define( 'Smart.ux.app.Application', {
             callback: function (options, success, response) {
                 var result = Ext.decode(response.responseText),
                     rows = result.rows[0];
-
+                
                 if((result.success)&&(result.modulebuild != Ext.manifest.version)) {
                     success = false;
                     Ext.Msg.show({

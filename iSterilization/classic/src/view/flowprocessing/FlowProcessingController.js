@@ -303,23 +303,44 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_MOVIMENTO_OF: function () {
-        var me = this;
-
-        Ext.create('iSterilization.store.armory.ArmoryMovement');
-        Ext.create('iSterilization.store.armory.ArmoryMovementItem');
-
-        Ext.getStore('armorymovement').setParams({
-            method: 'selectCode',
-            rows: Ext.encode({ id: 1 })
-        }).load({
-            scope: me,
-            callback: function(records, operation, success) {
-                Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
-                    this.master = me.getView();
-                    this.down('form').loadRecord(records[0]);
+        var me = this,
+            doCallBack = function (rows) {
+                Ext.widget('flowprocessingopen').show(null,function () {
+                    this.down('searchmaterial').focus(false,200);
+                    this.down('textfield[name=username]').setValue(rows.username);
+                    this.down('hiddenfield[name=areasid]').setValue(Smart.workstation.areasid);
+                    this.down('textfield[name=areasname]').setValue(Smart.workstation.areasname);
                 });
-            }
-        });
+
+                return true;
+            };
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });        
+        // var me = this;
+        //
+        // Ext.widget('armorymovementnew').show();
+
+        // Ext.create('iSterilization.store.armory.ArmoryMovement');
+        // Ext.create('iSterilization.store.armory.ArmoryMovementItem');
+        //
+        // Ext.getStore('armorymovement').setParams({
+        //     method: 'selectCode',
+        //     rows: Ext.encode({ id: 1 })
+        // }).load({
+        //     scope: me,
+        //     callback: function(records, operation, success) {
+        //         Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
+        //             this.master = me.getView();
+        //             this.down('form').loadRecord(records[0]);
+        //         });
+        //     }
+        // });
     },
 
     callSATOR_MOVIMENTO_TO: function () {
