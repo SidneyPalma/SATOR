@@ -1,3 +1,7 @@
+.x-window-default {
+    border-width: 0px !important;
+}
+
 .flow-processing {
     background: rgba(91, 105, 108, .6) !important;
 }
@@ -66,10 +70,6 @@
     border-width: 0px;
     border-style: none;
     border-color: transparent;
-}
-
-.header-hide .x-window-default {
-    border: none !important;
 }
 
 .x-tree-icon {

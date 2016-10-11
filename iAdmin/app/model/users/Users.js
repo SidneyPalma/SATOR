@@ -31,8 +31,7 @@ Ext.define( 'iAdmin.model.users.Users', {
             type: 'auto'
         }, {
             name: 'birthdate',
-            type: 'auto',
-            serializeType: 'date'
+            type: 'auto'
         }, {
             name: 'notifyuser',
             type: 'int'
