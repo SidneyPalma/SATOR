@@ -304,8 +304,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     callSATOR_MOVIMENTO_OF: function () {
         var me = this;
-        Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
-            this.master = me.getView();
+
+        Ext.create('iSterilization.store.armory.ArmoryMovement');
+        Ext.create('iSterilization.store.armory.ArmoryMovementItem');
+
+        Ext.getStore('armorymovement').setParams({
+            method: 'selectCode',
+            rows: Ext.encode({ id: 1 })
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
+                    this.master = me.getView();
+                    this.down('form').loadRecord(records[0]);
+                });
+            }
         });
     },
 
