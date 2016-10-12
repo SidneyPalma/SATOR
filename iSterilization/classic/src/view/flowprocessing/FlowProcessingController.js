@@ -207,18 +207,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.down('textfield[name=search]').focus(false,200);
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
-
-        Ext.getStore('flowprocessingstepaction').setParams({
-            method: 'selectHold',
-            query: Smart.workstation.areasid
-        }).load();
-
-        view.down('gridpanel[name=releasesType]').getStore().setParams({
-            method: 'releasesTypeA',
-            areasid: Smart.workstation.areasid
-        }).load();
+        
+        view.down('gridpanel[name=releasesHold]').getStore().load();
+        view.down('gridpanel[name=releasesType]').getStore().load();
     },
 
+    
+    
     onStepDoQuery: function (field, e, eOpts) {
         var me = this,
             value = field.getValue(),
@@ -307,6 +302,71 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    onArmoryOfQuery: function (field, e, eOpts) {
+        var me = this,
+            value = field.getValue(),
+            itemP = new RegExp(/(P\d{6})\w+/g);
+
+        field.reset();
+
+        if(value && value.length != 0) {
+            if(value.indexOf('SATOR') != -1) {
+                // me.holdProtocol(value);
+                return false;
+            }
+
+            if(itemP.test(value)) {
+                me.setMOVIMENTO_OF(value);
+                return false;
+            }
+        }
+    },
+
+    setMOVIMENTO_OF: function (value) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('armorymovementitem');
+
+        view.setLoading('Consultando processos...');
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'armoryOfQuery',
+                barcode: value,
+                areasid: Smart.workstation.areasid
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                view.setLoading(false);
+
+                console.info(result);
+
+                if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
+                    return false;
+                }
+
+                var data = result.rows[0],
+                    armorymovementid = view.down('hiddenfield[name=id]').getValue();
+
+                store.add({
+                    barcode: data.barcode,
+                    armorylocal: data.armorylocal,
+                    materialname: data.materialname,
+                    armorymovementid: armorymovementid,
+                    flowprocessingstepid: data.flowprocessingstepid,
+                    armorylocaldescription: data.armorylocaldescription
+                });
+
+                store.sync();
+            }
+        });
+    },
+
     getReleasesType: function(grid, rowIndex, colIndex) {
         var me = this,
             record = grid.getStore().getAt(rowIndex),
@@ -323,6 +383,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     this.master = me.getView();
                     this.down('form').loadRecord(rec);
                     this.down('textfield[name=search]').focus(false,200);
+                    Ext.getStore('armorymovementitem').setParams({
+                        query: record.get('id')
+                    }).load();
                 });
             }
         });
@@ -359,6 +422,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         );
     },
 
+    delReleasesItem: function(grid, rowIndex, colIndex) {
+        var store = grid.getStore(),
+            model = store.getAt(rowIndex);
+
+        Ext.Msg.confirm('Excluir lançamento', 'Confirma a exclusão do item selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    store.remove(model);
+                    store.sync();
+                }
+            }
+        );
+    },
+
     callSATOR_MOVIMENTO_OF: function () {
         var me = this,
             doCallBack = function (rows) {
@@ -382,8 +459,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                         var opr = batch.getOperations()[0],
                             rec = opr.getRecords()[0];
-
-                        // Ext.create('iSterilization.store.armory.ArmoryMovementItem');
 
                         Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
                             this.master = me.getView();

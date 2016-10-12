@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 450,
+    width: 500,
     modal: true,
     header: false,
     resizable: false,
@@ -24,6 +24,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
     title: 'Movimento',
 
     doCallBack: Ext.emptyFn,
+
+    listeners: {
+        queryreader: 'onArmoryOfQuery'
+    },
 
     initComponent: function () {
         var me = this;
@@ -107,16 +111,15 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         items: [
                             {
                                 flex: 1,
-                                margin: '20 0 0 0',
+                                margin: '10 0 0 0',
                                 useUpperCase: true,
                                 fieldLabel: 'Processos',
                                 name: 'search',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                            var me = this,
-                                                button = me.up('window').down('button[name=confirm]');
-                                            button.fireEvent('click', button);
+                                            var view = this.up('window');
+                                            view.fireEvent('queryreader', field, e, eOpts);
                                         }
                                     }
                                 }
@@ -126,29 +129,26 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         height: 350,
                         margin: '10 0 0 0',
                         xtype: 'gridpanel',
-                        cls: 'flowprocessinghold',
+                        cls: 'update-grid',
                         store: 'armorymovementitem',
                         columns: [
                             {
-                                width: 80,
-                                height: 60,
-                                renderer: function (value,metaData,record) {
-                                    var url = record.store.getUrl(),
-                                        img =  '<div style="margin-top: 6px;"><img src="{0}?action=select&method=renderCode&barCode={1}" id="SATOR-{2}" /></div>';
-                                    return Ext.String.format(img,url,record.get('barcode'),record.get('id'));
-                                }
-                            }, {
                                 flex: 1,
-                                dataIndex: 'materialname',
-                                renderer: function (value,metaData,record) {
-                                    var barcode = record.get('barcode'),
-                                        clientname = record.get('clientname'),
-                                        materialname = record.get('materialname'),
-                                        strRow =    '<div style="font-weight: 700; font-size: 16px; line-height: 24px;">' +
-                                            '<div>{0}</div><div>{1}</div><div>{2}</div>' +
-                                            '</div>';
-                                    return Ext.String.format(strRow,clientname,materialname,barcode);
-                                }
+                                dataIndex: 'materialname'
+                            }, {
+                                width: 180,
+                                dataIndex: 'armorylocaldescription'
+                            }, {
+                                width: 40,
+                                align: 'center',
+                                xtype: 'actioncolumn',
+                                items: [
+                                    {
+                                        handler: 'delReleasesItem',
+                                        iconCls: "fa fa-minus-circle action-delete-color-font",
+                                        tooltip: 'Descartar lançamento!'
+                                    }
+                                ]
                             }
                         ]
                     }

@@ -12,6 +12,12 @@ Ext.define( 'iSterilization.store.armory.ArmoryMovementItem', {
 
     url: '../iSterilization/business/Calls/armorymovementitem.php',
 
-    model: 'iSterilization.model.armory.ArmoryMovementItem'
+    model: 'iSterilization.model.armory.ArmoryMovementItem',
+
+    config: {
+        extraParams: {
+            method: 'selectItem'
+        }
+    }
 
 });

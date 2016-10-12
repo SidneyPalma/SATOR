@@ -109,10 +109,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
+        // Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
         // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
         // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInput');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepAction');
+        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepAction');
         // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepMaterial');
         // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInputTree');
 
@@ -142,7 +142,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                             }, {
                                 flex: 1,
                                 margin: '10 0 0 0',
-                                xtype: 'gridpanel',
+                                xtype: 'container',
                                 rowLines: true,
                                 // cls: 'flowprocessinghold',
                                 // bodyStyle: 'background:transparent;',
@@ -191,7 +191,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
                                 cls: 'flowprocessinghold',
                                 bodyStyle: 'background:transparent;',
-                                store: 'flowprocessingstepaction',
+
                                 columns: [
                                     {
                                         width: 80,
@@ -267,9 +267,34 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 rowLines: true,
+                                name: 'releasesHold',
                                 cls: 'flowprocessinghold',
                                 bodyStyle: 'background:transparent;',
-                                store: 'flowprocessingstepaction',
+
+                                url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+
+                                params: {
+                                    action: 'select',
+                                    method: 'selectHold',
+                                    areasid: Smart.workstation.areasid
+                                },
+
+                                fields: [
+                                    {
+                                        name: 'id',
+                                        type: 'int'
+                                    }, {
+                                        name: 'barcode',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'materialname',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'clientname',
+                                        type: 'auto'
+                                    }
+                                ],
+
                                 columns: [
                                     {
                                         width: 80,
@@ -281,7 +306,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                         }
                                     }, {
                                         flex: 1,
-                                        dataIndex: 'materialname',
                                         renderer: function (value,metaData,record) {
                                             var barcode = record.get('barcode'),
                                                 clientname = record.get('clientname'),
@@ -293,19 +317,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                         }
                                     }
                                 ]
-                            // }, {
-                            //     xtype: 'pagingtoolbar',
-                            //     store: 'flowprocessingstepaction',
-                            //     dock: 'bottom',
-                            //     displayInfo: true
-                            // .x-toolbar-default {
-                            //     padding: 6px 0 6px 8px;
-                            //     /* border-style: solid; */
-                            //     border-color: #d0d0d0;
-                            //     border-width: 1px;
-                            //     background-image: none;
-                            //     /* background-color: #fff; */
-                            // }
                             }, {
                                 margin: '10 0 0 0',
                                 xtype: 'gridpanel',
@@ -317,7 +328,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
                                 params: {
                                     action: 'select',
-                                    method: 'releasesTypeA'
+                                    method: 'releasesTypeA',
+                                    areasid: Smart.workstation.areasid
                                 },
 
                                 fields: [
@@ -357,7 +369,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 columns: [
                                     {
                                         flex: 1,
-                                        dataIndex: 'releasestypedescription',
                                         renderer: function (value,metaData,record) {
                                             var item = record.get('item'),
                                                 releasestype = record.get('releasestypedescription'),

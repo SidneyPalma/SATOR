@@ -508,6 +508,6 @@
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
 }
 
-.flowprocessinghold .x-form-cb-checked .x-form-radio-default:before {
-    color: rgb(16, 232, 196);
-}
+/*.flowprocessinghold .x-form-cb-checked .x-form-radio-default:before {*/
+    /*color: rgb(16, 232, 196);*/
+/*}*/
