@@ -11,8 +11,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    controller: 'flowprocessing',
-
     width: 550,
     modal: true,
     header: false,
@@ -114,7 +112,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                 margin: '20 0 0 0',
                                 useUpperCase: true,
                                 fieldLabel: 'Aguardando',
-                                name: 'userprotected',
+                                name: 'search',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
