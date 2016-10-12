@@ -8,6 +8,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
         'Ext.form.Panel',
         'Smart.plugins.*',
         'Ext.window.Window',
+        'Ext.grid.column.*',
+        'Ext.grid.plugin.CellEditing',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
@@ -22,6 +24,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
     iconCls: "fa fa-file-archive-o",
 
     title: 'Movimento',
+
+    editable: true,
 
     doCallBack: Ext.emptyFn,
 
@@ -101,7 +105,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                             }
                         ]
                     }, {
-                        xtype: 'container',
+                        hidden: !me.editable,
+                        xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
@@ -131,14 +136,36 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         xtype: 'gridpanel',
                         cls: 'update-grid',
                         store: 'armorymovementitem',
+
+                        selType: 'cellmodel',
+
+                        plugins: {
+                            ptype: 'cellediting',
+                            clicksToEdit: 1
+                        },
+
+                        listeners: {
+                            // edit: 'onEditMOVIMENTO_OF',
+                            beforeedit: 'onBeforeEditMOVIMENTO_OF'
+                        },
+
                         columns: [
                             {
                                 flex: 1,
                                 dataIndex: 'materialname'
                             }, {
                                 width: 180,
-                                dataIndex: 'armorylocaldescription'
+                                dataIndex: 'armorylocaldescription',
+                                editor: {
+                                    xtype: 'comboenum',
+                                    name: 'armorylocaldescription',
+                                    fieldCls: 'smart-field-style-action',
+                                    listeners: {
+                                        select: 'onEditMOVIMENTO_OF'
+                                    }
+                                }
                             }, {
+                                hidden: !me.editable,
                                 width: 40,
                                 align: 'center',
                                 xtype: 'actioncolumn',
@@ -161,14 +188,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
 
     buttons: [
         {
-        //     scale: 'medium',
-        //     name: 'confirm',
-        //     text: 'Confirmar',
-        //     showSmartTheme: 'green'
-        //     // listeners: {
-        //     //     click: 'relatarUsaEPI'
-        //     // }
-        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',

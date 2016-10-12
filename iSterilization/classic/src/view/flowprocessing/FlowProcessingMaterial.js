@@ -20,14 +20,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
         beforeedit: 'onBeforeEditMaterialFlowStepAction',
         select: 'onSelectMaterialFlowStepAction',
         itemdblclick: 'onItemDblClickMaterial'
-},
+    },
 
     selType: 'cellmodel',
 
     plugins: {
         ptype: 'cellediting',
-        clicksToEdit: 1,
-        pluginId: 'myplugin'
+        clicksToEdit: 1
     },
 
     initComponent: function () {
