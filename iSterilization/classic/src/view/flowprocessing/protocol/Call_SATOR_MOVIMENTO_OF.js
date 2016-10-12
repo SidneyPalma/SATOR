@@ -11,9 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    controller: 'flowprocessing',
-
-    width: 550,
+    width: 450,
     modal: true,
     header: false,
     resizable: false,
@@ -35,6 +33,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
 
     buildItems: function () {
         var me = this;
+
+        Ext.create('iSterilization.store.armory.ArmoryMovementItem');
 
         me.items = [
             {
@@ -60,7 +60,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         fieldLabel: 'Documento',
                         defaultType: 'textfield',
                         defaults: {
-                            useReadColor: true
+                            useReadColor: true,
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
@@ -74,9 +75,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                             }, {
                                 flex: 1,
                                 name: 'movementtypedescription'
-                            }, {
-                                width: 150,
-                                xtype: 'container'
                             }
                         ]
                     }, {
@@ -84,7 +82,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            useReadColor: true
+                            useReadColor: true,
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
@@ -94,10 +93,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                name: 'movementdateformat'
-                            }, {
-                                width: 150,
-                                xtype: 'container'
+                                name: 'releasestypedescription'
                             }
                         ]
                     }, {
@@ -105,16 +101,16 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            fieldCls: 'smart-field-style-action',
-                            labelCls: 'smart-field-style-action'
+                            fieldCls: 'smart-field-style-action'
+                            // labelCls: 'smart-field-style-action'
                         },
                         items: [
                             {
                                 flex: 1,
                                 margin: '20 0 0 0',
                                 useUpperCase: true,
-                                fieldLabel: 'Aguardando',
-                                name: 'userprotected',
+                                fieldLabel: 'Processos',
+                                name: 'search',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
@@ -124,9 +120,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                         }
                                     }
                                 }
-                            }, {
-                                width: 150,
-                                xtype: 'container'
                             }
                         ]
                     }, {
@@ -168,14 +161,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
 
     buttons: [
         {
-            scale: 'medium',
-            name: 'confirm',
-            text: 'Confirmar',
-            showSmartTheme: 'green'
-            // listeners: {
-            //     click: 'relatarUsaEPI'
-            // }
-        }, {
+        //     scale: 'medium',
+        //     name: 'confirm',
+        //     text: 'Confirmar',
+        //     showSmartTheme: 'green'
+        //     // listeners: {
+        //     //     click: 'relatarUsaEPI'
+        //     // }
+        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',

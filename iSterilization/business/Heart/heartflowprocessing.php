@@ -1324,10 +1324,55 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function releasesTypeA(array $data) {
+        $areasid = $data['areasid'];
+
+        $sql = "
+            declare
+                @areasid int = :areasid,
+                @releasestype char(1) = :releasestype;
+
+            select
+                am.id,
+                am.areasid,
+                a.name as areasname,
+                am.movementuser,
+                am.movementdate,
+                am.movementtype,
+                dbo.getEnum('movementtype',am.movementtype) as movementtypedescription,
+                am.releasestype,
+                dbo.getEnum('releasestype',am.releasestype) as releasestypedescription,
+                item = ( select count(id) from armorymovementitem where armorymovementid = am.id )
+            from
+                armorymovement am
+                inner join areas a on ( a.id = am.areasid )
+            where am.areasid = @areasid
+              and am.releasestype = @releasestype;";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":releasestype", "A", \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectFlowDash(array $data) {
         $query = $data['query'];
 
         $sql = "
+            declare
+                @id int = :id;
+
             select
                 fps.id,
                 fps.username,
@@ -1369,7 +1414,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 left join materialbox mb on ( mb.id = fp.materialboxid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 inner join client c on ( c.id = fp.clientid )
-            where fpsa.id = :id";
+            where fpsa.id = @id";
 
         try {
             $pdo = $this->prepare($sql);
