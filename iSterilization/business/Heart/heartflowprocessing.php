@@ -1328,6 +1328,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $query = $data['query'];
 
         $sql = "
+            declare
+                @id int = :id;
+
             select
                 fps.id,
                 fps.username,
@@ -1369,7 +1372,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 left join materialbox mb on ( mb.id = fp.materialboxid )
                 inner join sterilizationtype st on ( st.id = fp.sterilizationtypeid )
                 inner join client c on ( c.id = fp.clientid )
-            where fpsa.id = :id";
+            where fpsa.id = @id";
 
         try {
             $pdo = $this->prepare($sql);

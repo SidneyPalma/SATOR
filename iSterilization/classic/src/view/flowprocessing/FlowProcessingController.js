@@ -333,6 +333,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             this.down('form').loadRecord(rec);
                             this.down('textfield[name=search]').focus(false,200);
                         });
+                    },
+                    failure: function (batch, options) {
+                        var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+
+                        if(resultSet) {
+                            Smart.Msg.showToast(resultSet.getMessage(),'error');
+                        }
                     }
                 });
 
