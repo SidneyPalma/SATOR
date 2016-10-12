@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 550,
+    width: 450,
     modal: true,
     header: false,
     resizable: false,
@@ -33,6 +33,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
 
     buildItems: function () {
         var me = this;
+
+        Ext.create('iSterilization.store.armory.ArmoryMovementItem');
 
         me.items = [
             {
@@ -72,9 +74,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                             }, {
                                 flex: 1,
                                 name: 'movementtypedescription'
-                            }, {
-                                width: 150,
-                                xtype: 'container'
                             }
                         ]
                     }, {
@@ -93,9 +92,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                             }, {
                                 flex: 1,
                                 name: 'releasestypedescription'
-                            }, {
-                                width: 150,
-                                xtype: 'container'
                             }
                         ]
                     }, {
@@ -111,7 +107,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                 flex: 1,
                                 margin: '20 0 0 0',
                                 useUpperCase: true,
-                                fieldLabel: 'Aguardando',
+                                fieldLabel: 'Processos',
                                 name: 'search',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
@@ -122,9 +118,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                         }
                                     }
                                 }
-                            }, {
-                                width: 150,
-                                xtype: 'container'
                             }
                         ]
                     }, {

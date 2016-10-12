@@ -263,6 +263,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 text: 'Aguardando ...',
                                 name: 'labelitem'
                             }, {
+                                flex: 1,
                                 margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 rowLines: true,
@@ -305,6 +306,87 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                             //     background-image: none;
                             //     /* background-color: #fff; */
                             // }
+                            }, {
+                                margin: '10 0 0 0',
+                                xtype: 'gridpanel',
+                                name: 'releasesType',
+                                cls: 'search-grid flowprocessinghold',
+                                bodyStyle: 'background:transparent;',
+
+                                url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+
+                                params: {
+                                    action: 'select',
+                                    method: 'releasesTypeA'
+                                },
+
+                                fields: [
+                                    {
+                                        name: 'id',
+                                        type: 'int'
+                                    }, {
+                                        name: 'areasid',
+                                        type: 'int'
+                                    }, {
+                                        name: 'areasname',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'movementuser',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'movementdate',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'movementtype',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'movementtypedescription',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'releasestype',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'releasestypedescription',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'item',
+                                        type: 'int'
+                                    }
+                                ],
+
+                                columns: [
+                                    {
+                                        flex: 1,
+                                        dataIndex: 'releasestypedescription',
+                                        renderer: function (value,metaData,record) {
+                                            var item = record.get('item'),
+                                                releasestype = record.get('releasestypedescription'),
+                                                movementuser = record.get('movementuser'),
+                                                strRow =    '<div style="font-weight: 700; font-size: 16px; line-height: 24px;">' +
+                                                                '<div>{0}: {1} (itens)</div><div>{2}</div>' +
+                                                            '</div>';
+                                            return Ext.String.format(strRow,releasestype,item,movementuser);
+                                        }
+                                    }, {
+                                        width: 100,
+                                        align: 'center',
+                                        sortable: false,
+                                        xtype: 'actioncolumn',
+                                        items: [
+                                            {
+                                                handler: 'getReleasesType',
+                                                iconCls: "fa fa-info-circle action-select-color-font",
+                                                tooltip: 'Carregar movimento!'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                handler: 'setReleasesType',
+                                                iconCls: "fa fa-minus-circle action-delete-color-font",
+                                                tooltip: 'Descartar movimento!'
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     }

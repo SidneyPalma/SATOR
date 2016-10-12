@@ -212,6 +212,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             method: 'selectHold',
             query: Smart.workstation.areasid
         }).load();
+
+        view.down('gridpanel[name=releasesType]').getStore().setParams({
+            method: 'releasesTypeA',
+            areasid: Smart.workstation.areasid
+        }).load();
     },
 
     onStepDoQuery: function (field, e, eOpts) {
@@ -302,6 +307,58 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    getReleasesType: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex),
+            store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+
+        store.setParams({
+            method: 'selectCode',
+            rows: Ext.encode({ id: record.get('id') })
+        }).load({
+            scope: me,
+            callback: function (records) {
+                var rec = records[0];
+                Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
+                    this.master = me.getView();
+                    this.down('form').loadRecord(rec);
+                    this.down('textfield[name=search]').focus(false,200);
+                });
+            }
+        });
+    },
+
+    setReleasesType: function(grid, rowIndex, colIndex) {
+        var me = this,
+            record = grid.getStore().getAt(rowIndex);
+
+        Ext.Msg.confirm('Cancelar movimento', 'Confirma o cancelamento do movimento selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    var store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+
+                    store.setParams({
+                        method: 'selectCode',
+                        rows: Ext.encode({ id: record.get('id') })
+                    }).load({
+                        scope: me,
+                        callback: function () {
+                            var model = store.getAt(0);
+
+                            model.set('releasestype','C');
+                            store.sync({
+                                callback: function () {
+                                    grid.getStore().load();
+                                }
+                            });
+                        }
+                    });
+
+                }
+            }
+        );
+    },
+
     callSATOR_MOVIMENTO_OF: function () {
         var me = this,
             doCallBack = function (rows) {
@@ -326,7 +383,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         var opr = batch.getOperations()[0],
                             rec = opr.getRecords()[0];
 
-                        Ext.create('iSterilization.store.armory.ArmoryMovementItem');
+                        // Ext.create('iSterilization.store.armory.ArmoryMovementItem');
 
                         Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
                             this.master = me.getView();
