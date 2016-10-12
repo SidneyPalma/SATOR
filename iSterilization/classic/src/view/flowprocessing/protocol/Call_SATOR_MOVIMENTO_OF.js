@@ -60,7 +60,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         fieldLabel: 'Documento',
                         defaultType: 'textfield',
                         defaults: {
-                            useReadColor: true
+                            useReadColor: true,
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
@@ -81,7 +82,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            useReadColor: true
+                            useReadColor: true,
+                            fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
@@ -99,8 +101,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            fieldCls: 'smart-field-style-action',
-                            labelCls: 'smart-field-style-action'
+                            fieldCls: 'smart-field-style-action'
+                            // labelCls: 'smart-field-style-action'
                         },
                         items: [
                             {
@@ -159,14 +161,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
 
     buttons: [
         {
-            scale: 'medium',
-            name: 'confirm',
-            text: 'Confirmar',
-            showSmartTheme: 'green'
-            // listeners: {
-            //     click: 'relatarUsaEPI'
-            // }
-        }, {
+        //     scale: 'medium',
+        //     name: 'confirm',
+        //     text: 'Confirmar',
+        //     showSmartTheme: 'green'
+        //     // listeners: {
+        //     //     click: 'relatarUsaEPI'
+        //     // }
+        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',
