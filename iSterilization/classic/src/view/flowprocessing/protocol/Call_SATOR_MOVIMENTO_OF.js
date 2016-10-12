@@ -92,7 +92,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                name: 'movementdateformat'
+                                name: 'releasestypedescription'
                             }, {
                                 width: 150,
                                 xtype: 'container'

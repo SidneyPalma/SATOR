@@ -21,7 +21,6 @@ class armorymovement extends \Smart\Data\Event {
      */
     public function valInsert($model) {
         $areasid = $model->getAreasid();
-        $releasestype = $model->getReleasestype();
 
         $sql = "
             declare
@@ -37,7 +36,7 @@ class armorymovement extends \Smart\Data\Event {
 
         $pdo = $this->getProxy()->prepare($sql);
         $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
-        $pdo->bindValue(":releasestype", $releasestype, \PDO::PARAM_STR);
+        $pdo->bindValue(":releasestype", "A", \PDO::PARAM_STR);
 
         $pdo->execute();
         $rows = $pdo->fetchAll();
