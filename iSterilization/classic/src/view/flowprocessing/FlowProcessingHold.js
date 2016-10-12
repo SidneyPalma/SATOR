@@ -321,7 +321,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 name: 'releasesType',
-                                cls: 'search-grid flowprocessinghold',
+                                // cls: 'search-grid flowprocessinghold',
+                                cls: 'flowprocessinghold',
                                 bodyStyle: 'background:transparent;',
 
                                 url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',

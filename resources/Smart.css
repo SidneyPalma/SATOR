@@ -619,7 +619,7 @@
 }
 
 .action-select-color-font:hover {
-    color: rgb(25, 125, 25) !important;
+    color: rgb(0, 227, 0) !important;
 
     top: -7px;
     left: -7px;
@@ -675,7 +675,7 @@
 
 .action-delete-color-font {
     cursor: pointer;
-    color: rgba(194, 52, 92, .7) !important;
+    color: rgba(194, 52, 92, 1) !important;
 }
 
 .action-delete-color-font:hover {
