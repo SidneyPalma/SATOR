@@ -332,12 +332,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         if(value && value.length != 0) {
             if(value.indexOf('SATOR') != -1) {
-                // me.holdProtocol(value);
+                me.setProtocolMOVIMENTO_OF(value);
                 return false;
             }
 
             if(itemP.test(value)) {
-                me.setMOVIMENTO_OF(value);
+                me.setMaterialMOVIMENTO_OF(value);
                 return false;
             }
         }
@@ -357,9 +357,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onBeforeEditMOVIMENTO_OF: function ( editor, context, eOpts ) {
         return context.grid.up('window').editable;
-    },    
-    
-    setMOVIMENTO_OF: function (value) {
+    },
+
+    setMaterialMOVIMENTO_OF: function (value) {
         var me = this,
             view = me.getView(),
             store = Ext.getStore('armorymovementitem');
@@ -400,6 +400,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 store.sync();
             }
         });
+    },
+
+    setProtocolMOVIMENTO_OF: function (value) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            data = form.getRecord();
+
+        Ext.Msg.confirm('Encerrar movimento', 'Confirma o encerramento do movimento?',
+            function (choice) {
+                if (choice === 'yes') {
+                    console.info(data);
+                }
+            }
+        );
     },
 
     getReleasesType: function(grid, rowIndex, colIndex) {
@@ -592,7 +607,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
-    // Abrir Novo Processamento/Leitura
     callSATOR_PROCESSAR_ITENS: function () {
         var me = this,
             doCallBack = function (rows) {

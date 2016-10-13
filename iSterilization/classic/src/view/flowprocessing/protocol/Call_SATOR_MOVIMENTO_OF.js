@@ -119,6 +119,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                 margin: '10 0 0 0',
                                 useUpperCase: true,
                                 fieldLabel: 'Processos',
+                                inputType: 'password',
                                 name: 'search',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
