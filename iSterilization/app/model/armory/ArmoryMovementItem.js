@@ -20,7 +20,16 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementItem', {
             name: 'flowprocessingstepid',
             type: 'int'
         }, {
+            name: 'barcode',
+            type: 'auto'
+        }, {
+            name: 'materialname',
+            type: 'auto'
+        }, {
             name: 'armorylocal',
+            type: 'auto'
+        }, {
+            name: 'armorylocaldescription',
             type: 'auto'
         }
     ]

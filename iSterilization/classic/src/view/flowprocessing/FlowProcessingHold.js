@@ -48,50 +48,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
     listeners: {
         queryreader: 'onHoldDoQuery',
-        afterrender: 'onAfterRenderHold'
+        afterrender: 'onAfterRenderHold',
+        updateholdaction: 'onHoldUpdateAction'
     },
 
     bodyStyle: 'padding: 10px',
 
-    timeoutInterval: (6000 * 10),
+    timeoutInterval: (1000 * 10),
 
-    selectStep: function() {
+    selectHold: function() {
         var me = this;
 
         me.timeoutID = window.setInterval(function () {
-            me.fireEvent('selectaction',me);
+            me.fireEvent('updateholdaction',me);
         }, me.timeoutInterval);
-
-        Ext.create('Ext.util.KeyNav', Ext.getDoc(), {
-            scope: me,
-            esc: function () {
-                if(me.isVisible()) {
-                    me.searchToogle();
-                }
-            }
-        });
     },
 
-    searchToogle: function () {
-        var me = this,
-            search = me.down('textfield[name=search]');
-
-        if(!search.isVisible()) {
-            search.show(false,function () {
-                search.focus(false,200);
-                me.down('label[name=labelitem]').setText('Consultar');
-            });
-        } else {
-            if(search.getValue().length != 0) {
-                search.reset();
-            } else  {
-                search.hide();
-                me.down('label[name=labelitem]').setText('Detalhes');
-            }
-        }
-    },
-
-    deselectStep: function () {
+    deselectHold: function () {
         var me = this;
         window.clearInterval(me.timeoutID);
     },
@@ -102,19 +75,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
         me.buildItems();
         me.callParent();
 
-        // me.onAfter('destroy', me.deselectStep, me);
-        // me.onAfter('afterrender', me.selectStep, me);
+        me.onAfter('destroy', me.deselectHold, me);
+        me.onAfter('afterrender', me.selectHold, me);
     },
 
     buildItems: function () {
         var me = this;
-
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessing');
-        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStep');
-        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInput');
-        Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepAction');
-        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepMaterial');
-        // Ext.create('iSterilization.store.flowprocessing.FlowProcessingStepInputTree');
 
         me.items = [
             {
@@ -142,7 +108,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                             }, {
                                 flex: 1,
                                 margin: '10 0 0 0',
-                                xtype: 'gridpanel',
+                                xtype: 'container',
                                 rowLines: true,
                                 // cls: 'flowprocessinghold',
                                 // bodyStyle: 'background:transparent;',
@@ -191,7 +157,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
                                 cls: 'flowprocessinghold',
                                 bodyStyle: 'background:transparent;',
-                                store: 'flowprocessingstepaction',
+
                                 columns: [
                                     {
                                         width: 80,
@@ -267,21 +233,46 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 rowLines: true,
+                                name: 'releasesHold',
                                 cls: 'flowprocessinghold',
                                 bodyStyle: 'background:transparent;',
-                                store: 'flowprocessingstepaction',
+
+                                url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+
+                                params: {
+                                    action: 'select',
+                                    method: 'selectHold',
+                                    areasid: Smart.workstation.areasid
+                                },
+
+                                fields: [
+                                    {
+                                        name: 'id',
+                                        type: 'int'
+                                    }, {
+                                        name: 'barcode',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'materialname',
+                                        type: 'auto'
+                                    }, {
+                                        name: 'clientname',
+                                        type: 'auto'
+                                    }
+                                ],
+
                                 columns: [
                                     {
-                                        width: 80,
-                                        height: 60,
-                                        renderer: function (value,metaData,record) {
-                                            var url = record.store.getUrl(),
-                                                img =  '<div style="margin-top: 6px;"><img src="{0}?action=select&method=renderCode&barCode={1}" id="SATOR-{2}" /></div>';
-                                            return Ext.String.format(img,url,record.get('barcode'),record.get('id'));
-                                        }
-                                    }, {
+                                    //     width: 80,
+                                    //     height: 60,
+                                    //     renderer: function (value,metaData,record) {
+                                    //         var url = '../iSterilization/business/Calls/armorymovement.php',
+                                    //             img =  '<div style="margin-top: 6px;"><img src="{0}?action=select&method=renderCode&barCode={1}" id="SATOR-{2}" /></div>';
+                                    //         console.info(url);
+                                    //         return Ext.String.format(img,url,record.get('barcode'),record.get('id'));
+                                    //     }
+                                    // }, {
                                         flex: 1,
-                                        dataIndex: 'materialname',
                                         renderer: function (value,metaData,record) {
                                             var barcode = record.get('barcode'),
                                                 clientname = record.get('clientname'),
@@ -293,31 +284,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                         }
                                     }
                                 ]
-                            // }, {
-                            //     xtype: 'pagingtoolbar',
-                            //     store: 'flowprocessingstepaction',
-                            //     dock: 'bottom',
-                            //     displayInfo: true
-                            // .x-toolbar-default {
-                            //     padding: 6px 0 6px 8px;
-                            //     /* border-style: solid; */
-                            //     border-color: #d0d0d0;
-                            //     border-width: 1px;
-                            //     background-image: none;
-                            //     /* background-color: #fff; */
-                            // }
                             }, {
                                 margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 name: 'releasesType',
-                                cls: 'search-grid flowprocessinghold',
+                                // cls: 'search-grid flowprocessinghold',
+                                cls: 'flowprocessinghold',
                                 bodyStyle: 'background:transparent;',
 
                                 url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
                                 params: {
                                     action: 'select',
-                                    method: 'releasesTypeA'
+                                    method: 'releasesTypeA',
+                                    areasid: Smart.workstation.areasid
                                 },
 
                                 fields: [
@@ -357,7 +337,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 columns: [
                                     {
                                         flex: 1,
-                                        dataIndex: 'releasestypedescription',
                                         renderer: function (value,metaData,record) {
                                             var item = record.get('item'),
                                                 releasestype = record.get('releasestypedescription'),

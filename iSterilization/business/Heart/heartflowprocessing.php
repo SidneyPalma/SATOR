@@ -1324,6 +1324,154 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function selectHold(array $data) {
+        $areasid = $data['areasid'];
+
+        $sql = "
+            declare
+                @areasid int = :areasid;
+
+            select
+                fp.id,
+                fp.barcode,
+                c.name as clientname,
+                m.materialname
+            from
+                flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join areas a on ( a.id = fps.areasid )
+                inner join client c on ( c.id = fp.clientid )
+                cross apply (
+                    select
+                        coalesce(ta.name,tb.name) as materialname
+                    from
+                        flowprocessing a
+                        inner join flowprocessingstep b on ( b.flowprocessingid = a.id and b.id = fps.id )
+                        outer apply (
+                            select
+                                mb.name
+                            from
+                                materialbox mb
+                            where mb.id = a.materialboxid
+                        ) ta
+                        outer apply (
+                            select top 1
+                                ib.name
+                            from
+                                flowprocessingstepmaterial mb
+                                inner join itembase ib on ( ib.id = mb.materialid )
+                                inner join flowprocessingstep x on ( x.flowprocessingid = a.id and x.id = mb.flowprocessingstepid )
+                            where x.id < fps.id
+                              and ( x.stepflaglist like '%001%' or x.stepflaglist like '%019%' )
+                        ) tb
+                    where a.id = fp.id
+                ) m
+            where fps.areasid = @areasid
+              and fps.flowstepstatus = '000'
+              and a.hasstock = 1
+			  and fps.id not in (
+					select
+						x.flowprocessingstepid
+					from
+						armorymovementitem x
+						inner join armorymovement z on ( z.id = x.armorymovementid )
+					where z.releasestype in ('A','E')
+			  )";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function armoryOfQuery(array $data) {
+        $areasid = $data['areasid'];
+        $barcode = $data['barcode'];
+
+        $sql = "
+            declare
+                @areasid int = :areasid,
+                @barcode varchar(20) = :barcode;
+
+            select
+                fp.id,
+				fps.id as flowprocessingstepid,
+                fp.barcode,
+                t.materialname,
+				t.armorylocal,
+				dbo.getEnum('armorylocal',t.armorylocal) as armorylocaldescription
+            from
+                flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+				cross apply (
+					select 
+						coalesce(ta.name,tb.name) as materialname,
+						coalesce(ta.armorylocal,tb.armorylocal) as armorylocal
+					from 
+						flowprocessing a
+						outer apply (
+							select
+								mb.name,
+								mb.armorylocal
+							from
+								materialbox mb
+							where mb.id = a.materialboxid
+						) ta
+						outer apply (
+							select top 1
+								ib.name,
+								m.armorylocal
+							from
+								flowprocessingstep b
+								inner join flowprocessingstepmaterial c on ( c.flowprocessingstepid = b.id )
+								inner join itembase ib on ( ib.id = c.materialid )
+								inner join material m on ( m.id = ib.id )
+							where b.flowprocessingid = fp.id
+							  and b.id < fps.id
+							  and ( b.stepflaglist like '%001%' or b.stepflaglist like '%019%' )
+						) tb
+					where a.id = fp.id
+				) t
+            where fps.areasid = @areasid
+              and fps.flowstepstatus = '000'
+              and fp.barcode = @barcode
+			  and fps.id not in (
+					select
+						x.flowprocessingstepid
+					from
+						armorymovementitem x
+						inner join armorymovement z on ( z.id = x.armorymovementid )
+					where z.releasestype in ('A','E')
+			  );";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function releasesTypeA(array $data) {
         $areasid = $data['areasid'];
 

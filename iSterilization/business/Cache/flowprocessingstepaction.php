@@ -2,7 +2,6 @@
 
 namespace iSterilization\Cache;
 
-use Endroid\QrCode\QrCode;
 use iSterilization\Model\flowprocessingstepaction as Model;
 
 class flowprocessingstepaction extends \Smart\Data\Cache {
@@ -448,84 +447,6 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
         }
 
         return self::getResultToJson();
-    }
-
-    public function selectHold(array $data) {
-        $query = $data['query'];
-        $proxy = $this->getStore()->getProxy();
-
-        $sql = "
-            declare
-                @areasid int = :areasid;
-
-            select
-                fp.id,
-                fp.barcode,
-                c.name as clientname,
-                m.materialname
-            from
-                flowprocessingstep fps
-                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
-                inner join areas a on ( a.id = fps.areasid )
-                inner join client c on ( c.id = fp.clientid )
-                cross apply (
-                    select
-                        coalesce(ta.name,tb.name) as materialname
-                    from
-                        flowprocessing a
-                        inner join flowprocessingstep b on ( b.flowprocessingid = a.id and b.id = fps.id )
-                        outer apply (
-                            select
-                                mb.name
-                            from
-                                materialbox mb
-                            where mb.id = a.materialboxid
-                        ) ta
-                        outer apply (
-                            select top 1
-                                ib.name
-                            from
-                                flowprocessingstepmaterial mb
-                                inner join itembase ib on ( ib.id = mb.materialid )
-                                inner join flowprocessingstep x on ( x.flowprocessingid = a.id and x.id = mb.flowprocessingstepid )
-                            where x.id < fps.id
-                              and ( x.stepflaglist like '%001%' or x.stepflaglist like '%019%' )
-                        ) tb
-                    where a.id = fp.id
-                ) m
-            where fps.areasid = @areasid
-              and fps.flowstepstatus = '000'
-              and a.hasstock = 1";
-
-        try {
-            $pdo = $proxy->prepare($sql);
-            $pdo->bindValue(":areasid", $query, \PDO::PARAM_INT);
-            $pdo->execute();
-            $rows = $pdo->fetchAll();
-
-            self::_setRows($rows);
-
-        } catch ( \PDOException $e ) {
-            self::_setSuccess(false);
-            self::_setText($e->getMessage());
-        }
-
-        return self::getResultToJson();
-    }
-
-    public function renderCode(array $data) {
-        $barcode = $_GET['barCode'];
-        $qrCode = new QrCode();
-        header( 'Content-type: image/png' );
-        $qrCode
-            ->setText($barcode)
-            ->setSize(58)
-            ->setPadding(1)
-            ->setErrorCorrection('high')
-            ->setImageType(QrCode::IMAGE_TYPE_PNG)
-            ->render();
-
-        exit;
     }
 
     public function selectStep(array $data) {

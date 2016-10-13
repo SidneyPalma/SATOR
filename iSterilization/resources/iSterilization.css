@@ -508,6 +508,29 @@
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
 }
 
-.flowprocessinghold .x-form-cb-checked .x-form-radio-default:before {
-    color: rgb(16, 232, 196);
+/*.flowprocessinghold .x-form-cb-checked .x-form-radio-default:before {*/
+    /*color: rgb(16, 232, 196);*/
+/*}*/
+
+.flowprocessinghold {
+    z-index: 0 !important;
+}
+
+.flowprocessinghold .x-grid-td {
+    vertical-align: middle;
+}
+
+.flowprocessinghold .x-grid-cell-inner {
+    font-size: 24px;
+    line-height: 30px;
+}
+
+.flowprocessinghold .x-grid-body {
+    border-width: 1px 1px 1px;
+}
+
+.flowprocessinghold .x-grid-cell-inner-action-col {
+    text-align: center !important;
+    /*text-shadow: none;*/
+    font-size: 38px !important;
 }
