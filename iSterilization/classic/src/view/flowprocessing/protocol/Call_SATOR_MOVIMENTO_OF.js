@@ -145,7 +145,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                         },
 
                         listeners: {
-                            // edit: 'onEditMOVIMENTO_OF',
                             beforeedit: 'onBeforeEditMOVIMENTO_OF'
                         },
 

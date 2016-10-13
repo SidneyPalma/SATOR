@@ -48,9 +48,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
     },
 
     listeners: {
-        selectaction: 'onSelectAction',
         queryreader: 'onStepDoQuery',
-        afterrender: 'onAfterRenderStep'
+        afterrender: 'onAfterRenderStep',
+        updatestepaction: 'onStepUpdateAction'
     },
 
     bodyStyle: 'padding: 10px',
@@ -61,7 +61,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         var me = this;
 
         me.timeoutID = window.setInterval(function () {
-            me.fireEvent('selectaction',me);
+            me.fireEvent('updatestepaction',me);
         }, me.timeoutInterval);
 
         Ext.create('Ext.util.KeyNav', Ext.getDoc(), {

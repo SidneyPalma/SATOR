@@ -3,7 +3,6 @@
 namespace iSterilization\Heart;
 
 use Smart\Setup\Start;
-use Endroid\QrCode\QrCode;
 use Smart\Common\Traits as Traits;
 
 class heartflowprocessing extends \Smart\Data\Proxy {
@@ -1326,7 +1325,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
     }
 
     public function selectHold(array $data) {
-        $query = $data['query'];
+        $areasid = $data['areasid'];
 
         $sql = "
             declare
@@ -1381,7 +1380,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         try {
             $pdo = $this->prepare($sql);
-            $pdo->bindValue(":areasid", $query, \PDO::PARAM_INT);
+            $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
@@ -1393,21 +1392,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         }
 
         return self::getResultToJson();
-    }
-
-    public function renderCode(array $data) {
-        $barcode = $_GET['barCode'];
-        $qrCode = new QrCode();
-        header( 'Content-type: image/png' );
-        $qrCode
-            ->setText($barcode)
-            ->setSize(58)
-            ->setPadding(1)
-            ->setErrorCorrection('high')
-            ->setImageType(QrCode::IMAGE_TYPE_PNG)
-            ->render();
-
-        exit;
     }
 
     public function armoryOfQuery(array $data) {
