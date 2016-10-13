@@ -59,6 +59,19 @@ class armorymovement extends \Smart\Data\Event {
      */
     public function preUpdate( \iSterilization\Model\armorymovement &$model ) {
         Session::hasProfile('','');
+
+        $this->setUpdate($model);
+    }
+
+    /**
+     * Validar Encerramento de movimento
+     * @param $model
+     */
+    public function setUpdate($model) {
+
+        $coach = new \iSterilization\Coach\armorymovement();
+        $older = $coach->getStore()->select();
+
     }
 
     /**
