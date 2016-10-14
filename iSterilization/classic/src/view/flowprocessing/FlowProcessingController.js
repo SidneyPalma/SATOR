@@ -421,9 +421,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                 return false;
                             }
 
-                            me.setView(view.master);
+                            view.master.down('gridpanel[name=releasesType]').getStore().load();
+
                             view.close();
-                            me.onHoldUpdateAction();
                         }
                     });
                 }
