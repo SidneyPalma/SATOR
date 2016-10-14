@@ -411,7 +411,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.Msg.confirm('Encerrar movimento', 'Confirma o encerramento do movimento?',
             function (choice) {
                 if (choice === 'yes') {
-                    console.info(data);
+                    data.set('releasestype','E');
+                    data.store.sync({
+                        callback: function (batch, options) {
+                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+
+                            if((resultSet == null) || (!resultSet.success)) {
+                                Smart.Msg.showToast(resultSet.getMessage(),'error');
+                                return false;
+                            }
+
+                            me.setView(view.master);
+                            view.close();
+                            me.onHoldUpdateAction();
+                        }
+                    });
                 }
             }
         );

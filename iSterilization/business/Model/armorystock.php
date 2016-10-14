@@ -27,6 +27,18 @@ class armorystock extends \Smart\Data\Model {
     private $armorystatus;
 
     /**
+     * @Policy {"nullable":false, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $armorylocal;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
+     */
+    private $flowprocessingstepid;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -71,6 +83,38 @@ class armorystock extends \Smart\Data\Model {
      */
     public function setArmorystatus($armorystatus) {
         $this->armorystatus = $armorystatus;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getArmorylocal() {
+        return $this->armorylocal;
+    }
+
+    /**
+     * @param type $armorylocal
+     * @return \iSterilization\Model\armorystock
+     */
+    public function setArmorylocal($armorylocal) {
+        $this->armorylocal = $armorylocal;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getFlowprocessingstepid() {
+        return $this->flowprocessingstepid;
+    }
+
+    /**
+     * @param type $flowprocessingstepid
+     * @return \iSterilization\Model\armorystock
+     */
+    public function setFlowprocessingstepid($flowprocessingstepid) {
+        $this->flowprocessingstepid = $flowprocessingstepid;
         return $this;
     }
 

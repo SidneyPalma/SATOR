@@ -68,10 +68,52 @@ class armorymovement extends \Smart\Data\Event {
      * @param $model
      */
     public function setUpdate($model) {
+        $id = $model->get('id');
+        $newreleasestype = $model->get('releasestype');
 
-        $coach = new \iSterilization\Coach\armorymovement();
-        $older = $coach->getStore()->select();
+        $data = array("query"=>$id);
 
+        $masterCoach = new \iSterilization\Coach\armorymovement();
+        $detailCoach = new \iSterilization\Coach\armorymovementitem();
+        $master = self::jsonToObject($masterCoach->getStore()->select());
+        $detail = self::jsonToObject($detailCoach->getStore()->getCache()->selectItem($data));
+
+        if(count($detail->rows) == 0) {
+            throw new \PDOException("O Movimento não pode ser encerrado pois <b>não existem lançamentos!</b>");
+        }
+
+        $oldreleasestype = $master->rows[0]->releasestype;
+
+        if($oldreleasestype !== $newreleasestype && $newreleasestype == "E") {
+
+            $proxy = $masterCoach->getStore()->getProxy();
+            $stock = new \iSterilization\Coach\armorystock();
+
+            try {
+                $proxy->beginTransaction();
+
+                foreach ($detail->rows as $item) {
+                    $stock->getStore()->getModel()->set('id','');
+                    $stock->getStore()->getModel()->set('armorymovementitemid',$item->id);
+                    $stock->getStore()->getModel()->set('flowprocessingstepid',$item->flowprocessingstepid);
+                    $stock->getStore()->getModel()->set('armorylocal',$item->armorylocal);
+                    $stock->getStore()->getModel()->set('armorystatus','A');
+                    $result = self::jsonToObject($stock->getStore()->insert());
+
+                    if($result->success == false) {
+                        throw new \PDOException($result->text);
+                        break;
+                    }
+                }
+
+                $proxy->commit();
+            } catch ( \PDOException $e ) {
+                if ($proxy->inTransaction()) {
+                    $proxy->rollBack();
+                }
+                throw new \PDOException($e->getMessage());
+            }
+        }
     }
 
     /**
