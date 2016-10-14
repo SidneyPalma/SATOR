@@ -421,9 +421,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                 return false;
                             }
 
-                            me.setView(view.master);
                             view.close();
-                            me.onHoldUpdateAction();
                         }
                     });
                 }
