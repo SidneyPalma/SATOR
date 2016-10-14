@@ -78,7 +78,7 @@ class armorymovement extends \Smart\Data\Event {
         $master = self::jsonToObject($masterCoach->getStore()->select());
         $detail = self::jsonToObject($detailCoach->getStore()->getCache()->selectItem($data));
 
-        if(count($detail->rows) == 0) {
+        if(count($detail->rows) == 0 && $newreleasestype != "C") {
             throw new \PDOException("O Movimento não pode ser encerrado pois <b>não existem lançamentos!</b>");
         }
 
