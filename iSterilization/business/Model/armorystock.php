@@ -15,12 +15,6 @@ class armorystock extends \Smart\Data\Model {
     private $id;
 
     /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
-     */
-    private $armorymovementitemid;
-
-    /**
      * @Policy {"nullable":false, "length":1}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -51,22 +45,6 @@ class armorystock extends \Smart\Data\Model {
      */
     public function setId($id) {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return type integer
-     */
-    public function getArmorymovementitemid() {
-        return $this->armorymovementitemid;
-    }
-
-    /**
-     * @param type $armorymovementitemid
-     * @return \iSterilization\Model\armorystock
-     */
-    public function setArmorymovementitemid($armorymovementitemid) {
-        $this->armorymovementitemid = $armorymovementitemid;
         return $this;
     }
 

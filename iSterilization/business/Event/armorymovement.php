@@ -94,7 +94,6 @@ class armorymovement extends \Smart\Data\Event {
 
                 foreach ($detail->rows as $item) {
                     $stock->getStore()->getModel()->set('id','');
-                    $stock->getStore()->getModel()->set('armorymovementitemid',$item->id);
                     $stock->getStore()->getModel()->set('flowprocessingstepid',$item->flowprocessingstepid);
                     $stock->getStore()->getModel()->set('armorylocal',$item->armorylocal);
                     $stock->getStore()->getModel()->set('armorystatus','A');
