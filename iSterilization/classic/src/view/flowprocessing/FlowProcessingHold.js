@@ -48,8 +48,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
     listeners: {
         queryreader: 'onHoldDoQuery',
-        afterrender: 'onAfterRenderHold',
-        updateholdaction: 'onHoldUpdateAction'
+        afterrender: 'onAfterRenderHold'
     },
 
     bodyStyle: 'padding: 10px',
@@ -60,13 +59,57 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
         var me = this;
 
         me.timeoutID = window.setInterval(function () {
-            me.fireEvent('updateholdaction',me);
+            me.updateHold();
         }, me.timeoutInterval);
     },
 
     deselectHold: function () {
         var me = this;
         window.clearInterval(me.timeoutID);
+    },
+
+    updateHold: function () {
+        var me = this,
+            storeHold = me.down('gridpanel[name=releasesHold]').getStore(),
+            storeType = me.down('gridpanel[name=releasesType]').getStore();
+
+        Ext.Ajax.request({
+            scope: me,
+            url: storeHold.getUrl(),
+            params: storeHold.getExtraParams(),
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                storeHold.removeAll();
+
+                if(result.rows) {
+                    storeHold.loadData(result.rows);
+                }
+            }
+        });
+
+        Ext.Ajax.request({
+            scope: me,
+            url: storeType.getUrl(),
+            params: storeType.getExtraParams(),
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                storeType.removeAll();
+
+                if(result.rows) {
+                    storeType.loadData(result.rows);
+                }
+            }
+        });
     },
 
     initComponent: function () {

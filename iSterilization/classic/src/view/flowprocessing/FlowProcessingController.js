@@ -186,55 +186,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.down('textfield[name=search]').focus(false,200);
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
-
-        me.onHoldUpdateAction();
+        view.updateHold();
     },
 
-    onHoldUpdateAction: function () {
-        var me = this,
-            view = me.getView(),
-            storeHold = view.down('gridpanel[name=releasesHold]').getStore(),
-            storeType = view.down('gridpanel[name=releasesType]').getStore();
-
-        Ext.Ajax.request({
-            scope: me,
-            url: storeHold.getUrl(),
-            params: storeHold.getExtraParams(),
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-
-                storeHold.removeAll();
-
-                if(result.rows) {
-                    storeHold.loadData(result.rows);
-                }
-            }
-        });
-
-        Ext.Ajax.request({
-            scope: me,
-            url: storeType.getUrl(),
-            params: storeType.getExtraParams(),
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-
-                storeType.removeAll();
-
-                if(result.rows) {
-                    storeType.loadData(result.rows);
-                }
-            }
-        });
-    },
-    
     onStepDoQuery: function (field, e, eOpts) {
         var me = this,
             value = field.getValue(),
@@ -275,6 +229,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 return false;
             }
         }
+
+        Smart.Msg.showToast('Protocolo inválido para esta área');
     },
 
     holdProtocol: function (value) {
@@ -421,8 +377,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                 return false;
                             }
 
-                            view.master.down('gridpanel[name=releasesType]').getStore().load();
-
+                            view.master.updateHold();
                             view.close();
                         }
                     });
