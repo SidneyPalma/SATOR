@@ -510,6 +510,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this;
         Ext.widget('call_SATOR_MOVIMENTO_TO').show(null,function () {
             this.master = me.getView();
+            this.down('clientsearch').focus(false,200);
         });
     },
 
