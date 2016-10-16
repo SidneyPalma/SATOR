@@ -62,9 +62,11 @@ Ext.define( 'Smart.plugins.TextMask', {
     init: function(cp) {
         this.cp = cp;
 
-        this.date = this.cp.xtype === 'datefield' || this.cp.xtype === 'smartdatefield';
+        this.date = this.cp.xtype === 'datefield';
 
-        if(this.date) {
+        this.time = this.cp.xtype === 'timefield';
+
+        if(this.date || this.time) {
             this.cp.mask = '';
             Ext.each(this.cp.format.split(''), function(item) {
                 this.cp.mask += this.maskRel[item] || item;
@@ -84,8 +86,8 @@ Ext.define( 'Smart.plugins.TextMask', {
         cp.getValueWithoutMask = this.getValueWithoutMask;
         cp.setMask = this.setMask;
 
-        if(this.date) {
-            cp.altFormats = "d|dm|dmY|d/m|d-m|d/m/Y|d-m-Y|Y-m-d|Y-m-dTg:i:s";
+        if(this.date || this.time) {
+            cp.altFormats = this.date ? "d|dm|dmY|d/m|d-m|d/m/Y|d-m-Y|Y-m-d|Y-m-dTg:i:s" : "g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H|gi a|hi a|giA|hiA|gi A|hi A";
             //"m/d/Y|n/j/Y|n/j/y|m/j/y|n/d/y|m/j/Y|n/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d|n-j|n/j"
             cp.setValue = this.setDateValue;
             cp.getSubmitData = this.getSubmitData;
@@ -247,21 +249,6 @@ Ext.define( 'Smart.plugins.TextMask', {
             this.hiddenField.dom.value = v;
             this.inputEl.dom.value = this.textMask.mask(v);
         }
-        this.value = v;
-    },
-    setTimeValue: function(v) {
-
-        if(v === 'now') {
-            v = new Date();
-        }
-
-        if(this.inputEl) {
-            v = this.formatDate(this.parseTime(v));
-
-            this.hiddenField.dom.value = v;
-            this.inputEl.dom.value = this.textMask.mask(v);
-        }
-
         this.value = v;
     },
 

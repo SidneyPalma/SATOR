@@ -10,7 +10,7 @@ class armorymovementoutput extends \Smart\Data\Model {
 
     /**
      * @Policy {"nullable":false}
-     * @Column {"description":"", "strategy":"NONE", "type":"integer", "policy":false, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"integer", "policy":false, "logallow":true, "default":""}
      */
     private $id;
 
@@ -19,6 +19,12 @@ class armorymovementoutput extends \Smart\Data\Model {
      * @Column {"description":"", "type":"integer", "policy":true, "logallow":true, "default":""}
      */
     private $clientid;
+
+    /**
+     * @Policy {"nullable":true, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $barcode;
 
     /**
      * @Policy {"nullable":true, "length":80}
@@ -45,7 +51,13 @@ class armorymovementoutput extends \Smart\Data\Model {
     private $flowing;
 
     /**
-     * @Policy {"nullable":false, "length":80}
+     * @Policy {"nullable":true, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $place;
+
+    /**
+     * @Policy {"nullable":true, "length":80}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $transportedby;
@@ -75,7 +87,7 @@ class armorymovementoutput extends \Smart\Data\Model {
     private $timeof;
 
     /**
-     * @Policy {"nullable":false}
+     * @Policy {"nullable":true}
      * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
      */
     private $hasbox;
@@ -109,6 +121,22 @@ class armorymovementoutput extends \Smart\Data\Model {
      */
     public function setClientid($clientid) {
         $this->clientid = $clientid;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getBarcode() {
+        return $this->barcode;
+    }
+
+    /**
+     * @param type $barcode
+     * @return \iSterilization\Model\armorymovementoutput
+     */
+    public function setBarcode($barcode) {
+        $this->barcode = $barcode;
         return $this;
     }
 
@@ -173,6 +201,22 @@ class armorymovementoutput extends \Smart\Data\Model {
      */
     public function setFlowing($flowing) {
         $this->flowing = $flowing;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getPlace() {
+        return $this->place;
+    }
+
+    /**
+     * @param type $place
+     * @return \iSterilization\Model\armorymovementoutput
+     */
+    public function setPlace($place) {
+        $this->place = $place;
         return $this;
     }
 

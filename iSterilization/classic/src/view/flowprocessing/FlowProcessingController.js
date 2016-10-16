@@ -507,11 +507,48 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_MOVIMENTO_TO: function () {
-        var me = this;
-        Ext.widget('call_SATOR_MOVIMENTO_TO').show(null,function () {
-            this.master = me.getView();
-            this.down('clientsearch').focus(false,200);
+        var me = this,
+            doCallBack = function (rows) {
+                Ext.widget('call_SATOR_MOVIMENTO_TO').show(null,function () {
+                    var movementtype = this.down('comboenum[name=movementtypedescription]');
+                    var releasestype = this.down('comboenum[name=releasestypedescription]');
+                    this.master = me.getView();
+                    this.down('clientsearch').focus(false,200);
+                    this.down('textfield[name=movementuser]').setValue(rows.username);
+                    this.down('hiddenfield[name=areasid]').setValue(Smart.workstation.areasid);
+                    this.down('textfield[name=areasname]').setValue(Smart.workstation.areasname);
+                    this.down('hiddenfield[name=movementtype]').setValue('002');
+                    this.down('hiddenfield[name=releasestype]').setValue('A');
+
+                    movementtype.setEnumItem();
+                    releasestype.setEnumItem();
+                });
+
+                return true;
+            };
+
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
         });
+    },
+
+    setMovementOutput: function () {
+        var me = this,
+            view = me.getView();
+
+        me.setModuleData('armorymovementoutput');
+        me.setModuleForm(view.down('form'));
+
+        me._success = function (frm, action) {
+            view.master.updateHold();
+            view.close();
+        }
+
+        me.updateRecord();
     },
 
     stepProtocol: function (value) {

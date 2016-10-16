@@ -9,8 +9,11 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
         'Smart.plugins.*',
         'Ext.window.Window',
         'Ext.grid.column.*',
+        'Smart.plugins.TextMask',
+        'Smart.form.field.ComboEnum',
         'Ext.grid.plugin.CellEditing',
         'iAdmin.view.person.client.ClientSearch',
+        'iSterilization.view.flowprocessing.SearchPatient',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
@@ -42,33 +45,62 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
     onSelectClient: function (combo,record,eOpts) {
         var me = combo.up('window'),
-            position = me.setPosition(),
-            innerHeigh = window.innerHeight,
+            dateof = me.down('datefield'),
             clienttype = record.get('clienttype'),
             surgicalroom = me.down('textfield[name=surgicalroom]');
+
+        me.showSurgical(false);
 
         me.down('fieldcontainer[name=group_01]').hide();
         me.down('fieldcontainer[name=group_02]').hide();
         me.down('fieldcontainer[name=group_03]').hide();
 
-        surgicalroom.reset();
-        surgicalroom.setReadColor(true);
-
         if (clienttype == '004') {
+            me.showSurgical(true);
             surgicalroom.focus(false, 200);
-            surgicalroom.setReadColor(false);
             me.down('fieldcontainer[name=group_01]').show();
             me.down('fieldcontainer[name=group_02]').show();
             me.down('fieldcontainer[name=group_03]').show();
         }
 
-        me.setPosition(position[0],(innerHeigh/2)-(me.getHeight()/2));
+        if (clienttype != '004') {
+            dateof.focus(false, 200);
+        }
+
+        me.updPosition();
+    },
+
+    showSurgical: function (value) {
+        var me = this,
+            dateof = me.down('datefield'),
+            timeof = me.down('timefield'),
+            searchpatient = me.down('searchpatient'),
+            flowing = me.down('textfield[name=flowing]'),
+            surgical = me.down('textfield[name=surgical]'),
+            surgicalroom = me.down('textfield[name=surgicalroom]'),
+            instrumentator = me.down('textfield[name=instrumentator]');
+
+        dateof.reset();
+        timeof.reset();
+
+        flowing.reset();
+        flowing.setReadColor(!value);
+
+        surgical.reset();
+        surgical.setReadColor(!value);
+
+        surgicalroom.reset();
+        surgicalroom.setReadColor(!value);
+
+        searchpatient.reset();
+        searchpatient.setReadColor(!value);
+
+        instrumentator.reset();
+        instrumentator.setReadColor(!value);
     },
 
     showClearClient: function (field, eOpts) {
         var me = field.up('window'),
-            position = me.setPosition(),
-            innerHeigh = window.innerHeight,
             surgicalroom = me.down('textfield[name=surgicalroom]');
 
         surgicalroom.reset();
@@ -77,19 +109,22 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
         me.down('fieldcontainer[name=group_01]').hide();
         me.down('fieldcontainer[name=group_02]').hide();
         me.down('fieldcontainer[name=group_03]').hide();
-        
-        me.setPosition(position[0],(innerHeigh/2)-(me.getHeight()/2));
+
+        me.updPosition();
     },
 
     buildItems: function () {
         var me = this;
 
+        Ext.create('iSterilization.store.armory.ArmoryMovementOutput');
+        
         me.items = [
             {
                 xtype: 'form',
                 bodyPadding: 10,
                 margin: '10 0 0 0',
                 layout: 'anchor',
+                plugins:'formenter',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
@@ -116,13 +151,18 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                                 xtype: 'hiddenfield',
                                 name: 'id'
                             }, {
+                                xtype: 'hiddenfield',
+                                name: 'areasid'
+                            }, {
                                 flex: 1,
                                 name: 'areasname'
                             }, {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                name: 'movementtypedescription'
+                                xtype: 'comboenum',
+                                name: 'movementtypedescription',
+                                hiddenNameId: 'movementtype'
                             }
                         ]
                     }, {
@@ -141,7 +181,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
-                                name: 'releasestypedescription'
+                                xtype: 'comboenum',
+                                name: 'releasestypedescription',
+                                hiddenNameId: 'releasestype'
                             }
                         ]
                     }, {
@@ -190,23 +232,34 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                         },
                         items: [
                             {
-                                xtype: 'hiddenfield',
-                                name: 'surgicalwarning'
-                            }, {
-                                pageSize: 10,
+                                pageSize: 0,
                                 useReadColor: true,
                                 fieldLabel: 'Aviso Cirurgia',
                                 name: 'patientname',
                                 xtype: 'searchpatient',
-                                hiddenNameId: 'surgicalwarning',
-                                listeners: {
-                                    select: 'onSelectPatient'
-                                }
+                                hiddenNameId: 'surgicalwarning'
                             }
                         ]
                     }, {
                         hidden: true,
                         name: 'group_02',
+                        xtype: 'fieldcontainer',
+                        layout: 'hbox',
+                        defaultType: 'textfield',
+                        defaults: {
+                            flex: 1,
+                            fieldCls: 'smart-field-style-action'
+                        },
+                        items: [
+                            {
+                                useReadColor: true,
+                                fieldLabel: 'Procedimento',
+                                name: 'surgical'
+                            }
+                        ]
+                    }, {
+                        hidden: true,
+                        name: 'group_03',
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'textfield',
@@ -228,47 +281,29 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                             }
                         ]
                     }, {
-                        hidden: true,
-                        name: 'group_03',
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            flex: 1,
-                            fieldCls: 'smart-field-style-action'
-                        },
-                        items: [
-                            {
-                                useReadColor: true,
-                                fieldLabel: 'Procedimento',
-                                name: 'surgical'
-                            }
-                        ]
-                    }, {
-                        xtype: 'fieldcontainer',
-                        layout: 'hbox',
-                        defaultType: 'textfield',
-                        defaults: {
-                            useReadColor: true,
+                            allowBlank: false,
+                            // useReadColor: true,
                             fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
                                 flex: 1,
+                                xtype: 'datefield',
                                 fieldLabel: 'Data',
+                                plugins: 'textmask',
                                 name: 'dateof'
                             }, {
                                 xtype: 'splitter'
                             }, {
                                 flex: 1,
+                                xtype: 'timefield',
                                 fieldLabel: 'Hora',
+                                plugins: 'textmask',
                                 name: 'timeof'
-                            }, {
-                                xtype: 'splitter'
-                            }, {
-                                flex: 1,
-                                fieldLabel: 'Transportado por',
-                                name: 'transportedby'
                             }
                         ]
                     }
@@ -281,6 +316,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
     buttons: [
         {
+            scale: 'medium',
+            name: 'confirm',
+            text: 'Confirmar',
+            showSmartTheme: 'green',
+            listeners: {
+                click: 'setMovementOutput'
+            }
+        }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',

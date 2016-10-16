@@ -17,6 +17,11 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
             name: 'clientid',
             type: 'int'
         }, {
+            name: 'barcode',
+            type: 'auto',
+            persist: true,
+            critical: true
+        }, {
             name: 'clientname',
             type: 'auto'
         }, {
@@ -30,6 +35,9 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
             type: 'auto'
         }, {
             name: 'flowing',
+            type: 'auto'
+        }, {
+            name: 'place',
             type: 'auto'
         }, {
             name: 'transportedby',
@@ -46,11 +54,56 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
             serializeType: 'date'
         }, {
             name: 'timeof',
-            type: 'time'
+            type: 'auto'
         }, {
             name: 'hasbox',
             type: 'int'
         }
     ]
+
+    // fields: [
+    //     {
+    //         name: 'id',
+    //         type: 'int',
+    //         serializeType: 'auto'
+    //     }, {
+    //         name: 'clientid',
+    //         type: 'int'
+    //     }, {
+    //         name: 'clientname',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'patientname',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'surgicalwarning',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'instrumentator',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'flowing',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'transportedby',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'surgicalroom',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'surgical',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'dateof',
+    //         type: 'auto',
+    //         serializeType: 'date'
+    //     }, {
+    //         name: 'timeof',
+    //         type: 'auto'
+    //     }, {
+    //         name: 'hasbox',
+    //         type: 'int'
+    //     }
+    // ]
 
 });

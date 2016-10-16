@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchPatient', {
 
     displayField: 'name',
 
-    pageSize: 0,
+    pageSize: 10,
     showClear: true,
 
     url: '../iSterilization/business/Calls/flowprocessing.php',
@@ -39,18 +39,18 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchPatient', {
 
     tpl: [
         '<tpl for=".">',
-            '<div class="x-boundlist-item">',
-                '<span style="font-size: 22px; display: block; line-height: 32px;">({id_patient}) {name}</span>',
-                '<span style="font-size: 15px; display: block; line-height: 18px;">{health_insurance}</span>',
-                '<span style="font-size: 18px; display: block; line-height: 26px; border-bottom: 1px solid #d0d0d0;">Aviso Cirúrgico: {id}</span>',
+            '<div class="x-boundlist-item" style="font-size: 14px; line-height: 18px;">',
+                '<span style="display: block;">({id_patient}) {name}</span>',
+                '<span style="display: block;">{health_insurance}</span>',
+                '<span style="display: block; border-bottom: 1px solid #d0d0d0;">Aviso Cirúrgico: {id}</span>',
             '</div>',
         '</tpl>'
-    ],
-
-    displayTpl: [
-        '<tpl for=".">',
-            '{id} {name} - ({health_insurance})',
-        '</tpl>'
     ]
+
+    // displayTpl: [
+    //     '<tpl for=".">',
+    //         '{id} {name} - ({health_insurance})',
+    //     '</tpl>'
+    // ]
 
 });
