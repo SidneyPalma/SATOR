@@ -15,12 +15,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldView', {
 
     url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
-    params: {
-        action: 'select',
-        method: 'releasesTypeA',
-        areasid: Smart.workstation.areasid
-    },
-
     fields: [
         {
             name: 'id',
@@ -77,6 +71,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldView', {
 
     initComponent: function () {
         var me = this;
+
+        me.params = {
+            action: 'select',
+            method: 'releasesTypeA',
+            areasid: Smart.workstation.areasid
+        };
 
         me.callParent();
 

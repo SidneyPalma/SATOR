@@ -73,6 +73,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
             holdview = me.down('flowprocessingholdview'),
             storeHold = me.down('gridpanel[name=releasesHold]').getStore();
 
+        if(!Smart.workstation || !Smart.workstation.areasid) {
+            Smart.Msg.showToast('Estação de Trabalho Não Configurada!','error');
+            return false;
+        }
+
         Ext.Ajax.request({
             scope: me,
             url: storeHold.getUrl(),
@@ -96,7 +101,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
         Ext.Ajax.request({
             scope: me,
             url: holdview.getUrl(),
-            params: holdview.getParams().__proto__,
+            params: holdview.getParams(),
             callback: function (options, success, response) {
                 var result = Ext.decode(response.responseText);
 
