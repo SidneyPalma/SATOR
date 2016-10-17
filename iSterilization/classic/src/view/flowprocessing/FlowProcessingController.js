@@ -386,9 +386,38 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         );
     },
 
-    getReleasesType: function(grid, rowIndex, colIndex) {
+    onFlowHoldDelete: function (viewView,store) {
         var me = this,
-            record = grid.getStore().getAt(rowIndex),
+            record = viewView.getSelectionModel().getSelection()[0];
+
+        Ext.Msg.confirm('Cancelar movimento', 'Confirma o cancelamento do movimento selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    var store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+                    store.setParams({
+                        method: 'selectCode',
+                        rows: Ext.encode({ id: record.get('id') })
+                    }).load({
+                        scope: me,
+                        callback: function () {
+                            var model = store.getAt(0);
+
+                            model.set('releasestype','C');
+                            store.sync({
+                                callback: function () {
+                                    grid.getStore().load();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        );
+    },
+
+    onFlowHoldSelect: function (viewView,store) {
+        var me = this,
+            record = viewView.getSelectionModel().getSelection()[0],
             store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
 
         store.setParams({
@@ -408,37 +437,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
             }
         });
-    },
-
-    setReleasesType: function(grid, rowIndex, colIndex) {
-        var me = this,
-            record = grid.getStore().getAt(rowIndex);
-
-        Ext.Msg.confirm('Cancelar movimento', 'Confirma o cancelamento do movimento selecionado?',
-            function (choice) {
-                if (choice === 'yes') {
-                    var store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
-
-                    store.setParams({
-                        method: 'selectCode',
-                        rows: Ext.encode({ id: record.get('id') })
-                    }).load({
-                        scope: me,
-                        callback: function () {
-                            var model = store.getAt(0);
-
-                            model.set('releasestype','C');
-                            store.sync({
-                                callback: function () {
-                                    grid.getStore().load();
-                                }
-                            });
-                        }
-                    });
-
-                }
-            }
-        );
     },
 
     delReleasesItem: function(grid, rowIndex, colIndex) {

@@ -28,6 +28,7 @@ Ext.define( 'Smart.ux.app.Application', {
 
         //<debug>
             Smart.appType = 'dev';
+            document.cookie = 'XDEBUG_SESSION=PHPSTORM;path=/;';
         //</debug>
 
         me.redirectTo(Ext.manifest.name.toLowerCase());
