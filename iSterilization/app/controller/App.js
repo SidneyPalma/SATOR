@@ -80,7 +80,7 @@ Ext.define( 'iSterilization.controller.App', {
         var me = this,
             rc = me.getMainTree().getSelection();
 
-        if(!Smart.workstation) {
+        if(!Smart.workstation || !Smart.workstation.areasid) {
             Smart.Msg.showToast('Estação de Trabalho Não Configurada!','error');
             return false;
         }
