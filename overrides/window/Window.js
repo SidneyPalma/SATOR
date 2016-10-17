@@ -8,6 +8,14 @@ Ext.define( 'Ext.overrides.window.Window', {
 
     animateClsIn: 'animated jello',
 
+    updPosition: function () {
+        var me = this,
+            position = me.setPosition(),
+            innerHeigh = window.innerHeight;
+
+        me.setPosition(position[0],(innerHeigh/2)-(me.getHeight()/2));
+    },
+
     initComponent: function () {
         var me = this;
 

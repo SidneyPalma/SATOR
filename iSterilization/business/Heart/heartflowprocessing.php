@@ -1483,6 +1483,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             select
                 am.id,
                 am.areasid,
+				coalesce(o.lineone,dbo.getEnum('movementtype',am.movementtype)) as lineone,
                 a.name as areasname,
                 am.movementuser,
                 am.movementdate,
@@ -1494,6 +1495,14 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             from
                 armorymovement am
                 inner join areas a on ( a.id = am.areasid )
+				outer apply (
+					select
+						c.name as lineone
+					from
+						armorymovementoutput amo
+						inner join client c on ( c.id = amo.clientid )
+					where amo.id = am.id
+				) o
             where am.areasid = @areasid
               and am.releasestype = @releasestype;";
 

@@ -30,6 +30,29 @@ Ext.define( 'Smart.form.field.ComboEnum', {
     filterField: null,
     displayField: null,
 
+    setEnumItem: function () {
+        var me = this,
+            comp = me.up('component');
+
+        me.getStore().load({
+            scope: me,
+            async: false,
+            params: {
+                type: me.valueField,
+                method: 'selectItem',
+                query: comp.down('hiddenfield[name=' + me.valueField + ']').getValue()
+            },
+            callback: function(records, operation, success) {
+
+                if(!success || records.length == 0) {
+                    return false;
+                }
+
+                me.setRawValue(records[0].get(me.displayField));
+            }
+        });
+    },
+
     buildCombo: function () {
         var me = this,
             name = me.getName(),

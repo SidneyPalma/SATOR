@@ -9,7 +9,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
         'Smart.plugins.*',
         'Ext.window.Window',
         'Ext.form.field.Checkbox',
-        'Smart.form.field.ComboEnum',
         'iAdmin.view.helper.place.PlaceSearch',
         'iAdmin.view.person.client.ClientSearch',
         'iAdmin.view.helper.flowing.FlowingSearch',

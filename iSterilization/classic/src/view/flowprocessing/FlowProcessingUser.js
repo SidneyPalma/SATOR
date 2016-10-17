@@ -70,6 +70,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                             }, {
                                 margin: '20 0 0 0',
                                 name: 'usercode',
+                                useUpperCase: true,
                                 inputType: 'password',
                                 // fieldLabel: 'Identificação',
                                 listeners: {

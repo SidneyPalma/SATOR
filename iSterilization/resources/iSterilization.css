@@ -531,6 +531,59 @@
 
 .flowprocessinghold .x-grid-cell-inner-action-col {
     text-align: center !important;
-    /*text-shadow: none;*/
+    text-shadow: none;
     font-size: 38px !important;
+}
+
+/*
+    dataview
+*/
+
+.hold {
+    float: left;
+    color: white;
+    padding: 10px;
+    height: 80px;
+    width: 300px;
+    cursor: pointer;
+    margin: 0 0 0 10px;
+    text-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
+.hold-001 {
+    background: rgb(254, 85, 46);
+}
+.hold-002 {
+    background: rgb(105, 112, 194);
+}
+
+.hold:hover {
+    color: rgb(229, 252, 194);
+}
+
+.hold-barcode {
+    width: 24%;
+    float: left;
+    height: 100%;
+}
+
+.hold-left {
+    width: 56%;
+    float: left;
+    height: 100%;
+    font-weight: 700;
+}
+
+.hold-right {
+    width: 18%;
+    height: 100%;
+    float: right;
+    font-size: 32px;
+    padding-left: 2%;
+    /*line-height: 28px;*/
+}
+
+.hold-right i {
+    text-align: center;
+    /*padding-left: 5px;*/
 }

@@ -12,7 +12,9 @@ class armorymovement extends \Smart\Data\Event {
     public function preInsert( \iSterilization\Model\armorymovement &$model ) {
         Session::hasProfile('','');
 
-        $this->valInsert($model);
+        if($model->get('movementtype') == '001') {
+            $this->valInsert($model);
+        }
     }
 
     /**
