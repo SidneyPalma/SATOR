@@ -112,7 +112,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                 holdview.store.removeAll();
 
                 // Ext.Object.equals
-
                 if(result.rows) {
                     holdview.store.loadData(result.rows);
                 }
