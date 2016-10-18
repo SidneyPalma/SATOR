@@ -154,93 +154,28 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 name: 'areasid'
                                             }, {
                                                 flex: 1,
-                                                name: 'areasname'
+                                                name: 'clientname'
                                             }, {
                                                 xtype: 'splitter'
                                             }, {
                                                 flex: 1,
-                                                xtype: 'comboenum',
-                                                name: 'movementtypedescription',
-                                                hiddenNameId: 'movementtype'
+                                                name: 'movementtypedescription'
                                             }
                                         ]
                                     }, {
                                         xtype: 'fieldcontainer',
-                                        layout: 'hbox',
                                         fieldLabel: 'Destino',
-                                        defaultType: 'textfield',
-                                        defaults: {
-                                            flex: 1,
-                                            hideTrigger: true,
-                                            allowBlank: false,
-                                            fieldCls: 'smart-field-style-action'
-                                        },
-                                        items: [
-                                            {
-                                                pageSize: 0,
-                                                margin: '0 5 0 0',
-                                                fieldLabel: 'Cliente',
-                                                // xtype: 'clientsearch',
-                                                name: 'clientname'
-                                                // hiddenNameId: 'clientid',
-                                                // listeners: {
-                                                //     select: me.onSelectClient,
-                                                //     showclear: me.showClearClient,
-                                                //     beforedeselect: 'showClearClient'
-                                                // }
-                                            }, {
-                                                allowBlank: true,
-                                                margin: '0 0 0 5',
-                                                useReadColor: true,
-                                                fieldLabel: 'Sala',
-                                                name: 'surgicalroom'
-                                            }
-                                        ]
-                                    }, {
-                                        name: 'group_01',
-                                        xtype: 'fieldcontainer',
-                                        layout: 'hbox',
-                                        defaultType: 'textfield',
-                                        defaults: {
-                                            flex: 1,
-                                            hideTrigger: true,
-                                            fieldCls: 'smart-field-style-action'
-                                        },
-                                        items: [
-                                            {
-                                                pageSize: 0,
-                                                useReadColor: true,
-                                                fieldLabel: 'Aviso Cirurgia',
-                                                name: 'patientname'
-                                                // xtype: 'searchpatient',
-                                                // hiddenNameId: 'surgicalwarning'
-                                            }
-                                        ]
-                                    }, {
-                                        xtype: 'fieldcontainer',
-                                        layout: 'hbox',
-                                        defaultType: 'textfield',
-                                        defaults: {
-                                            allowBlank: false,
-                                            // useReadColor: true,
-                                            fieldCls: 'smart-field-style-action'
-                                        },
-                                        items: [
-                                            {
-                                                flex: 1,
-                                                xtype: 'datefield',
-                                                fieldLabel: 'Data',
-                                                plugins: 'textmask',
-                                                name: 'dateof'
-                                            // }, {
-                                            //     xtype: 'splitter'
-                                            }, {
-                                                flex: 1,
-                                                xtype: 'timefield',
-                                                fieldLabel: 'Hora',
-                                                plugins: 'textmask',
-                                                name: 'timeof'
-                                            }
+                                        name: 'groupdocument',
+                                        tpl: [
+                                            '<div style="font-size: 14px; ">',
+                                                '<div style="line-height: 28px"><b>Data:</b> {movementdate}</div>',
+                                                '<div style="line-height: 28px; font-size: 20px;">Procedimento</div>',
+                                                '<div style="line-height: 28px"><b>Data:</b> {dateof}</div>',
+                                                '<div style="line-height: 28px"><b>Hora:</b> {timeof}</div>',
+                                                '<div style="line-height: 28px"><b>Status:</b> {releasestypedescription}</div>',
+                                                '<div style="line-height: 28px">{patientname}</div>',
+                                                '<div style="line-height: 28px">{flowing}</div>',
+                                            '</div>'
                                         ]
                                     }
                                 ]
