@@ -33,6 +33,18 @@ class armorymovementitem extends \Smart\Data\Model {
     private $armorylocal;
 
     /**
+     * @Policy {"nullable":true, "length":250}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $justified;
+
+    /**
+     * @Policy {"nullable":true, "length":1}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $outputtype;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -93,6 +105,38 @@ class armorymovementitem extends \Smart\Data\Model {
      */
     public function setArmorylocal($armorylocal) {
         $this->armorylocal = $armorylocal;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getJustified() {
+        return $this->justified;
+    }
+
+    /**
+     * @param type $justified
+     * @return \iSterilization\Model\armorymovementitem
+     */
+    public function setJustified($justified) {
+        $this->justified = $justified;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getOutputtype() {
+        return $this->outputtype;
+    }
+
+    /**
+     * @param type $outputtype
+     * @return \iSterilization\Model\armorymovementitem
+     */
+    public function setOutputtype($outputtype) {
+        $this->outputtype = $outputtype;
         return $this;
     }
 
