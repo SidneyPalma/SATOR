@@ -1483,28 +1483,35 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             select
                 am.id,
                 am.areasid,
-				coalesce(o.lineone,dbo.getEnum('movementtype',am.movementtype)) as lineone,
+                coalesce(o.lineone,dbo.getEnum('movementtype',am.movementtype)) as lineone,
                 a.name as areasname,
                 am.movementuser,
-                am.movementdate,
+                coalesce(o.patientname,am.movementdate) as linetwo,
                 am.movementtype,
                 dbo.getEnum('movementtype',am.movementtype) as movementtypedescription,
                 am.releasestype,
                 dbo.getEnum('releasestype',am.releasestype) as releasestypedescription,
+                o.patientname,
+                o.dateof,
+                o.timeof,
                 item = ( select count(id) from armorymovementitem where armorymovementid = am.id )
             from
                 armorymovement am
                 inner join areas a on ( a.id = am.areasid )
-				outer apply (
-					select
-						c.name as lineone
-					from
-						armorymovementoutput amo
-						inner join client c on ( c.id = amo.clientid )
-					where amo.id = am.id
-				) o
+                outer apply (
+                    select
+                        c.name as lineone,
+                        amo.patientname,
+                        amo.dateof,
+                        amo.timeof,
+                        amo.barcode
+                    from
+                        armorymovementoutput amo
+                        inner join client c on ( c.id = amo.clientid )
+                    where amo.id = am.id
+                ) o
             where am.areasid = @areasid
-              and am.releasestype = @releasestype;";
+                and am.releasestype = @releasestype;";
 
         try {
             $pdo = $this->prepare($sql);

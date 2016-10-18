@@ -13,7 +13,7 @@ class armorymovement extends \Smart\Data\Cache {
         header( 'Content-type: image/png' );
         $qrCode
             ->setText($barcode)
-            ->setSize(46)
+            ->setSize(54)
             ->setPadding(1)
             ->setErrorCorrection('high')
             ->setImageType(QrCode::IMAGE_TYPE_PNG)

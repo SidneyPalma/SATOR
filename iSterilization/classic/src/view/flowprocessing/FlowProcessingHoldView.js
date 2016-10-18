@@ -29,6 +29,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldView', {
             name: 'lineone',
             type: 'auto'
         }, {
+            name: 'linetwo',
+            type: 'auto'
+        }, {
             name: 'movementdate',
             type: 'auto'
         }, {
@@ -46,22 +49,32 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldView', {
         }, {
             name: 'movementuser',
             type: 'auto'
+        }, {
+            name: 'patientname',
+            type: 'auto'
+        }, {
+            name: 'dateof',
+            type: 'auto'
+        }, {
+            name: 'timeof',
+            type: 'auto'
         }
     ],
 
     tpl: [
         '<tpl for=".">',
-            '<div style="margin-bottom: 10px;" class="hold hold-{movementtype}">',
-                '<div class="hold-barcode">',
-                    '<div style="margin-top: 6px;"><img src="../iSterilization/business/Calls/armorymovement.php?action=select&method=renderCode&barCode={id}"/></div>',
+            '<div class="hold hold-{movementtype}">',
+                '<div class="hold-l">',
+                    '<div><img src="../iSterilization/business/Calls/armorymovement.php?action=select&method=renderCode&barCode={id}"/></div>',
                 '</div>',
-                '<div class="hold-left">',
-                    '<span style="font-size: 18px; display: block;">{lineone}</span>',
-                    '<span>{movementuser}</span>',
-                '</div>',
-                '<div class="hold-right">',
+                '<div class="hold-btn">',
                     '<i class="select fa fa-info-circle action-select-color-font"></i>',
                     '<i class="delete fa fa-minus-circle action-delete-color-font"></i>',
+                '</div>',
+                '<div class="hold-r">',
+                    '<div class="line-one">{lineone}</div>',
+                    '<div class="line-two">{linetwo}</div>',
+                    '<div class="line-two">{movementuser}</div>',
                 '</div>',
             '</div>',
         '</tpl>'
