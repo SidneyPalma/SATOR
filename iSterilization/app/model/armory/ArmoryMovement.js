@@ -24,8 +24,8 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovement', {
             type: 'auto'
         }, {
             name: 'movementdate',
-            type: 'auto',
-            serializeType: 'date'
+            type: 'date'
+            // serializeType: 'date'
         }, {
             name: 'movementdateformat',
             type: 'auto',

@@ -50,63 +50,18 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
             type: 'auto'
         }, {
             name: 'dateof',
-            type: 'auto',
-            serializeType: 'date'
+            type: 'date'
+            // serializeType: 'date'
         }, {
             name: 'timeof',
             type: 'auto',
             convert: function (value) {
-                return Ext.date
+                return value.length == 0 ? null : value.substring(5,0);
             }
         }, {
             name: 'hasbox',
             type: 'int'
         }
     ]
-
-    // fields: [
-    //     {
-    //         name: 'id',
-    //         type: 'int',
-    //         serializeType: 'auto'
-    //     }, {
-    //         name: 'clientid',
-    //         type: 'int'
-    //     }, {
-    //         name: 'clientname',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'patientname',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'surgicalwarning',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'instrumentator',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'flowing',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'transportedby',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'surgicalroom',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'surgical',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'dateof',
-    //         type: 'auto',
-    //         serializeType: 'date'
-    //     }, {
-    //         name: 'timeof',
-    //         type: 'auto'
-    //     }, {
-    //         name: 'hasbox',
-    //         type: 'int'
-    //     }
-    // ]
 
 });
