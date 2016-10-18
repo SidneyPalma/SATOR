@@ -180,14 +180,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 pageSize: 0,
                                                 margin: '0 5 0 0',
                                                 fieldLabel: 'Cliente',
-                                                xtype: 'clientsearch',
-                                                name: 'clientname',
-                                                hiddenNameId: 'clientid',
-                                                listeners: {
-                                                    select: me.onSelectClient,
-                                                    showclear: me.showClearClient,
-                                                    beforedeselect: 'showClearClient'
-                                                }
+                                                // xtype: 'clientsearch',
+                                                name: 'clientname'
+                                                // hiddenNameId: 'clientid',
+                                                // listeners: {
+                                                //     select: me.onSelectClient,
+                                                //     showclear: me.showClearClient,
+                                                //     beforedeselect: 'showClearClient'
+                                                // }
                                             }, {
                                                 allowBlank: true,
                                                 margin: '0 0 0 5',
@@ -211,9 +211,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 pageSize: 0,
                                                 useReadColor: true,
                                                 fieldLabel: 'Aviso Cirurgia',
-                                                name: 'patientname',
-                                                xtype: 'searchpatient',
-                                                hiddenNameId: 'surgicalwarning'
+                                                name: 'patientname'
+                                                // xtype: 'searchpatient',
+                                                // hiddenNameId: 'surgicalwarning'
                                             }
                                         ]
                                     }, {
@@ -232,8 +232,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 fieldLabel: 'Data',
                                                 plugins: 'textmask',
                                                 name: 'dateof'
-                                            }, {
-                                                xtype: 'splitter'
+                                            // }, {
+                                            //     xtype: 'splitter'
                                             }, {
                                                 flex: 1,
                                                 xtype: 'timefield',

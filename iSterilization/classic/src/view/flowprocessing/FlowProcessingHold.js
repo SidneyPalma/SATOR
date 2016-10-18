@@ -109,12 +109,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                     return false;
                 }
 
-                holdview.store.removeAll();
 
-                // Ext.Object.equals
-                if(result.rows) {
-                    holdview.store.loadData(result.rows);
-                }
+                Ext.each(result.rows,function (item) {
+                    var record = holdview.store.findRecord('id',item.id);
+
+                    if(!record) {
+                        holdview.store.add(item);
+                    }
+
+                });
+
+                holdview.store.each(function (record) {
+                    var obj = Ext.Array.findBy(result.rows, function(item) {
+                        if (item.id == record.get('id')) {
+                            return true;
+                        }
+                    });
+
+                    if(!obj) {
+                        holdview.store.remove(record);
+                    }
+                });
             }
         });
     },
