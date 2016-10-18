@@ -594,3 +594,11 @@
 .hold-002 {
     background: #ac8bff;
 }
+
+.movement-title {
+    font-size: 20px;
+}
+
+.movement {
+    line-height: 28px;
+}
