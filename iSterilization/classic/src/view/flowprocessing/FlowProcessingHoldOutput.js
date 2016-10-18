@@ -73,7 +73,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                         items: [
                             {
                                 margin: '10 10 0 0',
-                                flex: 1,
+                                flex: 3,
                                 xtype: 'container',
                                 layout: 'anchor',
                                 defaults: {
@@ -107,25 +107,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                     }
                                                 }
                                             }, {
-                                                useReadColor: true,
+                                                xtype: 'displayfield',
                                                 fieldLabel: 'Material/Kit',
-                                                name: 'materialname'
+                                                name: 'materialname',
+                                                value: '...'
                                             }, {
-                                                useReadColor: true,
+                                                xtype: 'displayfield',
                                                 fieldLabel: 'Transportador',
-                                                name: 'transportedby'
-                                            }, {
-                                                xtype: 'checkboxfield',
-                                                fieldLabel: 'Engradado lacrado',
-                                                boxLabel: 'Possui',
-                                                name: 'hasbox'
+                                                name: 'transportedby',
+                                                value: '...'
                                             }
                                         ]
                                     }
                                 ]
                             }, {
                                 margin: '10 0 0 10',
-                                flex: 1,
+                                flex: 2,
                                 xtype: 'container',
                                 layout: 'anchor',
                                 defaults: {
@@ -138,42 +135,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                     {
                                         margin: '10 0 10 0',
                                         xtype: 'fieldcontainer',
-                                        layout: 'hbox',
-                                        fieldLabel: 'Documento',
-                                        defaultType: 'textfield',
-                                        defaults: {
-                                            useReadColor: true,
-                                            fieldCls: 'smart-field-style-action'
-                                        },
-                                        items: [
-                                            {
-                                                xtype: 'hiddenfield',
-                                                name: 'id'
-                                            }, {
-                                                xtype: 'hiddenfield',
-                                                name: 'areasid'
-                                            }, {
-                                                flex: 1,
-                                                name: 'clientname'
-                                            }, {
-                                                xtype: 'splitter'
-                                            }, {
-                                                flex: 1,
-                                                name: 'movementtypedescription'
-                                            }
-                                        ]
-                                    }, {
-                                        xtype: 'fieldcontainer',
-                                        fieldLabel: 'Destino',
                                         name: 'groupdocument',
                                         tpl: [
-                                            '<div style="font-size: 14px; ">',
-                                                '<div style="line-height: 28px"><b>Data:</b> {movementdate}</div>',
-                                                '<div style="line-height: 28px; font-size: 20px;">Procedimento</div>',
-                                                '<div style="line-height: 28px"><b>Data:</b> {dateof} {timeof}</div>',
-                                                '<div style="line-height: 28px"><b>Status:</b> {releasestypedescription}</div>',
-                                                '<div style="line-height: 28px">{patientname}</div>',
-                                                '<div style="line-height: 28px">{flowing}</div>',
+                                            '<div>',
+                                                '<div class="movement movement-title">Documento</div>',
+                                                '<div class="movement movement-title">{clientname}</div>',
+                                                '<div class="movement movement-title">{movementtypedescription}</div>',
+                                                '<div class="movement"><b>Status:</b> {releasestypedescription}</div>',
+                                                '<div class="movement"><b>Data:</b> {movementdate}</div>',
+                                                '<div class="movement movement-title">Procedimento</div>',
+                                                '<div class="movement"><b>Data:</b> {dateof} {timeof}</div>',
+                                                '<div class="movement">{patientname}</div>',
+                                                '<div class="movement">{flowing}</div>',
+                                                '<div class="movement">{place}</div>',
+                                                '<div class="movement">{instrumentator}</div>',
+                                                '<div class="movement">{surgicalwarning}</div>',
                                             '</div>'
                                         ]
                                     }
@@ -181,7 +157,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                             }
                         ]
                     }, {
-                        height: 250,
+                        height: 350,
                         margin: '10 0 0 0',
                         xtype: 'gridpanel',
                         cls: 'update-grid',
@@ -205,7 +181,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                 dataIndex: 'materialname',
                                 text: 'Material / kit'
                             }, {
-                                width: 120,
+                                width: 180,
                                 text: 'Saída',
                                 dataIndex: 'outputtypedescription',
                                 editor: {
@@ -219,7 +195,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                             }, {
                                 text: 'Ações',
                                 hidden: !me.editable,
-                                width: 40,
+                                width: 80,
                                 align: 'center',
                                 xtype: 'actioncolumn',
                                 items: [
