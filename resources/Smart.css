@@ -615,6 +615,7 @@
 */
 
 .action-select-color-font {
+    cursor: pointer;
     color: rgb(0, 227, 0) !important;
 }
 

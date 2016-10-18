@@ -417,7 +417,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onFlowHoldSelect: function (viewView,store) {
         var me = this,
-            record = viewView.getSelectionModel().getSelection()[0],
+            record = viewView.getSelectionModel().getSelection()[0];
+
+        switch (record.get('movementtype')) {
+            case '001':
+                me.showMovementType001(record);
+                break
+            case '002':
+                me.showMovementType002(record);
+                break
+        }
+    },
+
+    showMovementType001: function (record) {
+        var me = this,
             store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
 
         store.setParams({
@@ -437,6 +450,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
             }
         });
+    },
+
+    showMovementType002: function (record) {
+
     },
 
     delReleasesItem: function(grid, rowIndex, colIndex) {
