@@ -1483,7 +1483,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             select
                 am.id,
                 am.areasid,
-                coalesce(o.lineone,dbo.getEnum('movementtype',am.movementtype)) as lineone,
+                coalesce(o.lineone,concat('#',convert(varchar, dbo.getLeftPad(8,'0',am.id)))) as lineone,
                 a.name as areasname,
                 am.movementuser,
                 coalesce(o.patientname,am.movementdate) as linetwo,

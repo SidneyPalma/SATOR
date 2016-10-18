@@ -453,6 +453,26 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     showMovementType002: function (record) {
+        var me = this,
+            store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+
+        store.setParams({
+            method: 'selectCode',
+            rows: Ext.encode({ id: record.get('id') })
+        }).load({
+            scope: me,
+            callback: function (records) {
+                var rec = records[0];
+                Ext.widget('flowprocessingholdoutput').show(null,function () {
+                    this.master = me.getView();
+                    this.down('form').loadRecord(rec);
+                    // this.down('textfield[name=search]').focus(false,200);
+                    Ext.getStore('armorymovementitem').setParams({
+                        query: record.get('id')
+                    }).load();
+                });
+            }
+        });
 
     },
 
