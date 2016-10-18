@@ -466,7 +466,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 Ext.widget('flowprocessingholdoutput').show(null,function () {
                     this.master = me.getView();
                     this.down('form').loadRecord(rec);
-                    // this.down('textfield[name=search]').focus(false,200);
+                    this.down('textfield[name=search]').focus(false,200);
                     Ext.getStore('armorymovementitem').setParams({
                         query: record.get('id')
                     }).load();
