@@ -454,19 +454,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     showMovementType002: function (record) {
         var me = this,
-            store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+            store = Ext.getStore('armorymovementoutput') || Ext.create('iSterilization.store.armory.ArmoryMovementOutput');
 
         store.setParams({
             method: 'selectCode',
-            rows: Ext.encode({ id: record.get('id') })
+            query: record.get('id')
         }).load({
             scope: me,
-            callback: function (records) {
+            callback: function(records, operation, success) {
                 var rec = records[0];
                 Ext.widget('flowprocessingholdoutput').show(null,function () {
                     this.master = me.getView();
                     this.down('form').loadRecord(rec);
                     this.down('textfield[name=search]').focus(false,200);
+                    var groupdocument = this.down('fieldcontainer[name=groupdocument]');
+
+                    groupdocument.update(rec.data);
+
                     Ext.getStore('armorymovementitem').setParams({
                         query: record.get('id')
                     }).load();
