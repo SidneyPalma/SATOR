@@ -54,7 +54,10 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
             serializeType: 'date'
         }, {
             name: 'timeof',
-            type: 'auto'
+            type: 'auto',
+            convert: function (value) {
+                return Ext.date
+            }
         }, {
             name: 'hasbox',
             type: 'int'
