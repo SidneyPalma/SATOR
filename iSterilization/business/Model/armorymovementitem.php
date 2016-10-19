@@ -33,6 +33,12 @@ class armorymovementitem extends \Smart\Data\Model {
     private $armorylocal;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,armorylocal"}
+     */
+    private $armorylocaldescription;
+
+    /**
      * @Policy {"nullable":true, "length":250}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
@@ -43,6 +49,12 @@ class armorymovementitem extends \Smart\Data\Model {
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
     private $outputtype;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,outputtype"}
+     */
+    private $outputtypedescription;
 
     /**
      * @return type integer
