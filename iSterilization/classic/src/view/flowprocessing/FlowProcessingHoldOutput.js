@@ -162,6 +162,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                         xtype: 'gridpanel',
                         cls: 'update-grid',
                         hideHeaders: false,
+                        headerBorders: false,
                         store: 'armorymovementitem',
 
                         selType: 'cellmodel',
@@ -177,6 +178,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
 
                         columns: [
                             {
+                                xtype: 'rownumberer'
+                            }, {
                                 flex: 1,
                                 sortable: false,
                                 dataIndex: 'materialname',

@@ -65,7 +65,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldView', {
         '<tpl for=".">',
             '<div class="hold hold-{movementtype}">',
                 '<div class="hold-l">',
-                    '<div><img src="../iSterilization/business/Calls/armorymovement.php?action=select&method=renderCode&barCode={id}"/></div>',
+                    '<div><img src="../iSterilization/business/Calls/armorymovement.php?action=select&method=renderCode&barCode={id}&movementType={movementtype}"/></div>',
                 '</div>',
                 '<div class="hold-btn">',
                     '<i class="select fa fa-info-circle action-select-color-font"></i>',

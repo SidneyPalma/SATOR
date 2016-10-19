@@ -219,7 +219,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         field.reset();
 
         if(value && value.length != 0) {
-            if(value.indexOf('SATOR') != -1) {
+            if( value.search(/SATOR/i) != -1 || value.search(/MOV/i) != -1) {
+            // if(['SATOR','MOV'].indexOf(value) != -1) {
+                console.info(value);
                 me.holdProtocol(value);
                 return false;
             }
@@ -234,14 +236,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     holdProtocol: function (value) {
-        var me = this;
-
-        switch(value) {
+        var me = this,
+            callHold = value.indexOf('MOV') != -1 ? 'MOV' : value;
+        switch(callHold) {
             case 'SATOR_MOVIMENTO_OF':
                 me.callSATOR_MOVIMENTO_OF();
                 break;
             case 'SATOR_MOVIMENTO_TO':
                 me.callSATOR_MOVIMENTO_TO();
+                break;
+            case 'MOV':
+                me.callSATOR_MOVIMENTO_ID(value);
                 break;
             default:
                 Smart.Msg.showToast('Protocolo inválido para esta área');
@@ -433,21 +438,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         switch (record.get('movementtype')) {
             case '001':
-                me.showMovementType001(record);
+                var value = record.get('id');
+                me.showMovementType001(value);
                 break
             case '002':
-                me.showMovementType002(record);
+                var value = record.get('id');
+                me.showMovementType002(value);
                 break
         }
     },
 
-    showMovementType001: function (record) {
+    showMovementType001: function (value) {
         var me = this,
             store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
 
         store.setParams({
             method: 'selectCode',
-            rows: Ext.encode({ id: record.get('id') })
+            rows: Ext.encode({ id: value })
         }).load({
             scope: me,
             callback: function (records) {
@@ -505,13 +512,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
     
-    showMovementType002: function (record) {
+    showMovementType002: function (value) {
         var me = this,
             store = Ext.getStore('armorymovementoutput') || Ext.create('iSterilization.store.armory.ArmoryMovementOutput');
 
         store.setParams({
             method: 'selectCode',
-            query: record.get('id')
+            query: value
         }).load({
             scope: me,
             callback: function(records, operation, success) {
@@ -545,6 +552,40 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
             }
         );
+    },
+
+    callSATOR_MOVIMENTO_ID: function (value) {
+        var me = this,
+            store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+
+        Ext.Ajax.request({
+            scope: me,
+            url: store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'selectCode',
+                rows: Ext.encode({ id: value.replace("MOV-", "") })
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
+                    return false;
+                }
+
+                var movementtype = result.rows[0].movementtype;
+
+                switch (movementtype) {
+                    case '001':
+                        me.showMovementType001(result.rows[0].id);
+                        break
+                    case '002':
+                        me.showMovementType002(result.rows[0].id);
+                        break
+                }
+            }
+        });
     },
 
     callSATOR_MOVIMENTO_OF: function () {
