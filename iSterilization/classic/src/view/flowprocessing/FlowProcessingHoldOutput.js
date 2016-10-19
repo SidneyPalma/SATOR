@@ -144,15 +144,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 '<div class="movement movement-title">Documento</div>',
                                                 '<div class="movement movement-title">{clientname}</div>',
                                                 '<div class="movement movement-title">{movementtypedescription}</div>',
-                                                '<div class="movement"><b>Status:</b> {releasestypedescription}</div>',
-                                                '<div class="movement"><b>Data:</b> {movementdate}</div>',
+                                                '<div class="movement"><b>Status:</b> {movementdate} - {releasestypedescription}</div>',
                                                 '<div class="movement movement-title">Procedimento</div>',
                                                 '<div class="movement"><b>Data:</b> {dateof} {timeof}</div>',
-                                                '<div class="movement">{patientname}</div>',
-                                                '<div class="movement">{flowing}</div>',
-                                                '<div class="movement">{place}</div>',
+                                                '<div class="movement">{surgicalwarning} {patientname}</div>',
+                                                '<div class="movement">{flowing} - {place}</div>',
                                                 '<div class="movement">{instrumentator}</div>',
-                                                '<div class="movement">{surgicalwarning}</div>',
                                             '</div>'
                                         ]
                                     }
