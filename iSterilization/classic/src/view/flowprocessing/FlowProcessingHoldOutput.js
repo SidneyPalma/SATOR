@@ -162,6 +162,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                         xtype: 'gridpanel',
                         cls: 'update-grid',
                         hideHeaders: false,
+                        headerBorders: false,
                         store: 'armorymovementitem',
 
                         selType: 'cellmodel',
@@ -177,11 +178,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
 
                         columns: [
                             {
+                                xtype: 'rownumberer'
+                            }, {
                                 flex: 1,
+                                sortable: false,
                                 dataIndex: 'materialname',
                                 text: 'Material / kit'
                             }, {
                                 width: 180,
+                                sortable: false,
                                 text: 'Saída',
                                 dataIndex: 'outputtypedescription',
                                 editor: {
@@ -193,6 +198,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                     }
                                 }
                             }, {
+                                sortable: false,
                                 text: 'Ações',
                                 hidden: !me.editable,
                                 width: 80,

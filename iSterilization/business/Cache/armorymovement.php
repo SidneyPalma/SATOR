@@ -8,11 +8,12 @@ use iSterilization\Model\armorymovement as Model;
 class armorymovement extends \Smart\Data\Cache {
 
     public function renderCode(array $data) {
-        $barcode = $_GET['barCode'];
+        $barCode = $_GET['barCode'];
+
         $qrCode = new QrCode();
         header( 'Content-type: image/png' );
         $qrCode
-            ->setText($barcode)
+            ->setText("MOV-$barCode")
             ->setSize(54)
             ->setPadding(1)
             ->setErrorCorrection('high')
