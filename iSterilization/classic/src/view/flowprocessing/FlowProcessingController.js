@@ -462,7 +462,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     this.down('form').loadRecord(rec);
                     this.down('textfield[name=search]').focus(false,200);
                     Ext.getStore('armorymovementitem').setParams({
-                        query: record.get('id')
+                        query: value
                     }).load();
                 });
             }
@@ -472,9 +472,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     onSelectHoldItem: function (field, e, eOpts) {
         var me = this,
             view = me.getView(),
-            value = field.getValue();
+            value = field.getValue(),
+            store = Ext.getStore('armorymovementitem');
 
         field.reset();
+
+        if(store.findRecord('barcode',value)) {
+            Smart.Msg.showToast("O item lido já foi lançado neste movimento!",'info');
+            return false;
+        }
 
         view.setLoading('Consultando materiais...');
 
@@ -488,19 +494,24 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             },
             callback: function (options, success, response) {
                 view.setLoading(false);
-                var result = Ext.decode(response.responseText),
-                    store = Ext.getStore('armorymovementitem') || Ext.create('iSterilization.store.armory.ArmoryMovementItem');
+                var result = Ext.decode(response.responseText);
 
-                if(!success || !result.success) {
+                if(!success || !result.success || result.records == 0) {
                     Smart.Msg.showToast(result.text,'error');
                     return false;
                 }
 
+                if(result.rows[0].available == 0) {
+                    Smart.Msg.showToast("O item lido já foi lançado em outro movimento!",'error');
+                    return false;
+                }
+
                 store.add({
+                    outputtype: 'P',
+                    barcode: result.rows[0].barcode,
                     materialname: result.rows[0].materialname,
                     armorymovementid: view.down('hiddenfield[name=id]').getValue(),
-                    flowprocessingstepid: result.rows[0].flowprocessingstepid,
-                    outputtype: 'P'
+                    flowprocessingstepid: result.rows[0].flowprocessingstepid
                 });
 
                 store.sync();
@@ -529,9 +540,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                     groupdocument.update(rec.data);
 
-                    Ext.getStore('armorymovementitem').setParams({
-                        query: record.get('id')
-                    }).load();
+                    Ext.getStore('armorymovementitem').setParams({query: value}).load();
                 });
             }
         });

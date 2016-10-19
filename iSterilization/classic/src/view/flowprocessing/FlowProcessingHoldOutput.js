@@ -185,6 +185,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                 dataIndex: 'materialname',
                                 text: 'Material / kit'
                             }, {
+                                width: 100,
+                                sortable: false,
+                                text: 'Schema',
+                                dataIndex: 'colorpallet'
+                            }, {
                                 width: 180,
                                 sortable: false,
                                 text: 'Saída',
