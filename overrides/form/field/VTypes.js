@@ -59,6 +59,27 @@ Ext.define( 'Ext.overrides.form.field.VTypes', {
          * min/max allowed values (these are tested for after the vtype test)
          */
         return true;
+    },
+
+    // https://www.sencha.com/forum/showthread.php?55946-validation-of-timefield
+    timerange : function(val, field) {
+        var time = field.parseDate(val);
+        if(!time){
+            return;
+        }
+        if (field.startTimeField && (!this.timeRangeMax || (time.getTime() != this.timeRangeMax.getTime()))) {
+            var start = Ext.getCmp(field.startTimeField);
+            start.maxValue = time;
+            start.validate();
+            this.timeRangeMax = time;
+        }
+        else if (field.endTimeField && (!this.timeRangeMin || (time.getTime() != this.timeRangeMin.getTime()))) {
+            var end = Ext.getCmp(field.endTimeField);
+            end.minValue = time;
+            end.validate();
+            this.timeRangeMin = time;
+        }
+        return true;
     }
 
 });
