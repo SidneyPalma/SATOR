@@ -190,10 +190,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                 editor: {
                                     xtype: 'comboenum',
                                     name: 'outputtypedescription',
-                                    fieldCls: 'smart-field-style-action'
-                                    //listeners: {
-                                    //    select: 'onEditMOVIMENTO_OF'
-                                    //}
+                                    fieldCls: 'smart-field-style-action',
+                                    listeners: {
+                                       select: 'onEditMOVIMENTO_TO'
+                                    }
                                 }
                             }, {
                                 text: 'Ações',

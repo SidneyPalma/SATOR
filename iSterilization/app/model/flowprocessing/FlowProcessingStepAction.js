@@ -64,7 +64,7 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStepAction', {
         }, {
             name: 'steptype',
             type: 'auto'
-        }, {        }, {
+        }, {
             name: 'donetype',
             type: 'auto'
         }, {
