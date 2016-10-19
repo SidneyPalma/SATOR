@@ -88,7 +88,6 @@ Ext.define( 'Smart.plugins.TextMask', {
 
         if(this.date || this.time) {
             cp.altFormats = this.date ? "d|dm|dmY|d/m|d-m|d/m/Y|d-m-Y|Y-m-d|Y-m-dTg:i:s" : "H:i|Hi";
-            //"m/d/Y|n/j/Y|n/j/y|m/j/y|n/d/y|m/j/Y|n/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d|n-j|n/j"
             cp.setValue = this.setDateValue;
             cp.getSubmitData = this.getSubmitData;
         } else {
