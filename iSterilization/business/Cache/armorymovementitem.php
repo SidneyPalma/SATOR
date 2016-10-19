@@ -18,6 +18,7 @@ class armorymovementitem extends \Smart\Data\Cache {
                 ami.*,
                 fp.barcode,
                 t.materialname,
+                dbo.getEnum('outputtype',ami.outputtype) as outputtypedescription,
                 dbo.getEnum('armorylocal',ami.armorylocal) as armorylocaldescription
             from
                 armorymovementitem ami
