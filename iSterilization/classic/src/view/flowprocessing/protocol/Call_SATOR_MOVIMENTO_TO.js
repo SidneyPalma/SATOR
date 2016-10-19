@@ -101,8 +101,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
     showClearClient: function (field, eOpts) {
         var me = field.up('window'),
+            patientname = me.down('hiddenfield[name=patientname]'),
             surgicalroom = me.down('textfield[name=surgicalroom]');
 
+        patientname.reset();
         surgicalroom.reset();
         surgicalroom.setReadColor(true);
 
@@ -153,6 +155,9 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                             }, {
                                 xtype: 'hiddenfield',
                                 name: 'areasid'
+                            }, {
+                                xtype: 'hiddenfield',
+                                name: 'patientname'
                             }, {
                                 flex: 1,
                                 name: 'areasname'
@@ -235,9 +240,15 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                                 pageSize: 0,
                                 useReadColor: true,
                                 fieldLabel: 'Aviso Cirurgia',
-                                name: 'patientname',
+                                name: 'surgicalwarningpatient',
                                 xtype: 'searchpatient',
-                                hiddenNameId: 'surgicalwarning'
+                                hiddenNameId: 'surgicalwarning',
+                                listeners: {
+                                    select: function (combo,record) {
+                                        var win = combo.up('call_SATOR_MOVIMENTO_TO');
+                                        win.down('hiddenfield[name=patientname]').setValue(record.get('name'));
+                                    }
+                                }
                             }
                         ]
                     }, {
