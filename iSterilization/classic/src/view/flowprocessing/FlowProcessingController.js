@@ -309,6 +309,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         rc.set('armorylocal',record.get('armorylocal'));
         rc.set('armorylocaldescription',record.get('armorylocaldescription'));
         rc.store.sync();
+        rc.commit();
+    },
+
+    onEditMOVIMENTO_TO: function ( combo, record, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('gridpanel'),
+            sm = grid.getSelectionModel(),
+            rc = sm.getSelection()[0];
+
+        rc.set('outputtype',record.get('outputtype'));
+        rc.set('outputtypedescription',record.get('outputtypedescription'));
+        rc.store.sync();
+        rc.commit();
     },
 
     onBeforeEditMOVIMENTO_OF: function ( editor, context, eOpts ) {

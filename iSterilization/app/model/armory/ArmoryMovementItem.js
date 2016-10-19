@@ -27,7 +27,9 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementItem', {
             type: 'auto'
         }, {
             name: 'armorylocal',
-            type: 'auto'
+            type: 'auto',
+            persist: true,
+            critical: true
         }, {
             name: 'armorylocaldescription',
             type: 'auto'
@@ -36,7 +38,9 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementItem', {
             type: 'auto'
         }, {
             name: 'outputtype',
-            type: 'auto'
+            type: 'auto',
+            persist: true,
+            critical: true
         }, {
             name: 'outputtypedescription',
             type: 'auto'
