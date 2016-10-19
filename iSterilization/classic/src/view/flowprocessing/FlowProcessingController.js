@@ -220,8 +220,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         if(value && value.length != 0) {
             if( value.search(/SATOR/i) != -1 || value.search(/MOV/i) != -1) {
-            // if(['SATOR','MOV'].indexOf(value) != -1) {
-                console.info(value);
                 me.holdProtocol(value);
                 return false;
             }
