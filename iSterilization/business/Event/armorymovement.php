@@ -12,6 +12,10 @@ class armorymovement extends \Smart\Data\Event {
     public function preInsert( \iSterilization\Model\armorymovement &$model ) {
         Session::hasProfile('','');
 
+        $movementdate = $datestart = date("Ymd H:i:s");
+
+        $model->set('movementdate',$movementdate);
+
         if($model->get('movementtype') == '001') {
             $this->valInsert($model);
         }
