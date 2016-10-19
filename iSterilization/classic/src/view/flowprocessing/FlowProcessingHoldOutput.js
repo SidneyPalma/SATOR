@@ -27,9 +27,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
 
     doCallBack: Ext.emptyFn,
 
-    // listeners: {
-    //     queryreader: 'onArmoryOfQuery'
-    // },
+    listeners: {
+        queryreader: 'onSelectHoldItem'
+    },
 
     initComponent: function () {
         var me = this;
@@ -95,12 +95,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                         },
                                         items: [
                                             {
+                                                xtype: 'hiddenfield',
+                                                name: 'id'
+                                            }, {
                                                 useUpperCase: true,
                                                 inputType: 'password',
                                                 name: 'search',
                                                 listeners: {
                                                     specialkey: function (field, e, eOpts) {
-                                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                                                        if ([e.ENTER].indexOf(e.getKey()) != -1) {
                                                             var view = this.up('window');
                                                             view.fireEvent('queryreader', field, e, eOpts);
                                                         }

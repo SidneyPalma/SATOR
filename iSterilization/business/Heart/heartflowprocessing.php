@@ -1394,6 +1394,70 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function selectHoldItem(array $data) {
+        $barcode = $data['barcode'];
+
+        $sql = "
+            declare
+                @barcode varchar(20) = :barcode;
+            
+            select
+                a.id, 
+                a.flowprocessingstepid, 
+                a.armorystatus, 
+                a.armorylocal,
+                t.materialname
+            from
+                armorystock a
+                inner join flowprocessingstep fps on ( fps.id = a.flowprocessingstepid )
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                cross apply (
+                    select 
+                        coalesce(ta.name,tb.name) as materialname
+                    from 
+                        flowprocessing a
+                        outer apply (
+                            select
+                                mb.name,
+                                mb.armorylocal
+                            from
+                                materialbox mb
+                            where mb.id = a.materialboxid
+                        ) ta
+                        outer apply (
+                            select top 1
+                                ib.name,
+                                m.armorylocal
+                            from
+                                flowprocessingstep b
+                                inner join flowprocessingstepmaterial c on ( c.flowprocessingstepid = b.id )
+                                inner join itembase ib on ( ib.id = c.materialid )
+                                inner join material m on ( m.id = ib.id )
+                            where b.flowprocessingid = fp.id
+                                and b.id < fps.id
+                                and ( b.stepflaglist like '%001%' or b.stepflaglist like '%019%' )
+                        ) tb
+                    where a.id = fp.id
+                ) t
+            where a.armorystatus = 'A'
+                and fp.barcode = @barcode";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function armoryOfQuery(array $data) {
         $areasid = $data['areasid'];
         $barcode = $data['barcode'];

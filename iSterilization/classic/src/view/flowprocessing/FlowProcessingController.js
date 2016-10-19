@@ -452,6 +452,47 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    onSelectHoldItem: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            value = field.getValue();
+
+        field.reset();
+
+        view.setLoading('Consultando materiais...');
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: {
+                action: 'select',
+                method: 'selectHoldItem',
+                barcode: value
+            },
+            callback: function (options, success, response) {
+                view.setLoading(false);
+                var result = Ext.decode(response.responseText),
+                    store = Ext.getStore('armorymovementitem') || Ext.create('iSterilization.store.armory.ArmoryMovementItem');
+
+                if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
+                    return false;
+                }
+
+                store.add({
+                    materialname: result.rows[0].materialname,
+                    armorymovementid: view.down('hiddenfield[name=id]').getValue(),
+                    flowprocessingstepid: result.rows[0].flowprocessingstepid,
+                    outputtype: 'P'
+                });
+
+                store.sync();
+
+                view.down('displayfield[name=materialname]').setValue(result.rows[0].materialname);
+            }
+        });
+    },
+    
     showMovementType002: function (record) {
         var me = this,
             store = Ext.getStore('armorymovementoutput') || Ext.create('iSterilization.store.armory.ArmoryMovementOutput');

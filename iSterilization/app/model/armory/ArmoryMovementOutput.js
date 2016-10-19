@@ -56,7 +56,7 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
             name: 'timeof',
             type: 'auto',
             convert: function (value) {
-                return value.length == 0 ? null : value.substring(5,0);
+                return ( value && value.length == 0) ? null : value.substring(5,0);
             }
         }, {
             name: 'hasbox',
