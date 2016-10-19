@@ -417,11 +417,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             var model = store.getAt(0);
 
                             model.set('releasestype','C');
-                            store.sync({
-                                callback: function () {
-                                    grid.getStore().load();
-                                }
-                            });
+                            store.sync();
+                            viewView.store.remove(record);
+                            viewView.store.clearSelections();
                         }
                     });
                 }

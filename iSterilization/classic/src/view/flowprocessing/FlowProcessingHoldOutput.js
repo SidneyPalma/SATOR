@@ -178,10 +178,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                         columns: [
                             {
                                 flex: 1,
+                                sortable: false,
                                 dataIndex: 'materialname',
                                 text: 'Material / kit'
                             }, {
                                 width: 180,
+                                sortable: false,
                                 text: 'Saída',
                                 dataIndex: 'outputtypedescription',
                                 editor: {
@@ -193,6 +195,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                     }
                                 }
                             }, {
+                                sortable: false,
                                 text: 'Ações',
                                 hidden: !me.editable,
                                 width: 80,
