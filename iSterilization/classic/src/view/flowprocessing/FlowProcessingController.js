@@ -493,8 +493,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 barcode: value
             },
             callback: function (options, success, response) {
-                view.setLoading(false);
                 var result = Ext.decode(response.responseText);
+
+                view.setLoading(false);
 
                 if(!success || !result.success || result.records == 0) {
                     Smart.Msg.showToast(result.text,'error');
