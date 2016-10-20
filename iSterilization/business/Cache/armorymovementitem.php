@@ -17,6 +17,7 @@ class armorymovementitem extends \Smart\Data\Cache {
             select
                 ami.*,
                 fp.barcode,
+                t.colorschema,
                 t.materialname,
                 dbo.getEnum('outputtype',ami.outputtype) as outputtypedescription,
                 dbo.getEnum('armorylocal',ami.armorylocal) as armorylocaldescription
@@ -25,13 +26,29 @@ class armorymovementitem extends \Smart\Data\Cache {
                 inner join flowprocessingstep fps on ( fps.id = ami.flowprocessingstepid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 cross apply (
-                    select 
+                    select
+                        ta.colorschema,
                         coalesce(ta.name,tb.name) as materialname
                     from 
                         flowprocessing a
                         outer apply (
                             select
-                                mb.name
+                                mb.name,
+                                colorschema = (
+                                    select stuff
+                                        (
+                                            (
+                                                select
+                                                    ',#' + tc.colorschema
+                                                from
+                                                    materialboxtarge mbt
+                                                    inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                                where mbt.materialboxid = mb.id
+                                                order by mbt.targeorderby asc
+                                                for xml path ('')
+                                            ) ,1,1,''
+                                        )                
+                                )
                             from
                                 materialbox mb
                             where mb.id = a.materialboxid

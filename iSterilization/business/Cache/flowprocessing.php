@@ -14,6 +14,10 @@ class flowprocessing extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @name varchar(80) = :name,
+                @barcode varchar(20) = :barcode;
+                
             select TOP 5
                 ib.id,
                 ib.name,
@@ -83,13 +87,13 @@ class flowprocessing extends \Smart\Data\Cache {
                 ) a
             where ib.isactive = 1
               and (
-                    ib.barcode = :barcode OR
-                    ib.name COLLATE Latin1_General_CI_AI LIKE :name
+                    ib.barcode = @barcode OR
+                    ib.name COLLATE Latin1_General_CI_AI LIKE @name
               )";
 
         try {
             $pdo = $proxy->prepare($sql);
-            $pdo->bindValue(":barcode", $query, \PDO::PARAM_INT);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
             $pdo->bindValue(":name", "{$query}%", \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();
