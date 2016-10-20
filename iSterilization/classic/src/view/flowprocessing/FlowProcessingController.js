@@ -289,12 +289,43 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_ENCERRAR_LEITURA':
                 me.setSATOR_ENCERRAR_LEITURA();
                 break;
+            case 'SATOR_CANCELAR_LEITURAS':
+                me.setSATOR_CANCELAR_LEITURAS();
+                break;
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.setSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
             default:
                 Smart.Msg.showToast('Protocolo inválido para esta área');
         }
+    },
+
+    setSATOR_CANCELAR_LEITURAS: function () {
+        var me = this,
+            view = me.getView(),
+            record = view.down('form').getRecord();
+
+        Ext.Msg.confirm('Cancelar movimento', 'Confirma o cancelamento do movimento selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    var store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+                    store.setParams({
+                        method: 'selectCode',
+                        rows: Ext.encode({ id: record.get('id') })
+                    }).load({
+                        scope: me,
+                        callback: function () {
+                            var model = store.getAt(0);
+
+                            model.set('releasestype','C');
+                            store.sync();
+                            view.master.down('flowprocessingholdview').getStore().remove(record);
+                            view.close();
+                        }
+                    });
+                }
+            }
+        );
     },
 
     setSATOR_ENCERRAR_LEITURA: function () {
@@ -455,8 +486,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                             model.set('releasestype','C');
                             store.sync();
-                            viewView.store.remove(record);
-                            viewView.store.clearSelections();
+                            viewView.getStore().remove(record);
                         }
                     });
                 }
@@ -482,6 +512,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     showMovementType001: function (value) {
         var me = this,
+            view = me.getView(),
             store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
 
         store.setParams({
@@ -492,12 +523,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             callback: function (records) {
                 var rec = records[0];
                 Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
-                    this.master = me.getView();
+                    this.master = view;
                     this.down('form').loadRecord(rec);
                     this.down('textfield[name=search]').focus(false,200);
-                    Ext.getStore('armorymovementitem').setParams({
-                        query: value
-                    }).load();
+                    Ext.getStore('armorymovementitem').setParams({query: value}).load();
                 });
             }
         });
@@ -563,6 +592,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     
     showMovementType002: function (value) {
         var me = this,
+            view = me.getView(),
             store = Ext.getStore('armorymovementoutput') || Ext.create('iSterilization.store.armory.ArmoryMovementOutput');
 
         store.setParams({
@@ -573,7 +603,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             callback: function(records, operation, success) {
                 var rec = records[0];
                 Ext.widget('flowprocessingholdoutput').show(null,function () {
-                    this.master = me.getView();
+                    this.master = view;
                     this.down('form').loadRecord(rec);
                     this.down('textfield[name=search]').focus(false,200);
                     var groupdocument = this.down('fieldcontainer[name=groupdocument]');
