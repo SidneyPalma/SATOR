@@ -1487,20 +1487,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
 	},
 
-	callSATOR_RELATAR_USA_EPI: function () {
-        var me = this,
-            view = me.getView();
+	//callSATOR_RELATAR_USA_EPI: function () {
+    //    var me = this,
+    //        view = me.getView();
 
-        Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
-            this.master = view;
-            this.down('textfield[name=userprotected]').focus(false,200);
-        });
-    },
+    //    Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
+    //        this.master = view;
+    //        this.down('textfield[name=userprotected]').focus(false,200);
+    //    });
+    //},
 
-    callSATOR_INICIAR_LEITURA: function () {
-        var me = this;
-        me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
-    },
+    //callSATOR_INICIAR_LEITURA: function () {
+    //    var me = this;
+    //    me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
+    //},
 
     /**
      * Encerrar Leitura

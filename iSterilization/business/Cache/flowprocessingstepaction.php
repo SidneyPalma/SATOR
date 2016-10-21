@@ -166,7 +166,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				o.originplace,
 				t.targetplace,
                 items = (
-                    select dbo.getLeftPad(2,'0',count(*)) from flowprocessingstepmaterial where flowprocessingstepid = fps.id
+                    select dbo.getLeftPad(3,'0',count(*)) from flowprocessingstepmaterial where flowprocessingstepid = fps.id
                 )
             from 
                 flowprocessingstepaction fpsa
@@ -253,7 +253,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.materialname,
 				t.originplace,
 				t.targetplace,
-				dbo.getLeftPad(2,'0',count(*)) as items
+				dbo.getLeftPad(3,'0',t.items) as items
+				--dbo.getLeftPad(3,'0',count(*)) as items
 			from
 				flowprocessingstep fps
 				cross apply (
@@ -273,7 +274,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						substring(convert(varchar(16), fpc.chargedate, 121),9,8) as timeof,
 						('T.' + convert(varchar,fpc.temperature) + 'º D.' + convert(varchar,fpc.duration) + 'm A.' + convert(varchar,fpc.timetoopen) +'m' ) as materialname,
 						a.elementname as originplace,
-						ta.targetplace
+						ta.targetplace,
+						dbo.getLeftPad(3,'0',count(*)) as items
 					from
 						flowprocessingstep a
 						inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid )
@@ -288,6 +290,19 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						) ta
 					where a.source = fps.id
 					  and fpc.chargeflag = '001'
+					group by
+						fpc.id,
+						fpc.chargedate, 
+						fpc.barcode,
+						fpc.cyclestartuser, 
+						fpc.chargeflag, 
+						c.name,
+						fpc.cyclestart,
+						fpc.temperature,
+						fpc.duration,
+						fpc.timetoopen,
+						a.elementname,
+						ta.targetplace
 				) t
 			where fps.areasid = @areasid
 			group by
@@ -306,7 +321,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.timeof,
 				t.materialname,
 				t.originplace,
-				t.targetplace
+				t.targetplace,
+				t.items
 
 			union all
 
@@ -327,7 +343,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.materialname,
 				t.originplace,
 				t.targetplace,
-				dbo.getLeftPad(2,'0',count(*)) as items
+				dbo.getLeftPad(3,'0',t.items) as items
 			from
 				flowprocessingstep fps
 				cross apply (
@@ -347,7 +363,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						substring(convert(varchar(16), fpc.cyclestart, 121),9,8) as timeof,
 						('T.' + convert(varchar,fpc.temperature) + ' D.' + convert(varchar,fpc.duration) + ' A.' + convert(varchar,fpc.timetoopen) ) as materialname,
 						a.elementname as originplace,
-						ta.targetplace
+						ta.targetplace,
+						dbo.getLeftPad(3,'0',count(*)) as items
 					from
 						flowprocessingstep a
 						inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid )
@@ -362,6 +379,19 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						) ta
 					where a.target = fps.id
 					  and fpc.chargeflag = '002'
+					group by
+						fpc.id,
+						fpc.cyclestart, 
+						fpc.barcode,
+						fpc.cyclestartuser, 
+						fpc.chargeflag, 
+						c.name,
+						fpc.cyclestart,
+						fpc.temperature,
+						fpc.duration,
+						fpc.timetoopen,
+						a.elementname,
+						ta.targetplace
 				) t
 			where fps.areasid = @areasid
 			group by
@@ -380,7 +410,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.timeof,
 				t.materialname,
 				t.originplace,
-				t.targetplace			
+				t.targetplace,
+				t.items			
 
 
 			union all
@@ -402,7 +433,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				'Lote Avulso' as materialname,
 				fps.elementname as originplace,
 				ta.targetplace,
-				dbo.getLeftPad(2,'0',count(*)) as items
+				dbo.getLeftPad(3,'0',count(*)) as items
 			from
 				flowprocessingstep fps
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
