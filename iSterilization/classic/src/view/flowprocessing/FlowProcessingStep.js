@@ -95,34 +95,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         me.timeoutID = window.setInterval(function () {
             me.updateStep();
         }, me.timeoutInterval);
-
-        // Ext.create('Ext.util.KeyNav', Ext.getDoc(), {
-        //     scope: me,
-        //     esc: function () {
-        //         if(me.isVisible()) {
-        //             me.searchToogle();
-        //         }
-        //     }
-        // });
-    },
-
-    searchToogle: function () {
-        var me = this,
-            search = me.down('textfield[name=search]');
-
-        if(!search.isVisible()) {
-            search.show(false,function () {
-                search.focus(false,200);
-                me.down('label[name=labelitem]').setText('Consultar');
-            });
-        } else {
-            if(search.getValue().length != 0) {
-                search.reset();
-            } else  {
-                search.hide();
-                me.down('label[name=labelitem]').setText('Detalhes');
-            }
-        }
     },
 
     deselectStep: function () {
