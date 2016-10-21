@@ -30,6 +30,18 @@ class armorymovementitem extends \Smart\Data\Model {
      * @Policy {"nullable":false, "length":3}
      * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
+    private $regresstype;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,regresstype"}
+     */
+    private $regresstypedescription;
+
+    /**
+     * @Policy {"nullable":false, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
     private $armorylocal;
 
     /**
@@ -117,6 +129,22 @@ class armorymovementitem extends \Smart\Data\Model {
      */
     public function setArmorylocal($armorylocal) {
         $this->armorylocal = $armorylocal;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getRegresstype() {
+        return $this->regresstype;
+    }
+
+    /**
+     * @param type $regresstype
+     * @return \iSterilization\Model\armorymovementitem
+     */
+    public function setRegresstype($regresstype) {
+        $this->regresstype = $regresstype;
         return $this;
     }
 

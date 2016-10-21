@@ -72,7 +72,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                 name: 'usercode',
                                 useUpperCase: true,
                                 inputType: 'password',
-                                // fieldLabel: 'Identificação',
                                 listeners: {
                                     specialkey: function (field, e, eOpts) {
                                         if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
@@ -81,24 +80,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
                                         }
                                     }
                                 }
-                            // }, {
-                            //     name: 'password',
-                            //     vtype: 'alphanum',
-                            //     inputType: 'password',
-                            //     fieldLabel: 'Senha',
-                            //     listeners: {
-                            //         specialkey: function (field, e, eOpts) {
-                            //             if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                            //                 var win = field.up('window'),
-                            //                     button = win.down('button');
-                            //                 button.fireEvent('click', button);
-                            //             }
-                            //         }
-                            //     }
-                            // }, {
-                            //     name: 'fullname',
-                            //     useReadColor: true,
-                            //     fieldLabel: 'Nome'
                             }
                         ]
                     }
@@ -111,13 +92,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingUser', {
 
     buttons: [
         {
-        //     scale: 'medium',
-        //     text: 'Confirmar',
-        //     showSmartTheme: 'green',
-        //     listeners: {
-        //         click: 'selectUserFlow'
-        //     }
-        // }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',

@@ -15,9 +15,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     listen: {
         store: {
-            '#flowprocessingstepaction': {
-                load: 'onLoadStepAction'
-            },
             '#flowprocessingstepmaterial': {
                 datachanged: 'onChangedMaterial'
             }
@@ -25,45 +22,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
-
-    onLoadStepAction: function (store, records, successful, operation, eOpts) {
-        var me = this;
-
-        me.setCycleStart(store);
-    },
-
-    setCycleStart: function (store) {
-        var clock = Ext.dom.Query.select('div.steptype-clock');
-        var clear = Ext.dom.Query.select('div.steptype-clear');
-
-        store.each(function (item) {
-            var id = item.get('id');
-            var steptype = item.get('steptype');
-
-            if (steptype == 'T') {
-                var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
-                Ext.each(clock,function (node) {
-                    var el = Ext.get(node);
-                    if(el.id == ('clock-' + id)) {
-                        el.removeCls('step-hide');
-                        el.timeout = window.setInterval(function () {
-                            var date2 = new Date();
-                            el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
-                        });
-                    }
-                });
-            }
-
-            if (steptype == 'C') {
-                Ext.each(clear,function (node) {
-                    var el = Ext.get(node);
-                    if(el.id == ('clear-' + id)) {
-                        el.removeCls('step-hide');
-                    }
-                });
-            }
-        });
-    },
 
     fetchField: function (search, button) {
         Ext.getStore('flowprocessing').setParams({
@@ -103,77 +61,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    onStepUpdateAction : function () {
-        var me = this,
-            view = me.getView(),
-            store = Ext.getStore('flowprocessingstepaction'),
-            dataview = view.down('dataview[name=flowprocessingsteptask]');
-
-        if(!Smart.workstation) {
-            return false;
-        }
-
-        Ext.Ajax.request({
-            scope: me,
-            url: store.getUrl(),
-            params: {
-                action: 'select',
-                method: 'selectArea',
-                query: Smart.workstation.areasid
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-
-                store.removeAll();
-
-                if(result.rows) {
-                    store.loadData(result.rows);
-                    me.setCycleStart(store);
-                }
-            }
-        });
-
-        Ext.Ajax.request({
-            scope: me,
-            url: dataview.store.getUrl(),
-            params: {
-                action: 'select',
-                method: 'actionTask'
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    return false;
-                }
-
-                dataview.store.removeAll();
-
-                if(result.rows) {
-                    dataview.store.loadData(result.rows);
-                }
-            }
-        });
-    },
-
     onAfterRenderStep: function () {
         var me = this,
-            view = me.getView(),
-            dataview = view.down('dataview[name=flowprocessingsteptask]');
+            view = me.getView();
 
         if(!Smart.workstation) {
             return false;
         }
 
-        view.searchToogle();
-
+        view.down('textfield[name=search]').focus(false,200);
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
-
-        me.onStepUpdateAction();
+        view.updateStep();
     },
 
     onAfterRenderHold: function () {
@@ -296,8 +194,46 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.setSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
             default:
-                Smart.Msg.showToast('Protocolo inválido para esta área');
+                Smart.Msg.showToast('Protocolo inválido para este local');
         }
+    },
+
+    setSATOR_ENCERRAR_LEITURA: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            data = form.getRecord(),
+            doCallBack = function () {
+
+                Ext.Msg.confirm('Encerrar movimento', 'Confirma o encerramento do movimento?',
+                    function (choice) {
+                        if (choice === 'yes') {
+                            data.set('releasestype', 'E');
+                            data.store.sync({
+                                callback: function (batch, options) {
+                                    var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+
+                                    if ((resultSet == null) || (!resultSet.success)) {
+                                        Smart.Msg.showToast(resultSet.getMessage(), 'error');
+                                        return false;
+                                    }
+
+                                    view.master.updateHold();
+                                    view.close();
+                                }
+                            });
+                        }
+                    }
+                );
+
+                return true;
+            };
+
+        Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null, function () {
+            this.master = view;
+            doCallBack: doCallBack;
+            this.down('textfield[name=transportedby]').focus(false, 200);
+        });
     },
 
     setSATOR_CANCELAR_LEITURAS: function () {
@@ -317,37 +253,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         callback: function () {
                             var model = store.getAt(0);
 
-                            model.set('releasestype','C');
+                            model.set('releasestype', 'C');
                             store.sync();
                             view.master.down('flowprocessingholdview').getStore().remove(record);
-                            view.close();
-                        }
-                    });
-                }
-            }
-        );
-    },
-
-    setSATOR_ENCERRAR_LEITURA: function () {
-        var me = this,
-            view = me.getView(),
-            form = view.down('form'),
-            data = form.getRecord();
-
-        Ext.Msg.confirm('Encerrar movimento', 'Confirma o encerramento do movimento?',
-            function (choice) {
-                if (choice === 'yes') {
-                    data.set('releasestype','E');
-                    data.store.sync({
-                        callback: function (batch, options) {
-                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
-
-                            if((resultSet == null) || (!resultSet.success)) {
-                                Smart.Msg.showToast(resultSet.getMessage(),'error');
-                                return false;
-                            }
-
-                            view.master.updateHold();
                             view.close();
                         }
                     });

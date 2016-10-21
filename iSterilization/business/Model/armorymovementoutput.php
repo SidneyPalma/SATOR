@@ -92,6 +92,12 @@ class armorymovementoutput extends \Smart\Data\Model {
      */
     private $hasbox;
 
+	/**
+	 * @Policy {"nullable":true, "length":20}
+	 * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+	 */	
+	private $boxseal;
+
     /**
      * @return type integer
      */
@@ -315,5 +321,21 @@ class armorymovementoutput extends \Smart\Data\Model {
         $this->hasbox = $hasbox;
         return $this;
     }
+
+	/**
+	 * @return type string
+	 */
+	public function getBoxseal() {
+		return $this->boxseal;
+	}
+
+	/**
+	 * @param type $boxseal
+	 * @return \iSterilization\Model\armorymovementoutput
+	 */
+	public function setBoxseal($boxseal) {
+		$this->boxseal = $boxseal;
+		return $this;
+	}
 
 }

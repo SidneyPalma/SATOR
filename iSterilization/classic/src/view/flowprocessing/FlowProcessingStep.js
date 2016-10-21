@@ -49,53 +49,117 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
     listeners: {
         queryreader: 'onStepDoQuery',
-        afterrender: 'onAfterRenderStep',
-        updatestepaction: 'onStepUpdateAction'
+        afterrender: 'onAfterRenderStep'
     },
 
     bodyStyle: 'padding: 10px',
 
     timeoutInterval: (6000 * 10),
 
-    selectStep: function() {
-        var me = this;
+    setCycleStart: function (store) {
+        var clock = Ext.dom.Query.select('div.steptype-clock');
+        var clear = Ext.dom.Query.select('div.steptype-clear');
 
-        me.timeoutID = window.setInterval(function () {
-            me.fireEvent('updatestepaction',me);
-        }, me.timeoutInterval);
+        store.each(function (item) {
+            var id = item.get('id');
+            var steptype = item.get('steptype');
 
-        Ext.create('Ext.util.KeyNav', Ext.getDoc(), {
-            scope: me,
-            esc: function () {
-                if(me.isVisible()) {
-                    me.searchToogle();
-                }
+            if (steptype == 'T') {
+                var date1 = Ext.Date.parse(item.get('dateof').substring(0, 19), "Y-m-d H:i:s");
+                Ext.each(clock,function (node) {
+                    var el = Ext.get(node);
+                    if(el.id == ('clock-' + id)) {
+                        el.removeCls('step-hide');
+                        el.timeout = window.setInterval(function () {
+                            var date2 = new Date();
+                            el.update(Ext.Date.dateFormat(new Date(date2-date1), "i:s"));
+                        });
+                    }
+                });
+            }
+
+            if (steptype == 'C') {
+                Ext.each(clear,function (node) {
+                    var el = Ext.get(node);
+                    if(el.id == ('clear-' + id)) {
+                        el.removeCls('step-hide');
+                    }
+                });
             }
         });
     },
 
-    searchToogle: function () {
-        var me = this,
-            search = me.down('textfield[name=search]');
+    selectStep: function() {
+        var me = this;
 
-        if(!search.isVisible()) {
-            search.show(false,function () {
-                search.focus(false,200);
-                me.down('label[name=labelitem]').setText('Consultar');
-            });
-        } else {
-            if(search.getValue().length != 0) {
-                search.reset();
-            } else  {
-                search.hide();
-                me.down('label[name=labelitem]').setText('Detalhes');
-            }
-        }
+        me.timeoutID = window.setInterval(function () {
+            me.updateStep();
+        }, me.timeoutInterval);
     },
 
     deselectStep: function () {
         var me = this;
         window.clearInterval(me.timeoutID);
+    },
+
+    updateStep : function () {
+        var me = this,
+            store = Ext.getStore('flowprocessingstepaction'),
+            dataview = me.down('dataview[name=flowprocessingsteptask]');
+
+        if(!Smart.workstation) {
+            return false;
+        }
+
+        Ext.Ajax.request({
+            scope: me,
+            url: store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'selectArea',
+                query: Smart.workstation.areasid
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                store.removeAll();
+
+                if(result.rows) {
+                    store.loadData(result.rows);
+                    me.setCycleStart(store);
+                }
+            }
+        });
+
+        Ext.Ajax.request({
+            scope: me,
+            url: dataview.store.getUrl(),
+            params: {
+                action: 'select',
+                method: 'actionTask'
+            },
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    return false;
+                }
+
+                if(!dataview.store) {
+                    return false;
+                }
+
+                dataview.store.removeAll();
+
+                if(result.rows) {
+                    dataview.store.loadData(result.rows);
+                }
+            }
+        });
     },
 
     initComponent: function () {
@@ -166,7 +230,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 text: 'Consultar',
                                 name: 'labelitem'
                             }, {
-                                hidden: true,
                                 name: 'search',
                                 showClear: true,
                                 xtype: 'textfield',

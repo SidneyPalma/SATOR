@@ -302,6 +302,14 @@
     float: right;
 }
 
+.step .step-line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    line-height: 18px;
+}
+
 .step .steptype-items:hover {
     color: white;
     background: #9452FF;

@@ -54,6 +54,14 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementItem', {
             name: 'justified',
             type: 'auto'
         }, {
+            name: 'regresstype',
+            type: 'auto',
+            persist: true,
+            critical: true
+        }, {
+            name: 'regresstypedescription',
+            type: 'auto'
+        }, {
             name: 'outputtype',
             type: 'auto',
             persist: true,
