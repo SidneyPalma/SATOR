@@ -104,7 +104,10 @@ Ext.define( 'iSterilization.controller.App', {
                 var data = result.rows[0];
 
                 report = (data.hasstock == 1) ? 'flowprocessinghold' : report;
-                return me.onMainPageView({ xtype: report, iconCls: (rc) ? rc.get("iconCls") : null });
+                var returnClass = me.onMainPageView({ xtype: report, iconCls: (rc) ? rc.get("iconCls") : null });
+                history.pushState({}, "route", "#flowprocessingtype");
+
+                return returnClass;
             }
         });
 
