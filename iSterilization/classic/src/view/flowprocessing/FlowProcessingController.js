@@ -162,18 +162,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     onAfterRenderStep: function () {
         var me = this,
-            view = me.getView(),
-            dataview = view.down('dataview[name=flowprocessingsteptask]');
+            view = me.getView();
 
         if(!Smart.workstation) {
             return false;
         }
 
-        view.searchToogle();
+        // view.searchToogle();
 
+        view.down('textfield[name=search]').focus(false,200);
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
         view.updateStep();
-        // me.onStepUpdateAction();
     },
 
     onAfterRenderHold: function () {
