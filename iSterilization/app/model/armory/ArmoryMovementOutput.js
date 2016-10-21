@@ -64,6 +64,9 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
         }, {
             name: 'hasbox',
             type: 'int'
+        }, {
+            name: 'boxseal',
+            type: 'auto'
         }
     ]
 

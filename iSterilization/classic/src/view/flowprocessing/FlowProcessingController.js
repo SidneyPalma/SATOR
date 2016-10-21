@@ -296,8 +296,46 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.setSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
             default:
-                Smart.Msg.showToast('Protocolo inválido para esta área');
+                Smart.Msg.showToast('Protocolo inválido para este local');
         }
+    },
+
+    setSATOR_ENCERRAR_LEITURA: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            data = form.getRecord(),
+            doCallBack = function () {
+
+                Ext.Msg.confirm('Encerrar movimento', 'Confirma o encerramento do movimento?',
+                    function (choice) {
+                        if (choice === 'yes') {
+                            data.set('releasestype', 'E');
+                            data.store.sync({
+                                callback: function (batch, options) {
+                                    var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+
+                                    if ((resultSet == null) || (!resultSet.success)) {
+                                        Smart.Msg.showToast(resultSet.getMessage(), 'error');
+                                        return false;
+                                    }
+
+                                    view.master.updateHold();
+                                    view.close();
+                                }
+                            });
+                        }
+                    }
+                );
+
+                return true;
+            };
+
+        Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null, function () {
+            this.master = view;
+            doCallBack: doCallBack;
+            this.down('textfield[name=transportedby]').focus(false, 200);
+        });
     },
 
     setSATOR_CANCELAR_LEITURAS: function () {
@@ -317,37 +355,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         callback: function () {
                             var model = store.getAt(0);
 
-                            model.set('releasestype','C');
+                            model.set('releasestype', 'C');
                             store.sync();
                             view.master.down('flowprocessingholdview').getStore().remove(record);
-                            view.close();
-                        }
-                    });
-                }
-            }
-        );
-    },
-
-    setSATOR_ENCERRAR_LEITURA: function () {
-        var me = this,
-            view = me.getView(),
-            form = view.down('form'),
-            data = form.getRecord();
-
-        Ext.Msg.confirm('Encerrar movimento', 'Confirma o encerramento do movimento?',
-            function (choice) {
-                if (choice === 'yes') {
-                    data.set('releasestype','E');
-                    data.store.sync({
-                        callback: function (batch, options) {
-                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
-
-                            if((resultSet == null) || (!resultSet.success)) {
-                                Smart.Msg.showToast(resultSet.getMessage(),'error');
-                                return false;
-                            }
-
-                            view.master.updateHold();
                             view.close();
                         }
                     });

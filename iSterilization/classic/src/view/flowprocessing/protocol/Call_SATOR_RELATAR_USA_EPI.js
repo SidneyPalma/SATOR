@@ -37,9 +37,11 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
                 bodyPadding: 10,
                 margin: '10 0 0 0',
                 layout: 'anchor',
+                defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
+                    useUpperCase: true,
                     fieldCls: 'smart-field-style-action',
                     labelCls: 'smart-field-style-action'
                 },
@@ -47,22 +49,18 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
                     {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Uso de EPI'
+                        text: 'Encerrar movimento'
                     }, {
                         margin: '20 0 0 0',
-                        useUpperCase: true,
-                        fieldLabel: 'Relatar uso de EPI (Sim/Não)',
-                        xtype: 'textfield',
-                        name: 'userprotected',
-                        listeners: {
-                            specialkey: function (field, e, eOpts) {
-                                if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                    var me = this,
-                                        button = me.up('window').down('button[name=confirm]');
-                                    button.fireEvent('click', button);
-                                }
-                            }
-                        }
+                        fieldLabel: 'Transportado por',
+                        name: 'transportedby'
+                    }, {
+                        fieldLabel: 'Número do lacre',
+                        name: 'boxseal'
+                    }, {
+                        xtype: 'checkboxfield',
+                        fieldLabel: 'Embalagem lacrada',
+                        name: 'hasbox'
                     }
                 ]
             }
@@ -77,8 +75,8 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_USA_
             name: 'confirm',
             text: 'Confirmar',
             showSmartTheme: 'green',
-            listeners: {
-                click: 'relatarUsaEPI'
+            handler: function (btn) {
+                btn.up('window').doCallBack();
             }
         }, {
             scale: 'medium',
