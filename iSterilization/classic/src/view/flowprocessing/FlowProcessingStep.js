@@ -230,7 +230,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                 text: 'Consultar',
                                 name: 'labelitem'
                             }, {
-                                hidden: true,
                                 name: 'search',
                                 showClear: true,
                                 xtype: 'textfield',
