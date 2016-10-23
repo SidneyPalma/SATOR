@@ -197,7 +197,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 Ext.widget('call_SATOR_ENCERRAR_MOVIMENTO', {
                     doCallBack: function () {
-                        var store = Ext.create('iSterilization.store.armory.ArmoryMovement');
+                        var value = this.down('form').getValues(),
+                            store = Ext.create('iSterilization.store.armory.ArmoryMovement');
 
                         store.removeAll();
                         store.load({
@@ -212,7 +213,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                     return false;
                                 }
                                 var record = records[0];
-
+                                record.set('boxsealone', value.boxsealone);
+                                record.set('boxsealtwo', value.boxsealtwo);
+                                record.set('transportedby', value.transportedby);
                                 record.set('releasestype', 'E');
                                 record.set('closedby', rows.username);
                                 store.sync({
@@ -234,8 +237,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     }
                 }).show(null, function () {
                     this.master = view.master;
-                    this.down('textfield[name=closedby]').setValue(rows.username);
                     this.down('textfield[name=transportedby]').focus(false, 200);
+                    this.down('textfield[name=closedby]').setValue(rows.username);
+                    this.down('fieldcontainer[name=boxseal]').setVisible(data.get('movementtype') == '002');
                 });
 
                 return true;
@@ -529,6 +533,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 Ext.widget('flowprocessingholdoutput').show(null,function () {
                     this.master = view;
                     this.down('form').loadRecord(rec);
+                    // this.down('fieldcontainer[name=boxseal]').show();
                     this.down('textfield[name=search]').focus(false,200);
                     var groupdocument = this.down('fieldcontainer[name=groupdocument]');
 

@@ -49,6 +49,21 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovement', {
         }, {
             name: 'closeddate',
             type: 'auto'
+        }, {
+            name: 'boxsealone',
+            type: 'auto',
+            persist: true,
+            critical: true
+        }, {
+            name: 'boxsealtwo',
+            type: 'auto',
+            persist: true,
+            critical: true
+        }, {
+            name: 'transportedby',
+            type: 'auto',
+            persist: true,
+            critical: true
         }
     ]
 
