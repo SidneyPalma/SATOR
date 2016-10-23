@@ -61,7 +61,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
     },
 
-    onAfterRenderStep: function () {
+    onAfterRenderType: function () {
         var me = this,
             view = me.getView();
 
@@ -71,20 +71,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         view.down('textfield[name=search]').focus(false,200);
         view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
-        view.updateStep();
-    },
-
-    onAfterRenderHold: function () {
-        var me = this,
-            view = me.getView();
-
-        if(!Smart.workstation) {
-            return false;
-        }
-
-        view.down('textfield[name=search]').focus(false,200);
-        view.down('label[name=labelareas]').setText(Smart.workstation.areasname);
-        view.updateHold();
+        view.updateType();
     },
 
     onStepDoQuery: function (field, e, eOpts) {
@@ -133,7 +120,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     holdProtocol: function (value) {
         var me = this,
-            callHold = value.indexOf('MOV') != -1 ? 'MOV' : value;
+            callHold = value.indexOf('MOV-') != -1 ? 'MOV' : value;
         switch(callHold) {
             case 'SATOR_MOVIMENTO_OF':
                 me.callSATOR_MOVIMENTO_OF();
@@ -2624,7 +2611,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             method: 'setRemoveCargaLista'
                         },
                         success: function() {
-                            store.load();
+                            viewView.updateType();
                         }
                     });
                 }
@@ -2895,9 +2882,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 if (back) {
+                    view.master.updateType();
                     Smart.ion.sound.play("button_tiny");
                     view.close();
-                    Ext.getStore('flowprocessingstepaction').load();
+                    // Ext.getStore('flowprocessingstepaction').load();
                 }
 
                 return back;
@@ -2954,9 +2942,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 if (back) {
+                    view.master.updateType();
                     Smart.ion.sound.play("button_tiny");
                     view.close();
-                    Ext.getStore('flowprocessingstepaction').load();
                 }
 
                 return back;
@@ -3013,9 +3001,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 if (back) {
+                    view.master.updateType();
                     Smart.ion.sound.play("button_tiny");
                     view.close();
-                    Ext.getStore('flowprocessingstepaction').load();
                 }
 
                 return back;
@@ -3072,12 +3060,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 if (back) {
-                    // if(['FINAL','PRINT'].indexOf(cyclestatus) != -1) {
-                    //     me.callSATOR_IMPRIMIR_ETIQUETA(cyclestatus);
-                    // }
+                    view.master.updateType();
                     Smart.ion.sound.play("button_tiny");
                     view.close();
-                    Ext.getStore('flowprocessingstepaction').load();
                 }
 
                 return back;

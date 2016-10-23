@@ -281,6 +281,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid )
 						inner join cycle c on ( c.id = ec.cycleid )
 						inner join flowprocessingcharge fpc on ( fpc.equipmentcycleid =  ec.id )
+						inner join flowprocessingchargeitem fpci on ( fpci.flowprocessingchargeid =  fpc.id )
 						outer apply (
 							select top 1
 								b.elementname as targetplace
@@ -370,6 +371,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 						inner join equipmentcycle ec on ( ec.equipmentid = a.equipmentid )
 						inner join cycle c on ( c.id = ec.cycleid )
 						inner join flowprocessingcharge fpc on ( fpc.equipmentcycleid =  ec.id )
+						inner join flowprocessingchargeitem fpci on ( fpci.flowprocessingchargeid =  fpc.id )
 						outer apply (
 							select top 1
 								b.elementname as targetplace

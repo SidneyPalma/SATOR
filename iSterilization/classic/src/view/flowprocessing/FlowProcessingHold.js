@@ -48,7 +48,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
     listeners: {
         queryreader: 'onHoldDoQuery',
-        afterrender: 'onAfterRenderHold'
+        afterrender: 'onAfterRenderType'
     },
 
     bodyStyle: 'padding: 10px',
@@ -59,7 +59,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
         var me = this;
 
         me.timeoutID = window.setInterval(function () {
-            me.updateHold();
+            me.updateType();
         }, me.timeoutInterval);
     },
 
@@ -68,7 +68,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
         window.clearInterval(me.timeoutID);
     },
 
-    updateHold: function () {
+    updateType: function () {
         var me = this,
             holdview = me.down('flowprocessingholdview'),
             storeHold = me.down('gridpanel[name=releasesHold]').getStore();
