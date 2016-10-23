@@ -192,58 +192,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 // hiddenNameId: 'placeid'
                             }
                         ]
-                    // }, {
-                    //     hidden: true,
-                    //     disabled: true,
-                    //     name: 'localization',
-                    //     xtype: 'fieldcontainer',
-                    //     layout: 'anchor',
-                    //     labelCls: 'sub-title-label',
-                    //     fieldLabel: 'Cirurgia',
-                    //     defaultType: 'textfield',
-                    //     defaults: {
-                    //         anchor: '100%',
-                    //         allowBlank: false,
-                    //         fieldCls: 'smart-field-style-action'
-                    //     },
-                    //     items: [
-                    //         {
-                    //             xtype: 'container',
-                    //             layout: 'hbox',
-                    //             defaultType: 'textfield',
-                    //             defaults: {
-                    //                 flex: 1,
-                    //                 hideTrigger: true,
-                    //                 allowBlank: false,
-                    //                 fieldCls: 'smart-field-style-action'
-                    //             },
-                    //             items: [
-                    //                 {
-                    //                     margin: '0 5 0 0',
-                    //                     fieldLabel: 'Circulante',
-                    //                     xtype: 'flowingsearch',
-                    //                     name: 'flowingname',
-                    //                     hiddenNameId: 'flowingid'
-                    //                 }, {
-                    //                     margin: '0 0 0 5',
-                    //                     fieldLabel: 'Instrumentador',
-                    //                     xtype: 'instrumentatorsearch',
-                    //                     name: 'instrumentatorname',
-                    //                     hiddenNameId: 'instrumentatorid'
-                    //                 }
-                    //             ]
-                    //         }, {
-                    //             pageSize: 10,
-                    //             hideTrigger: true,
-                    //             fieldLabel: 'Paciente',
-                    //             name: 'patientname',
-                    //             xtype: 'searchpatient',
-                    //             hiddenNameId: 'surgicalwarning',
-                    //             listeners: {
-                    //                 select: 'onSelectPatient'
-                    //             }
-                    //         }
-                    //     ]
                     }
                 ]
             }
