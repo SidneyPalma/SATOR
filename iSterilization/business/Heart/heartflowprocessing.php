@@ -565,6 +565,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 					@flowstepaction = ta.flowstepaction
                 from
                     flowprocessingstep fps
+                    inner join areas a on ( a.id = fps.areasid )
 					outer apply (
 						select
 							fpsa.id,
@@ -576,8 +577,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 						  and fpsa.isactive = 0
 					) ta
                 where fps.flowprocessingid = @flowprocessingid
-                    and fps.id > @flowprocessingstepid
-                    and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' )                
+                    and ( fps.id > @flowprocessingstepid and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' ) )
+					 or ( a.hasstock = 1 )
 
                 select @newid as newid, @oldid as oldid, @flowstepaction as flowstepaction;";
 
@@ -1332,12 +1333,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 @areasid int = :areasid;
 
             select
-                fp.id,
+                fps.id,
                 fp.barcode,
                 c.name as clientname,
                 m.materialname
             from
                 flowprocessingstep fps
+				inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 inner join areas a on ( a.id = fps.areasid )
                 inner join client c on ( c.id = fp.clientid )
@@ -1367,7 +1369,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     where a.id = fp.id
                 ) m
             where fps.areasid = @areasid
-              and fps.flowstepstatus = '000'
+              and fps.flowstepstatus = '001'
+			  AND fpsa.isactive = 1
               and a.hasstock = 1
 			  and fps.id not in (
 					select
