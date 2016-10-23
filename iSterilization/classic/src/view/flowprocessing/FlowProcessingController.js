@@ -193,6 +193,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             data = form.getRecord(),
             doCallBack = function (rows) {
 
+                if(data.get('movementtype') == '001') {
+                    data.set('releasestype', 'E');
+                    data.set('closedby', rows.username);
+                    data.store.sync({
+                        async: false,
+                        callback: function (batch, options) {
+                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+
+                            if ((resultSet == null) || (!resultSet.success)) {
+                                Smart.Msg.showToast(resultSet.getMessage(), 'error');
+                                return false;
+                            }
+                        }
+                    });
+
+                    this.close();
+                    view.master.updateType();
+                    view.close();
+                    return false;
+                }
+
                 view.close();
 
                 Ext.widget('call_SATOR_ENCERRAR_MOVIMENTO', {
@@ -201,6 +222,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             store = Ext.create('iSterilization.store.armory.ArmoryMovement');
 
                         store.removeAll();
+
                         store.load({
                             scope: this,
                             params: {
