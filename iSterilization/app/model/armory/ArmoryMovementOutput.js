@@ -62,10 +62,10 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
                 return ( !value || value.length == 0) ? null : value.substring(5,0);
             }
         }, {
-            name: 'hasbox',
-            type: 'int'
+            name: 'boxsealone',
+            type: 'auto'
         }, {
-            name: 'boxseal',
+            name: 'boxsealtwo',
             type: 'auto'
         }
     ]

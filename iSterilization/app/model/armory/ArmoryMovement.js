@@ -31,7 +31,9 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovement', {
             }
         }, {
             name: 'movementtype',
-            type: 'auto'
+            type: 'auto',
+            persist: true,
+            critical: true
         }, {
             name: 'movementtypedescription',
             type: 'auto'
@@ -40,6 +42,12 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovement', {
             type: 'auto'
         }, {
             name: 'releasestypedescription',
+            type: 'auto'
+        }, {
+            name: 'closedby',
+            type: 'auto'
+        }, {
+            name: 'closeddate',
             type: 'auto'
         }
     ]

@@ -63,6 +63,18 @@ class armorymovement extends \Smart\Data\Model {
     private $releasestypedescription;
 
     /**
+     * @Policy {"nullable":false, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $closedby;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $closeddate;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -155,6 +167,38 @@ class armorymovement extends \Smart\Data\Model {
      */
     public function setReleasestype($releasestype) {
         $this->releasestype = $releasestype;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getClosedby() {
+        return $this->closedby;
+    }
+
+    /**
+     * @param type $closedby
+     * @return \iSterilization\Model\armorymovement
+     */
+    public function setClosedby($closedby) {
+        $this->closedby = $closedby;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getCloseddate() {
+        return $this->closeddate;
+    }
+
+    /**
+     * @param type $closeddate
+     * @return \iSterilization\Model\armorymovement
+     */
+    public function setCloseddate($closeddate) {
+        $this->closeddate = $closeddate;
         return $this;
     }
 

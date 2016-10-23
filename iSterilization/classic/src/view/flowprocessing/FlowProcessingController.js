@@ -121,6 +121,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     holdProtocol: function (value) {
         var me = this,
             callHold = value.indexOf('MOV-') != -1 ? 'MOV' : value;
+
         switch(callHold) {
             case 'SATOR_MOVIMENTO_OF':
                 me.callSATOR_MOVIMENTO_OF();
@@ -190,36 +191,62 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             form = view.down('form'),
             data = form.getRecord(),
-            doCallBack = function () {
+            doCallBack = function (rows) {
 
-                Ext.Msg.confirm('Encerrar movimento', 'Confirma o encerramento do movimento?',
-                    function (choice) {
-                        if (choice === 'yes') {
-                            data.set('releasestype', 'E');
-                            data.store.sync({
-                                callback: function (batch, options) {
-                                    var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+                view.close();
 
-                                    if ((resultSet == null) || (!resultSet.success)) {
-                                        Smart.Msg.showToast(resultSet.getMessage(), 'error');
-                                        return false;
-                                    }
+                Ext.widget('call_SATOR_ENCERRAR_MOVIMENTO', {
+                    doCallBack: function () {
+                        var store = Ext.create('iSterilization.store.armory.ArmoryMovement');
 
-                                    view.master.updateHold();
-                                    view.close();
+                        store.removeAll();
+                        store.load({
+                            scope: this,
+                            params: {
+                                method: 'selectCode',
+                                rows: Ext.encode({id: data.get('id')})
+                            },
+                            callback: function(records, operation, success) {
+
+                                if(!success || records.length == 0) {
+                                    return false;
                                 }
-                            });
-                        }
+                                var record = records[0];
+
+                                record.set('releasestype', 'E');
+                                record.set('closedby', rows.username);
+                                store.sync({
+                                    scope: this,
+                                    callback: function (batch, options) {
+                                        var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+
+                                        if ((resultSet == null) || (!resultSet.success)) {
+                                            Smart.Msg.showToast(resultSet.getMessage(), 'error');
+                                            return false;
+                                        }
+
+                                        view.master.updateType();
+                                        this.close();
+                                    }
+                                });
+                            }
+                        });
                     }
-                );
+                }).show(null, function () {
+                    this.master = view.master;
+                    this.down('textfield[name=closedby]').setValue(rows.username);
+                    this.down('textfield[name=transportedby]').focus(false, 200);
+                });
 
                 return true;
             };
 
-        Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null, function () {
-            this.master = view;
-            doCallBack: doCallBack;
-            this.down('textfield[name=transportedby]').focus(false, 200);
+        Ext.widget('flowprocessinguser', {
+            scope: me,
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
         });
     },
 
@@ -440,6 +467,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
+        console.info(store.findRecord('barcode',value));
+
         if(store.findRecord('barcode',value)) {
             Smart.Msg.showToast("O item lido já foi lançado neste movimento!",'info');
             return false;
@@ -649,7 +678,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.setModuleForm(view.down('form'));
 
         me._success = function (frm, action) {
-            view.master.updateHold();
+            view.master.updateType();
             view.close();
         }
 
@@ -2885,7 +2914,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     view.master.updateType();
                     Smart.ion.sound.play("button_tiny");
                     view.close();
-                    // Ext.getStore('flowprocessingstepaction').load();
                 }
 
                 return back;
