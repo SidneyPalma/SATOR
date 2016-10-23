@@ -433,6 +433,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         $steplevel = implode(",", $steplevel);
 
         $sql = "
+            declare
+                @flowprocessingid int = :flowprocessingid;
+
             select
                 a.id,
                 a.name,
@@ -445,7 +448,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             from
                 flowprocessingstep fps
                 inner join areas a on ( a.id = fps.areasid )
-            where fps.flowprocessingid = :flowprocessingid
+            where fps.flowprocessingid = @flowprocessingid
               and fps.steplevel in ({$steplevel})
               and fps.areasid in ({$typeid})";
 
@@ -577,8 +580,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 						  and fpsa.isactive = 0
 					) ta
                 where fps.flowprocessingid = @flowprocessingid
-                    and ( fps.id > @flowprocessingstepid and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' ) )
-					 or ( a.hasstock = 1 )
+                    and (( fps.id > @flowprocessingstepid and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' ) )
+					 or ( a.hasstock = 1 ))
 
                 select @newid as newid, @oldid as oldid, @flowstepaction as flowstepaction;";
 
@@ -1538,6 +1541,74 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         try {
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":areasid", $areasid, \PDO::PARAM_INT);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function armoryInQuery(array $data) {
+        $barcode = $data['barcode'];
+
+        $sql = "
+            declare
+                @barcode varchar(20) = :barcode;
+
+		select
+			fp.id,
+			a.flowprocessingstepid,
+			fp.barcode,
+			t.materialname,
+			a.armorylocal,
+			'001' as regresstype,
+			dbo.getEnum('regresstype','001') as regresstypedescription,
+			dbo.getEnum('armorylocal',a.armorylocal) as armorylocaldescription
+		from
+			flowprocessing fp
+			inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+			inner join armorystock a on ( a.flowprocessingstepid = fps.id )
+			inner join armorymovementitem ami on ( ami.flowprocessingstepid = a.flowprocessingstepid )
+			inner join armorymovement am on ( am.id = ami.armorymovementid )
+			cross apply (
+				select 
+					coalesce(ta.name,tb.name) as materialname
+				from 
+					flowprocessing a
+					outer apply (
+						select
+							mb.name
+						from
+							materialbox mb
+						where mb.id = a.materialboxid
+					) ta
+					outer apply (
+						select top 1
+							ib.name
+						from
+							flowprocessingstep b
+							inner join flowprocessingstepmaterial c on ( c.flowprocessingstepid = b.id )
+							inner join itembase ib on ( ib.id = c.materialid )
+						where b.flowprocessingid = fp.id
+							and b.id < fps.id
+							and ( b.stepflaglist like '%001%' or b.stepflaglist like '%019%' )
+					) tb
+				where a.id = fp.id
+			) t
+		where fp.barcode = @barcode
+		  and a.armorystatus = 'E'
+		  and am.movementtype = '002'";
+
+        try {
+            $pdo = $this->prepare($sql);
             $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();

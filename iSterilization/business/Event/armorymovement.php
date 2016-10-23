@@ -159,6 +159,19 @@ class armorymovement extends \Smart\Data\Event {
 
                         $proxy->exec($sql);
                     }
+
+                    if($newmovementtype == '003') {
+                        $sql = "
+                            update 
+                              armorystock
+                            set
+                              armorystatus = 'A'
+                            where flowprocessingstepid = {$flowprocessingstepid}
+                              and armorystatus = 'E'
+                              and armorylocal = '{$armorylocal}'";
+
+                        $proxy->exec($sql);
+                    }
                 }
 
                 $proxy->commit();
