@@ -755,8 +755,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     callSATOR_PROCESSAR_ITENS: function () {
         var me = this,
+            view = me.getView(),
             doCallBack = function (rows) {
                 Ext.widget('flowprocessingopen').show(null,function () {
+                    this.master = view;
                     this.down('searchmaterial').focus(false,200);
                     this.down('textfield[name=username]').setValue(rows.username);
                     this.down('hiddenfield[name=areasid]').setValue(Smart.workstation.areasid);
@@ -1117,24 +1119,35 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 query: Ext.encode(data)
             },
             callback: function (options, success, response) {
-                view.setLoading(false);
                 var result = Ext.decode(response.responseText);
+
+                view.setLoading(false);
 
                 if(!success || !result.success) {
                     Smart.Msg.showToast(result.text,'error');
                     return false;
                 }
 
+                view.master.updateType();
                 view.close();
 
-                store.setParams({
-                    method: 'selectTask',
-                    query: result.rows.id
-                }).load({
-                    callback: function(records, operation, success) {
-                        var record = records[0];
+                Ext.Ajax.request({
+                    scope: me,
+                    url: store.getUrl(),
+                    params: {
+                        action: 'select',
+                        method: 'selectTask',
+                        query: result.rows.id
+                    },
+                    callback: function (options, success, response) {
+                        var result = Ext.decode(response.responseText);
+
+                        if(!success || !result.success) {
+                            Smart.Msg.showToast(result.text,'error');
+                            return false;
+                        }
+                        var record = Ext.create('iSterilization.model.flowprocessing.FlowProcessingStepAction',result.rows[0]);
                         me.onFlowStepAction(null,record);
-                        store.removeAll();
                     }
                 });
             }
