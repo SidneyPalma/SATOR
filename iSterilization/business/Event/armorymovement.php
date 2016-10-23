@@ -65,7 +65,7 @@ class armorymovement extends \Smart\Data\Event {
      */
     public function preUpdate( \iSterilization\Model\armorymovement &$model ) {
         Session::hasProfile('','');
-
+        
         $this->setUpdate($model);
     }
 
@@ -102,7 +102,20 @@ class armorymovement extends \Smart\Data\Event {
             try {
                 $proxy->beginTransaction();
 
-                $sql = "update armorystock set armorystatus = 'E' where flowprocessingstepid = ";
+                if($newmovementtype == '002') {
+                    $boxsealone = $model->getSubmit()->getRowValue('boxsealone');
+                    $boxsealtwo = $model->getSubmit()->getRowValue('boxsealtwo');
+                    $transportedby = $model->getSubmit()->getRowValue('transportedby');
+
+                    $proxy->exec("
+                            update 
+                              armorymovementoutput 
+                            set 
+                              boxsealone = '{$boxsealone}',
+                              boxsealtwo = '{$boxsealtwo}',
+                              transportedby = '{$transportedby}'
+                            where id = {$id}");
+                }
 
                 foreach ($detail->rows as $item) {
                     $armorylocal = $item->armorylocal;
@@ -122,9 +135,8 @@ class armorymovement extends \Smart\Data\Event {
                     }
 
                     if($newmovementtype == '002') {
-                        $proxy->exec($sql . $flowprocessingstepid);
+                        $proxy->exec("update armorystock set armorystatus = 'E' where flowprocessingstepid = {$flowprocessingstepid}");
                     }
-
                 }
 
                 $proxy->commit();
