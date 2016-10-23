@@ -98,23 +98,26 @@ class armorymovement extends \Smart\Data\Event {
 
             $proxy = $masterCoach->getStore()->getProxy();
             $stock = new \iSterilization\Coach\armorystock();
+            $output = new \iSterilization\Coach\armorymovementoutput();
 
             try {
                 $proxy->beginTransaction();
 
                 if($newmovementtype == '002') {
+
                     $boxsealone = $model->getSubmit()->getRowValue('boxsealone');
                     $boxsealtwo = $model->getSubmit()->getRowValue('boxsealtwo');
                     $transportedby = $model->getSubmit()->getRowValue('transportedby');
 
-                    $proxy->exec("
-                            update 
-                              armorymovementoutput 
-                            set 
-                              boxsealone = '{$boxsealone}',
-                              boxsealtwo = '{$boxsealtwo}',
-                              transportedby = '{$transportedby}'
-                            where id = {$id}");
+                    $output->getStore()->getModel()->set('id',$id);
+                    $output->getStore()->getModel()->set('boxsealone',$boxsealone);
+                    $output->getStore()->getModel()->set('boxsealtwo',$boxsealtwo);
+                    $output->getStore()->getModel()->set('transportedby',$transportedby);
+                    $result = self::jsonToObject($output->getStore()->update());
+
+                    if($result->success == false) {
+                        throw new \PDOException($result->text);
+                    }
                 }
 
                 foreach ($detail->rows as $item) {
@@ -132,10 +135,29 @@ class armorymovement extends \Smart\Data\Event {
                             throw new \PDOException($result->text);
                             break;
                         }
+
+                        $sql = "
+                            declare
+                                @flowprocessingid int,
+                                @flowprocessingstepid int = {$flowprocessingstepid};
+                            
+                            select
+                                @flowprocessingid = flowprocessingid
+                            from
+                                flowprocessingstep
+                            where id = @flowprocessingstepid;
+                             
+                            update flowprocessing set flowstatus = 'E' where id = @flowprocessingid;
+                             
+                            update flowprocessingstepaction set isactive = 0 where flowprocessingstepid = @flowprocessingstepid;";
+
+                        $proxy->exec($sql);
                     }
 
                     if($newmovementtype == '002') {
-                        $proxy->exec("update armorystock set armorystatus = 'E' where flowprocessingstepid = {$flowprocessingstepid}");
+                        $sql = "update armorystock set armorystatus = 'E' where flowprocessingstepid = {$flowprocessingstepid}";
+
+                        $proxy->exec($sql);
                     }
                 }
 

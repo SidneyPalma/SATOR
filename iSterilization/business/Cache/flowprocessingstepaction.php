@@ -379,8 +379,8 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 								flowprocessingstep b
 							where b.source = a.target
 						) ta
-					--where a.target = fps.id
-					where a.source = fps.id
+					where a.target = fps.id
+					--where a.source = fps.id
 					  and fpc.chargeflag = '002'
 					group by
 						fpc.id,

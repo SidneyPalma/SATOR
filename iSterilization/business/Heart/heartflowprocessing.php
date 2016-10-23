@@ -1490,7 +1490,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 				dbo.getEnum('armorylocal',t.armorylocal) as armorylocaldescription
             from
                 flowprocessingstep fps
+				inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+				inner join areas a on ( a.id = fps.areasid )
 				cross apply (
 					select 
 						coalesce(ta.name,tb.name) as materialname,
@@ -1521,8 +1523,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 					where a.id = fp.id
 				) t
             where fps.areasid = @areasid
-              and fps.flowstepstatus = '000'
+              and fps.flowstepstatus = '001'
               and fp.barcode = @barcode
+			  and a.hasstock = 1
 			  and fps.id not in (
 					select
 						x.flowprocessingstepid
