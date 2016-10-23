@@ -75,6 +75,7 @@ class armorymovement extends \Smart\Data\Event {
      */
     public function setUpdate($model) {
         $id = $model->get('id');
+        $newmovementtype = $model->get('movementtype');
         $newreleasestype = $model->get('releasestype');
 
         $data = array("query"=>$id);
@@ -92,23 +93,38 @@ class armorymovement extends \Smart\Data\Event {
 
         if($oldreleasestype !== $newreleasestype && $newreleasestype == "E") {
 
+            $closeddate = date("Ymd H:i:s");
+            $model->set('closeddate',$closeddate);
+
             $proxy = $masterCoach->getStore()->getProxy();
             $stock = new \iSterilization\Coach\armorystock();
 
             try {
                 $proxy->beginTransaction();
 
-                foreach ($detail->rows as $item) {
-                    $stock->getStore()->getModel()->set('id','');
-                    $stock->getStore()->getModel()->set('flowprocessingstepid',$item->flowprocessingstepid);
-                    $stock->getStore()->getModel()->set('armorylocal',$item->armorylocal);
-                    $stock->getStore()->getModel()->set('armorystatus','A');
-                    $result = self::jsonToObject($stock->getStore()->insert());
+                $sql = "update armorystock set armorystatus = 'E' where flowprocessingstepid = ";
 
-                    if($result->success == false) {
-                        throw new \PDOException($result->text);
-                        break;
+                foreach ($detail->rows as $item) {
+                    $armorylocal = $item->armorylocal;
+                    $flowprocessingstepid = $item->flowprocessingstepid;
+
+                    if($newmovementtype == '001') {
+                        $stock->getStore()->getModel()->set('id','');
+                        $stock->getStore()->getModel()->set('flowprocessingstepid',$flowprocessingstepid);
+                        $stock->getStore()->getModel()->set('armorylocal',$armorylocal);
+                        $stock->getStore()->getModel()->set('armorystatus','A');
+                        $result = self::jsonToObject($stock->getStore()->insert());
+
+                        if($result->success == false) {
+                            throw new \PDOException($result->text);
+                            break;
+                        }
                     }
+
+                    if($newmovementtype == '002') {
+                        $proxy->exec($sql . $flowprocessingstepid);
+                    }
+
                 }
 
                 $proxy->commit();

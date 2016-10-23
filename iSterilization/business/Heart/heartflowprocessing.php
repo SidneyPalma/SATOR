@@ -1407,7 +1407,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 a.armorystatus, 
                 a.armorylocal,
                 t.materialname,
-                iif(armorymovementid = null,1,0) as available
+                case coalesce(o.armorymovementid,1) when 1 then 1 else 0 end as available
             from
                 armorystock a
                 inner join flowprocessingstep fps on ( fps.id = a.flowprocessingstepid )

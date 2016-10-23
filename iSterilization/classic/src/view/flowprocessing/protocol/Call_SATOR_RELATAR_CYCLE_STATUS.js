@@ -57,10 +57,15 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_RELATAR_CYCL
         ]
     },
 
+    defaultButton: 0,
+
+    defaultFocus: 'confirm',
+
     buttonAlign: 'center',
 
     buttons: [
         {
+            itemId: 'confirm',
             scale: 'medium',
             name: 'confirm',
             text: 'Confirmar',

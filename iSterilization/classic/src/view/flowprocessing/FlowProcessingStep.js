@@ -49,7 +49,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
     listeners: {
         queryreader: 'onStepDoQuery',
-        afterrender: 'onAfterRenderStep'
+        afterrender: 'onAfterRenderType'
     },
 
     bodyStyle: 'padding: 10px',
@@ -93,7 +93,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         var me = this;
 
         me.timeoutID = window.setInterval(function () {
-            me.updateStep();
+            me.updateType();
         }, me.timeoutInterval);
     },
 
@@ -102,7 +102,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
         window.clearInterval(me.timeoutID);
     },
 
-    updateStep : function () {
+    updateType : function () {
         var me = this,
             store = Ext.getStore('flowprocessingstepaction'),
             dataview = me.down('dataview[name=flowprocessingsteptask]');
@@ -122,11 +122,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
             callback: function (options, success, response) {
                 var result = Ext.decode(response.responseText);
 
+                store.removeAll();
+
                 if(!success || !result.success) {
                     return false;
                 }
-
-                store.removeAll();
 
                 if(result.rows) {
                     store.loadData(result.rows);
@@ -137,7 +137,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
 
         Ext.Ajax.request({
             scope: me,
-            url: dataview.store.getUrl(),
+            url: dataview.getUrl(),
             params: {
                 action: 'select',
                 method: 'actionTask'
@@ -298,9 +298,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                     '</tpl>'
                 ],
                 listeners: {
-                    render: function () {
-                        this.getStore().load();
-                    },
                     itemdblclick: 'onFlowTaskAction'
                 }
             }

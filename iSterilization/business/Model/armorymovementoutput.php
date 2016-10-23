@@ -87,16 +87,16 @@ class armorymovementoutput extends \Smart\Data\Model {
     private $timeof;
 
     /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":""}
+     * @Policy {"nullable":true, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $hasbox;
+    private $boxsealone;
 
 	/**
 	 * @Policy {"nullable":true, "length":20}
 	 * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
 	 */	
-	private $boxseal;
+	private $boxsealtwo;
 
     /**
      * @return type integer
@@ -307,34 +307,34 @@ class armorymovementoutput extends \Smart\Data\Model {
     }
 
     /**
-     * @return type boolean
+     * @return type string
      */
-    public function getHasbox() {
-        return $this->hasbox;
+    public function getBoxsealone() {
+        return $this->boxsealone;
     }
 
     /**
-     * @param type $hasbox
+     * @param type $boxsealone
      * @return \iSterilization\Model\armorymovementoutput
      */
-    public function setHasbox($hasbox) {
-        $this->hasbox = $hasbox;
+    public function setBoxsealone($boxsealone) {
+        $this->boxsealone = $boxsealone;
         return $this;
     }
 
 	/**
 	 * @return type string
 	 */
-	public function getBoxseal() {
-		return $this->boxseal;
+	public function getBoxsealtwo() {
+		return $this->boxsealtwo;
 	}
 
 	/**
-	 * @param type $boxseal
+	 * @param type $boxsealtwo
 	 * @return \iSterilization\Model\armorymovementoutput
 	 */
-	public function setBoxseal($boxseal) {
-		$this->boxseal = $boxseal;
+	public function setBoxsealtwo($boxsealtwo) {
+		$this->boxsealtwo = $boxsealtwo;
 		return $this;
 	}
 

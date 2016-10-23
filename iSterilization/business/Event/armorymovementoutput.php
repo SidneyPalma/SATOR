@@ -29,11 +29,9 @@ class armorymovementoutput extends \Smart\Data\Event {
         $barcode = substr("O" . date("YmdHis") . $milliseconds,0,20);
 
         $model->setId($id);
-        $model->setHasbox('1');
-        $model->setBarcode($barcode);
+        $model->set('barcode',$barcode);
 
         if( !isset($surgicalwarning) || strlen($surgicalwarning) == 0) {
-            $model->set('hasbox',null);
             $model->set('patientname',null);
             $model->set('surgicalwarning',null);
             $model->set('instrumentator',null);
