@@ -379,6 +379,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         rc.commit();
     },
 
+    onEditMOVIMENTO_IN: function ( combo, record, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('gridpanel'),
+            sm = grid.getSelectionModel(),
+            rc = sm.getSelection()[0];
+
+        rc.set('regresstype',record.get('regresstype'));
+        rc.set('regresstypedescription',record.get('regresstypedescription'));
+        rc.store.sync();
+        rc.commit();
+    },
+
     onEditMOVIMENTO_TO: function ( combo, record, eOpts ) {
         var me = this,
             view = me.getView(),
@@ -470,9 +483,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 store.add({
                     barcode: data.barcode,
                     armorylocal: data.armorylocal,
+                    regresstype: data.regresstype,
                     materialname: data.materialname,
                     armorymovementid: armorymovementid,
                     flowprocessingstepid: data.flowprocessingstepid,
+                    regresstypedescription: data.regresstypedescription,
                     armorylocaldescription: data.armorylocaldescription
                 });
 

@@ -1569,6 +1569,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 			fp.barcode,
 			t.materialname,
 			a.armorylocal,
+			'001' as regresstype,
+			dbo.getEnum('regresstype','001') as regresstypedescription,
 			dbo.getEnum('armorylocal',a.armorylocal) as armorylocaldescription
 		from
 			flowprocessing fp

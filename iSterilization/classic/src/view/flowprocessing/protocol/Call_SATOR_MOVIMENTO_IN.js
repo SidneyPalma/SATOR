@@ -156,14 +156,17 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_IN
                             }, {
                                 width: 180,
                                 dataIndex: 'armorylocaldescription'
-                                // editor: {
-                                //     xtype: 'comboenum',
-                                //     name: 'armorylocaldescription',
-                                //     fieldCls: 'smart-field-style-action',
-                                //     listeners: {
-                                //         select: 'onEditMOVIMENTO_OF'
-                                //     }
-                                // }
+                            }, {
+                                width: 180,
+                                dataIndex: 'regresstypedescription',
+                                editor: {
+                                    xtype: 'comboenum',
+                                    name: 'regresstypedescription',
+                                    fieldCls: 'smart-field-style-action',
+                                    listeners: {
+                                        select: 'onEditMOVIMENTO_IN'
+                                    }
+                                }
                             }, {
                                 hidden: !me.editable,
                                 width: 40,
