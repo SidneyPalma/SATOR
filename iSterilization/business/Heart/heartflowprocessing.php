@@ -577,8 +577,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 						  and fpsa.isactive = 0
 					) ta
                 where fps.flowprocessingid = @flowprocessingid
-                    and ( fps.id > @flowprocessingstepid and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' ) )
-					 or ( a.hasstock = 1 )
+                    and (( fps.id > @flowprocessingstepid and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' ) )
+					 or ( a.hasstock = 1 ))
 
                 select @newid as newid, @oldid as oldid, @flowstepaction as flowstepaction;";
 
