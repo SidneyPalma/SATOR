@@ -90,8 +90,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingClient', {
             text: 'Cancelar',
             showSmartTheme: 'red',
             handler: function (btn) {
-                btn.up('window').doCallBack();
-                // btn.windowClose();
+                btn.windowClose();
             }
         }
     ]

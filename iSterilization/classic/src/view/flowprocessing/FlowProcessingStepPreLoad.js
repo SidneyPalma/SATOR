@@ -38,8 +38,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
     buildItems: function () {
         var me = this;
 
-        Ext.create('iSterilization.store.armory.ArmoryMovementItem');
-
         me.items = [
             {
                 xtype: 'form',
@@ -139,8 +137,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
                                         clientname = record.get('clientname'),
                                         materialname = record.get('materialname'),
                                         strRow =    '<div style="font-weight: 700; font-size: 16px; line-height: 24px;">' +
-                                            '<div>{0}</div><div>{1}</div><div>{2}</div>' +
-                                            '</div>';
+                                                        '<div>{0}</div><div>{1}</div><div>{2}</div>' +
+                                                    '</div>';
                                     return Ext.String.format(strRow,clientname,materialname,barcode);
                                 }
                             }
