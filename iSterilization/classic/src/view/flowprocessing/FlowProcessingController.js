@@ -871,6 +871,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this;
 
         switch(value) {
+            case 'SATOR_PREPARA_LEITURA':
+                me.callSATOR_PREPARA_LEITURA();
+                break;
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
@@ -927,6 +930,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.widget('call_SATOR_PREPARA_LOTE_AVULSO').show(null,function () {
             this.master = me.getView();
             this.down('textfield[name=materialboxname]').focus(false,200);
+        });
+    },
+
+    callSATOR_PREPARA_LEITURA: function () {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('flowprocessingsteppreload').show(null,function () {
+            this.master = view;
+            this.down('textfield[name=search]').focus(false,200);
         });
     },
 
