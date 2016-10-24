@@ -20,9 +20,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingClient', {
     resizable: false,
     showAnimate: true,
 
-    // listeners: {
-    //     selectusercode: 'onSelectUserCode'
-    // },
+     listeners: {
+         queryreader: 'getSelectClient'
+     },
 
     doCallBack: Ext.emptyFn,
 
@@ -62,14 +62,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingClient', {
                         },
                         items: [
                             {
-                                xtype: 'hiddenfield',
-                                name: 'id'
-                            }, {
-                                xtype: 'hiddenfield',
-                                name: 'username'
-                            }, {
                                 margin: '10 0 0 0',
-                                name: 'search',
+                                name: 'clientid',
                                 useUpperCase: true,
                                 inputType: 'password',
                                 listeners: {

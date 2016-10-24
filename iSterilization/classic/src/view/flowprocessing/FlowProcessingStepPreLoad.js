@@ -59,21 +59,41 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
                         cls: 'title-label',
                         text: 'Preparar Leituras'
                     }, {
+                        xtype: 'hiddenfield',
+                        name: 'clientid'
+                    }, {
                         margin: '20 0 0 0',
-                        anchor: '50%',
-                        name: 'search',
-                        xtype: 'textfield',
-                        useUpperCase: true,
-                        inputType: 'password',
-                        fieldLabel: 'Consultar material',
-                        listeners: {
-                            specialkey: function (field, e, eOpts) {
-                                if ([e.ENTER].indexOf(e.getKey()) != -1) {
-                                    var view = this.up('window');
-                                    view.fireEvent('queryreader', field, e, eOpts);
+                        xtype: 'fieldcontainer',
+                        layout: 'hbox',
+                        defaultType: 'textfield',
+                        defaults: {
+                            useUpperCase: true,
+                            fieldCls: 'smart-field-style-action',
+                            labelCls: 'smart-field-style-action'
+                        },
+                        items: [
+                            {
+                                flex: 1,
+                                name: 'searchmaterial',
+                                inputType: 'password',
+                                fieldLabel: 'Consultar material',
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+                                            var view = this.up('window');
+                                            view.fireEvent('queryreader', field, e, eOpts);
+                                        }
+                                    }
                                 }
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                useReadColor: true,
+                                fieldLabel: 'Cliente',
+                                name: 'clientname'
                             }
-                        }
+                        ]
                     }, {
                         height: 350,
                         rowLines: true,

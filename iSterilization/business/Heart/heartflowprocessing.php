@@ -1328,6 +1328,34 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+	public function selectClientId(array $data) {
+		$clientid = str_replace('HAM-C','',$data['clientid']);
+
+		$sql = "
+			declare
+				@clientid int = :clientid;
+
+            select c.id as clientid, c.name as clientname from client c where c.id = @clientid";
+
+		try {
+			$pdo = $this->prepare($sql);
+			$pdo->bindValue(":clientid", $clientid, \PDO::PARAM_INT);
+			$pdo->execute();
+			$rows = $pdo->fetchAll();
+			
+			$success = (count($rows) != 0);
+			
+			self::_setRows($rows);
+			self::_setSuccess($success);
+
+		} catch ( \PDOException $e ) {
+			self::_setSuccess(false);
+			self::_setText($e->getMessage());
+		}
+
+		return self::getResultToJson();
+	}
+
     public function selectHold(array $data) {
         $areasid = $data['areasid'];
 
