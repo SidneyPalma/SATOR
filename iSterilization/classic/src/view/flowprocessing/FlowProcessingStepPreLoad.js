@@ -13,7 +13,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 850,
+    width: 950,
     modal: true,
     header: false,
     resizable: false,
@@ -59,11 +59,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
                         cls: 'title-label',
                         text: 'Preparar Leituras'
                     }, {
-                        xtype: 'textfield',
+                        margin: '20 0 0 0',
                         anchor: '50%',
+                        name: 'search',
+                        xtype: 'textfield',
                         useUpperCase: true,
                         inputType: 'password',
-                        name: 'search',
+                        fieldLabel: 'Consultar material',
                         listeners: {
                             specialkey: function (field, e, eOpts) {
                                 if ([e.ENTER].indexOf(e.getKey()) != -1) {
@@ -72,6 +74,57 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
                                 }
                             }
                         }
+                    }, {
+                        height: 350,
+                        rowLines: true,
+                        margin: '10 0 0 0',
+                        xtype: 'gridpanel',
+                        cls: 'update-grid',
+                        url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
+                        params: {
+                            action: 'select',
+                            method: 'selectHold',
+                            areasid: Smart.workstation.areasid
+                        },
+
+                        fields: [
+                            {
+                                name: 'id',
+                                type: 'int'
+                            }, {
+                                name: 'barcode',
+                                type: 'auto'
+                            }, {
+                                name: 'materialname',
+                                type: 'auto'
+                            }, {
+                                name: 'clientname',
+                                type: 'auto'
+                            }
+                        ],
+
+                        columns: [
+                            {
+                                //     width: 80,
+                                //     height: 60,
+                                //     renderer: function (value,metaData,record) {
+                                //         var url = '../iSterilization/business/Calls/armorymovement.php',
+                                //             img =  '<div style="margin-top: 6px;"><img src="{0}?action=select&method=renderCode&barCode={1}" id="SATOR-{2}" /></div>';
+                                //         return Ext.String.format(img,url,record.get('barcode'),record.get('id'));
+                                //     }
+                                // }, {
+                                flex: 1,
+                                renderer: function (value,metaData,record) {
+                                    var barcode = record.get('barcode'),
+                                        clientname = record.get('clientname'),
+                                        materialname = record.get('materialname'),
+                                        strRow =    '<div style="font-weight: 700; font-size: 16px; line-height: 24px;">' +
+                                            '<div>{0}</div><div>{1}</div><div>{2}</div>' +
+                                            '</div>';
+                                    return Ext.String.format(strRow,clientname,materialname,barcode);
+                                }
+                            }
+                        ]
                     }
                 ]
             }
@@ -82,6 +135,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
 
     buttons: [
         {
+            scale: 'medium',
+            text: 'Confirmar',
+            showSmartTheme: 'blue'
+        }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',
