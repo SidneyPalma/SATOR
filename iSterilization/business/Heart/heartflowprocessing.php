@@ -582,6 +582,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 where fps.flowprocessingid = @flowprocessingid
                     and (( fps.id > @flowprocessingstepid and ( fps.stepflaglist like '%001%' or fps.stepflaglist like '%019%' ) )
 					 or ( a.hasstock = 1 ))
+			    order by fps.id
 
                 select @newid as newid, @oldid as oldid, @flowstepaction as flowstepaction;";
 
