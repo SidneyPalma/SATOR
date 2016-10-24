@@ -871,6 +871,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this;
 
         switch(value) {
+            case 'SATOR_PREPARA_LEITURA':
+                me.callSATOR_PREPARA_LEITURA();
+                break;
             case 'SATOR_PROCESSAR_ITENS':
                 me.callSATOR_PROCESSAR_ITENS();
                 break;
@@ -927,6 +930,28 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.widget('call_SATOR_PREPARA_LOTE_AVULSO').show(null,function () {
             this.master = me.getView();
             this.down('textfield[name=materialboxname]').focus(false,200);
+        });
+    },
+
+    callSATOR_PREPARA_LEITURA: function () {
+        var me = this,
+            view = me.getView(),
+            doCallBack = function (rows) {
+                Ext.widget('flowprocessingsteppreload').show(null,function () {
+                    this.master = view;
+                    this.down('textfield[name=searchmaterial]').focus(false, 200);
+                    this.down('hiddenfield[name=clientid]').setValue(rows.clientid);
+                    this.down('textfield[name=clientname]').setValue(rows.clientname);
+                });
+
+                return true;
+            };
+
+        Ext.widget('flowprocessingclient',{
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=clientid]').focus(false, 200);
         });
     },
 
@@ -1090,6 +1115,30 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             params: {
                 action: 'select',
                 method: 'selectUserFlow'
+            },
+            success: me.onComeInSendSuccess,
+            failure: me.onFormSubmitFailure
+        });
+    },
+
+    getSelectClient: function () {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form');
+
+        if (!form.isValid()) {
+            return false;
+        }
+
+        view.setLoading('Registrando cliente...');
+
+        form.submit({
+            scope: me,
+            url: me.url,
+            clientValidation: true,
+            params: {
+                action: 'select',
+                method: 'selectClientId'
             },
             success: me.onComeInSendSuccess,
             failure: me.onFormSubmitFailure
