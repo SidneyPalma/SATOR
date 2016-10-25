@@ -936,19 +936,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     callSATOR_PREPARA_LEITURA: function () {
         var me = this,
             view = me.getView(),
-            doCallBack = function (rows) {
+            fnCallBack = function (rows) {
                 Ext.widget('flowprocessingsteppreload').show(null,function () {
                     this.master = view;
                     this.down('textfield[name=searchmaterial]').focus(false, 200);
                     this.down('hiddenfield[name=clientid]').setValue(rows.clientid);
                     this.down('textfield[name=clientname]').setValue(rows.clientname);
                 });
-
-                return true;
             };
 
-        Ext.widget('flowprocessingclient',{
-            doCallBack: doCallBack
+        me.callFlowprocessingClient(fnCallBack);
+    },
+
+    callFlowprocessingClient: function (fnCallBack) {
+        var me = this;
+        Ext.widget('flowprocessingclient', {
+            scope: me,
+            doCallBack: fnCallBack
         }).show(null,function () {
             this.down('form').reset();
             this.down('textfield[name=clientid]').focus(false, 200);
