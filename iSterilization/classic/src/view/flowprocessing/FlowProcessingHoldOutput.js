@@ -140,16 +140,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                         xtype: 'fieldcontainer',
                                         name: 'groupdocument',
                                         tpl: [
-                                            '<div>',
-                                                '<div class="movement movement-title">Documento</div>',
-                                                '<div class="movement movement-title">{clientname}</div>',
-                                                '<div class="movement movement-title">{movementtypedescription}</div>',
-                                                '<div class="movement"><b>Status:</b> {movementdate} - {releasestypedescription}</div>',
-                                                '<div class="movement movement-title">Procedimento</div>',
-                                                '<div class="movement"><b>Data:</b> {dateof} {timeof}</div>',
-                                                '<div class="movement">{surgicalwarning} {patientname}</div>',
-                                                '<div class="movement">{flowing} - {place}</div>',
-                                                '<div class="movement">{instrumentator}</div>',
+                                            '<div class="movement">',
+                                                '<div class="movement-title">{clientname}</div>',
+                                                '<div class="movement-title">{movementtypedescription} {movementdate}</div>',
+                                                '<div><b>{releasestypedescription}</b></div>',
+                                                '<div class="movement-title">Procedimento</div>',
+                                                '<div><b>{surgical}</b></div>',
+                                                '<div><b>Data:</b> {dateof} {timeof}</div>',
+                                                '<div>{surgicalwarning} {patientname}</div>',
+                                                '<div>{flowing} - {instrumentator}</div>',
+                                                '<div>{place}</div>',
                                             '</div>'
                                         ]
                                     }

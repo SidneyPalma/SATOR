@@ -1442,21 +1442,11 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 a.armorystatus, 
                 a.armorylocal,
                 t.materialname,
-                case coalesce(o.armorymovementid,1) when 1 then 1 else 0 end as available
+                dbo.areAvailableForOutput(fp.barcode) as available
             from
                 armorystock a
                 inner join flowprocessingstep fps on ( fps.id = a.flowprocessingstepid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
-				outer apply (
-					select
-						am.id as armorymovementid
-					from
-						armorymovementitem ami
-						inner join armorymovement am on ( am.id = ami.armorymovementid )
-					where ami.flowprocessingstepid = fps.id
-					  and am.movementtype = '002'
-					  and am.releasestype in ('A','E')
-				) o
                 cross apply (
                     select 
                         coalesce(ta.name,tb.name) as materialname
