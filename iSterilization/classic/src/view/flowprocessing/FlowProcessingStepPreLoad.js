@@ -120,8 +120,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
                                         if ([e.ENTER].indexOf(e.getKey()) != -1) {
                                             var view = this.up('window');
                                             view.fireEvent('queryreader', field, e, eOpts);
-                                            e.stopEvent();
                                         }
+                                        e.stopEvent();
                                     }
                                 }
                             }, {
@@ -135,7 +135,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
                         ]
                     }, {
                         height: 350,
-                        // rowLines: true,
                         margin: '10 0 0 0',
                         xtype: 'gridpanel',
                         cls: 'update-grid',
@@ -167,11 +166,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
                                 dataIndex: 'items'
                             }, {
                                 width: 180,
-                                sortable: false,
-                                text: 'Cliente',
-                                dataIndex: 'clientname'
-                            }, {
-                                width: 150,
                                 sortable: false,
                                 text: 'Fluxo',
                                 dataIndex: 'sterilizationtypename'

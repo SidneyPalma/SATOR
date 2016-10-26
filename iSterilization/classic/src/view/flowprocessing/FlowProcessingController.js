@@ -935,7 +935,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
         if(value && value.length != 0) {
             if( value.search(/SATOR/i) != -1 || value.search(/MOV/i) != -1) {
-                // me.loadProtocol(value);
+                me.loadProtocol(value);
                 return false;
             }
 
@@ -948,11 +948,30 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Smart.Msg.showToast('Protocolo inválido para esta área');
     },
 
+    loadProtocol: function (value) {
+        var me = this;
+
+        switch(value) {
+            case 'SATOR_ENCERRAR_LEITURA':
+                me.setSATOR_ENCERRAR_LEITURA();
+                break;
+            case 'SATOR_CANCELAR_LEITURAS':
+                me.preSATOR_CANCELAR_LEITURAS();
+                break;
+            case 'SATOR_CANCELAR_ULTIMA_LEITURA':
+                me.preSATOR_CANCELAR_ULTIMA_LEITURA();
+                break;
+            default:
+                Smart.Msg.showToast('Protocolo inválido para este local');
+        }
+    },
+
     loadMaterial: function (value) {
         var me = this,
             view = me.getView(),
             form = view.down('form'),
-            data = form.getValues();
+            data = form.getValues(),
+            grid = view.down('gridpanel');
 
         data.barcode = value;
         data.action = 'select';
@@ -972,9 +991,51 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
                 var rows = result.rows[0];
 
-                view.down('gridpanel').getStore().add(rows);
+                if(grid.getStore().findRecord('barcode',rows.barcode)) {
+                    Smart.Msg.showToast("O item lido já esta aguardando processamento!",'info');
+                    return false;
+                }
+
+                var id = grid.getStore().getCount()+1;
+
+                rows.id = id;
+
+                grid.getStore().add(rows);
             }
         });
+    },
+
+    preSATOR_CANCELAR_LEITURAS: function () {
+        var me = this,
+            view = me.getView();
+
+        Ext.Msg.confirm('Cancelar movimento', 'Confirma o cancelamento do movimento selecionado?',
+            function (choice) {
+                if (choice === 'yes') {
+                    view.down('gridpanel').getStore().removeAll();
+                }
+            }
+        );
+    },
+
+    preSATOR_CANCELAR_ULTIMA_LEITURA: function () {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('gridpanel'),
+            record = grid.getStore().getAt(grid.getStore().getCount()-1);
+
+        if(grid.getStore().getCount() == 0) {
+            Smart.Msg.showToast("Não existem lançamentos para serem excluidos!",'info');
+            return false;
+        }
+
+        Ext.Msg.confirm('Excluir item', 'Confirma a exclusão do ultimo item lançado no movimento?',
+            function (choice) {
+                if (choice === 'yes') {
+                    grid.getStore().remove(record);
+                }
+            }
+        );
     },
 
     callSATOR_PREPARA_LOTE_AVULSO: function () {
