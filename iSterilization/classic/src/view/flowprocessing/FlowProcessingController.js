@@ -1052,6 +1052,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 view.setLoading(false);
                 view.master.updateType();
                 view.close();
+
+                return false;
             };
 
         if(grid.getStore().getCount() == 0) {
@@ -1118,15 +1120,15 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     this.down('hiddenfield[name=clientid]').setValue(rows.clientid);
                     this.down('displayfield[name=clientname]').setValue(rows.clientname);
                 });
+                
+                this.close();
             };
 
         me.callFlowprocessingClient(fnCallBack);
     },
 
     callFlowprocessingClient: function (fnCallBack) {
-        var me = this;
         Ext.widget('flowprocessingclient', {
-            scope: me,
             doCallBack: fnCallBack
         }).show(null,function () {
             this.down('form').reset();
