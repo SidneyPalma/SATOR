@@ -1008,93 +1008,63 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     preSATOR_ENCERRAR_LEITURA: function () {
         var me = this,
             view = me.getView(),
-            form = view.down('form'),
-            data = form.getRecord(),
+            grid = view.down('gridpanel'),
             doCallBack = function (rows) {
+                var data = [];
 
-                if(['001','003'].indexOf(data.get('movementtype')) != -1) {
-                    data.set('releasestype', 'E');
-                    data.set('closedby', rows.username);
-                    data.store.sync({
+                grid.getStore().each(function (record) {
+                    data.push(record.data);
+                });
+
+                view.setLoading('Gerando estrutura de leitura de materiais...');
+
+                Ext.each(data, function(item) {
+                    item.areasid = Smart.workstation.areasid;
+                    item.username = rows.username;
+                    item.clienttype = '001';
+                    delete item.id;
+                    delete item.barcode;
+
+                    Ext.Ajax.request({
+                        scope: me,
+                        url: me.url,
                         async: false,
-                        callback: function (batch, options) {
-                            var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
+                        params: {
+                            action: 'select',
+                            method: 'newFlowView',
+                            query: Ext.encode(item)
+                        },
+                        callback: function (options, success, response) {
+                            var result = Ext.decode(response.responseText);
 
-                            if ((resultSet == null) || (!resultSet.success)) {
-                                Smart.Msg.showToast(resultSet.getMessage(), 'error');
+                            if(!success || !result.success) {
+                                var rec = grid.getStore().findRecord('id',item.id);
+                                Smart.Msg.showToast(result.text, 'error');
+                                if(rec) {
+                                    grid.getStore().remove(rec);
+                                }
                                 return false;
                             }
                         }
                     });
-
-                    this.close();
-                    view.master.updateType();
-                    view.close();
-                    return false;
-                }
-
-                view.close();
-
-                Ext.widget('call_SATOR_ENCERRAR_MOVIMENTO', {
-                    doCallBack: function () {
-                        var value = this.down('form').getValues(),
-                            store = Ext.create('iSterilization.store.armory.ArmoryMovement');
-
-                        store.removeAll();
-
-                        store.load({
-                            scope: this,
-                            params: {
-                                method: 'selectCode',
-                                rows: Ext.encode({id: data.get('id')})
-                            },
-                            callback: function(records, operation, success) {
-
-                                if(!success || records.length == 0) {
-                                    return false;
-                                }
-                                var record = records[0];
-                                record.set('boxsealone', value.boxsealone);
-                                record.set('boxsealtwo', value.boxsealtwo);
-                                record.set('transportedby', value.transportedby);
-                                record.set('releasestype', 'E');
-                                record.set('closedby', rows.username);
-                                store.sync({
-                                    scope: this,
-                                    callback: function (batch, options) {
-                                        var resultSet = batch.getOperations().length != 0 ? batch.operations[0].getResultSet() : null;
-
-                                        if ((resultSet == null) || (!resultSet.success)) {
-                                            Smart.Msg.showToast(resultSet.getMessage(), 'error');
-                                            return false;
-                                        }
-
-                                        view.master.updateType();
-                                        this.close();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }).show(null, function () {
-                    this.master = view.master;
-                    this.down('textfield[name=transportedby]').focus(false, 200);
-                    this.down('textfield[name=closedby]').setValue(rows.username);
-                    this.down('fieldcontainer[name=boxseal]').setVisible(data.get('movementtype') == '002');
                 });
 
-                return true;
+                view.setLoading(false);
+                view.master.updateType();
+                view.close();
             };
 
-        Smart.Msg.showToast('Estamos implementando logo estará pronto!');
+        if(grid.getStore().getCount() == 0) {
+            Smart.Msg.showToast('Não existem lançamentos para completar a operação!');
+            return false;
+        }
 
-        // Ext.widget('flowprocessinguser', {
-        //     scope: me,
-        //     doCallBack: doCallBack
-        // }).show(null,function () {
-        //     this.down('form').reset();
-        //     this.down('textfield[name=usercode]').focus(false,200);
-        // });
+        Ext.widget('flowprocessinguser', {
+            doCallBack: doCallBack
+        }).show(null,function () {
+            this.down('form').reset();
+            this.down('textfield[name=usercode]').focus(false,200);
+        });
     },
 
     preSATOR_CANCELAR_LEITURAS: function () {

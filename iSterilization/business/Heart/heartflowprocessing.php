@@ -1460,8 +1460,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 inner join client c on ( c.id = amo.clientid )
                 cross apply (
                     select
-                        tb.materialid,
                         ta.materialboxid,
+						coalesce(tb.materialid,ta.materialid) as materialid,
                         coalesce(ta.items,tb.items) as items,
                         coalesce(ta.name,tb.name) as materialname,
                         coalesce(ta.barcode,tb.barcode) as barcode,
@@ -1476,6 +1476,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                                 mb.name,
                                 mb.barcode,
                                 stt.version,
+								mbi.materialid,
                                 mt.prioritylevel,
                                 mbi.materialboxid,
                                 (select count(id) from materialboxitem where materialboxid = mb.id ) as items,
@@ -1492,6 +1493,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                                 mb.name, 
                                 mb.barcode, 
                                 stt.version,
+								mbi.materialid,
                                 mt.prioritylevel, 
                                 mbi.materialboxid, 
                                 stt.name, 
