@@ -1429,6 +1429,126 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function selectPreLoad(array $data) {
+        $barcode = $data['barcode'];
+        $clientid = $data['clientid'];
+
+        $sql = "
+            declare
+                @clientid int = :clientid,
+                @barcode varchar(20) = :barcode;
+            
+            select top 1
+                amo.id,
+                t.version,
+                t.barcode,
+                t.materialname,
+                t.items,
+                amo.clientid,
+                t.materialid,
+                t.materialboxid,
+                t.prioritylevel,
+                c.name as clientname,
+                t.sterilizationtypeid,
+                t.sterilizationtypename
+            from
+                flowprocessing fp
+                inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
+                inner join armorystock st on ( st.flowprocessingstepid = fps.id )
+                inner join armorymovementitem ami on ( ami.flowprocessingstepid = st.flowprocessingstepid )
+                inner join armorymovementoutput amo on ( amo.id = ami.armorymovementid )
+                inner join client c on ( c.id = amo.clientid )
+                cross apply (
+                    select
+                        ta.materialboxid,
+						coalesce(tb.materialid,ta.materialid) as materialid,
+                        coalesce(ta.items,tb.items) as items,
+                        coalesce(ta.name,tb.name) as materialname,
+                        coalesce(ta.barcode,tb.barcode) as barcode,
+                        coalesce(ta.version,tb.version) as version,
+                        coalesce(ta.prioritylevel,tb.prioritylevel) as prioritylevel,
+                        coalesce(ta.sterilizationtypeid,tb.sterilizationtypeid) as sterilizationtypeid,
+                        coalesce(ta.sterilizationtypename,tb.sterilizationtypename) as sterilizationtypename
+                    from 
+                        flowprocessing a
+                        outer apply (
+                            select
+                                mb.name,
+                                mb.barcode,
+                                stt.version,
+								mbi.materialid,
+                                mt.prioritylevel,
+                                mbi.materialboxid,
+                                (select count(id) from materialboxitem where materialboxid = mb.id ) as items,
+                                mt.sterilizationtypeid,
+                                stt.name as sterilizationtypename
+                            from
+                                materialbox mb
+                                inner join materialboxitem mbi on ( mbi.materialboxid = mb.id )
+                                inner join itembase ib on ( ib.id = mbi.materialid and ib.barcode = @barcode )
+                                inner join materialtypeflow mt on ( mt.materialid = mbi.materialid and mt.prioritylevel = 'N' )
+                                inner join sterilizationtype stt on ( stt.id = mt.sterilizationtypeid )
+                            group by 
+                                mb.id,
+                                mb.name, 
+                                mb.barcode, 
+                                stt.version,
+								mbi.materialid,
+                                mt.prioritylevel, 
+                                mbi.materialboxid, 
+                                stt.name, 
+                                mt.sterilizationtypeid
+                        ) ta
+                        outer apply (
+                            select
+                                ib.name,
+                                ib.barcode,
+                                stt.version,
+                                mt.materialid,
+                                mt.prioritylevel,
+                                count(ib.id) as items,
+                                mt.sterilizationtypeid,
+                                stt.name as sterilizationtypename
+                            from
+                                itembase ib
+                                inner join materialtypeflow mt on ( mt.materialid = ib.id and mt.prioritylevel = 'N' )
+                                inner join sterilizationtype stt on ( stt.id = mt.sterilizationtypeid ) 
+                            where ib.id = fp.materialid
+                              and ib.barcode = @barcode
+                            group by 
+                                ib.id, 
+                                ib.name, 
+                                ib.barcode, 
+                                stt.version,
+                                mt.materialid, 
+                                mt.prioritylevel, 
+                                stt.name, 
+                                mt.sterilizationtypeid
+                        ) tb
+                    where a.id = fp.id
+                ) t
+            where amo.clientid = @clientid
+              and st.armorystatus = 'E'
+              and fp.flowstatus not in  ('R','I','S')
+            order by amo.id desc";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
+            $pdo->bindValue(":clientid", $clientid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectHoldItem(array $data) {
         $barcode = $data['barcode'];
 
@@ -1442,21 +1562,11 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 a.armorystatus, 
                 a.armorylocal,
                 t.materialname,
-                case coalesce(o.armorymovementid,1) when 1 then 1 else 0 end as available
+                dbo.areAvailableForOutput(fp.barcode) as available
             from
                 armorystock a
                 inner join flowprocessingstep fps on ( fps.id = a.flowprocessingstepid )
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
-				outer apply (
-					select
-						am.id as armorymovementid
-					from
-						armorymovementitem ami
-						inner join armorymovement am on ( am.id = ami.armorymovementid )
-					where ami.flowprocessingstepid = fps.id
-					  and am.movementtype = '002'
-					  and am.releasestype in ('A','E')
-				) o
                 cross apply (
                     select 
                         coalesce(ta.name,tb.name) as materialname
@@ -2100,5 +2210,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
 
     }
+
+
 
 }
