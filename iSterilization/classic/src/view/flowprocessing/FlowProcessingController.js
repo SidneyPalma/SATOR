@@ -925,6 +925,58 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    onLoadDoQuery: function (field, e, eOpts) {
+        var me = this,
+            value = field.getValue(),
+            itemC = new RegExp(/(C\d{6})\w+/g),
+            itemP = new RegExp(/(P\d{6})\w+/g);
+
+        field.reset();
+
+        if(value && value.length != 0) {
+            if( value.search(/SATOR/i) != -1 || value.search(/MOV/i) != -1) {
+                // me.loadProtocol(value);
+                return false;
+            }
+
+            if(itemC.test(value) || itemP.test(value)) {
+                me.loadMaterial(value);
+                return false;
+            }
+        }
+
+        Smart.Msg.showToast('Protocolo inválido para esta área');
+    },
+
+    loadMaterial: function (value) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form'),
+            data = form.getValues();
+
+        data.barcode = value;
+        data.action = 'select';
+        data.method = 'selectPreLoad';
+
+        Ext.Ajax.request({
+            scope: me,
+            url: me.url,
+            params: data,
+            callback: function (options, success, response) {
+                var result = Ext.decode(response.responseText);
+
+                if(!success || !result.success) {
+                    Smart.Msg.showToast(result.text,'error');
+                    return false;
+                }
+
+                var rows = result.rows[0];
+
+                view.down('gridpanel').getStore().add(rows);
+            }
+        });
+    },
+
     callSATOR_PREPARA_LOTE_AVULSO: function () {
         var me = this;
         Ext.widget('call_SATOR_PREPARA_LOTE_AVULSO').show(null,function () {
@@ -941,7 +993,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     this.master = view;
                     this.down('textfield[name=searchmaterial]').focus(false, 200);
                     this.down('hiddenfield[name=clientid]').setValue(rows.clientid);
-                    this.down('textfield[name=clientname]').setValue(rows.clientname);
+                    this.down('displayfield[name=clientname]').setValue(rows.clientname);
                 });
             };
 
@@ -1124,7 +1176,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             failure: me.onFormSubmitFailure
         });
     },
-
+    
     getSelectClient: function () {
         var me = this,
             view = me.getView(),
