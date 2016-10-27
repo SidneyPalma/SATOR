@@ -222,6 +222,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
                     where a.id = fp.id
                 ) m
             where fpsa.isactive = 1
+              AND fp.flowstatus = 'I'
 			  and fpsa.flowstepaction in ('001','004')
               and not exists (
                     select

@@ -992,12 +992,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var rows = result.rows[0];
 
                 if(grid.getStore().findRecord('barcode',rows.barcode)) {
-                    Smart.Msg.showToast("O item lido já esta aguardando processamento!",'info');
+                    Smart.Msg.showToast("O item lido já esta <b>aguardando processamento!</b>",'info');
                     return false;
                 }
 
                 if(rows.clientid != data.clientid) {
-                    Smart.Msg.showToast("O item lido não pode ser confirmado pois é de origem diferente!",'error');
+                    Smart.Msg.showToast("O item lido não pode ser confirmado pois é <b>de origem diferente!</b>",'error');
                     return false;
                 }
 
