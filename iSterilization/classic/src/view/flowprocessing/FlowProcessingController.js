@@ -1028,7 +1028,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 Ext.each(data, function(item) {
                     item.areasid = Smart.workstation.areasid;
                     item.username = rows.username;
-                    item.clienttype = '001';
                     delete item.id;
                     delete item.barcode;
 

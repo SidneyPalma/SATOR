@@ -216,7 +216,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 //                $coach->getStore()->getModel()->set('placeid',$query->placeid);
 //                $coach->getStore()->getModel()->set('flowingid',$query->flowingid);
                 $coach->getStore()->getModel()->set('patientname',$query->patientname);
-                $coach->getStore()->getModel()->set('healthinsurance',$query->healthinsurance);
+//                $coach->getStore()->getModel()->set('healthinsurance',$query->healthinsurance);
                 $coach->getStore()->getModel()->set('surgicalwarning',$query->surgicalwarning);
 //                $coach->getStore()->getModel()->set('instrumentatorid',$query->instrumentatorid);
             }
@@ -1440,11 +1440,14 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 amo.id,
                 t.version,
                 t.barcode,
-                t.materialname,
                 t.items,
                 amo.clientid,
+				amo.patientname,
+				amo.surgicalwarning,
                 t.materialid,
+                c.clienttype,
 				t.colorschema,
+                t.materialname,
                 t.materialboxid,
                 t.prioritylevel,
                 c.name as clientname,
@@ -1480,7 +1483,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 								mbi.materialid,
                                 mt.prioritylevel,
                                 mbi.materialboxid,
-                                (select count(id) from materialboxitem where materialboxid = mb.id ) as items,
+                                ( select count(id) from materialboxitem where materialboxid = mb.id ) as items,
                                 mt.sterilizationtypeid,
                                 stt.name as sterilizationtypename,
 								colorschema = (

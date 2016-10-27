@@ -84,6 +84,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
             name: 'clientname',
             type: 'auto'
         }, {
+            name: 'clienttype',
+            type: 'auto'
+        }, {
             name: 'sterilizationtypename',
             type: 'auto'
         }, {
@@ -92,6 +95,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
         }, {
             name: 'areavailable',
             type: 'int'
+        }, {
+            name: 'patientname',
+            type: 'auto'
+        }, {
+            name: 'surgicalwarning',
+            type: 'auto'
         }
     ],
 
