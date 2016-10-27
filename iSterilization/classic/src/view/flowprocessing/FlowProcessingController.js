@@ -992,17 +992,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var rows = result.rows[0];
 
                 if(grid.getStore().findRecord('barcode',rows.barcode)) {
-                    Smart.Msg.showToast("O item lido já esta aguardando processamento!",'info');
+                    Smart.Msg.showToast("O item lido <b>já está aguardando processamento!</b>",'info');
                     return false;
                 }
 
                 if(rows.clientid != data.clientid) {
-                    Smart.Msg.showToast("O item lido não pode ser confirmado pois é de origem diferente!",'error');
+                    Smart.Msg.showToast("O item lido não pode ser confirmado pois é <b>de origem diferente!</b>",'error');
                     return false;
                 }
 
                 if(rows.areavailable == 0) {
-                    Smart.Msg.showToast("O item lido não está disponível para este processamento!",'info');
+                    Smart.Msg.showToast("O item lido <b>não está disponível</b> para este processamento!",'info');
                     return false;
                 }
 
