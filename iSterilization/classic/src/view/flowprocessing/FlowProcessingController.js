@@ -992,7 +992,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var rows = result.rows[0];
 
                 if(grid.getStore().findRecord('barcode',rows.barcode)) {
-                    Smart.Msg.showToast("O item lido já esta <b>aguardando processamento!</b>",'info');
+                    Smart.Msg.showToast("O item lido <b>já está aguardando processamento!</b>",'info');
                     return false;
                 }
 
@@ -1002,7 +1002,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 }
 
                 if(rows.areavailable == 0) {
-                    Smart.Msg.showToast("O item lido não está disponível para este processamento!",'info');
+                    Smart.Msg.showToast("O item lido <b>não está disponível</b> para este processamento!",'info');
                     return false;
                 }
 
