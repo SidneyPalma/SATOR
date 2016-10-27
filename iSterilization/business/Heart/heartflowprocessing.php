@@ -1453,7 +1453,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 c.name as clientname,
                 t.sterilizationtypeid,
                 t.sterilizationtypename,
-				dbo.areAvailableForProcessing(@barcode,'P') as areavailable
+				dbo.areAvailableForProcessing(@barcode,'L') as areavailable
             from
                 flowprocessing fp
                 inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )

@@ -173,6 +173,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 }
                             }, {
                                 pageSize: 10,
+                                margin: '0 0 0 5',
                                 allowBlank: true,
                                 hideTrigger: true,
                                 useReadColor: true,

@@ -40,6 +40,7 @@ class flowprocessing extends \Smart\Data\Cache {
 				dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
 				dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
                 mtf.prioritylevel,
+                dbo.areAvailableForProcessing(@barcode,'P') as areavailable,
                 dbo.getEnum('prioritylevel',mtf.prioritylevel) as priorityleveldescription,
                 st.name +' ('+ dbo.getEnum('prioritylevel',mtf.prioritylevel) +')' as sterilizationpriority
             from

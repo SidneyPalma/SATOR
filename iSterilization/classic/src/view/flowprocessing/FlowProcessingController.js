@@ -1377,11 +1377,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         Ext.getStore('flowprocessing').setParams({
             method: 'selectDashFlow',
             dateof: Ext.util.Format.date(date,'Y-m-d')
-        }).load({
-            scope: me,
-            callback: function(records, operation, success) {
-            }
-        });
+        }).load();
 
         Ext.getStore('flowprocessingstep').removeAll();
     },
@@ -1399,6 +1395,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             clientsearch = view.down('clientsearch'),
             flow = view.down('searchsterilizationtype');
+
+        if(record.get('areavailable') == 0) {
+            combo.reset();
+            combo.focus(false,200);
+            Smart.Msg.showToast("O item lido <b>não está disponível</b> para este processamento!",'info');
+            return false;
+        }
 
         flow.setReadColor(false);
         flow.setValue(record.get('sterilizationtypeid'));
@@ -1428,7 +1431,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     nextFieldMaterial: function (field,eOpts) {
         var me = this,
             view = me.getView(),
-            type = view.down('clientsearch');
+            type = view.down('clientsearch'),
+            searchmaterial = view.down('searchmaterial');
+
+        if(searchmaterial.getRawValue().length == 0) {
+            searchmaterial.reset();
+            searchmaterial.focus(false,200);
+            return false;
+        }
 
         Ext.getStore('client').load({
             scope: me,
@@ -1444,7 +1454,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.onSelectClient(type, record, eOpts);
             }
         });
-
     },
 
     onSelectSterilization: function (combo,record,eOpts) {
