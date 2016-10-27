@@ -996,10 +996,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     return false;
                 }
 
-                var id = grid.getStore().getCount()+1;
+                if(rows.clientid != data.clientid) {
+                    Smart.Msg.showToast("O item lido não pode ser confirmado pois é de origem diferente!",'error');
+                    return false;
+                }
 
-                rows.id = id;
+                if(rows.areavailable == 0) {
+                    Smart.Msg.showToast("O item lido não está disponível para este processamento!",'info');
+                    return false;
+                }
 
+                rows.id = grid.getStore().getCount()+1;
                 grid.getStore().add(rows);
             }
         });

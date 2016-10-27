@@ -1431,11 +1431,9 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
     public function selectPreLoad(array $data) {
         $barcode = $data['barcode'];
-        $clientid = $data['clientid'];
 
         $sql = "
             declare
-                @clientid int = :clientid,
                 @barcode varchar(20) = :barcode;
             
             select top 1
@@ -1446,11 +1444,13 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 t.items,
                 amo.clientid,
                 t.materialid,
+				t.colorschema,
                 t.materialboxid,
                 t.prioritylevel,
                 c.name as clientname,
                 t.sterilizationtypeid,
-                t.sterilizationtypename
+                t.sterilizationtypename,
+				dbo.areAvailableForProcessing(@barcode,'P') as areavailable
             from
                 flowprocessing fp
                 inner join flowprocessingstep fps on ( fps.flowprocessingid = fp.id )
@@ -1461,6 +1461,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 cross apply (
                     select
                         ta.materialboxid,
+						ta.colorschema,
 						coalesce(tb.materialid,ta.materialid) as materialid,
                         coalesce(ta.items,tb.items) as items,
                         coalesce(ta.name,tb.name) as materialname,
@@ -1481,7 +1482,22 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                                 mbi.materialboxid,
                                 (select count(id) from materialboxitem where materialboxid = mb.id ) as items,
                                 mt.sterilizationtypeid,
-                                stt.name as sterilizationtypename
+                                stt.name as sterilizationtypename,
+								colorschema = (
+									select stuff
+										(
+											(
+												select
+													',#' + tc.colorschema
+												from
+													materialboxtarge mbt
+													inner join targecolor tc on ( tc.id = mbt.targecolorid )
+												where mbt.materialboxid = mbi.materialboxid
+												order by mbt.targeorderby desc
+												for xml path ('')
+											) ,1,1,''
+										)                
+								)
                             from
                                 materialbox mb
                                 inner join materialboxitem mbi on ( mbi.materialboxid = mb.id )
@@ -1506,7 +1522,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                                 stt.version,
                                 mt.materialid,
                                 mt.prioritylevel,
-                                count(ib.id) as items,
+                                1 as items,
                                 mt.sterilizationtypeid,
                                 stt.name as sterilizationtypename
                             from
@@ -1515,31 +1531,20 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                                 inner join sterilizationtype stt on ( stt.id = mt.sterilizationtypeid ) 
                             where ib.id = fp.materialid
                               and ib.barcode = @barcode
-                            group by 
-                                ib.id, 
-                                ib.name, 
-                                ib.barcode, 
-                                stt.version,
-                                mt.materialid, 
-                                mt.prioritylevel, 
-                                stt.name, 
-                                mt.sterilizationtypeid
                         ) tb
                     where a.id = fp.id
                 ) t
-            where amo.clientid = @clientid
-              and st.armorystatus = 'E'
-              and fp.flowstatus not in  ('R','I','S')
+            where st.armorystatus = 'E'
             order by amo.id desc";
 
         try {
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":barcode", $barcode, \PDO::PARAM_STR);
-            $pdo->bindValue(":clientid", $clientid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
