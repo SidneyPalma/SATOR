@@ -16,6 +16,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
     hideTrigger: true,
     useUpperCase: true,
     readerBarCode: false,
+    enableKeyEvents: true,
 
     url: '../iSterilization/business/Calls/flowprocessing.php',
 
@@ -51,7 +52,10 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             type: 'auto'
         }, {
             name: 'materialboxitems',
-            type: 'int'
+            type: 'auto',
+            convert: function (value, record) {
+                return (value && value.length != 0) ? Ext.String.format("{0} item(s)",value) : '';
+            }
         }, {
             name: 'filedata',
             type: 'auto',
@@ -85,8 +89,22 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             name: 'sterilizationpriority',
             type: 'auto'
         }, {
-            name: 'colorpallet',
+            name: 'colorschema',
             type: 'auto'
+        }, {
+            name: 'colorpallet',
+            type: 'auto',
+            convert: function (value, record) {
+                var colorpallet = '',
+                    colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
+                    coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
+
+                Ext.each(colorschema, function (color) {
+                    colorpallet += Ext.String.format(coloritem, color);
+                });
+
+                return colorpallet;
+            }
         }
     ],
 
@@ -114,32 +132,32 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             me.minChars = 999;
             me.maxLength = 60;
             me.setSpecialKeyEvent();
-            me.store.onAfter('load', me.fnLoad, me);
+            me.store.onAfter('load', me.fnStoreLoad, me);
         }
     },
 
-    fnLoad: function (store, records, successful, operation, eOpts) {
-        this.expand();
+    fnStoreLoad: function (store, records, successful, operation, eOpts) {
+        var me = this;
+        if (store.getCount() == 1) {
+            var record = store.getAt(0);
+            me.setRawValue(record.get('name'));
+            me.fireEvent('select', me, record, eOpts);
+        }
+        if (store.getCount() >= 2) {
+            me.expand();
+        }
     },
 
     setSpecialKeyEvent: function () {
         var me = this;
 
         me.setListeners({
-            expand: function (field, eOpts) {
-                if(field.getStore().getCount()) {
-                    field.picker.getSelectionModel().select(0);
-                    field.fireEvent('nextfield',field,eOpts);
-                }
-            },
             specialkey: function (field, e, eOpts) {
                 if ([e.ESC].indexOf(e.getKey()) != -1) {
-                    field.reset();
+                    field.fireEvent('showclear', field);
                 }
                 if ([e.ENTER].indexOf(e.getKey()) != -1) {
-                    var value = field.getRawValue();
-                    field.doQuery(value,true,true);
-                    e.stopEvent();
+                    field.getStore().setParams({ query: field.getRawValue() }).load();
                 }
             }
         });

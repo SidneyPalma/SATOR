@@ -45,7 +45,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                 bodyPadding: 10,
                 margin: '10 0 0 0',
                 layout: 'anchor',
-                plugins:'formenter',
+                // plugins:'formenter',
                 defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
