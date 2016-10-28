@@ -11,7 +11,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 650,
+    width: 850,
     modal: true,
     layout: 'fit',
     header: false,
@@ -30,21 +30,17 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
         var view = this,
             portrait = view.down('portrait'),
             materialdetail = view.down('form[name=materialdetail]');
-        var colorpallet = '',
-            colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
-            coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
 
-        Ext.each(colorschema,function (color) {
-            colorpallet += Ext.String.format(coloritem,color);
-        });
-
-        record.set('colorpallet',colorpallet);
+        if (!record) {
+            portrait.beFileData();
+            materialdetail.update('');
+            portrait.update('<div style="position: absolute; padding: 10px 0 0 10px;">...</div>');
+            return false;
+        }
 
         materialdetail.update(record.data);
-
-        if(portrait) {
-            portrait.beFileData(record.get('filetype'));
-        }
+        portrait.beFileData(record.get('filetype'));
+        portrait.update(Ext.String.format('<div style="position: absolute; padding: 10px 0 0 10px;">{0}</div>', record.get('colorpallet')));
     },
 
     buildItems: function () {
@@ -58,7 +54,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                 layout: 'anchor',
                 defaults: {
                     anchor: '100%',
-                    allowBlank: false,
+                    allowBlank: true,
                     fieldCls: 'smart-field-style-action',
                     labelCls: 'smart-field-style-action'
                 },
@@ -69,42 +65,33 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                         text: 'Consultar Material'
                     }, {
                         margin: '20 0 0 0',
-                        fieldLabel: 'Material',
-                        xtype: 'searchmaterial',
                         readerBarCode: true,
-                        hiddenNameId: 'materialid',
                         name: 'materialname',
+                        xtype: 'searchmaterial',
+                        hiddenNameId: 'materialid',
                         configStoreListeners: {
-                            load: function (store, records , successful , operation , eOpts) {
-                                if(records.length == 1) {
-                                    var record = records[0];
-                                    me.showData(record);
-                                    me.down('searchmaterial').collapse();
-                                    me.down('searchmaterial').setRawValue(record.get('name'));
+                            load: function (store, records, successful, operation, eOpts) {
+                                // var searchmaterial = me.down('searchmaterial');
+                                // if (store.getCount() == 1) {
+                                //     var record = store.getAt(0);
+                                //     searchmaterial.fireEvent('select',searchmaterial, record, eOpts);
+                                // }
+                                // if (store.getCount() >= 2) {
+                                //     searchmaterial.expand();
+                                // }
+                                if (store.getCount() == 0) {
+                                    me.showData();
                                 }
                             }
                         },
                         listeners: {
                             showclear: function (combo) {
-                                var view = combo.up('window'),
-                                    portrait = view.down('portrait'),
-                                    materialdetail = view.down('form[name=materialdetail]');
-
-                                materialdetail.update({
-                                    'Kit:':'',
-                                    'Grupo:': '',
-                                    'Status:':'',
-                                    'Embalagem:':'',
-                                    'Proprietario': ''
-                                });
-
-                                if(portrait) {
-                                    portrait.beFileData();
-                                }
+                                var view = combo.up('window');
+                                combo.reset();
+                                view.showData();
                             },
                             select: function (combo,record,eOpts) {
                                 var view = combo.up('window');
-
                                 view.showData(record);
                             }
                         }
@@ -119,21 +106,23 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                 xtype: 'form',
                                 name: 'materialdetail',
                                 tpl: [
-                                    '<div style="font-size: 14px; font-family: Monda;">',
-                                        '<div style="margin-top: 16px;">{colorpallet} </div><br/>',
-                                        '<p><b>Kit:</b> {materialboxname}</p>',
-                                        '<p><b>Grupo:</b> {itemgroupdescription}</p>',
-                                        '<p><b>Status:</b> {materialstatusdescription}</p>',
-                                        '<p><b>Embalagem:</b> {packingname}</p>',
-                                        '<p><b style="color: red;">Proprietario:</b> {proprietaryname}</p>',
-                                        '<p><b style="color: blue;">Código de Barras:</b> {barcode} <b style="color: red;">({materialboxitems} itens)</b></p>',
+                                    '<div class="movement consulta" style="margin-top: 20px;">',
+                                        '<div class="movement-title"><b>{name}</b></div>',
+                                        '<div class="movement-title"><b>Kit:</b> {materialboxname} <b>{materialboxitems}</b></div>',
+                                        '<div class="movement-title"><b>Status:</b> {materialstatusdescription}</div>',
+                                        '<div><b>Código de Barras: {barcode}</b></div>',
+                                        '<div><b>Grupo:</b> {itemgroupdescription}</div>',
+                                        '<div><b>Embalagem:</b> {packingname}</div>',
+                                        '<div><b style="color: red;">Proprietario:</b> {proprietaryname}</div>',
+                                        '<div><b>Rastreabilidade:</b></div>',
+                                        '<div>{message}</div>',
                                     '</div>'
                                 ]
                             }, {
                                 xtype: 'splitter'
                             }, {
                                 flex: 2,
-                                height: 200,
+                                height: 300,
                                 margin: '16 0 0 0',
                                 hideButtons: true,
                                 xtype: 'portrait'
