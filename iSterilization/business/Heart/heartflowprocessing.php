@@ -1357,6 +1357,43 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 		return self::getResultToJson();
 	}
 
+	public function selectOpenClient (array $data) {
+		$clientid = str_replace('HAM-C','',$data['query']);
+
+        $clientid = $this->tryNumeric($clientid) ? intval($clientid) : $clientid;
+
+		$sql = "
+			declare
+				@id varchar(20) = :id,
+				@name varchar(60) = :name;
+
+            select 
+				c.id as clientid, 
+				c.name as clientname 
+			from 
+				client c 
+			where convert(varchar(20),c.id) = @id or c.name COLLATE Latin1_General_CI_AI LIKE @name";
+		
+		try {
+			$pdo = $this->prepare($sql);
+			$pdo->bindValue(":id", $clientid, \PDO::PARAM_STR);
+			$pdo->bindValue(":name", "{$clientid}%", \PDO::PARAM_STR);
+			$pdo->execute();
+			$rows = $pdo->fetchAll();
+			
+			$success = (count($rows) != 0);
+			
+			self::_setRows($rows);
+			self::_setSuccess($success);
+
+		} catch ( \PDOException $e ) {
+			self::_setSuccess(false);
+			self::_setText($e->getMessage());
+		}
+
+		return self::getResultToJson();		
+	}
+
     public function selectHold(array $data) {
         $areasid = $data['areasid'];
 
@@ -1782,7 +1819,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             select
                 am.id,
                 am.areasid,
-                coalesce(o.lineone,concat('#',convert(varchar, dbo.getLeftPad(8,'0',am.id)))) as lineone,
+                coalesce(o.lineone,('#' + convert(varchar, dbo.getLeftPad(8,'0',am.id)))) as lineone,
                 a.name as areasname,
                 am.movementuser,
                 coalesce(o.patientname, convert(char(10), am.movementdate, 103)) as linetwo,

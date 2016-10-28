@@ -1313,23 +1313,25 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             form = view.down('form');
 
-        if (!form.isValid()) {
-            return false;
-        }
+        console.info(form);
+        
+        // if (!form.isValid()) {
+        //     return false;
+        // }
 
-        view.setLoading('Registrando cliente...');
-
-        form.submit({
-            scope: me,
-            url: me.url,
-            clientValidation: true,
-            params: {
-                action: 'select',
-                method: 'selectClientId'
-            },
-            success: me.onComeInSendSuccess,
-            failure: me.onFormSubmitFailure
-        });
+        // view.setLoading('Registrando cliente...');
+        //
+        // form.submit({
+        //     scope: me,
+        //     url: me.url,
+        //     clientValidation: true,
+        //     params: {
+        //         action: 'select',
+        //         method: 'selectClientId'
+        //     },
+        //     success: me.onComeInSendSuccess,
+        //     failure: me.onFormSubmitFailure
+        // });
     },
 
     onComeInSendSuccess: function (form, action) {
