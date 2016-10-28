@@ -8,6 +8,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingClient', {
         'Ext.form.Panel',
         'Smart.plugins.*',
         'Ext.window.Window',
+        'iSterilization.view.flowprocessing.SearchClient',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
@@ -19,10 +20,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingClient', {
     header: false,
     resizable: false,
     showAnimate: true,
-
-     listeners: {
-         queryreader: 'getSelectClient'
-     },
 
     doCallBack: Ext.emptyFn,
 
@@ -62,15 +59,26 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingClient', {
                         },
                         items: [
                             {
+                                xtype: 'searchclient',
                                 margin: '10 0 0 0',
                                 name: 'clientid',
-                                useUpperCase: true,
-                                inputType: 'password',
+                                readerBarCode: true,
                                 listeners: {
-                                    specialkey: function (field, e, eOpts) {
-                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                            var win = field.up('window');
-                                            win.fireEvent('queryreader',win,field,eOpts);
+                                    select: function (combo,record) {
+                                        var view = combo.up('window'),
+                                            rows = record.data;
+
+                                        if( view.doCallBack(rows) ) {
+                                            view.close();
+                                        }
+                                    }
+                                },
+                                configStoreListeners: {
+                                    load: function (store, records, successful, operation, eOpts) {
+                                        if (store.getCount() == 1) {
+                                            var record = records[0],
+                                                combo = me.down('searchclient');
+                                            combo.fireEvent('select',combo,record,eOpts);
                                         }
                                     }
                                 }
