@@ -1415,6 +1415,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         flow.setValue(record.get('sterilizationtypeid'));
         flow.setRawValue(record.get('sterilizationpriority'));
 
+        view.down('hiddenfield[name=materialid]').setValue(record.get('id'));
         view.down('hiddenfield[name=version]').setValue(record.get('version'));
         view.down('hiddenfield[name=prioritylevel]').setValue(record.get('prioritylevel'));
         view.down('hiddenfield[name=materialboxid]').setValue(record.get('materialboxid'));
