@@ -42,7 +42,8 @@ class flowprocessing extends \Smart\Data\Cache {
                 mtf.prioritylevel,
                 dbo.areAvailableForProcessing(@barcode,'P') as areavailable,
                 dbo.getEnum('prioritylevel',mtf.prioritylevel) as priorityleveldescription,
-                st.name +' ('+ dbo.getEnum('prioritylevel',mtf.prioritylevel) +')' as sterilizationpriority
+                st.name +' ('+ dbo.getEnum('prioritylevel',mtf.prioritylevel) +')' as sterilizationpriority,
+                areavailable = dbo.areAvailableForProcessing (ib.barcode, 'L')
             from
                 itembase ib
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
@@ -59,7 +60,7 @@ class flowprocessing extends \Smart\Data\Cache {
 							FROM
 							    materialboxitem mbi
 							WHERE mbi.materialboxid = mb.id
-							  AND mbi.boxitemstatus = 'A'
+							  --AND mbi.boxitemstatus = 'A'
 						),
                         mbi.materialboxid,
 						mb.name as materialboxname,
@@ -82,8 +83,8 @@ class flowprocessing extends \Smart\Data\Cache {
                         materialbox mb
                     inner join materialboxitem mbi on ( 
                                     mbi.materialboxid = mb.id
-                                AND mbi.materialid = m.id
-                                AND mbi.boxitemstatus = 'A' )
+                                AND mbi.materialid = m.id )
+                                --AND mbi.boxitemstatus = 'A' )
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ) a
             where ib.isactive = 1
@@ -96,6 +97,32 @@ class flowprocessing extends \Smart\Data\Cache {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
             $pdo->bindValue(":name", "{$query}%", \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function getAvailableForProcessing(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @barcode varchar(20) = :barcode;
+                
+            exec dbo.getAvailableForProcessing @barcode";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 

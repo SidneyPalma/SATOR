@@ -5,7 +5,7 @@ Ext.define( 'Ext.overrides.form.field.ComboBox', {
     minChars: 1,
     pageSize: 10,
 
-    //typeAhead: true,
+    // typeAhead: true,
     selectRecord: false,
     hiddenNameId: false,
     defaultSelect: false,
@@ -76,7 +76,6 @@ Ext.define( 'Ext.overrides.form.field.ComboBox', {
 				console.warn('Não foi possível aplicar a configuração na paginação do ComboBox');
 			}
 		}
-		
     },
     
     // configStoreListeners: false,

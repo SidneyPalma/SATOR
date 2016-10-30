@@ -36,6 +36,7 @@ Ext.define( 'Ext.overrides.form.field.Text', {
             me.on({
                 change: { fn: 'clearState', scope: me }
             });
+            // me.onAfter('change', me.clearState, me);
         }
 
         if(me.showFetch === true ) {
@@ -46,6 +47,7 @@ Ext.define( 'Ext.overrides.form.field.Text', {
                 change: { fn: 'clearState', scope: me },
                 specialkey: { fn: 'fetchStart', scope: me }
             });
+            // me.onAfter('change', me.clearState, me);
         }
     },
 
@@ -56,6 +58,7 @@ Ext.define( 'Ext.overrides.form.field.Text', {
     },
 
     clearState: function (field, newValue, oldValue, eOpts) {
+
         if(newValue && newValue.length > 0) {
             field.getTrigger('clear').show();
         } else {

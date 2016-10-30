@@ -15,7 +15,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
     showClear: true,
     hideTrigger: true,
     useUpperCase: true,
-    readerBarCode: false,
+    readerBarCode: true,
     enableKeyEvents: true,
 
     url: '../iSterilization/business/Calls/flowprocessing.php',
@@ -97,7 +97,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             convert: function (value, record) {
                 var colorpallet = '',
                     colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
-                    coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
+                    coloritem = '<div style="background: {0}; width: 30px; height: 30px; float: left; border: 2px solid black; border-radius: 50%"></div>';
 
                 Ext.each(colorschema, function (color) {
                     colorpallet += Ext.String.format(coloritem, color);
@@ -132,6 +132,7 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             me.minChars = 999;
             me.maxLength = 60;
             me.setSpecialKeyEvent();
+            me.getTrigger('clear').show();
             me.store.onAfter('load', me.fnStoreLoad, me);
         }
     },
