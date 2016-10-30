@@ -72,7 +72,9 @@ Ext.define( 'iAdmin.view.helper.targe.TargeColorEdit', {
                             }
                         ]
                     }, {
-                        xtype: 'container',
+                        xtype: 'fieldcontainer',
+                        fieldLabel: 'Paleta',
+                        labelCls: 'smart-field-style-action',
                         layout: 'hbox',
                         defaults: {
                             flex: 1,
