@@ -97,12 +97,19 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             convert: function (value, record) {
                 var colorpallet = '',
                     colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
-                    coloritem = '<div style="background: {0}; width: 30px; height: 30px; float: left; border: 2px solid black; border-radius: 50%"></div>';
+                    coloritem = '<div style="background: {0}; width: 30px; height: 30px; float: left; border: 2px solid black; border-radius: 50%"></div>',
+                    colorstripe = '<div style="{0}"></div>',
+                    stripestyle = 'width: 30px; height: 30px; float: left; border: 2px solid black; border-radius: 50%; color: white;' +
+                                  'background: -webkit-repeating-linear-gradient(45deg, #FFFFFF, #FFFFFF 2px, {0} 2px, {1} 7px);' +
+                                  'background: repeating-linear-gradient(45deg, #FFFFFF, #FFFFFF 2px, {2} 2px, {3} 7px);';
+
+                coloritem = Ext.String.format(colorstripe, stripestyle);
 
                 Ext.each(colorschema, function (color) {
-                    colorpallet += Ext.String.format(coloritem, color);
+                    colorpallet += Ext.String.format(coloritem, color,color,color,color);
+                    // colorpallet += Ext.String.format(coloritem, color);
                 });
-
+console.info(colorpallet);
                 return colorpallet;
             }
         }

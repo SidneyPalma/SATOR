@@ -55,22 +55,43 @@ Ext.define( 'iAdmin.view.helper.targe.TargeColorEdit', {
                         name: 'id',
                         allowBlank: true
                     }, {
-                        xtype: 'label',
-                        cls: 'sub-title-label',
-                        text: 'Seleção de cor'
+                        xtype: 'fieldcontainer',
+                        fieldLabel: 'Seleção de cor',
+                        labelCls: 'smart-field-style-action',
+                        layout: 'anchor',
+                        defaults: {
+                            flex: 1,
+                            anchor: '100%',
+                            allowBlank: false
+                        },
+                        items: [
+                            {
+                                xtype: 'textfield',
+                                name: 'name',
+                                fieldLabel: 'Nome'
+                            }
+                        ]
                     }, {
-                        xtype: 'textfield',
-                        name: 'name',
-                        fieldLabel: 'Nome'
-                    }, {
-                        fieldLabel: 'Paleta',
-                        name: 'colorschema',
-                        xtype: 'colorfield'
-                    }, {
-                        name: 'isactive',
-                        xtype: 'checkboxfield',
-                        fieldLabel: 'Status',
-                        boxLabel: 'Ativo'
+                        xtype: 'container',
+                        layout: 'hbox',
+                        defaults: {
+                            flex: 1,
+                            allowBlank: false,
+                            useUpperCase: true
+                        },
+                        items: [
+                            {
+                                margin: '0 5 0 0',
+                                fieldLabel: 'Fundo',
+                                name: 'colorschema',
+                                xtype: 'colorfield'
+                            }, {
+                                margin: '0 0 0 5',
+                                fieldLabel: 'Linha',
+                                name: 'colorstripe',
+                                xtype: 'colorfield'
+                            }
+                        ]
                     }
                 ]
             }

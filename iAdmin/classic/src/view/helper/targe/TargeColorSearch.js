@@ -15,12 +15,6 @@ Ext.define( 'iAdmin.view.helper.targe.TargeColorSearch', {
 
     store: 'iAdmin.store.helper.TargeColor',
 
-    //http://codepen.io/chriscoyier/pen/epfEc
-    // .stripe-1 {
-    //     background: -webkit-repeating-linear-gradient(90deg, #FFFFFF, #FFFFFF 1px, #465298 1px, #465298 5px);
-    //     background: repeating-linear-gradient(90deg, #FFFFFF, #FFFFFF 1px, #465298 1px, #465298 5px);
-    // }
-
     tpl: [
         '<tpl for=".">',
             '<div class="x-boundlist-item" style="height: 30px;">',
