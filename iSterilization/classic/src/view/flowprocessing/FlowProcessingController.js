@@ -184,6 +184,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.setSATOR_CANCELAR_ULTIMA_LEITURA();
                 break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
+                break;
             default:
                 Smart.Msg.showToast('Protocolo inválido para este local');
         }
@@ -960,6 +963,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 break;
             case 'SATOR_CANCELAR_ULTIMA_LEITURA':
                 me.preSATOR_CANCELAR_ULTIMA_LEITURA();
+                break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
                 break;
             default:
                 Smart.Msg.showToast('Protocolo inválido para este local');
