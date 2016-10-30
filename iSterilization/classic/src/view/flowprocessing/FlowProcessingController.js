@@ -1418,8 +1418,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('hiddenfield[name=prioritylevel]').setValue(record.get('prioritylevel'));
         view.down('hiddenfield[name=materialboxid]').setValue(record.get('materialboxid'));
         view.down('hiddenfield[name=sterilizationtypeid]').setValue(record.get('sterilizationtypeid'));
-
-        // clientsearch.expand();
     },
 
     showClearMaterial: function (field, eOpts) {
