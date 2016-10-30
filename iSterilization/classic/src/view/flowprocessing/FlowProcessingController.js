@@ -1319,8 +1319,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             form = view.down('form');
 
-        console.info(form);
-        
         // if (!form.isValid()) {
         //     return false;
         // }
@@ -1421,7 +1419,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         view.down('hiddenfield[name=materialboxid]').setValue(record.get('materialboxid'));
         view.down('hiddenfield[name=sterilizationtypeid]').setValue(record.get('sterilizationtypeid'));
 
-        clientsearch.expand();
+        // clientsearch.expand();
     },
 
     showClearMaterial: function (field, eOpts) {
@@ -1440,14 +1438,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     nextFieldMaterial: function (field,eOpts) {
         var me = this,
             view = me.getView(),
-            type = view.down('clientsearch'),
-            searchmaterial = view.down('searchmaterial');
+            type = view.down('clientsearch');
+            // searchmaterial = view.down('searchmaterial');
 
-        if(searchmaterial.getRawValue().length == 0) {
-            searchmaterial.reset();
-            searchmaterial.focus(false,200);
-            return false;
-        }
+        // if(searchmaterial.getStore().getCount() == 0) {
+        //     searchmaterial.reset();
+        //     searchmaterial.focus(false,200);
+        //     return false;
+        // }
 
         Ext.getStore('client').load({
             scope: me,

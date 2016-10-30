@@ -134,7 +134,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                         var searchmaterial = me.down('searchmaterial');
                                         if (store.getCount() == 1) {
                                             var record = store.getAt(0);
-                                            searchmaterial.fireEvent('select',searchmaterial, record, eOpts);
+                                            searchmaterial.fireEvent('nextfield',searchmaterial,eOpts);
+                                            searchmaterial.fireEvent('select', searchmaterial, record, eOpts);
                                         }
                                         if (store.getCount() >= 2) {
                                             searchmaterial.expand();
@@ -196,13 +197,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 listeners: {
                                     select: 'onSelectPatient'
                                 }
-                                // allowBlank: true,
-                                // useReadColor: true,
-                                // margin: '0 0 0 5',
-                                // fieldLabel: 'Local (sala)',
-                                // xtype: 'placesearch',
-                                // name: 'placename',
-                                // hiddenNameId: 'placeid'
                             }
                         ]
                     }
