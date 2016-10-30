@@ -45,7 +45,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                 bodyPadding: 10,
                 margin: '10 0 0 0',
                 layout: 'anchor',
-                // plugins:'formenter',
+                plugins:'formenter',
                 defaultType: 'textfield',
                 defaults: {
                     anchor: '100%',
@@ -129,6 +129,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingOpen', {
                                 hiddenNameId: 'materialid',
                                 name: 'materialname',
                                 readerBarCode: true,
+                                configStoreListeners: {
+                                    load: function (store, records, successful, operation, eOpts) {
+                                        var searchmaterial = me.down('searchmaterial');
+                                        if (store.getCount() == 1) {
+                                            var record = store.getAt(0);
+                                            searchmaterial.fireEvent('select',searchmaterial, record, eOpts);
+                                        }
+                                        if (store.getCount() >= 2) {
+                                            searchmaterial.expand();
+                                        }
+                                    }
+                                },
                                 listeners: {
                                     select: 'onSelectMaterial',
                                     nextfield: 'nextFieldMaterial',
