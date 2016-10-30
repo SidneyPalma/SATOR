@@ -1439,13 +1439,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         var me = this,
             view = me.getView(),
             type = view.down('clientsearch');
-            // searchmaterial = view.down('searchmaterial');
-
-        // if(searchmaterial.getStore().getCount() == 0) {
-        //     searchmaterial.reset();
-        //     searchmaterial.focus(false,200);
-        //     return false;
-        // }
 
         Ext.getStore('client').load({
             scope: me,
