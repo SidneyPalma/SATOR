@@ -7,6 +7,45 @@ use iAdmin\Model\materialbox as Model;
 
 class materialbox extends \Smart\Data\Cache {
 
+    public function selectItem(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @id int = :id;
+            
+            select
+                mb.id, 
+                ib.name, 
+                mb.barcode, 
+                mb.itemsize
+                dbo.getEnum('itemsize',mb.itemsize) as itemsizedescription,
+                mb.statusbox, 
+                dbo.getEnum('statusbox',mb.statusbox) as statusboxdescription
+            from
+                materialbox mb
+                inner join itembase ib on ( ib.id = mb.materialid )
+            where ib.id = @id";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+    
     public function selectCode(array $data) {
         $query = $data['query'];
         $proxy = $this->getStore()->getProxy();

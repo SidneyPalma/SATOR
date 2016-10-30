@@ -5,6 +5,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
     xtype: 'call_SATOR_CONSULTAR_MATERIAL',
 
     requires: [
+        'Ext.tab.Panel',
         'Ext.form.Panel',
         'Smart.plugins.*',
         'Ext.window.Window',
@@ -33,10 +34,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
             materialdetail = view.down('container[name=materialdetail]'),
             materialmessage = view.down('container[name=materialmessage]');
 
+        view.down('tabpanel').setActiveTab(0);
+
         if (!record) {
             portrait.beFileData();
             materialdetail.update('');
             materialmessage.update('');
+            searchmaterial.getStore().removeAll();
+            view.down('gridpanel').getStore().removeAll();
             portrait.update('<div style="position: absolute; padding: 10px 0 0 10px;">...</div>');
             return false;
         }
@@ -119,7 +124,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                             }
                         }
                     }, {
-                        height: 20,
+                        height: 10,
                         xtype: 'container'
                     }, {
                         xtype: 'panel',
@@ -128,36 +133,115 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                             {
                                 flex: 3,
                                 height: 300,
-                                layout: {
-                                    type: 'vbox',
-                                    align: 'stretch'
+                                plain: true,
+                                cls: 'consulta',
+                                xtype: 'tabpanel',
+                                headerPosition: 'left',
+                                tabBarHeaderPosition: 2,
+                                defaults: {
+                                    bodyStyle: 'padding-left: 10px'
                                 },
-                                xtype: 'container',
+                                listeners: {
+                                    tabchange: function ( tabPanel, newCard , oldCard , eOpts) {
+                                        var view = tabPanel.up('window'),
+                                            searchmaterial = view.down('searchmaterial'),
+                                            store = searchmaterial.getStore();
+
+                                        if(newCard.tabIndex == 1 && store.getCount() != 0) {
+                                            var record = store.getAt(0),
+                                                params = {
+                                                    query: record.get('materialboxid'),
+                                                    limit: record.get('materialboxitems')
+                                                };
+                                            view.down('gridpanel').getStore().removeAll();
+                                            view.down('gridpanel').getStore().load({params: params});
+                                        }
+                                    }
+                                },
                                 items: [
                                     {
-                                        flex: 1,
-                                        xtype: 'container',
-                                        name: 'materialdetail',
-                                        tpl: [
-                                            '<div class="movement consulta">',
-                                                '<div class="movement-title"><b>{name}</b></div>',
-                                                '<div class="movement-title"><b>Kit:</b> {materialboxname} <b>{materialboxitems}</b></div>',
-                                                '<div class="movement-title"><b>Status:</b> {materialstatusdescription}</div>',
-                                                '<div><b>Código de Barras: {barcode}</b></div>',
-                                                '<div><b>Grupo:</b> {itemgroupdescription}</div>',
-                                                '<div><b>Embalagem:</b> {packingname}</div>',
-                                                '<div><b style="color: red;">Proprietario:</b> {proprietaryname}</div>',
-                                            '</div>'
+                                        tabIndex: 0,
+                                        title: 'Material',
+                                        xtype: 'panel',
+                                        layout: {
+                                            type: 'vbox',
+                                            align: 'stretch'
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                xtype: 'container',
+                                                name: 'materialdetail',
+                                                tpl: [
+                                                    '<div class="movement consulta">',
+                                                    '<div class="movement-title"><b>{name}</b></div>',
+                                                    '<div class="movement-title"><b>Kit:</b> {materialboxname} <b>{materialboxitemstext}</b></div>',
+                                                    '<div class="movement-title"><b>Status:</b> {materialstatusdescription}</div>',
+                                                    '<div><b>Código de Barras: {barcode}</b></div>',
+                                                    '<div><b>Grupo:</b> {itemgroupdescription}</div>',
+                                                    '<div><b>Embalagem:</b> {packingname}</div>',
+                                                    '<div><b style="color: red;">Proprietario:</b> {proprietaryname}</div>',
+                                                    '</div>'
+                                                ]
+                                            }, {
+                                                height: 60,
+                                                xtype: 'container',
+                                                name: 'materialmessage',
+                                                tpl: [
+                                                    '<div class="movement consulta">',
+                                                        '<div class="movement-title"><b>Localização:</b></div>',
+                                                        '<div><b style="color: red;">{message}</b></div>',
+                                                    '</div>'
+                                                ]
+                                            }
                                         ]
                                     }, {
-                                        height: 70,
-                                        xtype: 'container',
-                                        name: 'materialmessage',
-                                        tpl: [
-                                            '<div class="movement consulta">',
-                                                '<div class="movement-title"><b>Localização:</b></div>',
-                                                '<div><b style="color: red;">{message}</b></div>',
-                                            '</div>'
+
+                                        tabIndex: 1,
+                                        title: 'Kit',
+                                        xtype: 'panel',
+                                        layout: 'fit',
+                                        items: [
+                                            {
+                                                xtype: 'gridpanel',
+                                                cls: 'update-grid',
+                                                hideHeaders: false,
+                                                headerBorders: false,
+
+                                                params: {
+                                                    action: 'select',
+                                                    method: 'selectCode'
+                                                },
+
+                                                url: '../iAdmin/business/Calls/materialboxitem.php',
+
+                                                fields: [
+                                                    {
+                                                        name: 'id',
+                                                        type: 'int'
+                                                    }, {
+                                                        name: 'barcode',
+                                                        type: 'auto'
+                                                    }, {
+                                                        name: 'materialname',
+                                                        type: 'auto'
+                                                    }, {
+                                                        name: 'proprietaryname',
+                                                        type: 'auto'
+                                                    }
+                                                ],
+
+                                                columns: [
+                                                    {
+                                                        xtype: 'rownumberer'
+                                                    }, {
+                                                        flex: 1,
+                                                        sortable: false,
+                                                        dataIndex: 'materialname',
+                                                        text: 'Material'
+                                                    }
+                                                ]
+                                            }
                                         ]
                                     }
                                 ]

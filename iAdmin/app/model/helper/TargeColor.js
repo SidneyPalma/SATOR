@@ -20,8 +20,8 @@ Ext.define( 'iAdmin.model.helper.TargeColor', {
             name: 'colorschema',
             type: 'auto'
         }, {
-            name: 'isactive',
-            type: 'int'
+            name: 'colorstripe',
+            type: 'auto'
         }
     ]
 

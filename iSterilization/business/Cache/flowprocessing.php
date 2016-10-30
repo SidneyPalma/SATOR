@@ -69,7 +69,7 @@ class flowprocessing extends \Smart\Data\Cache {
                                 (
                                     (
                                         select
-                                            ',#' + tc.colorschema
+                                            ',#' + tc.colorschema + '|#' + tc.colorstripe
                                         from
                                             materialboxtarge mbt
                                             inner join targecolor tc on ( tc.id = mbt.targecolorid )

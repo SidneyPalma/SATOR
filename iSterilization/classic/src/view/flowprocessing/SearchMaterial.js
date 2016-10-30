@@ -52,9 +52,13 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             type: 'auto'
         }, {
             name: 'materialboxitems',
+            type: 'auto'
+        }, {
+            name: 'materialboxitemstext',
             type: 'auto',
             convert: function (value, record) {
-                return (value && value.length != 0) ? Ext.String.format("{0} item(s)",value) : '';
+                var materialboxitems = record.get('materialboxitems');
+                return (materialboxitems && materialboxitems.length != 0) ? Ext.String.format("{0} item(s)",materialboxitems) : '';
             }
         }, {
             name: 'filedata',
@@ -97,10 +101,15 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             convert: function (value, record) {
                 var colorpallet = '',
                     colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
-                    coloritem = '<div style="background: {0}; width: 30px; height: 30px; float: left; border: 2px solid black; border-radius: 50%"></div>';
+                    schema = '<div style="{0}"></div>',
+                    stripe = 'width: 30px; height: 30px; float: left; border: 2px solid black; border-radius: 50%;' +
+                             'background: -webkit-repeating-linear-gradient(45deg, {0}, {1} 2px, {2} 2px, {3} 7px);';
 
-                Ext.each(colorschema, function (color) {
-                    colorpallet += Ext.String.format(coloritem, color);
+                var item = Ext.String.format(schema,stripe);
+
+                Ext.each(colorschema, function (data) {
+                    var colorstripe = data.split("|");
+                    colorpallet += Ext.String.format(item, colorstripe[1],colorstripe[1],colorstripe[0],colorstripe[0]);
                 });
 
                 return colorpallet;
