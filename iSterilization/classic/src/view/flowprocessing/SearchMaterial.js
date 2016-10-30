@@ -52,9 +52,13 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             type: 'auto'
         }, {
             name: 'materialboxitems',
+            type: 'auto'
+        }, {
+            name: 'materialboxitemstext',
             type: 'auto',
             convert: function (value, record) {
-                return (value && value.length != 0) ? Ext.String.format("{0} item(s)",value) : '';
+                var materialboxitems = record.get('materialboxitems');
+                return (materialboxitems && materialboxitems.length != 0) ? Ext.String.format("{0} item(s)",materialboxitems) : '';
             }
         }, {
             name: 'filedata',

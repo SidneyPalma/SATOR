@@ -624,3 +624,12 @@
 .consulta {
     line-height: 32px !important;
 }
+
+.consulta .x-panel-header-default-vertical {
+    background-image: none;
+    background-color: rgb(193, 230, 255);
+}
+.consulta .x-panel-header-default {
+    background-image: none;
+    background-color: rgb(193, 230, 255);
+}
