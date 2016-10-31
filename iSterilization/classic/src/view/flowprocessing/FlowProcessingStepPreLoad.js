@@ -50,18 +50,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
             type: 'auto'
         }, {
             name: 'colorpallet',
-            type: 'auto',
-            convert: function (value,record) {
-                var colorpallet = '',
-                    colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
-                    coloritem = '<div style="background: {0}; width: 20px; height: 20px; float: left; border: 2px solid black; border-radius: 50%"></div>';
-
-                Ext.each(colorschema,function (color) {
-                    colorpallet += Ext.String.format(coloritem,color);
-                });
-
-                return colorpallet;
-            }
+            type: 'colorpallet'
         }, {
             name: 'materialname',
             type: 'auto'
