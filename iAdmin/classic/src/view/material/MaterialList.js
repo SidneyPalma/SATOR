@@ -80,6 +80,10 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         text: 'Kit',
                         dataIndex: 'materialboxname'
                     }, {
+                        width: 150,
+                        text: 'Schema',
+                        dataIndex: 'colorpallet'
+                    }, {
                         width: 120,
                         text: 'Grupo',
                         dataIndex: 'itemgroupdescription'

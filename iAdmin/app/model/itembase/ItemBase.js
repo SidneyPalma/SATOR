@@ -49,6 +49,12 @@ Ext.define( 'iAdmin.model.itembase.ItemBase', {
             name: 'registrationanvisa',
             type: 'auto'
         }, {
+            name: 'colorschema',
+            type: 'auto'
+        }, {
+            name: 'colorpallet',
+            type: 'colorpallet'
+        }, {
             name: 'itemgroup',
             type: 'auto'
         }, {
