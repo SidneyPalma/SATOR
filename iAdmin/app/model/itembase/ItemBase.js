@@ -4,7 +4,8 @@ Ext.define( 'iAdmin.model.itembase.ItemBase', {
 
     requires: [
         'Smart.util.Resource',
-        'Smart.data.identifier.Auto'
+        'Smart.data.identifier.Auto',
+        'Smart.data.field.ColorPallet'
     ],
 
     identifier: 'auto',

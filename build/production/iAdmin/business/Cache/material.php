@@ -15,6 +15,11 @@ class material extends \Smart\Data\Cache {
         $total = isset($data['totalresults']) ? $data['totalresults'] : 10;
 
         $sql = "
+            declare
+                @name varchar(60) = :name,
+                @barcode varchar(20) = :barcode,
+                @description varchar(60) = :description;
+	
             SELECT top $total  
                 ib.name,
                 ib.description,
@@ -50,7 +55,7 @@ class material extends \Smart\Data\Cache {
                                 (
                                     (
                                         select
-                                            ',#' + tc.colorschema
+                                            ',#' + tc.colorschema + '|#' + tc.colorstripe
                                         from
                                             materialboxtarge mbt
                                             inner join targecolor tc on ( tc.id = mbt.targecolorid )
@@ -64,22 +69,20 @@ class material extends \Smart\Data\Cache {
                         materialbox mb
                     inner join materialboxitem mbi on ( 
                                     mbi.materialboxid = mb.id
-                                AND mbi.materialid = m.id
+                                AND mbi.materialid = m.id 
                                 AND mbi.boxitemstatus = 'A' )
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ) a
-            WHERE ib.name COLLATE Latin1_General_CI_AI LIKE :name
-               OR ib.barcode COLLATE Latin1_General_CI_AI LIKE :barcode
-               OR ib.description COLLATE Latin1_General_CI_AI LIKE :description";
+            WHERE ib.barcode = @barcode
+               OR ib.name COLLATE Latin1_General_CI_AI LIKE @name 
+               OR ib.description COLLATE Latin1_General_CI_AI LIKE @description;";
 
         try {
             $pdo = $proxy->prepare($sql);
 
-            $query = "%{$query}%";
-
-            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
             $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
-            $pdo->bindValue(":description", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":description", "%{$query}%", \PDO::PARAM_STR);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();
