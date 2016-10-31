@@ -22,6 +22,9 @@ Ext.define( 'iAdmin.model.helper.TargeColor', {
         }, {
             name: 'colorstripe',
             type: 'auto'
+        // }, {
+        //     name: 'colorpallet',
+        //     type: 'colorpallet'
         }
     ]
 

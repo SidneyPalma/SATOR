@@ -3,7 +3,8 @@ Ext.define( 'iAdmin.model.itembase.Material', {
     extend: 'iAdmin.model.itembase.ItemBase',
 
     requires: [
-        'iAdmin.model.itembase.ItemBase'
+        'iAdmin.model.itembase.ItemBase',
+        'Smart.data.field.ColorPallet'
     ],
 
     classFields: [
@@ -57,6 +58,9 @@ Ext.define( 'iAdmin.model.itembase.Material', {
         }, {
             name: 'colorschema',
             type: 'auto'
+        }, {
+            name: 'colorpallet',
+            type: 'colorpallet'
         }, {
             name: 'cloned',
             type: 'boolean'

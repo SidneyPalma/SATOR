@@ -17,7 +17,7 @@ Ext.define( 'iAdmin.view.helper.targe.TargeColorEdit', {
 
     constrain: true,
 
-    width: 450,
+    width: 550,
     resizable: false,
     showAnimate: true,
     layout: 'fit',

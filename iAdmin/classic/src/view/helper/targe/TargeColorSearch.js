@@ -18,7 +18,7 @@ Ext.define( 'iAdmin.view.helper.targe.TargeColorSearch', {
     tpl: [
         '<tpl for=".">',
             '<div class="x-boundlist-item" style="height: 30px;">',
-                '<div style="float: left; height: 30px; width: 30px; margin-right: 10px; background-color: #{colorschema}; border: 5px solid white; border-radius: 50%;"></div>',
+                '<div style="width: 25px; height: 25px; margin-right: 10px; float: left; border: 2px solid black; border-radius: 50%; background: repeating-linear-gradient(-90deg, #{colorstripe}, #{colorstripe} 2px, #{colorschema} 2px, #{colorschema} 7px);"></div>',
                 '<div>{name}</div>',
             '</div>',
         '</tpl>'

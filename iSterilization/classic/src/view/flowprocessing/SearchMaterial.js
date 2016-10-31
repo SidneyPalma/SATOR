@@ -6,7 +6,8 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
 
     requires: [
         'Smart.util.Resource',
-        'Smart.form.field.ComboSearch'
+        'Smart.form.field.ComboSearch',
+        'Smart.data.field.ColorPallet'
     ],
 
     displayField: 'name',
@@ -96,24 +97,10 @@ Ext.define( 'iSterilization.view.flowprocessing.SearchMaterial', {
             name: 'colorschema',
             type: 'auto'
         }, {
+            valueH: 30,
+            valueW: 30,
             name: 'colorpallet',
-            type: 'auto',
-            convert: function (value, record) {
-                var colorpallet = '',
-                    colorschema = record.get('colorschema') ? record.get('colorschema').split(",") : null,
-                    schema = '<div style="{0}"></div>',
-                    stripe = 'width: 30px; height: 30px; float: left; border: 2px solid black; border-radius: 50%;' +
-                             'background: -webkit-repeating-linear-gradient(45deg, {0}, {1} 2px, {2} 2px, {3} 7px);';
-
-                var item = Ext.String.format(schema,stripe);
-
-                Ext.each(colorschema, function (data) {
-                    var colorstripe = data.split("|");
-                    colorpallet += Ext.String.format(item, colorstripe[1],colorstripe[1],colorstripe[0],colorstripe[0]);
-                });
-
-                return colorpallet;
-            }
+            type: 'colorpallet'
         }
     ],
 

@@ -26,6 +26,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxTarge', {
         edit: 'onEditTargeColor'
     },
 
+    cls: 'update-grid',
+
     store: 'materialboxtarge',
 
     initComponent: function () {
@@ -41,18 +43,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxTarge', {
 
         me.columns = [
             {
-                width: 60,
-                dataIndex: 'colorname',
-                renderer: function (value,metaData,record) {
-                    metaData.style = 'font-weight: bold;';
-                    return value;
-                }
-            }, {
-                width: 40,
-                renderer: function (value,metaData,record) {
-                    var fieldColor = '<div style="border-radius: 50%; width: 100%; height: 100%; padding: 10px; background: #{0};"></div>';
-                    return Ext.String.format(fieldColor,record.get('colorschema'));
-                }
+                width: 50,
+                dataIndex: 'colorpallet'
             }, {
                 flex: 1,
                 dataIndex: 'targecolorname',
