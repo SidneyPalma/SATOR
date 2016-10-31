@@ -11,8 +11,8 @@ Ext.define( 'Smart.data.field.ColorPallet', {
 
     alternateClassName: 'Ext.data.ColorPallet',
 
-    valueH: 25,
-    valueW: 25,
+    valueH: 30,
+    valueW: 30,
 
     convert: function (value, record) {
         var me = this,

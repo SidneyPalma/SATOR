@@ -97,7 +97,8 @@ class materialbox extends \Smart\Data\Cache {
 
         $sql = "
             declare
-                @name varchar(60) = :name;
+                @name varchar(60) = :name,
+                @barcode varchar(20) = :barcode;
 
 			select
                 mb.*,
@@ -127,14 +128,15 @@ class materialbox extends \Smart\Data\Cache {
                 )
 			from
 				materialbox mb
-			where mb.name like @name";
+			where mb.name COLLATE Latin1_General_CI_AI LIKE @name
+			   or mb.barcode = @barcode";
 
         try {
-            $query = "%{$query}%";
 
             $pdo = $proxy->prepare($sql);
 
-            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();
