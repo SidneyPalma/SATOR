@@ -32,20 +32,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     //routes ===================================>>
     getFlowProcessingId: function (id, barcode) {
         var me = this,
-            app = Smart.app.getController('App');
+            app = Smart.app.getController('App'),
+            store = Ext.getStore('flowprocessingstep');
 
-        Ext.getStore('flowprocessingstep').setParams({
+        store.setParams({
             method: 'selectStep',
             query: id
         }).load({
             scope: me,
             callback: function(records, operation, success) {
 
-                if(!success || records.length == 0) {
+                if(!success || store.getCount() == 0) {
                     return false;
                 }
 
-                app.onMainPageView({xtype: 'flowprocessingview', xdata: records[0], barcode: barcode});
+                app.onMainPageView({xtype: 'flowprocessingview', xdata: store.getAt(0), barcode: barcode});
             }
         });
     },
@@ -1211,9 +1212,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             data = view.xdata,
             barcode = view.barcode,
-            text = 'Material ({0})',
-            colorschema = data.get('colorschema') ? data.get('colorschema').split(",") : null,
-            schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
+            text = 'Material ({0})';
+            // colorschema = data.get('colorschema') ? data.get('colorschema').split(",") : null,
+            // schema = "<div style='width: 20px; background: {0}; height: 26px; float: right; border: 1px solid #111214; margin-left: 5px;'></div>";
 
         Ext.getStore('flowprocessingstepinputtree').setParams({
             flowprocessingid: data.get('flowprocessingid'),
@@ -1225,17 +1226,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             query: data.get('id')
         }).load();
 
-        if(colorschema) {
-            Ext.each(colorschema,function(item) {
-                list += Ext.String.format(schema,item);
-            });
-        }
+        // if(colorschema) {
+        //     Ext.each(colorschema,function(item) {
+        //         list += Ext.String.format(schema,item);
+        //     });
+        // }
 
         view.down('hiddenfield[name=id]').setValue(data.get('id'));
         view.down('hiddenfield[name=materialboxid]').setValue(data.get('materialboxid'));
 
         view.down('textfield[name=search]').focus(false,200);
-        view.down('container[name=colorschema]').update(list);
+        view.down('container[name=colorschema]').update(data.get('colorpallet'));
         view.down('textfield[name=username]').setValue(data.get('username'));
         view.down('textfield[name=areasname]').setValue(data.get('areasname'));
         view.down('textfield[name=clientname]').setValue(data.get('clientname'));

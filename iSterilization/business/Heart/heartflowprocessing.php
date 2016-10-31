@@ -1528,7 +1528,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 										(
 											(
 												select
-													',#' + tc.colorschema
+													',#' + tc.colorschema + '|#' + tc.colorstripe
 												from
 													materialboxtarge mbt
 													inner join targecolor tc on ( tc.id = mbt.targecolorid )
@@ -1895,7 +1895,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         (
                             (
                                 select
-                                    ',#' + tc.colorschema
+                                    ',#' + tc.colorschema + '|#' + tc.colorstripe
                                 from
                                     materialboxtarge mbt
                                     inner join targecolor tc on ( tc.id = mbt.targecolorid )

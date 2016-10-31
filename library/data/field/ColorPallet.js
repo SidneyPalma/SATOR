@@ -25,7 +25,6 @@ Ext.define( 'Smart.data.field.ColorPallet', {
         var item = Ext.String.format(schema,stripe);
 
         Ext.each(colorschema, function (data) {
-            console.info(data);
             if(data.length != 0) {
                 var colorstripe = data.split("|");
                 colorpallet += Ext.String.format(item, colorstripe[1],colorstripe[1],colorstripe[0],colorstripe[0]);

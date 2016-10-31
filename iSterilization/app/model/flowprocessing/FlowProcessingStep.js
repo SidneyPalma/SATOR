@@ -56,6 +56,14 @@ Ext.define( 'iSterilization.model.flowprocessing.FlowProcessingStep', {
             name: 'useppe',
             type: 'int'
         }, {
+            name: 'colorschema',
+            type: 'auto'
+        }, {
+            valueH: 25,
+            valueW: 25,
+            name: 'colorpallet',
+            type: 'colorpallet'
+        }, {
             name: 'datestart',
             type: 'auto'
         }, {

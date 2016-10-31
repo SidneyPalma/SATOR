@@ -12,6 +12,9 @@ class flowprocessingstep extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @flowprocessingid int = :flowprocessingid;
+                
             select
                 fps.id, 
                 fps.flowprocessingid, 
@@ -29,7 +32,7 @@ class flowprocessingstep extends \Smart\Data\Cache {
                 dbo.getEnum('flowstepstatus',fps.flowstepstatus) as flowstepstatusdescription
             from
                 flowprocessingstep fps
-            where fps.flowprocessingid = :flowprocessingid
+            where fps.flowprocessingid = @flowprocessingid
             order by fps.steplevel, fps.steppriority";
 
         try {
@@ -55,6 +58,9 @@ class flowprocessingstep extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @id int = :id;
+                
             select
                 fps.id,
                 fp.barcode,
@@ -96,7 +102,7 @@ class flowprocessingstep extends \Smart\Data\Cache {
                         (
                             (
                                 select
-                                    ',#' + tc.colorschema
+                                    ',#' + tc.colorschema + '|#' + tc.colorstripe
                                 from
                                     materialboxtarge mbt
                                     inner join targecolor tc on ( tc.id = mbt.targecolorid )
@@ -124,7 +130,7 @@ class flowprocessingstep extends \Smart\Data\Cache {
 					where a.flowprocessingid = fps.flowprocessingid
 					  and a.id = fps.source
 				) o
-            where fps.id = :id";
+            where fps.id = @id";
 
         try {
             $pdo = $proxy->prepare($sql);
