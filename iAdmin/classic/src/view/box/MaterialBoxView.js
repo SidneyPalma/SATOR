@@ -141,7 +141,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                         cls: 'sub-title-label',
                         text: 'Esquema de cores'
                     }, {
-                        height: 132,
+                        height: 152,
                         disabled: true,
                         margin: '10 0 0 0',
                         xtype: 'materialboxtarge'

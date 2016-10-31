@@ -27,10 +27,10 @@ class targecolor extends \Smart\Data\Model {
     private $colorschema;
 
     /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"boolean", "policy":true, "logallow":true, "default":"1"}
+     * @Policy {"nullable":false, "length":20}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
      */
-    private $isactive;
+    private $colorstripe;
 
     /**
      * @return type integer
@@ -81,18 +81,18 @@ class targecolor extends \Smart\Data\Model {
     }
 
     /**
-     * @return type boolean
+     * @return type string
      */
-    public function getIsactive() {
-        return $this->isactive;
+    public function getColorstripe() {
+        return $this->colorstripe;
     }
 
     /**
-     * @param type $isactive
+     * @param type $colorstripe
      * @return \iAdmin\Model\targecolor
      */
-    public function setIsactive($isactive) {
-        $this->isactive = $isactive;
+    public function setColorstripe($colorstripe) {
+        $this->colorstripe = $colorstripe;
         return $this;
     }
 

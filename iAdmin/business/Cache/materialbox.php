@@ -96,6 +96,10 @@ class materialbox extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @name varchar(60) = :name,
+                @barcode varchar(20) = :barcode;
+
 			select
                 mb.*,
                 dbo.getEnum('statusbox',mb.statusbox) as statusboxdescription,
@@ -112,7 +116,7 @@ class materialbox extends \Smart\Data\Cache {
                         (
                             (
                                 select
-                                    ',#' + tc.colorschema
+                                    ',#' + tc.colorschema + '|#' + tc.colorstripe
                                 from
                                     materialboxtarge mbt
                                     inner join targecolor tc on ( tc.id = mbt.targecolorid )
@@ -124,14 +128,15 @@ class materialbox extends \Smart\Data\Cache {
                 )
 			from
 				materialbox mb
-			where mb.name like :name";
+			where mb.name COLLATE Latin1_General_CI_AI LIKE @name
+			   or mb.barcode = @barcode";
 
         try {
-            $query = "%{$query}%";
 
             $pdo = $proxy->prepare($sql);
 
-            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();

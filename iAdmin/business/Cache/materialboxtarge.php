@@ -17,7 +17,7 @@ class materialboxtarge extends \Smart\Data\Cache {
                 mbt.targecolorid,
                 mbt.targeorderby,
                 tc.name as targecolorname,
-                tc.colorschema
+                colorschema = ',#' + tc.colorschema + '|#' + tc.colorstripe
             from
                 materialboxtarge mbt
                 inner join targecolor tc on ( tc.id = mbt.targecolorid )

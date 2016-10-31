@@ -3,7 +3,8 @@ Ext.define( 'iAdmin.model.box.MaterialBox', {
     extend: 'Ext.data.Model',
 
     requires: [
-        'Smart.data.identifier.Auto'
+        'Smart.data.identifier.Auto',
+        'Smart.data.field.ColorPallet'
     ],
 
     identifier: 'auto',
@@ -49,6 +50,9 @@ Ext.define( 'iAdmin.model.box.MaterialBox', {
         }, {
             name: 'colorschema',
             type: 'auto'
+        }, {
+            name: 'colorpallet',
+            type: 'colorpallet'
         }, {
             name: 'filedata',
             type: 'auto',
