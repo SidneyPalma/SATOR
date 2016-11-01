@@ -10,6 +10,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStepPreLoad', {
         'Ext.window.Window',
         'Ext.grid.column.*',
         'Ext.grid.plugin.CellEditing',
+        'Smart.data.field.ColorPallet',
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
