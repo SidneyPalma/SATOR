@@ -68,7 +68,7 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                 },
                 columns: [
                     {
-                        width: 120,
+                        width: 110,
                         sortable: false,
                         text: 'Código',
                         dataIndex: 'barcode'

@@ -15,10 +15,45 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
         }
     },
 
+    // fetchField: function (search, button) {
+    //     Ext.getStore('materialbox').setParams({
+    //         query: search.getValue()
+    //     }).load();
+    // },
+
     fetchField: function (search, button) {
-        Ext.getStore('materialbox').setParams({
-            query: search.getValue()
-        }).load();
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('materialbox'),
+            params = {
+                action: 'select',
+                method: 'selectLike',
+                query: search.getValue()
+            },
+            proprietarysearch = view.down('proprietarysearch');
+
+        if(proprietarysearch.getValue()) {
+            params.method = 'selectProprietary';
+            params.proprietaryid = proprietarysearch.getValue();
+        }
+
+        store.setParams(params).load();
+    },
+
+    showClear: function (field, eOpts) {
+        var me = this,
+            view = me.getView(),
+            search = view.down('textfield[name=search]');
+
+        me.fetchField(search);
+    },
+
+    selectProprietary: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            search = view.down('textfield[name=search]');
+
+        me.fetchField(search);
     },
 
     //routes ========================>

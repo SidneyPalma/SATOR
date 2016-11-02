@@ -9,7 +9,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
         'Ext.form.Panel',
         'Ext.grid.column.*',
         'iAdmin.store.box.*',
-        'iAdmin.view.box.MaterialBoxController'
+        'iAdmin.view.box.MaterialBoxController',
+        'iAdmin.view.person.proprietary.ProprietarySearch'
     ],
 
     layout: 'fit',
@@ -66,9 +67,17 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                 },
                 columns: [
                     {
+                        width: 100,
+                        text: 'Código',
+                        dataIndex: 'barcode'
+                    }, {
                         flex: 1,
                         text: 'Nome do Kit',
                         dataIndex: 'name'
+                    }, {
+                        width: 180,
+                        text: 'Proprietário',
+                        dataIndex: 'proprietaryname'
                     }, {
                         width: 150,
                         text: 'Schema',
@@ -77,10 +86,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         width: 120,
                         text: 'Itens',
                         dataIndex: 'materialboxitems'
-                    }, {
-                        width: 180,
-                        text: 'Código de Barras',
-                        dataIndex: 'barcode'
                     }, {
                         text: 'Status',
                         dataIndex: 'statusboxdescription',
@@ -109,11 +114,18 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                                 xtype: 'textfield',
                                 name: 'search',
                                 reference: 'search',
-                                showFetch: true
+                                showFetch: true,
+                                margin: '0 10 0 0'
                             }, {
-                                xtype: 'splitter'
+                                width: 350,
+                                xtype: 'proprietarysearch',
+                                listeners: {
+                                    showclear: 'showClear',
+                                    select: 'selectProprietary'
+                                }
                             }, {
                                 height: 38,
+                                margin: '0 0 0 10',
                                 xtype: 'button',
                                 iconCls: "fa fa-file-o",
                                 handler: 'insertViewNew',
