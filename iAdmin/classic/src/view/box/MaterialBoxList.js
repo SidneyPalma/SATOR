@@ -100,6 +100,9 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         xtype:  'panel',
                         layout: 'hbox',
                         bodyStyle: 'padding-bottom: 10px;',
+                        defaults: {
+                            fieldCls: 'smart-field-style-action'
+                        },
                         items: [
                             {
                                 flex: 1,
@@ -110,6 +113,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                             }, {
                                 xtype: 'splitter'
                             }, {
+                                height: 38,
                                 xtype: 'button',
                                 iconCls: "fa fa-file-o",
                                 handler: 'insertViewNew',

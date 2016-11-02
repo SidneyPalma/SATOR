@@ -7,6 +7,58 @@ use iAdmin\Model\material as Model;
 
 class material extends \Smart\Data\Cache {
 
+    public function selectType(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $filtertype = $data['filtertype'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @name varchar(60) = :name,
+                @filtertype int = :filtertype;
+	
+	        if(@filtertype = 1)
+	        begin
+	            select
+	                id, name, @filtertype as filtertype
+	            from
+	                materialbox
+	            where name COLLATE Latin1_General_CI_AI LIKE @name
+	            order by name
+	        end
+	
+	        if(@filtertype = 2)
+	        begin
+	            select
+	                id, name, @filtertype as filtertype
+	            from
+	                proprietary
+	            where name COLLATE Latin1_General_CI_AI LIKE @name
+	            order by name
+	        end";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":filtertype", $filtertype, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+            
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectLike(array $data) {
         $query = $data['query'];
         $start = $data['start'];
@@ -74,7 +126,8 @@ class material extends \Smart\Data\Cache {
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ) a
             WHERE ib.barcode = @barcode
-               OR ib.name COLLATE Latin1_General_CI_AI LIKE @name 
+               OR ib.name COLLATE Latin1_General_CI_AI LIKE @name
+               OR pt.name COLLATE Latin1_General_CI_AI LIKE @name
                OR ib.description COLLATE Latin1_General_CI_AI LIKE @description;";
 
         try {
