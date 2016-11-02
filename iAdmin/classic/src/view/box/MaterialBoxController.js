@@ -43,8 +43,9 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
     showClear: function (field, eOpts) {
         var me = this,
             view = me.getView(),
-            search = view.down('textfield[name=search]');
-
+            search = view.down('textfield[name=search]'),
+            proprietarysearch = view.down('proprietarysearch');
+        proprietarysearch.reset();
         me.fetchField(search);
     },
 

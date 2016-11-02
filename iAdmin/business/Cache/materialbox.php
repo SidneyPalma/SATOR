@@ -296,7 +296,7 @@ class materialbox extends \Smart\Data\Cache {
                 )
 			from
 				materialbox mb
-				outer apply (
+				cross apply (
 					select
 						p.name as proprietaryname,
 						count(mbi.materialboxid) as materialboxitems
