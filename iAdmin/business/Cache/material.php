@@ -7,6 +7,58 @@ use iAdmin\Model\material as Model;
 
 class material extends \Smart\Data\Cache {
 
+    public function selectType(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $filtertype = $data['filtertype'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @name varchar(60) = :name,
+                @filtertype int = :filtertype;
+	
+	        if(@filtertype = 1)
+	        begin
+	            select
+	                id, name, @filtertype as filtertype
+	            from
+	                materialbox
+	            where name COLLATE Latin1_General_CI_AI LIKE @name
+	            order by name
+	        end
+	
+	        if(@filtertype = 2)
+	        begin
+	            select
+	                id, name, @filtertype as filtertype
+	            from
+	                proprietary
+	            where name COLLATE Latin1_General_CI_AI LIKE @name
+	            order by name
+	        end";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":filtertype", $filtertype, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectLike(array $data) {
         $query = $data['query'];
         $start = $data['start'];
@@ -17,8 +69,7 @@ class material extends \Smart\Data\Cache {
         $sql = "
             declare
                 @name varchar(60) = :name,
-                @barcode varchar(20) = :barcode,
-                @description varchar(60) = :description;
+                @barcode varchar(20) = :barcode;
 	
             SELECT top $total  
                 ib.name,
@@ -69,20 +120,17 @@ class material extends \Smart\Data\Cache {
                         materialbox mb
                     inner join materialboxitem mbi on ( 
                                     mbi.materialboxid = mb.id
-                                AND mbi.materialid = m.id 
-                                AND mbi.boxitemstatus = 'A' )
+                                AND mbi.materialid = m.id )
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ) a
             WHERE ib.barcode = @barcode
-               OR ib.name COLLATE Latin1_General_CI_AI LIKE @name 
-               OR ib.description COLLATE Latin1_General_CI_AI LIKE @description;";
+               OR ib.name COLLATE Latin1_General_CI_AI LIKE @name";
 
         try {
             $pdo = $proxy->prepare($sql);
 
             $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
             $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
-            $pdo->bindValue(":description", "%{$query}%", \PDO::PARAM_STR);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();
@@ -311,8 +359,13 @@ class material extends \Smart\Data\Cache {
         $start = $data['start'];
         $limit = $data['limit'];
         $proxy = $this->getStore()->getProxy();
-        $materialboxid = isset($data['materialboxid']) ? $data['materialboxid'] : null;
+        $materialboxid = isset($data['filterid']) ? $data['filterid'] : null;
         $sql = "
+            declare
+                @name varchar(60) = :name,
+                @barcode varchar(20) = :barcode,
+                @materialboxid int = :materialboxid;
+
             SELECT
                 ib.name,
                 ib.description,
@@ -327,17 +380,8 @@ class material extends \Smart\Data\Cache {
                 ib.itemgroup,
                 dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
                 dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
-                materialboxname = (
-                  SELECT TOP 1
-                    mb.name
-                  FROM
-                    materialbox mb
-                    inner join materialboxitem mbi on ( 
-                                            mbi.materialboxid = mb.id
-                                        AND mbi.materialid = m.id
-                                        AND mbi.boxitemstatus = 'A' )
-                    inner join itembase ibt on ( ibt.id = mbi.materialid )
-                ),
+                a.materialboxname,
+                a.colorschema,
                 m.*,
                 --ms.name as materialstatusname,
                 dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
@@ -351,20 +395,132 @@ class material extends \Smart\Data\Cache {
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
-                inner join materialboxitem mbi on ( mbi.materialid = m.id and mbi.materialboxid = :materialboxid )
-            WHERE ib.name COLLATE Latin1_General_CI_AI LIKE :name
-               OR ib.barcode COLLATE Latin1_General_CI_AI LIKE :barcode
-               OR ib.description COLLATE Latin1_General_CI_AI LIKE :description";
+                inner join materialboxitem mbi on ( mbi.materialid = m.id and mbi.materialboxid = @materialboxid )
+                outer apply (
+                    SELECT
+                        mb.name as materialboxname,
+                        colorschema = (
+                            select stuff
+                                (
+                                    (
+                                        select
+                                            ',#' + tc.colorschema + '|#' + tc.colorstripe
+                                        from
+                                            materialboxtarge mbt
+                                            inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                        where mbt.materialboxid = mb.id
+                                        order by mbt.targeorderby asc
+                                        for xml path ('')
+                                    ) ,1,1,''
+                                )                
+                        )
+                    FROM
+                        materialbox mb
+                    inner join materialboxitem mbi on ( 
+                                    mbi.materialboxid = mb.id
+                                AND mbi.materialid = m.id )
+                    inner join itembase ibt on ( ibt.id = mbi.materialid )
+                ) a
+            WHERE ib.barcode = @barcode
+               OR ib.name COLLATE Latin1_General_CI_AI LIKE @name;";
 
         try {
             $pdo = $proxy->prepare($sql);
 
-            $query = "%{$query}%";
-
-            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
             $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
-            $pdo->bindValue(":description", $query, \PDO::PARAM_STR);
             $pdo->bindValue(":materialboxid", $materialboxid, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectProprietary(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $proxy = $this->getStore()->getProxy();
+        $proprietaryid = isset($data['filterid']) ? $data['filterid'] : null;
+        $sql = "
+            declare
+                @name varchar(60) = :name,
+                @barcode varchar(20) = :barcode,
+                @proprietaryid int = :proprietaryid;
+
+            SELECT
+                ib.name,
+                ib.description,
+                ib.barcode,
+                ib.itembasetype,
+                ib.proprietaryid,
+                ib.manufacturerid,
+                ib.dateacquisition,
+                ib.patrimonialcode,
+                ib.registrationanvisa,
+                ib.isactive,
+                ib.itemgroup,
+                dbo.getEnum('itemsize',m.itemsize) as itemsizedescription,
+                dbo.getEnum('itemgroup',ib.itemgroup) as itemgroupdescription,
+                a.materialboxname,
+                a.colorschema,
+                m.*,
+                --ms.name as materialstatusname,
+                dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
+                pk.name as packingname,
+                pt.name as proprietaryname,
+                mf.name as manufacturername
+            FROM
+                itembase ib
+                inner join material m on ( m.id = ib.id )
+                --inner join materialstatus ms on ( ms.id = m.materialstatusid )
+                inner join packing pk on ( pk.id = m.packingid )
+                inner join proprietary pt on ( pt.id = ib.proprietaryid and ib.proprietaryid = @proprietaryid )
+                inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+                inner join materialboxitem mbi on ( mbi.materialid = m.id )
+                outer apply (
+                    SELECT
+                        mb.name as materialboxname,
+                        colorschema = (
+                            select stuff
+                                (
+                                    (
+                                        select
+                                            ',#' + tc.colorschema + '|#' + tc.colorstripe
+                                        from
+                                            materialboxtarge mbt
+                                            inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                        where mbt.materialboxid = mb.id
+                                        order by mbt.targeorderby asc
+                                        for xml path ('')
+                                    ) ,1,1,''
+                                )                
+                        )
+                    FROM
+                        materialbox mb
+                    inner join materialboxitem mbi on ( 
+                                    mbi.materialboxid = mb.id
+                                AND mbi.materialid = m.id )
+                    inner join itembase ibt on ( ibt.id = mbi.materialid )
+                ) a
+            WHERE ib.barcode = @barcode
+               OR ib.name COLLATE Latin1_General_CI_AI LIKE @name;";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":proprietaryid", $proprietaryid, \PDO::PARAM_INT);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();

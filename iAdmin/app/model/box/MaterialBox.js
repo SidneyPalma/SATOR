@@ -42,6 +42,12 @@ Ext.define( 'iAdmin.model.box.MaterialBox', {
             name: 'packingname',
             type: 'auto'
         }, {
+            name: 'proprietaryid',
+            type: 'int'
+        }, {
+            name: 'proprietaryname',
+            type: 'auto'
+        }, {
             name: 'requirepatient',
             type: 'int'
         }, {

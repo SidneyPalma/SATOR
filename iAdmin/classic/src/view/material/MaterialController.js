@@ -38,8 +38,13 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
 
     onLoadMaterial: function ( store , records , successful , operation , eOpts ) {
         var me = this,
-            view = me.getView(),
-            totalresults = view.down('numberfield[name=totalresults]');
+            view = me.getView();
+
+        if(view.getXType() != 'materiallist') {
+            view = view.up('materiallist');
+        }
+
+        var totalresults = view.down('numberfield[name=totalresults]');
 
         var nrf = store.pageSize * store.currentPage;
         var nri = store.currentPage > 1 ? nrf - store.pageSize + 1 : 1;
@@ -50,8 +55,13 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
 
     onBeforeLoadMaterial: function (store , operation , eOpts) {
         var me = this,
-            view = me.getView(),
-            totalresults = view.down('numberfield[name=totalresults]');
+            view = me.getView();
+
+        if(view.getXType() != 'materiallist') {
+            view = view.up('materiallist');
+        }
+
+        var totalresults = view.down('numberfield[name=totalresults]');
 
         if(totalresults) {
             store.setParams({totalresults: totalresults.getValue()});
@@ -70,6 +80,34 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         }
     },
 
+    //routes ========================>
+
+    setSelectFilterType: function(grid, rowIndex, colIndex) {
+        var me = this,
+            view = me.getView(),
+            record = grid.getStore().getAt(rowIndex),
+            search = view.down('textfield[name=search]');
+
+        view.down('materialsearchfilter').setValue(record.get('name'));
+        view.down('hiddenfield[name=filterid]').setValue(record.get('id'));
+        view.down('hiddenfield[name=filtertype]').setValue(record.get('filtertype'));
+
+        view.down('materialsearchfilter').collapse();
+
+        me.fetchField(search);
+    },
+
+    showClear: function (field, eOpts) {
+        var me = this,
+            view = me.getView(),
+            search = view.down('textfield[name=search]');
+
+        view.down('hiddenfield[name=filterid]').reset();
+        view.down('hiddenfield[name=filtertype]').reset();
+
+        me.fetchField(search);
+    },
+
     fetchField: function (search, button) {
         var me = this,
             view = me.getView(),
@@ -79,40 +117,15 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
                 method: 'selectLike',
                 query: search.getValue()
             },
-            materialbox = view.down('materialboxsearch');
+            filterid = view.down('hiddenfield[name=filterid]'),
+            filtertype = view.down('hiddenfield[name=filtertype]');
 
-        if(materialbox.getValue()) {
-            params.method = 'selectBox';
-            params.materialboxid = materialbox.getValue();
+        if(filtertype.getValue()) {
+            params.filterid = filterid.getValue();
+            params.method = (filtertype.getValue() == 1) ? 'selectBox' : 'selectProprietary';
         }
 
         store.setParams(params).load();
-    },
-
-    //routes ========================>
-
-    onSelectMaterialBox: function (combo,record,eOpts) {
-        var me = this,
-            view = me.getView(),
-            search = view.down('textfield[name=search]');
-
-        me.fetchField(search);
-
-        // store.clearFilter();
-        // store.filter('materialboxname', combo.getRawValue());
-    },
-
-    showClear: function (field, eOpts) {
-        var me = this,
-            view = me.getView(),
-            search = view.down('textfield[name=search]');
-
-        me.fetchField(search);
-
-        // var store = Ext.getStore('material');
-        //
-        // store.removeFilter('materialboxname');
-        // store.clearFilter();
     },
 
     getMaterialId: function (id) {

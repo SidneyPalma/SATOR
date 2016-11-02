@@ -13,6 +13,9 @@ class materialboxitem extends \Smart\Data\Cache {
 		$proxy = $this->getStore()->getProxy();
 
 		$sql = "
+			declare
+				@id int = :id;
+				
             select
                 mbi.id,
                 mbi.materialboxid,
@@ -30,7 +33,7 @@ class materialboxitem extends \Smart\Data\Cache {
                 inner join itembase ib on ( ib.id = mbi.materialid )
                 inner join material m on ( m.id = ib.id )
                 inner join proprietary p on ( p.id = ib.proprietaryid )
-            where mbi.materialboxid = :id";
+            where mbi.materialboxid = @id";
 
 		try {
 			$pdo = $proxy->prepare($sql);

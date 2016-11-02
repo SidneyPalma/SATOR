@@ -103,14 +103,8 @@ class materialbox extends \Smart\Data\Cache {
 			select
                 mb.*,
                 dbo.getEnum('statusbox',mb.statusbox) as statusboxdescription,
-                materialboxitems = (
-                    SELECT
-                      COUNT(mbi.id)
-                    FROM
-                      materialboxitem mbi
-                    WHERE mbi.materialboxid = mb.id
-                      AND mbi.boxitemstatus = 'A'
-                ),
+				i.materialboxitems,
+				i.proprietaryname,
                 colorschema = (
                     select stuff
                         (
@@ -128,8 +122,20 @@ class materialbox extends \Smart\Data\Cache {
                 )
 			from
 				materialbox mb
-			where mb.name COLLATE Latin1_General_CI_AI LIKE @name
-			   or mb.barcode = @barcode";
+				outer apply (
+					select
+						p.name as proprietaryname,
+						count(mbi.materialboxid) as materialboxitems
+					from
+						materialboxitem mbi
+						inner join itembase ib on ( ib.id = mbi.materialid )
+						inner join proprietary p on ( p.id = ib.proprietaryid )
+					where mbi.materialboxid = mb.id
+					group by p.name
+				) i
+			where mb.barcode = @barcode
+			   or mb.name COLLATE Latin1_General_CI_AI LIKE @name 
+			   or i.proprietaryname COLLATE Latin1_General_CI_AI LIKE @name;";
 
         try {
 
@@ -253,6 +259,76 @@ class materialbox extends \Smart\Data\Cache {
             self::_setText($e->getMessage());
         }
 
+        return self::getResultToJson();
+    }
+
+    public function selectProprietary(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $proxy = $this->getStore()->getProxy();
+        $proprietaryid = isset($data['proprietaryid']) ? $data['proprietaryid'] : null;
+        $sql = "
+            declare
+                @name varchar(60) = :name,
+                @barcode varchar(20) = :barcode,
+                @proprietaryid int = :proprietaryid;
+
+			select
+                mb.*,
+                dbo.getEnum('statusbox',mb.statusbox) as statusboxdescription,
+				i.materialboxitems,
+				i.proprietaryname,
+                colorschema = (
+                    select stuff
+                        (
+                            (
+                                select
+                                    ',#' + tc.colorschema + '|#' + tc.colorstripe
+                                from
+                                    materialboxtarge mbt
+                                    inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                where mbt.materialboxid = mb.id
+                                order by mbt.targeorderby asc
+                                for xml path ('')
+                            ) ,1,1,''
+                        )                
+                )
+			from
+				materialbox mb
+				cross apply (
+					select
+						p.name as proprietaryname,
+						count(mbi.materialboxid) as materialboxitems
+					from
+						materialboxitem mbi
+						inner join itembase ib on ( ib.id = mbi.materialid )
+						inner join proprietary p on ( p.id = ib.proprietaryid and ib.proprietaryid = @proprietaryid )
+					where mbi.materialboxid = mb.id
+					group by p.name
+				) i
+			where mb.barcode = @barcode
+			   or mb.name COLLATE Latin1_General_CI_AI LIKE @name;";
+
+        try {
+
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+            $pdo->bindValue(":proprietaryid", $proprietaryid, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        self::_setPage($start, $limit);
         return self::getResultToJson();
     }
 

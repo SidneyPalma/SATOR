@@ -10,7 +10,8 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
         'Ext.grid.column.*',
         'iAdmin.store.itembase.*',
         'iAdmin.view.box.MaterialBoxSearch',
-        'iAdmin.view.material.MaterialController'
+        'iAdmin.view.material.MaterialController',
+        'iAdmin.view.material.MaterialSearchFilter'
     ],
 
     layout: 'fit',
@@ -67,7 +68,7 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                 },
                 columns: [
                     {
-                        width: 120,
+                        width: 110,
                         sortable: false,
                         text: 'Código',
                         dataIndex: 'barcode'
@@ -121,6 +122,9 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         xtype:  'panel',
                         layout: 'hbox',
                         bodyStyle: 'padding-bottom: 10px;',
+                        defaults: {
+                            fieldCls: 'smart-field-style-action'
+                        },
                         items: [
                             {
                                 flex: 1,
@@ -130,14 +134,20 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                                 showFetch: true,
                                 margin: '0 10 0 0'
                             }, {
+                                xtype: 'hiddenfield',
+                                name: 'filtertype'
+                            }, {
+                                xtype: 'hiddenfield',
+                                name: 'filterid'
+                            }, {
                                 width: 350,
                                 showClear: true,
-                                xtype: 'materialboxsearch',
+                                xtype: 'materialsearchfilter',
                                 listeners: {
-                                    showclear: 'showClear',
-                                    select: 'onSelectMaterialBox'
+                                    showclear: 'showClear'
                                 }
                             }, {
+                                height: 38,
                                 margin: '0 0 0 10',
                                 xtype: 'button',
                                 iconCls: "fa fa-file-o",
