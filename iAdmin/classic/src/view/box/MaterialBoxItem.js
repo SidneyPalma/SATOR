@@ -121,7 +121,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
             items: [
                 {
                     width: 350,
-                    margin: '0 5 0 0',
+                    // margin: '0 5 0 0',
                     fieldLabel: 'Filtrar',
                     xtype: 'Searchmaterialinbox',
                     listeners: {
@@ -129,14 +129,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                         select: 'selectFilterItem',
                         beforequery: 'beforeSelectItem'
                     }
-                }, {
-                    margin: '0 0 0 5',
-                    xtype: 'comboenum',
-                    fieldLabel: 'Status',
-                    name: 'boxitemstatusdescription',
-                    listeners: {
-                        // select: ''
-                    }
+                // }, {
+                //     margin: '0 0 0 5',
+                //     xtype: 'comboenum',
+                //     fieldLabel: 'Status',
+                //     name: 'boxitemstatusdescription'
                 }
             ]
         }
