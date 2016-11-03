@@ -561,11 +561,11 @@
     width: 25%;
     float: left;
     height: 100%;
-    padding: 12px 0 0 10px;
+    padding: 10px 0 0 8px;
     background: rgba(19, 20, 50, 1);
 }
 .hold .hold-btn {
-    line-height: 40px;
+    line-height: 38px;
     text-align: center;
     width: 15%;
     float: right;
@@ -598,12 +598,15 @@
 }
 .hold-001 {
     background: #37cfff;
+    border: solid 2px rgba(19, 20, 50, 1);
 }
 .hold-002 {
     background: #ac8bff;
+    border: solid 2px rgba(19, 20, 50, 1);
 }
 .hold-003 {
     background: #fff73b;
+    border: solid 2px rgba(19, 20, 50, 1);
 }
 
 .movement-title {

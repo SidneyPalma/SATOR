@@ -1674,7 +1674,22 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 fp.barcode,
                 t.materialname,
 				t.armorylocal,
-				dbo.getEnum('armorylocal',t.armorylocal) as armorylocaldescription
+				dbo.getEnum('armorylocal',t.armorylocal) as armorylocaldescription,
+                colorschema = (
+                    select stuff
+                        (
+                            (
+                                select
+                                    ',#' + tc.colorschema + '|#' + tc.colorstripe
+                                from
+                                    materialboxtarge mbt
+                                    inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                where mbt.materialboxid = fp.materialboxid
+                                order by mbt.targeorderby desc
+                                for xml path ('')
+                            ) ,1,1,''
+                        )                
+                )				
             from
                 flowprocessingstep fps
 				inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )

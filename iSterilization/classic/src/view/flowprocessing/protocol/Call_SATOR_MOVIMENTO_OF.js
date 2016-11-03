@@ -13,7 +13,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 500,
+    width: 650,
     modal: true,
     header: false,
     resizable: false,
@@ -153,6 +153,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                             {
                                 flex: 1,
                                 dataIndex: 'materialname'
+                            }, {
+                                width: 150,
+                                text: 'Schema',
+                                dataIndex: 'colorpallet'
                             }, {
                                 width: 180,
                                 dataIndex: 'armorylocaldescription',
