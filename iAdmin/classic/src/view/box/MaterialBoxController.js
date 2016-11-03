@@ -59,6 +59,38 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
     //routes ========================>
 
+    clearFilter: function (field,eOpts) {
+        var me = this,
+            store = Ext.getStore('materialboxitem');
+
+        store.load();
+    },
+
+    selectFilterItem: function (combo,record,eOpts) {
+        var me = this,
+            view = me.getView(),
+            id = view.down('hiddenfield[name=id]'),
+            store = Ext.getStore('materialboxitem');
+
+        store.load({
+           params: {
+               method: 'filterItem',
+               materialid: record.get('id'),
+               materialboxid: id.getValue()
+           }
+        });
+    },
+
+    beforeSelectItem: function ( queryPlan, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            combo = queryPlan.combo,
+            store = combo .getStore(),
+            id = view.down('hiddenfield[name=id]');
+
+        store.setParams({ materialboxid: id.getValue() });
+    },
+
     getMaterialBoxId: function (id) {
         var app = Smart.app.getController('App'),
             record = Ext.getStore('materialbox').findRecord('id',id);
@@ -100,6 +132,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
 
         Ext.widget('materialboxiteminsert').show(null,function() {
             this.data = view.xdata;
+            this.down('materialboxitemsearch').focus(false, 200);
         });
     },
 

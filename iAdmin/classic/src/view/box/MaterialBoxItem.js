@@ -123,9 +123,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                     width: 350,
                     margin: '0 5 0 0',
                     fieldLabel: 'Filtrar',
-                    xtype: 'materialboxitemsearch',
+                    xtype: 'Searchmaterialinbox',
                     listeners: {
-                        // select: ''
+                        showclear: 'clearFilter',
+                        select: 'selectFilterItem',
+                        beforequery: 'beforeSelectItem'
                     }
                 }, {
                     margin: '0 0 0 5',
