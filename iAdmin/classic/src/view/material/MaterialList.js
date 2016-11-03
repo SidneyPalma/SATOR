@@ -85,9 +85,9 @@ Ext.define( 'iAdmin.view.material.MaterialList', {
                         text: 'Schema',
                         dataIndex: 'colorpallet'
                     }, {
-                        width: 120,
-                        text: 'Grupo',
-                        dataIndex: 'itemgroupdescription'
+                        width: 180,
+                        text: 'Proprietário',
+                        dataIndex: 'proprietaryname'
                     }, {
                         width: 120,
                         text: 'Status',

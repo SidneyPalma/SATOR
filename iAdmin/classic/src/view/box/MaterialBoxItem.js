@@ -8,7 +8,8 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
         'Smart.plugins.*',
         'Ext.grid.Panel',
         'Ext.grid.column.*',
-        'iAdmin.store.box.*'
+        'iAdmin.store.box.*',
+        'iAdmin.store.box.MaterialBoxItemSearch'
     ],
 
     cls: 'update-grid',
@@ -52,6 +53,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 sortable: false,
                 text: 'Proprietário',
                 dataIndex: 'proprietaryname'
+            }, {
+                width: 150,
+                sortable: false,
+                text: 'Status',
+                dataIndex: 'boxitemstatusdescription'
             }, {
                 width: 100,
                 sortable: false,
@@ -107,7 +113,30 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
             xtype: 'pagingtoolbar',
             store: 'materialboxitem',
             dock: 'bottom',
-            displayInfo: true
+            displayInfo: true,
+            defaults: {
+                labelWidth: 50,
+                labelAlign: 'left'
+            },
+            items: [
+                {
+                    width: 350,
+                    margin: '0 5 0 0',
+                    fieldLabel: 'Filtrar',
+                    xtype: 'materialboxitemsearch',
+                    listeners: {
+                        // select: ''
+                    }
+                }, {
+                    margin: '0 0 0 5',
+                    xtype: 'comboenum',
+                    fieldLabel: 'Status',
+                    name: 'boxitemstatusdescription',
+                    listeners: {
+                        // select: ''
+                    }
+                }
+            ]
         }
     ]
 

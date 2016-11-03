@@ -75,10 +75,6 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         text: 'Nome do Kit',
                         dataIndex: 'name'
                     }, {
-                        width: 180,
-                        text: 'Proprietário',
-                        dataIndex: 'proprietaryname'
-                    }, {
                         width: 150,
                         text: 'Schema',
                         dataIndex: 'colorpallet'
@@ -86,6 +82,10 @@ Ext.define( 'iAdmin.view.box.MaterialBoxList', {
                         width: 120,
                         text: 'Itens',
                         dataIndex: 'materialboxitems'
+                    }, {
+                        width: 180,
+                        text: 'Proprietário',
+                        dataIndex: 'proprietaryname'
                     }, {
                         text: 'Status',
                         dataIndex: 'statusboxdescription',

@@ -26,7 +26,8 @@ class materialboxitem extends \Smart\Data\Cache {
                 m.isconsigned,
                 p.name as proprietaryname,
                 mb.statusbox,
-                mbi.boxitemstatus
+                mbi.boxitemstatus,
+                dbo.getEnum('boxitemstatus',mbi.boxitemstatus) as boxitemstatusdescription
             from
                 materialboxitem mbi
                 inner join materialbox mb on ( mb.id = mbi.materialboxid )
@@ -92,6 +93,58 @@ class materialboxitem extends \Smart\Data\Cache {
 			$pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
 			$pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
 			$pdo->bindValue(":packingid", $packingid, \PDO::PARAM_INT);
+
+			$pdo->execute();
+			$rows = $pdo->fetchAll();
+
+			self::_setRows($rows);
+
+		} catch ( \PDOException $e ) {
+			self::_setSuccess(false);
+			self::_setText($e->getMessage());
+		}
+
+		self::_setPage($start, $limit);
+		return self::getResultToJson();
+	}
+
+	public function selectItem(array $data) {
+		$query = $data['query'];
+		$start = $data['start'];
+		$limit = $data['limit'];
+		$materialboxid = $data['materialboxid'];
+		$proxy = $this->getStore()->getProxy();
+
+		$sql = "
+			declare
+				@materialboxid int = :materialboxid,
+				@barcode varchar(20) = :barcode,
+				@name varchar(80) = :name;
+				
+            select
+				ib.id,
+				ib.name,
+				ib.barcode,
+				ib.description,
+				mf.name as manufacturername,
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo
+            from
+                materialboxitem mbi
+                inner join itembase ib on ( ib.id = mbi.materialid )
+				inner join manufacturer mf on ( mf.id = ib.manufacturerid )
+            where mbi.materialboxid = @materialboxid
+			  and (
+				ib.barcode = @barcode OR
+				ib.name COLLATE Latin1_General_CI_AI LIKE @name
+			  )";
+
+		try {
+			$pdo = $proxy->prepare($sql);
+
+			$pdo->bindValue(":barcode", $query, \PDO::PARAM_STR);
+			$pdo->bindValue(":name", "%{$query}%", \PDO::PARAM_STR);
+			$pdo->bindValue(":materialboxid", $materialboxid, \PDO::PARAM_INT);
 
 			$pdo->execute();
 			$rows = $pdo->fetchAll();
