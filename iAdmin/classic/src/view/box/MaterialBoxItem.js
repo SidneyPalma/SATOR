@@ -39,7 +39,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
 
         me.columns = [
             {
-                width: 150,
+                width: 110,
                 sortable: false,
                 text: 'Código',
                 dataIndex: 'barcode'
@@ -59,16 +59,16 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 text: 'Status',
                 dataIndex: 'boxitemstatusdescription'
             }, {
-                width: 100,
+                width: 50,
                 sortable: false,
                 align: 'center',
-                text: 'Processos',
+                text: 'P',
                 dataIndex: 'numberproceedings'
             }, {
-                width: 100,
+                width: 50,
                 sortable: false,
                 align: 'center',
-                text: 'Consignado',
+                text: 'C',
                 xtype: 'actioncolumn',
                 items: [
                     {
