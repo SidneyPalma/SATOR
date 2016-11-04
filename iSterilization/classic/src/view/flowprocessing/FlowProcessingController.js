@@ -624,8 +624,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
 
                 store.sync();
-
-                view.down('displayfield[name=materialname]').setValue(result.rows[0].materialname);
             }
         });
     },

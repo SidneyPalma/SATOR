@@ -111,11 +111,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 }
                                             }, {
                                                 xtype: 'displayfield',
-                                                fieldLabel: 'Material/Kit',
-                                                name: 'materialname',
-                                                value: '...'
-                                            }, {
-                                                xtype: 'displayfield',
                                                 fieldLabel: 'Transportador',
                                                 name: 'transportedby',
                                                 value: '...'
@@ -136,20 +131,18 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                 },
                                 items: [
                                     {
-                                        margin: '10 0 10 0',
+                                        margin: '0 0 10 0',
                                         xtype: 'fieldcontainer',
                                         name: 'groupdocument',
                                         tpl: [
                                             '<div class="movement">',
+                                                '<div class="movement-title" style="padding-bottom: 10px;">{movementtypedescription} {movementdate}</div>',
                                                 '<div class="movement-title">{clientname}</div>',
-                                                '<div class="movement-title">{movementtypedescription} {movementdate}</div>',
                                                 '<div><b>{releasestypedescription}</b></div>',
                                                 '<div class="movement-title">Procedimento</div>',
                                                 '<div><b>{surgical}</b></div>',
                                                 '<div><b>{surgicalwarning} {patientname}</b></div>',
-                                                '<div>{dateof} {timeof}</div>',
-                                                '<div>{flowing} {instrumentator}</div>',
-                                                '<div>{place}</div>',
+                                                '<div>{dateof} {timeof} {surgicalroom}</div>',
                                             '</div>'
                                         ]
                                     }
@@ -158,7 +151,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                         ]
                     }, {
                         height: 350,
-                        margin: '10 0 0 0',
                         xtype: 'gridpanel',
                         cls: 'update-grid',
                         hideHeaders: false,
