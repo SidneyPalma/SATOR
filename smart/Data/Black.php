@@ -61,7 +61,13 @@ class Black extends \PDO {
                 AVISO_CIRURGIA as id,
                 COD_PACIENTE as id_patient,
                 PACIENTE as name,
-                CONVENIO as health_insurance
+                CONVENIO as health_insurance,
+                SALA_PROCEDIMENTO as surgical_room,
+                PROCEDIMENTO as surgical_procedure,
+                DATE_FORMAT(DATA_HORA,'%Y-%m-%d') as dateof,
+                DATE_FORMAT(DATA_HORA,'%h:%i') as timeof,
+                TP_SITUACAO as surgical_status,
+                TP_PROCEDIMENTO surgical_type
             from
                 avisocirurgia
             where AVISO_CIRURGIA like :AVISO_CIRURGIA or PACIENTE like :PACIENTE";

@@ -28,6 +28,12 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovementOutput', {
             name: 'patientname',
             type: 'auto'
         }, {
+            name: 'surgicalstatus',
+            type: 'auto'
+        }, {
+            name: 'surgicaltype',
+            type: 'auto'
+        }, {
             name: 'surgicalwarning',
             type: 'auto'
         }, {

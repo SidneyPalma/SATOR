@@ -614,6 +614,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 store.add({
                     outputtype: 'P',
                     barcode: result.rows[0].barcode,
+                    colorschema: result.rows[0].colorschema,
                     materialname: result.rows[0].materialname,
                     armorymovementid: view.down('hiddenfield[name=id]').getValue(),
                     flowprocessingstepid: result.rows[0].flowprocessingstepid

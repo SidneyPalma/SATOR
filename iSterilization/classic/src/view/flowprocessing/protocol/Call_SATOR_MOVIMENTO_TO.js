@@ -17,7 +17,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 500,
+    width: 650,
     modal: true,
     header: false,
     resizable: false,
@@ -45,7 +45,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
     onSelectClient: function (combo,record,eOpts) {
         var me = combo.up('window'),
-            dateof = me.down('datefield'),
             clienttype = record.get('clienttype'),
             surgicalroom = me.down('textfield[name=surgicalroom]');
 
@@ -57,14 +56,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
         if (clienttype == '004') {
             me.showSurgical(true);
-            surgicalroom.focus(false, 200);
             me.down('fieldcontainer[name=group_01]').show();
             me.down('fieldcontainer[name=group_02]').show();
-            me.down('fieldcontainer[name=group_03]').show();
-        }
-
-        if (clienttype != '004') {
-            dateof.focus(false, 200);
+            // me.down('fieldcontainer[name=group_03]').show();
+            me.down('fieldcontainer[name=group_04]').show();
         }
 
         me.updPosition();
@@ -78,7 +73,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
             flowing = me.down('textfield[name=flowing]'),
             surgical = me.down('textfield[name=surgical]'),
             surgicalroom = me.down('textfield[name=surgicalroom]'),
-            instrumentator = me.down('textfield[name=instrumentator]');
+            instrumentator = me.down('textfield[name=instrumentator]'),
+            surgicalstatus = me.down('hiddenfield[name=surgicalstatus]'),
+            surgicaltype = me.down('hiddenfield[name=surgicaltype]');
+
+        surgicaltype.reset();
+        surgicalstatus.reset();
 
         dateof.reset();
         timeof.reset();
@@ -90,6 +90,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
         surgical.setReadColor(!value);
 
         surgicalroom.reset();
+        surgicalroom.setDisabled(!value);
         surgicalroom.setReadColor(!value);
 
         searchpatient.reset();
@@ -101,18 +102,49 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
     showClearClient: function (field, eOpts) {
         var me = field.up('window'),
+            dateof = me.down('datefield'),
+            timeof = me.down('timefield'),
+            surgical = me.down('textfield[name=surgical]'),
             patientname = me.down('hiddenfield[name=patientname]'),
-            surgicalroom = me.down('textfield[name=surgicalroom]');
+            surgicalroom = me.down('textfield[name=surgicalroom]'),
+            instrumentator = me.down('textfield[name=instrumentator]'),
+            surgicalstatus = me.down('hiddenfield[name=surgicalstatus]'),
+            surgicaltype = me.down('hiddenfield[name=surgicaltype]');
 
+        dateof.reset();
+        timeof.reset();
+        surgical.reset();
         patientname.reset();
+        surgicaltype.reset();
         surgicalroom.reset();
-        surgicalroom.setReadColor(true);
+        surgicalstatus.reset();
+        instrumentator.reset();
 
         me.down('fieldcontainer[name=group_01]').hide();
         me.down('fieldcontainer[name=group_02]').hide();
-        me.down('fieldcontainer[name=group_03]').hide();
+        // me.down('fieldcontainer[name=group_03]').hide();
+        me.down('fieldcontainer[name=group_04]').hide();
 
         me.updPosition();
+    },
+
+    showClearPatiente: function (field, eOpts) {
+        var me = field.up('window'),
+            dateof = me.down('datefield'),
+            timeof = me.down('timefield'),
+            surgical = me.down('textfield[name=surgical]'),
+            surgicalroom = me.down('textfield[name=surgicalroom]'),
+            instrumentator = me.down('textfield[name=instrumentator]'),
+            surgicalstatus = me.down('hiddenfield[name=surgicalstatus]'),
+            surgicaltype = me.down('hiddenfield[name=surgicaltype]');
+
+        dateof.reset();
+        timeof.reset();
+        surgical.reset();
+        surgicaltype.reset();
+        surgicalroom.reset();
+        surgicalstatus.reset();
+        instrumentator.reset();
     },
 
     buildItems: function () {
@@ -152,6 +184,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                             {
                                 xtype: 'hiddenfield',
                                 name: 'id'
+                            }, {
+                                xtype: 'hiddenfield',
+                                name: 'surgicalstatus'
+                            }, {
+                                xtype: 'hiddenfield',
+                                name: 'surgicaltype'
                             }, {
                                 xtype: 'hiddenfield',
                                 name: 'areasid'
@@ -206,7 +244,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                         items: [
                             {
                                 pageSize: 0,
-                                margin: '0 5 0 0',
                                 fieldLabel: 'Cliente',
                                 xtype: 'clientsearch',
                                 name: 'clientname',
@@ -216,12 +253,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                                     showclear: me.showClearClient,
                                     beforedeselect: 'showClearClient'
                                 }
-                            }, {
-                                allowBlank: true,
-                                margin: '0 0 0 5',
-                                useReadColor: true,
-                                fieldLabel: 'Sala',
-                                name: 'surgicalroom'
                             }
                         ]
                     }, {
@@ -244,9 +275,16 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                                 xtype: 'searchpatient',
                                 hiddenNameId: 'surgicalwarning',
                                 listeners: {
+                                    showclear: me.showClearPatiente,
                                     select: function (combo,record) {
                                         var win = combo.up('call_SATOR_MOVIMENTO_TO');
                                         win.down('hiddenfield[name=patientname]').setValue(record.get('name'));
+                                        win.down('hiddenfield[name=surgicaltype]').setValue(record.get('surgical_type'));
+                                        win.down('hiddenfield[name=surgicalstatus]').setValue(record.get('surgical_status'));
+                                        win.down('textfield[name=surgicalroom]').setValue(record.get('surgical_room'));
+                                        win.down('textfield[name=surgical]').setValue(record.get('surgical_procedure'));
+                                        win.down('datefield').setValue(record.get('dateof'));
+                                        win.down('timefield').setValue(record.get('timeof'));
                                     }
                                 }
                             }
@@ -292,29 +330,35 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                             }
                         ]
                     }, {
+                        hidden: true,
+                        name: 'group_04',
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
                             allowBlank: false,
-                            // useReadColor: true,
                             fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
                                 flex: 1,
+                                margin: '0 5 0 0',
                                 xtype: 'datefield',
                                 fieldLabel: 'Data',
                                 plugins: 'textmask',
                                 name: 'dateof'
                             }, {
-                                xtype: 'splitter'
-                            }, {
                                 flex: 1,
+                                margin: '0 5 0 5',
                                 xtype: 'timefield',
                                 fieldLabel: 'Hora',
                                 plugins: 'textmask',
                                 name: 'timeof'
+                            }, {
+                                flex: 1,
+                                margin: '0 0 0 5',
+                                fieldLabel: 'Sala',
+                                name: 'surgicalroom'
                             }
                         ]
                     }

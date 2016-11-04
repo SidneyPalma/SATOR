@@ -146,9 +146,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 '<div><b>{releasestypedescription}</b></div>',
                                                 '<div class="movement-title">Procedimento</div>',
                                                 '<div><b>{surgical}</b></div>',
-                                                '<div><b>Data:</b> {dateof} {timeof}</div>',
-                                                '<div>{surgicalwarning} {patientname}</div>',
-                                                '<div>{flowing} - {instrumentator}</div>',
+                                                '<div><b>{surgicalwarning} {patientname}</b></div>',
+                                                '<div>{dateof} {timeof}</div>',
+                                                '<div>{flowing} {instrumentator}</div>',
                                                 '<div>{place}</div>',
                                             '</div>'
                                         ]
@@ -185,9 +185,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                 dataIndex: 'materialname',
                                 text: 'Material / kit'
                             }, {
-                                width: 100,
-                                sortable: false,
+                                width: 150,
                                 text: 'Schema',
+                                sortable: false,
                                 dataIndex: 'colorpallet'
                             }, {
                                 width: 180,
