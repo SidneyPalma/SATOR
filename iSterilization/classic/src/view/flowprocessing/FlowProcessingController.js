@@ -133,6 +133,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_MOVIMENTO_IN':
                 me.callSATOR_MOVIMENTO_IN();
                 break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
+                break;
             case 'MOV':
                 me.callSATOR_MOVIMENTO_ID(value);
                 break;

@@ -12,7 +12,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 850,
+    width: 950,
     modal: true,
     layout: 'fit',
     header: false,
@@ -132,7 +132,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                         items: [
                             {
                                 flex: 3,
-                                height: 300,
+                                height: 400,
                                 plain: true,
                                 cls: 'consulta',
                                 xtype: 'tabpanel',
@@ -184,7 +184,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                                     '</div>'
                                                 ]
                                             }, {
-                                                height: 60,
+                                                height: 120,
                                                 xtype: 'container',
                                                 name: 'materialmessage',
                                                 tpl: [
@@ -235,6 +235,11 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                                     {
                                                         xtype: 'rownumberer'
                                                     }, {
+                                                        width: 120,
+                                                        sortable: false,
+                                                        dataIndex: 'barcode',
+                                                        text: 'Código'
+                                                    }, {
                                                         flex: 1,
                                                         sortable: false,
                                                         dataIndex: 'materialname',
@@ -249,7 +254,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                 xtype: 'splitter'
                             }, {
                                 flex: 2,
-                                height: 300,
+                                height: 400,
                                 hideButtons: true,
                                 xtype: 'portrait'
                             }
