@@ -1838,6 +1838,67 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function selectInQuery(array $data) {
+        $search = $data['search'];
+        $movementtype = $data['movementtype'];
+
+        $sql = "
+            declare
+                @search varchar(60) = :search,
+                @movementtype varchar(3) = :movementtype;
+            
+            select
+                am.id,
+                a.barcode,	
+                am.movementdate,
+                am.movementtype,
+                dbo.getEnum('movementtype',am.movementtype) as movementtypedescription,
+                am.releasestype,
+                dbo.getEnum('releasestype',am.releasestype) as releasestypedescription,
+                am.movementuser,
+                items = ( select count(*) from armorymovementitem where armorymovementid = am.id )
+            from
+                armorymovementitem ami
+                inner join flowprocessingstep fps on ( fps.id = ami.flowprocessingstepid )
+                inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
+                inner join itembase ib on ( ib.id = fpsm.materialid )
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join armorymovement am on ( am.id = ami.armorymovementid )
+                outer apply (
+                    select
+                        o.barcode
+                    from
+                        armorymovementoutput o
+                    where o.id = am.id
+                ) a
+            where ( ib.barcode = @search or fp.barcode = @search )
+              or ( am.movementtype = @movementtype or @movementtype = '000' )
+            group by
+                am.id,
+                a.barcode,	
+                am.movementdate,
+                am.movementtype,
+                am.releasestype,
+                am.movementuser
+            order by am.movementdate desc";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":search", $search, \PDO::PARAM_STR);
+            $pdo->bindValue(":movementtype", $movementtype, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function releasesTypeA(array $data) {
         $areasid = $data['areasid'];
 

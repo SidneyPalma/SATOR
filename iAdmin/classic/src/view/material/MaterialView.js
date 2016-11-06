@@ -466,5 +466,3 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
     }
 
 });
-
-

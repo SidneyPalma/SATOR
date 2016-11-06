@@ -486,7 +486,7 @@ class material extends \Smart\Data\Cache {
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid and ib.proprietaryid = @proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
-                inner join materialboxitem mbi on ( mbi.materialid = m.id )
+                left join materialboxitem mbi on ( mbi.materialid = m.id )
                 outer apply (
                     SELECT
                         mb.name as materialboxname,

@@ -136,6 +136,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_CONSULTAR_MATERIAL':
                 me.callSATOR_CONSULTAR_MATERIAL();
                 break;
+            case 'SATOR_CONSULTAR_MOVIMENTO':
+                me.callSATOR_CONSULTAR_MOVIMENTO();
+                break;
             case 'MOV':
                 me.callSATOR_MOVIMENTO_ID(value);
                 break;
@@ -173,6 +176,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 me.onFlowStepAction(null,record);
             }
         });
+    },
+
+    callSATOR_CONSULTAR_MOVIMENTO: function () {
+        var me = this,
+            view = me.getView();
+
+        Ext.widget('flowprocessingholdsearch').show();
     },
 
     onHoldArmory: function (value) {
@@ -569,6 +579,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 });
             }
         });
+    },
+
+    onSearchMoviment: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('gridpanel'),
+            value = field.getValue(),
+            radiogroup = view.down('radiogroup').getValue();
+
+        field.reset();
+
+        grid.getStore().setParams({
+            search: value,
+            movementtype: radiogroup.movementtype
+        }).load();
     },
 
     onSelectHoldItem: function (field, e, eOpts) {
