@@ -31,10 +31,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldRevert', {
 
     doCallBack: Ext.emptyFn,
 
-    // listeners: {
-    //     queryreader: 'onSelectHoldItem'
-    // },
-
     initComponent: function () {
         var me = this;
         me.buildItems();
@@ -197,7 +193,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldRevert', {
                                         xtype: 'fieldcontainer',
                                         layout: 'anchor',
                                         fieldLabel: 'Lançamentos',
-                                        defaultType: 'textfield',
+                                        defaultType: 'hiddenfield',
                                         defaults: {
                                             anchor: '100%',
                                             useReadColor: true
@@ -205,19 +201,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldRevert', {
                                         },
                                         items: [
                                             {
-                                                xtype: 'hiddenfield',
                                                 name: 'id'
                                             }, {
-                                                xtype: 'hiddenfield',
+                                                name: 'movementtype',
+                                                value: '004'
+                                            }, {
+                                                name: 'releasestype',
+                                                value: 'E'
+                                            }, {
+                                                name: 'areasid',
+                                                value: Smart.workstation.areasid
+                                            }, {
                                                 name: 'surgicalstatus'
                                             }, {
-                                                xtype: 'hiddenfield',
                                                 name: 'surgicaltype'
                                             }, {
-                                                xtype: 'hiddenfield',
-                                                name: 'areasid'
-                                            }, {
-                                                xtype: 'hiddenfield',
                                                 name: 'patientname'
                                             }, {
                                                 columns: 2,
@@ -288,7 +286,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldRevert', {
                                                     {
                                                         pageSize: 0,
                                                         useReadColor: true,
-                                                        fieldLabel: 'Aviso Cirurgia',
+                                                        fieldLabel: 'Aviso Cirurgico',
                                                         name: 'surgicalwarningpatient',
                                                         xtype: 'searchpatient',
                                                         hiddenNameId: 'surgicalwarning',
@@ -453,6 +451,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldRevert', {
 
     buttons: [
         {
+            scale: 'medium',
+            name: 'confirm',
+            text: 'Confirmar',
+            showSmartTheme: 'green',
+            listeners: {
+                click: 'setMovementRevert'
+            }
+        }, {
             scale: 'medium',
             text: 'Cancelar',
             showSmartTheme: 'red',

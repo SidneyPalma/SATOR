@@ -179,7 +179,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_CONSULTAR_MOVIMENTO: function () {
+        var me = this,
+            view = me.getView();
+
         Ext.widget('flowprocessingholdsearch').show(null, function () {
+            this.master = view;
             this.down('textfield[name=search]').focus(false, 200);
         });
     },
@@ -744,13 +748,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             method: 'selectCode',
             query: value
         }).load({
-            // scope: me,
+            scope: me,
             callback: function(records, operation, success) {
                 var rec = records[0];
                 Ext.widget('flowprocessingholdrevert', {
                     editable: rec.get('releasestype') == "A"
                 }).show(null,function () {
-                    // this.master = view;
+                    this.master = view.master;
                     this.down('form').loadRecord(rec);
                     // this.down('textfield[name=search]').setReadColor(rec.get('releasestype') != "A");
                     // this.down('textfield[name=search]').focus(false,200);
@@ -942,6 +946,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.down('form').reset();
             this.down('textfield[name=usercode]').focus(false,200);
         });
+    },
+
+    setMovementRevert: function () {
+        var me = this,
+            view = me.getView();
+
+        view.down('hiddenfield[name=areasid]').reset();
+        view.down('hiddenfield[name=movementtype]').reset();
+        view.down('hiddenfield[name=releasestype]').reset();
+
+        console.info(view.down('form').getValues());
+
+        // me.setModuleData('armorymovementoutput');
+        // me.setModuleForm(view.down('form'));
+        //
+        // me._success = function (frm, action) {
+        //     view.master.updateType();
+        //     view.close();
+        // }
+        //
+        // me.updateRecord();
     },
 
     setMovementOutput: function () {
