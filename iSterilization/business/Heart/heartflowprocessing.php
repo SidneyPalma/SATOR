@@ -1872,7 +1872,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     where o.id = am.id
                 ) a
             where ( ib.barcode = @search or fp.barcode = @search )
-              or ( am.movementtype = @movementtype or @movementtype = '000' )
+               or ( am.movementtype = @movementtype or @movementtype = '000' )
             group by
                 am.id,
                 a.barcode,	
