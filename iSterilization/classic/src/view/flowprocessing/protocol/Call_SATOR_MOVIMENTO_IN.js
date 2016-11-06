@@ -25,7 +25,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_IN
 
     title: 'Movimento',
 
-    editable: true,
+    editable: false,
 
     doCallBack: Ext.emptyFn,
 
@@ -110,6 +110,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_IN
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
+                            useReadColor: true,
                             fieldCls: 'smart-field-style-action'
                             // labelCls: 'smart-field-style-action'
                         },
