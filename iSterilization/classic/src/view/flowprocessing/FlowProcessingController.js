@@ -760,6 +760,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     // this.down('textfield[name=search]').focus(false,200);
                     var groupdocument = this.down('fieldcontainer[name=groupdocument]');
 
+
+                    view.close();
                     groupdocument.update(rec.data);
 
                     Ext.getStore('armorymovementitem').setParams({query: value}).load();
