@@ -1607,7 +1607,22 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 a.armorystatus, 
                 a.armorylocal,
                 t.materialname,
-                dbo.areAvailableForOutput(fp.barcode) as available
+                dbo.areAvailableForOutput(fp.barcode) as available,
+                colorschema = (
+                    select stuff
+                        (
+                            (
+                                select
+                                    ',#' + tc.colorschema + '|#' + tc.colorstripe
+                                from
+                                    materialboxtarge mbt
+                                    inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                where mbt.materialboxid = fp.materialboxid
+                                order by mbt.targeorderby desc
+                                for xml path ('')
+                            ) ,1,1,''
+                        )                
+                )				
             from
                 armorystock a
                 inner join flowprocessingstep fps on ( fps.id = a.flowprocessingstepid )
@@ -1674,7 +1689,22 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 fp.barcode,
                 t.materialname,
 				t.armorylocal,
-				dbo.getEnum('armorylocal',t.armorylocal) as armorylocaldescription
+				dbo.getEnum('armorylocal',t.armorylocal) as armorylocaldescription,
+                colorschema = (
+                    select stuff
+                        (
+                            (
+                                select
+                                    ',#' + tc.colorschema + '|#' + tc.colorstripe
+                                from
+                                    materialboxtarge mbt
+                                    inner join targecolor tc on ( tc.id = mbt.targecolorid )
+                                where mbt.materialboxid = fp.materialboxid
+                                order by mbt.targeorderby desc
+                                for xml path ('')
+                            ) ,1,1,''
+                        )                
+                )				
             from
                 flowprocessingstep fps
 				inner join flowprocessingstepaction fpsa on ( fpsa.flowprocessingstepid = fps.id )
@@ -1799,6 +1829,67 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
             self::_setRows($rows);
             self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectInQuery(array $data) {
+        $search = $data['search'];
+        $movementtype = $data['movementtype'];
+
+        $sql = "
+            declare
+                @search varchar(60) = :search,
+                @movementtype varchar(3) = :movementtype;
+            
+            select
+                am.id,
+                a.barcode,	
+                am.movementdate,
+                am.movementtype,
+                dbo.getEnum('movementtype',am.movementtype) as movementtypedescription,
+                am.releasestype,
+                dbo.getEnum('releasestype',am.releasestype) as releasestypedescription,
+                am.movementuser,
+                items = ( select count(*) from armorymovementitem where armorymovementid = am.id )
+            from
+                armorymovementitem ami
+                inner join flowprocessingstep fps on ( fps.id = ami.flowprocessingstepid )
+                inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
+                inner join itembase ib on ( ib.id = fpsm.materialid )
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join armorymovement am on ( am.id = ami.armorymovementid )
+                outer apply (
+                    select
+                        o.barcode
+                    from
+                        armorymovementoutput o
+                    where o.id = am.id
+                ) a
+            where ( ib.barcode = @search or fp.barcode = @search )
+               or ( am.movementtype = @movementtype or @movementtype = '000' )
+            group by
+                am.id,
+                a.barcode,	
+                am.movementdate,
+                am.movementtype,
+                am.releasestype,
+                am.movementuser
+            order by am.movementdate desc";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":search", $search, \PDO::PARAM_STR);
+            $pdo->bindValue(":movementtype", $movementtype, \PDO::PARAM_STR);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);

@@ -35,7 +35,6 @@ Ext.define( 'Smart.plugins.FormEnter', {
     },
 
     focusIf: function(field, select, delay) {
-
         if(!(Ext.isEmpty(field) || field.isHidden() || field.isDisabled() || field.isXType('hiddenfield'))) {
             return field.focus(select, delay);
         }

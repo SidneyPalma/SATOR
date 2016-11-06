@@ -39,7 +39,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
 
         me.columns = [
             {
-                width: 150,
+                width: 110,
                 sortable: false,
                 text: 'Código',
                 dataIndex: 'barcode'
@@ -59,16 +59,16 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                 text: 'Status',
                 dataIndex: 'boxitemstatusdescription'
             }, {
-                width: 100,
+                width: 50,
                 sortable: false,
                 align: 'center',
-                text: 'Processos',
+                text: 'P',
                 dataIndex: 'numberproceedings'
             }, {
-                width: 100,
+                width: 50,
                 sortable: false,
                 align: 'center',
-                text: 'Consignado',
+                text: 'C',
                 xtype: 'actioncolumn',
                 items: [
                     {
@@ -121,7 +121,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
             items: [
                 {
                     width: 350,
-                    margin: '0 5 0 0',
+                    // margin: '0 5 0 0',
                     fieldLabel: 'Filtrar',
                     xtype: 'Searchmaterialinbox',
                     listeners: {
@@ -129,14 +129,11 @@ Ext.define( 'iAdmin.view.box.MaterialBoxItem', {
                         select: 'selectFilterItem',
                         beforequery: 'beforeSelectItem'
                     }
-                }, {
-                    margin: '0 0 0 5',
-                    xtype: 'comboenum',
-                    fieldLabel: 'Status',
-                    name: 'boxitemstatusdescription',
-                    listeners: {
-                        // select: ''
-                    }
+                // }, {
+                //     margin: '0 0 0 5',
+                //     xtype: 'comboenum',
+                //     fieldLabel: 'Status',
+                //     name: 'boxitemstatusdescription'
                 }
             ]
         }

@@ -133,6 +133,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             case 'SATOR_MOVIMENTO_IN':
                 me.callSATOR_MOVIMENTO_IN();
                 break;
+            case 'SATOR_CONSULTAR_MATERIAL':
+                me.callSATOR_CONSULTAR_MATERIAL();
+                break;
+            case 'SATOR_CONSULTAR_MOVIMENTO':
+                me.callSATOR_CONSULTAR_MOVIMENTO();
+                break;
             case 'MOV':
                 me.callSATOR_MOVIMENTO_ID(value);
                 break;
@@ -169,6 +175,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 var record = Ext.create('iSterilization.model.flowprocessing.FlowProcessingStepAction', result.rows[0]);
                 me.onFlowStepAction(null,record);
             }
+        });
+    },
+
+    callSATOR_CONSULTAR_MOVIMENTO: function () {
+        Ext.widget('flowprocessingholdsearch').show(null, function () {
+            this.down('textfield[name=search]').focus(false, 200);
         });
     },
 
@@ -568,6 +580,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    onSearchMoviment: function (field, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('gridpanel'),
+            value = field.getValue(),
+            radiogroup = view.down('radiogroup').getValue();
+
+        field.reset();
+
+        grid.getStore().setParams({
+            search: value,
+            movementtype: radiogroup.movementtype
+        }).load();
+    },
+
     onSelectHoldItem: function (field, e, eOpts) {
         var me = this,
             view = me.getView(),
@@ -614,14 +641,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 store.add({
                     outputtype: 'P',
                     barcode: result.rows[0].barcode,
+                    colorschema: result.rows[0].colorschema,
                     materialname: result.rows[0].materialname,
                     armorymovementid: view.down('hiddenfield[name=id]').getValue(),
                     flowprocessingstepid: result.rows[0].flowprocessingstepid
                 });
 
                 store.sync();
-
-                view.down('displayfield[name=materialname]').setValue(result.rows[0].materialname);
             }
         });
     },

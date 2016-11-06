@@ -190,7 +190,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
 
         var materialboxname = xdata.get('materialboxname') ? xdata.get('materialboxname') : '';
 
-        view.down('packingsearch').setReadColor(materialboxname.length != 0);
+        // view.down('packingsearch').setReadColor(materialboxname.length != 0);
 
         Ext.getStore('materialtypeflow').setParams({
             query: xdata.get('id')

@@ -180,7 +180,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 }
 
                             }, {
-                                columns: 4,
+                                columns: 5,
                                 vertical: false,
                                 xtype: 'radiogroup',
                                 cls: 'flowprocessinghold',
@@ -189,7 +189,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                     { boxLabel: 'Todos', name: 'movementtype', inputValue: '000', checked: true },
                                     { boxLabel: 'Entradas', name: 'movementtype', inputValue: '001' },
                                     { boxLabel: 'Saídas', name: 'movementtype', inputValue: '002' },
-                                    { boxLabel: 'Retornos', name: 'movementtype', inputValue: '003' }
+                                    { boxLabel: 'Retornos', name: 'movementtype', inputValue: '003' },
+                                    { boxLabel: 'Estornos', name: 'movementtype', inputValue: '004' }
                                 ],
                                 listeners: {
                                     change: function ( field , newValue , oldValue , eOpts) {
@@ -197,7 +198,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
                                         me.store.clearFilter();
 
-                                        if(['001','002','003'].indexOf(newValue.movementtype) != -1) {
+                                        if(['001','002','003','004'].indexOf(newValue.movementtype) != -1) {
                                             me.store.filter('movementtype', newValue.movementtype);
                                         }
                                     }
@@ -254,14 +255,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
 
                                 columns: [
                                     {
-                                    //     width: 80,
-                                    //     height: 60,
-                                    //     renderer: function (value,metaData,record) {
-                                    //         var url = '../iSterilization/business/Calls/armorymovement.php',
-                                    //             img =  '<div style="margin-top: 6px;"><img src="{0}?action=select&method=renderCode&barCode={1}" id="SATOR-{2}" /></div>';
-                                    //         return Ext.String.format(img,url,record.get('barcode'),record.get('id'));
-                                    //     }
-                                    // }, {
                                         flex: 1,
                                         renderer: function (value,metaData,record) {
                                             var barcode = record.get('barcode'),

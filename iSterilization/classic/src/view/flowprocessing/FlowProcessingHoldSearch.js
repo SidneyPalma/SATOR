@@ -1,8 +1,8 @@
 //@charset UTF-8
-Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
+Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldSearch', {
     extend: 'Ext.window.Window',
 
-    xtype: 'flowprocessingholdoutput',
+    xtype: 'flowprocessingholdsearch',
 
     requires: [
         'Ext.form.Panel',
@@ -28,7 +28,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
     doCallBack: Ext.emptyFn,
 
     listeners: {
-        queryreader: 'onSelectHoldItem'
+        queryreader: 'onSearchMoviment'
     },
 
     initComponent: function () {
@@ -48,7 +48,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                 bodyPadding: 10,
                 margin: '10 0 0 0',
                 layout: 'anchor',
-                plugins:'formenter',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
@@ -59,7 +58,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                     {
                         xtype: 'label',
                         cls: 'title-label',
-                        text: 'Movimento'
+                        text: 'Consultar movimentos'
                     }, {
                         xtype: 'container',
                         layout: {
@@ -87,7 +86,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                         margin: '10 0 10 0',
                                         xtype: 'fieldcontainer',
                                         layout: 'anchor',
-                                        fieldLabel: 'Lançamentos',
+                                        fieldLabel: 'Pesquisa',
                                         defaultType: 'textfield',
                                         defaults: {
                                             anchor: '100%',
@@ -95,11 +94,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                         },
                                         items: [
                                             {
-                                                xtype: 'hiddenfield',
-                                                name: 'id'
-                                            }, {
                                                 useUpperCase: true,
-                                                inputType: 'password',
                                                 name: 'search',
                                                 listeners: {
                                                     specialkey: function (field, e, eOpts) {
@@ -110,10 +105,16 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                     }
                                                 }
                                             }, {
-                                                xtype: 'displayfield',
-                                                fieldLabel: 'Transportador',
-                                                name: 'transportedby',
-                                                value: '...'
+                                                columns: 5,
+                                                vertical: false,
+                                                xtype: 'radiogroup',
+                                                items: [
+                                                    { boxLabel: 'Todos', name: 'movementtype', inputValue: '000', checked: true },
+                                                    { boxLabel: 'Entradas', name: 'movementtype', inputValue: '001' },
+                                                    { boxLabel: 'Saídas', name: 'movementtype', inputValue: '002' },
+                                                    { boxLabel: 'Retornos', name: 'movementtype', inputValue: '003' },
+                                                    { boxLabel: 'Estornos', name: 'movementtype', inputValue: '004' }
+                                                ]
                                             }
                                         ]
                                     }
@@ -136,13 +137,13 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                         name: 'groupdocument',
                                         tpl: [
                                             '<div class="movement">',
-                                                '<div class="movement-title" style="padding-bottom: 10px;">{movementtypedescription} {movementdate}</div>',
-                                                '<div class="movement-title">{clientname}</div>',
-                                                '<div><b>{releasestypedescription}</b></div>',
-                                                '<div class="movement-title">Procedimento</div>',
-                                                '<div><b>{surgical}</b></div>',
-                                                '<div><b>{surgicalwarning} {patientname}</b></div>',
-                                                '<div>{dateof} {timeof} {surgicalroom}</div>',
+                                            '<div class="movement-title" style="padding-bottom: 10px;">{movementtypedescription} {movementdate}</div>',
+                                            '<div class="movement-title">{clientname}</div>',
+                                            '<div><b>{releasestypedescription}</b></div>',
+                                            '<div class="movement-title">Procedimento</div>',
+                                            '<div><b>{surgical}</b></div>',
+                                            '<div><b>{surgicalwarning} {patientname}</b></div>',
+                                            '<div>{dateof} {timeof} {surgicalroom}</div>',
                                             '</div>'
                                         ]
                                     }
@@ -155,57 +156,82 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                         cls: 'update-grid',
                         hideHeaders: false,
                         headerBorders: false,
-                        store: 'armorymovementitem',
 
-                        selType: 'cellmodel',
+                        url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
-                        plugins: {
-                            ptype: 'cellediting',
-                            clicksToEdit: 1
+                        params: {
+                            action: 'select',
+                            method: 'selectInQuery'
                         },
 
-                        // listeners: {
-                        //     beforeedit: 'onBeforeEditMOVIMENTO_OF'
-                        // },
-
+                        fields: [
+                            {
+                                name: 'id',
+                                type: 'int'
+                            }, {
+                                name: 'barcode',
+                                type: 'auto'
+                            }, {
+                                name: 'movementdate',
+                                type: 'date'
+                            }, {
+                                name: 'movementtype',
+                                type: 'auto'
+                            }, {
+                                name: 'movementtypedescription',
+                                type: 'auto'
+                            }, {
+                                name: 'releasestype',
+                                type: 'auto'
+                            }, {
+                                name: 'releasestypedescription',
+                                type: 'auto'
+                            }, {
+                                name: 'movementuser',
+                                type: 'auto'
+                            }, {
+                                name: 'items',
+                                type: 'auto'
+                            }
+                        ],
+                        
                         columns: [
                             {
                                 xtype: 'rownumberer'
                             }, {
                                 flex: 1,
                                 sortable: false,
-                                dataIndex: 'materialname',
-                                text: 'Material / kit'
+                                dataIndex: 'barcode',
+                                text: 'Código'
                             }, {
-                                width: 150,
-                                text: 'Schema',
+                                width: 60,
+                                text: 'Itens',
                                 sortable: false,
-                                dataIndex: 'colorpallet'
+                                dataIndex: 'items'
+                            }, {
+                                width: 120,
+                                text: 'Data',
+                                sortable: false,
+                                dataIndex: 'movementdate'
                             }, {
                                 width: 180,
                                 sortable: false,
-                                text: 'Saída',
-                                dataIndex: 'outputtypedescription',
-                                editor: {
-                                    xtype: 'comboenum',
-                                    name: 'outputtypedescription',
-                                    fieldCls: 'smart-field-style-action',
-                                    listeners: {
-                                       select: 'onEditMOVIMENTO_TO'
-                                    }
-                                }
+                                text: 'Tipo',
+                                dataIndex: 'movementtypedescription'
+                            }, {
+                                width: 220,
+                                sortable: false,
+                                text: 'Status',
+                                dataIndex: 'releasestypedescription'
                             }, {
                                 sortable: false,
-                                text: 'Ações',
-                                hidden: !me.editable,
-                                width: 80,
+                                width: 40,
                                 align: 'center',
                                 xtype: 'actioncolumn',
                                 items: [
                                     {
-                                        handler: 'delReleasesItem',
-                                        iconCls: "fa fa-minus-circle action-delete-color-font",
-                                        tooltip: 'Descartar lançamento!'
+                                        // handler: 'delReleasesItem',
+                                        iconCls: "fa fa-check-circle action-checked-color-font"
                                     }
                                 ]
                             }
