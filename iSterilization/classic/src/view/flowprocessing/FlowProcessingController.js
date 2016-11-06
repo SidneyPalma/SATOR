@@ -179,10 +179,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_CONSULTAR_MOVIMENTO: function () {
-        var me = this,
-            view = me.getView();
-
-        Ext.widget('flowprocessingholdsearch').show();
+        Ext.widget('flowprocessingholdsearch').show(null, function () {
+            this.down('textfield[name=search]').focus(false, 200);
+        });
     },
 
     onHoldArmory: function (value) {

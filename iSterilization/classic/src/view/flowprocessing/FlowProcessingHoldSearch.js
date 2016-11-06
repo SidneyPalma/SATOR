@@ -48,7 +48,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldSearch', {
                 bodyPadding: 10,
                 margin: '10 0 0 0',
                 layout: 'anchor',
-                // plugins:'formenter',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
@@ -231,9 +230,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldSearch', {
                                 xtype: 'actioncolumn',
                                 items: [
                                     {
-                                        handler: 'delReleasesItem',
-                                        iconCls: "fa fa-minus-circle action-delete-color-font",
-                                        tooltip: 'Descartar lançamento!'
+                                        // handler: 'delReleasesItem',
+                                        iconCls: "fa fa-check-circle action-checked-color-font"
                                     }
                                 ]
                             }
