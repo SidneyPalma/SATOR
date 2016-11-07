@@ -50,7 +50,7 @@ Ext.define( 'iAdmin.view.material.MaterialController', {
         var nri = store.currentPage > 1 ? nrf - store.pageSize + 1 : 1;
         if (nrf > store.totalCount) nrf = store.totalCount;
         totalresults.setFieldLabel(Ext.String.format("{0} - {1} de ", nri, nrf));
-        totalresults.setValue(store.totalCount);
+        totalresults.setValue(store.totalCount || 10);
     },
 
     onBeforeLoadMaterial: function (store , operation , eOpts) {
