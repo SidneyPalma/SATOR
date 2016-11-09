@@ -74,8 +74,6 @@ Ext.define( 'Smart.ux.app.Application', {
 
                     document.getElementsByTagName('head')[0].appendChild(link);
 
-                    console.info(Ext.String.format('Is Test Base Access: {0}',result.isTest));
-
                     if(result.isTest == true) {
                         Ext.getBody().getById('marquee').show();
                     }
