@@ -112,6 +112,11 @@ Ext.define( 'iAdmin.view.material.MaterialView', {
                         fieldLabel: 'Descrição',
                         name: 'description'
                     }, {
+                        fieldLabel: 'Local',
+                        xtype: 'comboenum',
+                        name: 'armorylocaldescription',
+                        hiddenNameId: 'armorylocalid'
+                    }, {
                         allowBlank: true,
                         useReadColor: true,
                         fieldLabel: 'Kit ativo',

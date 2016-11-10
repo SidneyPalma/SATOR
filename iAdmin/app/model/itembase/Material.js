@@ -47,6 +47,12 @@ Ext.define( 'iAdmin.model.itembase.Material', {
             name: 'itemsizedescription',
             type: 'auto'
         }, {
+            name: 'armorylocal',
+            type: 'auto'
+        }, {
+            name: 'armorylocaldescription',
+            type: 'auto'
+        }, {
             name: 'itemlength',
             type: 'auto'
         }, {
