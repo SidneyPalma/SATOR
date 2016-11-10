@@ -1794,6 +1794,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             value = field.getValue(),
             stepflaglist = record.get('stepflaglist');
 
+        view.down('radiogroup').setValue({unconformities: '000'});
+
         field.reset();
 
         if(value && value.length != 0) {
