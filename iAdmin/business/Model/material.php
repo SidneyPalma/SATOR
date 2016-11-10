@@ -98,6 +98,20 @@ class material extends \Smart\Data\Model {
      */
     private $cloneusername;
 
+
+    /**
+     * @Policy {"nullable":true, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     */
+    private $armorylocal;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"formula", "policy":false, "logallow":true, "default":"getEnumSearch,armorylocal"}
+     */
+    private $armorylocaldescription;
+
+
     /**
      * @return type integer
      */
@@ -206,6 +220,22 @@ class material extends \Smart\Data\Model {
      */
     public function setItemsize($itemsize) {
         $this->itemsize = $itemsize;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getArmorylocal() {
+        return $this->armorylocal;
+    }
+
+    /**
+     * @param type $armorylocal
+     * @return \iAdmin\Model\material
+     */
+    public function setArmorylocal($armorylocal) {
+        $this->armorylocal = $armorylocal;
         return $this;
     }
 
