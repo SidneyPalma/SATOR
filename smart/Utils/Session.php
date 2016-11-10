@@ -71,16 +71,19 @@ class Session {
     public function startSession() {
 
         if ( $this->sessionState == self::_SESSION_NOT_STARTED ) {
-			$name = self::_SESSION_NAME;
+//			$name = self::_SESSION_NAME;
 			$path = self::_SESSION_PATH;
-			
+			$name = isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name;
+
             $expireto = 60*60*24*1; // 1 day
-            //session_set_cookie_params($expireto,self::$path);
-            //session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
+//            session_set_cookie_params($expireto,self::$path);
+//            session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
 
 			ini_set("session.name","{$name}");
+            ini_set("session.cookie_path","{$path}");
+            ini_set("session.cookie_lifetime","{$expireto}");
 			ini_set("session.gc_maxlifetime","{$expireto}");
-			ini_set("session.save_path", "/{$path}/{$name}/");
+//			ini_set("session.save_path", "/{$path}/{$name}/");
 			
             $this->sessionState = session_start();
 			
