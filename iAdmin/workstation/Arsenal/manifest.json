@@ -1,0 +1,36 @@
+{  
+   "name":"Config Workstation",
+   "version":"1.0",
+   "description":"Arsenal",
+   "background":{  
+      "scripts":[  
+         "background.js"
+      ],
+      "persistent":false
+   },
+   "page_action":{  
+      "default_icon":"icon-19.png",
+      "default_title":"SATOR Tools"
+   },
+   "permissions":[  
+      "declarativeContent"
+   ],
+   "icons":{  
+      "48":"icon-48.png",
+      "128":"icon-128.png"
+   },
+   "manifest_version":2,
+   "content_scripts":[  
+      {  
+         "js":[  
+            "workstation.js"
+         ],
+         "matches":[  
+            "http://*/*-dev/iAdmin*",
+			"http://*/*-pro/iAdmin*",
+			"http://*/*-dev/iSterilization*",
+            "http://*/*-pro/iSterilization*"
+         ]
+      }
+   ]
+}

@@ -144,26 +144,77 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                         items: [
                             {
                                 flex: 1,
-                                name: 'search',
-                                showClear: true,
-                                useUpperCase: true,
-                                useReadColor: false,
-                                fieldLabel: 'Leitura',
-                                inputType: 'password',
-                                cls: 'processing-field',
-                                labelCls: 'processing-field-font',
-                                listeners: {
-                                    specialkey: function (field, e, eOpts) {
-                                        if ([e.ESC].indexOf(e.getKey()) != -1) {
-                                            field.reset();
+                                xtype: 'container',
+                                layout: 'hbox',
+                                defaultType: 'textfield',
+                                defaults: {
+                                    useReadColor: true,
+                                    anchor: '100%',
+                                    cls: 'processing-field',
+                                    labelCls: 'processing-field-font'
+                                },
+                                items: [
+                                    {
+                                        flex: 3,
+                                        name: 'search',
+                                        showClear: true,
+                                        useUpperCase: true,
+                                        useReadColor: false,
+                                        fieldLabel: 'Leitura',
+                                        inputType: 'password',
+                                        cls: 'processing-field',
+                                        labelCls: 'processing-field-font',
+                                        listeners: {
+                                            specialkey: function (field, e, eOpts) {
+                                                if ([e.ESC].indexOf(e.getKey()) != -1) {
+                                                    field.reset();
+                                                }
+                                                if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
+                                                    var view = field.up('flowprocessingview');
+                                                    view.fireEvent('startreader', field, e, eOpts);
+                                                    e.stopEvent();
+                                                }
+                                            }
                                         }
-                                        if ([e.TAB,e.ENTER].indexOf(e.getKey()) != -1) {
-                                            var view = field.up('flowprocessingview');
-                                            view.fireEvent('startreader', field, e, eOpts);
-                                            e.stopEvent();
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        flex: 3,
+                                        columns: 4,
+                                        vertical: false,
+                                        fieldLabel: 'Filtrar',
+                                        xtype: 'radiogroup',
+                                        cls: 'flowprocessinghold',
+                                        labelCls: 'processing-field-font',
+                                        items: [
+                                            { boxLabel: 'Todos', name: 'unconformities', inputValue: '000', checked: true },
+                                            { boxLabel: 'Sim...', name: 'unconformities', inputValue: '001' },
+                                            { boxLabel: 'Não...', name: 'unconformities', inputValue: '002' },
+                                            { boxLabel: 'Outros', name: 'unconformities', inputValue: '003' }
+                                        ],
+                                        listeners: {
+                                            change: function ( field , newValue , oldValue , eOpts) {
+                                                var store = Ext.getStore('flowprocessingstepmaterial');
+
+                                                store.clearFilter();
+
+                                                switch(newValue.unconformities) {
+                                                    case '001':
+                                                        store.filter('unconformities', '010');
+                                                        break;
+                                                    case '002':
+                                                        store.filter('unconformities', '001');
+                                                        break;
+                                                    case '003':
+                                                        store.filterBy(function(rec) {
+                                                            return (['001','010'].indexOf(rec.get('unconformities')) == -1);
+                                                        });
+                                                        break;
+                                                }
+                                            }
                                         }
                                     }
-                                }
+                                ]
                             }, {
                                 xtype: 'splitter'
                             }, {
