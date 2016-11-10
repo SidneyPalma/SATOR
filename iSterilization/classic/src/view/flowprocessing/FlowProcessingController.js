@@ -3327,7 +3327,35 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             portrait = view.down('portrait');
 
         if(portrait) {
-            portrait.beFileData(record.get('filetype'));
+            Ext.Ajax.request({
+                scope: me,
+                async: false,
+                url: record.store.getUrl(),
+                params: {
+                    action: 'select',
+                    method: 'selectFile',
+                    materialid: record.get('materialid')
+                },
+                callback: function (options, success, response) {
+                    var result = Ext.decode(response.responseText);
+
+                    if (!success || !result.success) {
+                        Smart.Msg.showToast('O processo não foi executado com sucesso!','info');
+                        return false;
+                    }
+
+                    var filedata = result.rows[0].filedata;
+                    var fileinfo = result.rows[0].fileinfo;
+
+                    var info = fileinfo,
+                        type = (info && info.length !== 0) ? Ext.decode(info) : null;
+                    var filetype = (type) ? Ext.String.format('data:{0};base64,{1}',type.fileType,filedata) : filedata;
+
+                    portrait.beFileData(filetype);
+                }
+            });
+
+            // portrait.beFileData(record.get('filetype'));
             portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
         }
     },
