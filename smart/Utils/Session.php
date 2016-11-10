@@ -20,7 +20,7 @@ use Smart\Common\Traits as Traits;
 class Session {
     use Traits\TresultSet;
 
-    const _SESSION_PATH = '/';
+    const _SESSION_PATH = '/temp';
     const _SESSION_NAME = 'smart';
 
     const _SESSION_STARTED = true;
@@ -71,10 +71,22 @@ class Session {
     public function startSession() {
 
         if ( $this->sessionState == self::_SESSION_NOT_STARTED ) {
+			$name = self::_SESSION_NAME;
+			$path = self::_SESSION_PATH;
+			
             $expireto = 60*60*24*1; // 1 day
-            session_set_cookie_params($expireto,self::$path);
-            session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
+            //session_set_cookie_params($expireto,self::$path);
+            //session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
+
+			ini_set("session.name","{$name}");
+			ini_set("session.gc_maxlifetime","{$expireto}");
+			ini_set("session.save_path", "/{$path}/{$name}/");
+			
             $this->sessionState = session_start();
+			
+			//ini_set("session.gc_maxlifetime","21600"); // 6 hours
+			//ini_set("session.save_path", "/your_home/your_sessions/");
+			//session_start();			
         }
 
         return $this->sessionState;
@@ -85,7 +97,7 @@ class Session {
      *    Example: $instance->foo = 'bar';
      *
      *    @param    name    Name of the datas.
-     *    @param    value    Your datas.
+     *    @param    value   Your datas.
      *    @return   void
      */
     public function __set( $name, $value ) {
@@ -97,7 +109,7 @@ class Session {
      *    Example: echo $instance->foo;
      *
      *    @param    name    Name of the datas to get.
-     *    @return   mixed    Datas stored in session.
+     *    @return   mixed   Datas stored in session.
      */
     public function __get( $name ) {
         if (isset($_SESSION[$name])) {
@@ -135,7 +147,8 @@ class Session {
     }
 
     public function have() {
-        return ( strlen(self::$instance->username) !== 0 );
+		return $this->sessionState;
+        /*return ( strlen(self::$instance->username) !== 0 );*/
     }
    
     public function hasProfile($menu, $action, $goback = false, $msgerror = null) {
