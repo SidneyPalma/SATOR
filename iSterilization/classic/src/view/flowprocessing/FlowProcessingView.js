@@ -280,13 +280,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                         flex: 1,
                                         dockedItems: [
                                             {
-                                                margin: '0 0 6 0',
-                                                xtype: 'label',
-                                                cls: 'processing-field-font',
-                                                text: 'Imagem'
+                                                xtype: 'container',
+                                                layout: 'hbox',
+                                                items: [
+                                                    {
+                                                        flex: 1,
+                                                        height: 26,
+                                                        xtype: 'container',
+                                                        name: 'colorschema'
+                                                    }, {
+                                                        width: 120,
+                                                        margin: '0 0 6 0',
+                                                        xtype: 'label',
+                                                        cls: 'processing-field-font',
+                                                        text: 'Imagem',
+                                                        style: {
+                                                            'text-align': 'right;'
+                                                        }
+                                                    }
+                                                ]
                                             }
                                         ],
-                                        // border: true,
                                         hideButtons: true,
                                         xtype: 'portrait',
                                         cls: 'processing-panel-header-flow'

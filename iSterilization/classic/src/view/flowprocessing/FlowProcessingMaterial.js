@@ -54,16 +54,20 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                         "text-overflow": "ellipsis;"
                     }
                 }, {
-                    width: 80,
+                    width: 120,
                     xtype: 'label',
                     cls: 'processing-field-font',
                     text: '(00/00)',
-                    name: 'materialaccount'
-                }, {
-                    width: 80,
-                    height: 26,
-                    xtype: 'container',
-                    name: 'colorschema'
+                    name: 'materialaccount',
+                    style: {
+                        'color': 'yellow',
+                        'text-align': 'right;'
+                    }
+                // }, {
+                //     width: 80,
+                //     height: 26,
+                //     xtype: 'container',
+                //     name: 'colorschema'
                 }
             ]
         }
