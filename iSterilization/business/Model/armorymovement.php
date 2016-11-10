@@ -63,14 +63,14 @@ class armorymovement extends \Smart\Data\Model {
     private $releasestypedescription;
 
     /**
-     * @Policy {"nullable":false, "length":20}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     * @Policy {"nullable":true, "length":20}
+     * @Column {"description":"", "type":"string", "policy":false, "logallow":true, "default":""}
      */
     private $closedby;
 
     /**
      * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"string", "policy":true, "logallow":true, "default":""}
+     * @Column {"description":"", "type":"string", "policy":false, "logallow":true, "default":""}
      */
     private $closeddate;
 

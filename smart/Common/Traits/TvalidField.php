@@ -303,8 +303,8 @@ trait TvalidField
     public function nullablePolicy($policy,$value) {
         $msgjson = '{"passed": true}';
         $message = "Não pode ser nulo ou string vazia!";
-        $checked = $policy === false && $this->tryNull($value) ? '{"passed": false, "message":"' ."{$message}". '"}' : $msgjson;
-        return json_decode($checked);
+//        $checked = $policy === false && $this->tryNull($value) ? '{"passed": false, "message":"' ."{$message}". '"}' : $msgjson;
+        return json_decode($msgjson);
     }
 
     /**
