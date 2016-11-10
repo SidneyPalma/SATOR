@@ -47,7 +47,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
                     xtype: 'label',
                     cls: 'processing-field-font',
                     text: 'Materiais',
-                    name: 'materialboxname'
+                    name: 'materialboxname',
+                    style: {
+                        "overflow": "hidden;",
+                        "white-space": "nowrap;",
+                        "text-overflow": "ellipsis;"
+                    }
                 }, {
                     width: 80,
                     xtype: 'label',

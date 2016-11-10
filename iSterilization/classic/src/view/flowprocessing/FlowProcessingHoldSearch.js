@@ -219,18 +219,38 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldSearch', {
                                 text: 'Tipo',
                                 dataIndex: 'movementtypedescription'
                             }, {
-                                width: 220,
+                                width: 200,
                                 sortable: false,
                                 text: 'Status',
                                 dataIndex: 'releasestypedescription'
                             }, {
                                 sortable: false,
-                                width: 40,
+                                width: 90,
                                 align: 'center',
                                 xtype: 'actioncolumn',
                                 items: [
                                     {
-                                        // handler: 'delReleasesItem',
+                                        handler: 'onFlowHoldRevert',
+                                        getTip: function(value, metaData, record) {
+                                            var releasestype = record.get('releasestype'),
+                                                movementtype = record.get('movementtype');
+                                            return ( movementtype == '002' && releasestype == 'E') ? "Estornar movimento!" : '';
+                                        },
+                                        getClass: function(value, metaData, record, rowIndex, colIndex, store) {
+                                            var releasestype = record.get('releasestype'),
+                                                movementtype = record.get('movementtype');
+                                            return ( movementtype == '002' && releasestype == 'E') ? "fa fa-history action-select-color-font" : '';
+                                        },
+                                        isDisabled: function(view, rowIndex, colIndex, item, record) {
+                                            var releasestype = record.get('releasestype'),
+                                                movementtype = record.get('movementtype');
+
+                                            return ( movementtype != '002' || releasestype != 'E');
+                                        }
+                                    }, {
+                                        xtype: 'splitter'
+                                    }, {
+                                        handler: 'onFlowHoldSearch',
                                         iconCls: "fa fa-check-circle action-checked-color-font"
                                     }
                                 ]

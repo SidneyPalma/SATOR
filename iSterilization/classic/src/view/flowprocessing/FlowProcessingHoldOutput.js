@@ -23,7 +23,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
     cls: 'panel-frame',
     iconCls: "fa fa-file-archive-o",
 
-    editable: true,
+    editable: false,
 
     doCallBack: Ext.emptyFn,
 
@@ -91,6 +91,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                         defaultType: 'textfield',
                                         defaults: {
                                             anchor: '100%',
+                                            useReadColor: true,
                                             fieldCls: 'smart-field-style-action'
                                         },
                                         items: [
@@ -110,10 +111,28 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                     }
                                                 }
                                             }, {
-                                                xtype: 'displayfield',
-                                                fieldLabel: 'Transportador',
-                                                name: 'transportedby',
-                                                value: '...'
+                                                xtype: 'container',
+                                                layout: 'hbox',
+                                                defaultType: 'displayfield',
+                                                defaults: {
+                                                    fieldCls: 'smart-field-style-action'
+                                                },
+                                                items: [
+                                                    {
+                                                        flex: 2,
+                                                        fieldLabel: 'Transportado por',
+                                                        name: 'transportedby',
+                                                        value: '...'
+                                                    }, {
+                                                        xtype: 'splitter'
+                                                    }, {
+                                                        flex: 3,
+                                                        xtype: 'displayfield',
+                                                        fieldLabel: 'Encerrado em',
+                                                        name: 'closeddate',
+                                                        value: '...'
+                                                    }
+                                                ]
                                             }
                                         ]
                                     }

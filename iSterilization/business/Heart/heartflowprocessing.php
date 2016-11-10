@@ -1871,8 +1871,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         armorymovementoutput o
                     where o.id = am.id
                 ) a
-            where ( ib.barcode = @search or fp.barcode = @search )
-               or ( am.movementtype = @movementtype or @movementtype = '000' )
+            where ( ib.barcode = @search or a.barcode = @search or @search = '' )
+              and ( am.movementtype = @movementtype or @movementtype = '000' )
             group by
                 am.id,
                 a.barcode,	

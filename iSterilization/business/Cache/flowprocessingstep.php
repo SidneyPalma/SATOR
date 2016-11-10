@@ -107,12 +107,12 @@ class flowprocessingstep extends \Smart\Data\Cache {
                                     materialboxtarge mbt
                                     inner join targecolor tc on ( tc.id = mbt.targecolorid )
                                 where mbt.materialboxid = fp.materialboxid
-                                order by mbt.targeorderby desc
+                                order by mbt.targeorderby
                                 for xml path ('')
                             ) ,1,1,''
                         )                
                 ),
-				O.originplace
+				o.originplace
             from
                 flowprocessingstepaction fpsa
                 inner join flowprocessingstep fps on ( fps.id = fpsa.flowprocessingstepid )

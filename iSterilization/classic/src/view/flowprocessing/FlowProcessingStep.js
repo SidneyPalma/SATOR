@@ -217,6 +217,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                             }
                         ]
                     }, {
+                        xtype: 'splitter'
+                    }, {
                         width: 350,
                         xtype: 'container',
                         layout: {

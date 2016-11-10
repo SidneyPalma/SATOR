@@ -221,6 +221,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 text: 'Processos',
                                 name: 'labelitem'
                             }, {
+                                name: 'search',
+                                showClear: true,
+                                xtype: 'textfield',
+                                useUpperCase: true,
+                                useReadColor: false,
+                                inputType: 'password',
+                                cls: 'processing-field',
+                                labelCls: 'processing-field-font',
+                                listeners: {
+                                    specialkey: function (field, e, eOpts) {
+                                        var view = field.up('flowprocessinghold');
+                                        if ([e.ENTER].indexOf(e.getKey()) != -1) {
+                                            view.fireEvent('queryreader', field, e, eOpts);
+                                        }
+                                    }
+                                }
+                            }, {
                                 flex: 1,
                                 rowLines: true,
                                 margin: '10 0 0 0',
@@ -267,23 +284,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                         }
                                     }
                                 ]
-                            }, {
-                                name: 'search',
-                                showClear: true,
-                                xtype: 'textfield',
-                                useUpperCase: true,
-                                useReadColor: false,
-                                inputType: 'password',
-                                cls: 'processing-field',
-                                labelCls: 'processing-field-font',
-                                listeners: {
-                                    specialkey: function (field, e, eOpts) {
-                                        var view = field.up('flowprocessinghold');
-                                        if ([e.ENTER].indexOf(e.getKey()) != -1) {
-                                            view.fireEvent('queryreader', field, e, eOpts);
-                                        }
-                                    }
-                                }
                             }
                         ]
                     }

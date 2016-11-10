@@ -24,9 +24,9 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
                 p.name as proprietaryname,
                 dbo.getEnum('unconformities',fpm.unconformities) as unconformitiesdescription,
                 fpm.dateof,
-                fpm.dateto,
-                dbo.binary2base64(ib.filedata) as filedata,
-                ib.fileinfo
+                fpm.dateto
+                --dbo.binary2base64(ib.filedata) as filedata,
+                --ib.fileinfo
             from
                 flowprocessingstepmaterial fpm
                 inner join itembase ib on ( ib.id = fpm.materialid )
@@ -36,6 +36,39 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
         try {
             $pdo = $proxy->prepare($sql);
             $pdo->bindValue(":flowprocessingstepid", $query, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setSuccess(count($rows) != 0);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectFile(array $data) {
+        $materialid = $data['materialid'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @materialid int = :materialid;
+                
+            select
+                ib.id, 
+                dbo.binary2base64(ib.filedata) as filedata,
+                ib.fileinfo
+            from
+                itembase ib
+            where ib.id = @materialid";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+            $pdo->bindValue(":materialid", $materialid, \PDO::PARAM_INT);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 

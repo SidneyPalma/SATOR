@@ -27,7 +27,7 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovement', {
             type: 'auto',
             serializeType: 'date',
             convert: function (value, record) {
-                return ( !value || value.length == 0) ? null : Ext.util.Format.date(Ext.Date.parse(value,'Y-m-d'),'d/m/Y');
+                return ( !value || value.length == 0) ? null : Ext.util.Format.date(value,'d/m/Y');
             }
         }, {
             name: 'movementtype',
@@ -48,7 +48,11 @@ Ext.define( 'iSterilization.model.armory.ArmoryMovement', {
             type: 'auto'
         }, {
             name: 'closeddate',
-            type: 'auto'
+            type: 'auto',
+            serializeType: 'date',
+            convert: function (value, record) {
+                return ( !value || value.length == 0) ? null : Ext.util.Format.date(value,'d/m/Y H:i')  + ' - ' + record.get('closedby');
+            }
         }, {
             name: 'boxsealone',
             type: 'auto',

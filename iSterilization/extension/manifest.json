@@ -1,0 +1,17 @@
+{  
+   "name":"Esterilização CME",
+   "description":"Esterilização CME - Módulo Operacional",
+   "version":"1.0",
+   "manifest_version": 2,
+   "app":{  
+      "urls":[  
+         "http://localhost/SATOR-dev/iSterilization/#isterilization"
+      ],
+      "launch":{  
+         "web_url":"http://localhost/SATOR-dev/iSterilization/#isterilization"
+      }
+   },
+   "icons":{  
+      "128":"icon_128.png"
+   }
+}

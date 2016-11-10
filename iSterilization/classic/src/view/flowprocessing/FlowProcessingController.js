@@ -179,7 +179,11 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     callSATOR_CONSULTAR_MOVIMENTO: function () {
+        var me = this,
+            view = me.getView();
+
         Ext.widget('flowprocessingholdsearch').show(null, function () {
+            this.master = view;
             this.down('textfield[name=search]').focus(false, 200);
         });
     },
@@ -538,46 +542,26 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         );
     },
 
+    onFlowHoldRevert: function(grid, rowIndex, colIndex) {
+        var me = this,
+            model = grid.getStore().getAt(rowIndex),
+            value = model.get('id');
+
+        me.showMovementType004(value);
+    },
+
     onFlowHoldSelect: function (viewView,store) {
         var me = this,
             record = viewView.getSelectionModel().getSelection()[0];
 
-        switch (record.get('movementtype')) {
-            case '001':
-                var value = record.get('id');
-                me.showMovementType001(value);
-                break
-            case '002':
-                var value = record.get('id');
-                me.showMovementType002(value);
-                break
-            case '003':
-                var value = record.get('id');
-                me.showMovementType003(value);
-                break
-        }
+        me.getMovementType(record);
     },
 
-    showMovementType001: function (value) {
+    onFlowHoldSearch: function(grid, rowIndex, colIndex) {
         var me = this,
-            view = me.getView(),
-            store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+            model = grid.getStore().getAt(rowIndex);
 
-        store.setParams({
-            method: 'selectCode',
-            rows: Ext.encode({ id: value })
-        }).load({
-            scope: me,
-            callback: function (records) {
-                var rec = records[0];
-                Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
-                    this.master = view;
-                    this.down('form').loadRecord(rec);
-                    this.down('textfield[name=search]').focus(false,200);
-                    Ext.getStore('armorymovementitem').setParams({query: value}).load();
-                });
-            }
-        });
+        me.getMovementType(model);
     },
 
     onSearchMoviment: function (field, e, eOpts) {
@@ -651,7 +635,55 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             }
         });
     },
-    
+
+    getMovementType: function (record) {
+        var me = this;
+
+        switch (record.get('movementtype')) {
+            case '001':
+                var value = record.get('id');
+                me.showMovementType001(value);
+                break
+            case '002':
+                var value = record.get('id');
+                me.showMovementType002(value);
+                break
+            case '003':
+                var value = record.get('id');
+                me.showMovementType003(value);
+                break
+            case '004':
+                var value = record.get('id');
+                me.showMovementType004(value);
+                break
+        }
+    },
+
+    showMovementType001: function (value) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('armorymovement') || Ext.create('iSterilization.store.armory.ArmoryMovement');
+
+        store.setParams({
+            method: 'selectCode',
+            rows: Ext.encode({ id: value })
+        }).load({
+            scope: me,
+            callback: function (records) {
+                var rec = records[0];
+                Ext.widget('call_SATOR_MOVIMENTO_OF', {
+                    editable: rec.get('releasestype') == "A"
+                }).show(null,function () {
+                    this.master = view;
+                    this.down('form').loadRecord(rec);
+                    this.down('textfield[name=search]').setReadColor(rec.get('releasestype') != "A");
+                    this.down('textfield[name=search]').focus(false,200);
+                    Ext.getStore('armorymovementitem').setParams({query: value}).load();
+                });
+            }
+        });
+    },
+
     showMovementType002: function (value) {
         var me = this,
             view = me.getView(),
@@ -664,10 +696,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             scope: me,
             callback: function(records, operation, success) {
                 var rec = records[0];
-                Ext.widget('flowprocessingholdoutput').show(null,function () {
+                Ext.widget('flowprocessingholdoutput', {
+                    editable: rec.get('releasestype') == "A"
+                }).show(null,function () {
                     this.master = view;
                     this.down('form').loadRecord(rec);
-                    // this.down('fieldcontainer[name=boxseal]').show();
+                    this.down('textfield[name=search]').setReadColor(rec.get('releasestype') != "A");
                     this.down('textfield[name=search]').focus(false,200);
                     var groupdocument = this.down('fieldcontainer[name=groupdocument]');
 
@@ -692,9 +726,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             scope: me,
             callback: function (records) {
                 var rec = records[0];
-                Ext.widget('call_SATOR_MOVIMENTO_IN').show(null,function () {
+                Ext.widget('call_SATOR_MOVIMENTO_IN', {
+                    editable: rec.get('releasestype') == "A"
+                }).show(null,function () {
                     this.master = view;
                     this.down('form').loadRecord(rec);
+                    this.down('textfield[name=search]').setReadColor(rec.get('releasestype') != "A");
                     this.down('textfield[name=search]').focus(false,200);
                     Ext.getStore('armorymovementitem').setParams({query: value}).load();
                 });
@@ -702,6 +739,37 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         });
     },
 
+    showMovementType004: function (value) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('armorymovementoutput') || Ext.create('iSterilization.store.armory.ArmoryMovementOutput');
+
+        store.setParams({
+            method: 'selectCode',
+            query: value
+        }).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                var rec = records[0];
+                Ext.widget('flowprocessingholdrevert', {
+                    editable: rec.get('releasestype') == "A"
+                }).show(null,function () {
+                    this.master = view.master;
+                    this.down('form').loadRecord(rec);
+                    // this.down('textfield[name=search]').setReadColor(rec.get('releasestype') != "A");
+                    // this.down('textfield[name=search]').focus(false,200);
+                    var groupdocument = this.down('fieldcontainer[name=groupdocument]');
+
+
+                    view.close();
+                    groupdocument.update(rec.data);
+
+                    Ext.getStore('armorymovementitem').setParams({query: value}).load();
+                });
+            }
+        });
+    },
+    
     delReleasesItem: function(grid, rowIndex, colIndex) {
         var store = grid.getStore(),
             model = store.getAt(rowIndex);
@@ -880,6 +948,27 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             this.down('form').reset();
             this.down('textfield[name=usercode]').focus(false,200);
         });
+    },
+
+    setMovementRevert: function () {
+        var me = this,
+            view = me.getView();
+
+        view.down('hiddenfield[name=areasid]').reset();
+        view.down('hiddenfield[name=movementtype]').reset();
+        view.down('hiddenfield[name=releasestype]').reset();
+
+        console.info(view.down('form').getValues());
+
+        // me.setModuleData('armorymovementoutput');
+        // me.setModuleForm(view.down('form'));
+        //
+        // me._success = function (frm, action) {
+        //     view.master.updateType();
+        //     view.close();
+        // }
+        //
+        // me.updateRecord();
     },
 
     setMovementOutput: function () {
@@ -3238,7 +3327,34 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             portrait = view.down('portrait');
 
         if(portrait) {
-            portrait.beFileData(record.get('filetype'));
+            Ext.Ajax.request({
+                scope: me,
+                url: record.store.getUrl(),
+                params: {
+                    action: 'select',
+                    method: 'selectFile',
+                    materialid: record.get('materialid')
+                },
+                callback: function (options, success, response) {
+                    var result = Ext.decode(response.responseText);
+
+                    if (!success || !result.success) {
+                        Smart.Msg.showToast('O processo não foi executado com sucesso!','info');
+                        return false;
+                    }
+
+                    var filedata = result.rows[0].filedata;
+                    var fileinfo = result.rows[0].fileinfo;
+
+                    var info = fileinfo,
+                        type = (info && info.length !== 0) ? Ext.decode(info) : null;
+                    var filetype = (type) ? Ext.String.format('data:{0};base64,{1}',type.fileType,filedata) : filedata;
+
+                    portrait.beFileData(filetype);
+                }
+            });
+
+            // portrait.beFileData(record.get('filetype'));
             portrait.update(Ext.String.format('<div class="portrait-label">{0}</div>',record.get('materialname')));
         }
     },
