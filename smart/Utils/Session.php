@@ -20,7 +20,7 @@ use Smart\Common\Traits as Traits;
 class Session {
     use Traits\TresultSet;
 
-    const _SESSION_PATH = '/temp';
+    const _SESSION_PATH = '/tmp';
     const _SESSION_NAME = 'smart';
 
     const _SESSION_STARTED = true;
