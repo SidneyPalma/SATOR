@@ -157,7 +157,9 @@ class Session {
     public function hasProfile($menu, $action, $goback = false, $msgerror = null) {
         $username = self::$instance->username;
 
-        if(!self::$instance->have()) {
+        $opened = self::$instance->have();
+
+        if(!$opened) {
             throw new \PDOException('Não existe uma sessão ativa para esta operação!');
         }
 
