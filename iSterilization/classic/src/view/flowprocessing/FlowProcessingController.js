@@ -3329,7 +3329,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         if(portrait) {
             Ext.Ajax.request({
                 scope: me,
-                async: false,
                 url: record.store.getUrl(),
                 params: {
                     action: 'select',
