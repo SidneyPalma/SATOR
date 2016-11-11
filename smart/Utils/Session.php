@@ -71,19 +71,18 @@ class Session {
     public function startSession() {
 
         if ( $this->sessionState == self::_SESSION_NOT_STARTED ) {
-//			$name = self::_SESSION_NAME;
-			$path = self::_SESSION_PATH;
-			$name = isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name;
+			//$name = self::_SESSION_NAME;
+			//$path = self::_SESSION_PATH;
+			//$name = isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name;
 
             $expireto = 60*60*24*1; // 1 day
-//            session_set_cookie_params($expireto,self::$path);
-//            session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
+            session_set_cookie_params($expireto,self::$path);
+            session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
 
-			ini_set("session.name","{$name}");
-            ini_set("session.cookie_path","{$path}");
-            ini_set("session.cookie_lifetime","{$expireto}");
-			ini_set("session.gc_maxlifetime","{$expireto}");
-//			ini_set("session.save_path", "/{$path}/{$name}/");
+			//ini_set("session.name","{$name}");
+			//ini_set("session.cookie_path","{$path}");
+			//ini_set("session.cookie_lifetime","{$expireto}");
+			//ini_set("session.gc_maxlifetime","{$expireto}");
 			
             $this->sessionState = session_start();
 			
@@ -150,18 +149,18 @@ class Session {
     }
 
     public function have() {
-		return $this->sessionState;
-        /*return ( strlen(self::$instance->username) !== 0 );*/
+		//return $this->sessionState;
+        return ( strlen(self::$instance->username) !== 0 );
     }
    
     public function hasProfile($menu, $action, $goback = false, $msgerror = null) {
         $username = self::$instance->username;
 
-        $opened = self::$instance->have();
+        //$opened = self::$instance->have();
 
-        if(!$opened) {
-            throw new \PDOException('Não existe uma sessão ativa para esta operação!');
-        }
+        //if(!$opened) {
+        //    throw new \PDOException('Não existe uma sessão ativa para esta operação!');
+        //}
 
         if(strlen($menu) == 0 || strlen($action) == 0) {
             return true;
