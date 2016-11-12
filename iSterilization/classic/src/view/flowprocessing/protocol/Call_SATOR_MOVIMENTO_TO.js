@@ -53,12 +53,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
         me.down('fieldcontainer[name=group_01]').hide();
         me.down('fieldcontainer[name=group_02]').hide();
         me.down('fieldcontainer[name=group_03]').hide();
+        me.down('fieldcontainer[name=group_04]').hide();
 
         if (clienttype == '004') {
             me.showSurgical(true);
             me.down('fieldcontainer[name=group_01]').show();
             me.down('fieldcontainer[name=group_02]').show();
-            // me.down('fieldcontainer[name=group_03]').show();
             me.down('fieldcontainer[name=group_04]').show();
         }
 
@@ -122,7 +122,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
         me.down('fieldcontainer[name=group_01]').hide();
         me.down('fieldcontainer[name=group_02]').hide();
-        // me.down('fieldcontainer[name=group_03]').hide();
         me.down('fieldcontainer[name=group_04]').hide();
 
         me.updPosition();
@@ -336,7 +335,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            allowBlank: false,
+                            // allowBlank: false,
                             fieldCls: 'smart-field-style-action'
                         },
                         items: [

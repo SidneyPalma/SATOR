@@ -8,11 +8,11 @@ use Smart\Common\Traits as Traits;
 
 /**
  * Session
- * 
+ *
  * Realiza o controle de autenticação do Usuário no servidor
  *
  * Validar permissões de acesso - Profile
- * 
+ *
  * <code>
  *      $session = Session::getInstance();
  * </code>
@@ -20,7 +20,7 @@ use Smart\Common\Traits as Traits;
 class Session {
     use Traits\TresultSet;
 
-    const _SESSION_PATH = '/temp';
+    const _SESSION_PATH = '/tmp';
     const _SESSION_NAME = 'smart';
 
     const _SESSION_STARTED = true;
@@ -71,22 +71,24 @@ class Session {
     public function startSession() {
 
         if ( $this->sessionState == self::_SESSION_NOT_STARTED ) {
-			$name = self::_SESSION_NAME;
+			//$name = self::_SESSION_NAME;
 			$path = self::_SESSION_PATH;
-			
+			$name = isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name;
+
             $expireto = 60*60*24*1; // 1 day
-            //session_set_cookie_params($expireto,self::$path);
-            //session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
+//            session_set_cookie_params($expireto,self::$path);
+//            session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
 
 			ini_set("session.name","{$name}");
+			ini_set("session.cookie_path","{$path}");
+			ini_set("session.cookie_lifetime","{$expireto}");
 			ini_set("session.gc_maxlifetime","{$expireto}");
-			ini_set("session.save_path", "/{$path}/{$name}/");
-			
+
             $this->sessionState = session_start();
-			
+
 			//ini_set("session.gc_maxlifetime","21600"); // 6 hours
 			//ini_set("session.save_path", "/your_home/your_sessions/");
-			//session_start();			
+			//session_start();
         }
 
         return $this->sessionState;
@@ -133,9 +135,9 @@ class Session {
 	public function destroy() {
 		if ( $this->sessionState == self::_SESSION_STARTED ) {
 			$this->sessionState = !session_destroy();
-			
+
 			unset( $_SESSION );
-			
+
 			return !$this->sessionState;
 		}
 
@@ -148,11 +150,17 @@ class Session {
 
     public function have() {
 		return $this->sessionState;
-        /*return ( strlen(self::$instance->username) !== 0 );*/
+//        return ( strlen(self::$instance->username) !== 0 );
     }
-   
+
     public function hasProfile($menu, $action, $goback = false, $msgerror = null) {
         $username = self::$instance->username;
+
+        $opened = self::$instance->have();
+
+        if(!$opened) {
+            throw new \PDOException('Não existe uma sessão ativa para esta operação!');
+        }
 
         if(strlen($menu) == 0 || strlen($action) == 0) {
             return true;
@@ -201,7 +209,7 @@ class Session {
                 inner join menu m on ( m.id = pm.menuid )
                 inner join profilemenuaction pma on ( pma.profilemenuid = pm.id )
                 inner join menuaction ma on ( ma.menuid = m.id and ma.id = pma.menuactionid )
-                inner join action a on ( a.id = ma.actionid )			 
+                inner join action a on ( a.id = ma.actionid )
 			where m.guid = @mguid
 			  and a.guid = @aguid
               and u.username = @uname
@@ -225,7 +233,7 @@ class Session {
         }
 
         $credential = (object) self::getResult();
-		
+
         if($goback === true) {
             return $credential;
         }

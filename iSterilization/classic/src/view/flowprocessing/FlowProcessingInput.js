@@ -27,7 +27,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingInput', {
             margin: '0 0 6 0',
             xtype: 'label',
             cls: 'processing-field-font',
-            text: 'Insumos'
+            text: 'Insumos',
+            style: {
+                'text-align': 'right;'
+            }
         }
     ],
 

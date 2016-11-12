@@ -60,8 +60,8 @@ Ext.define( 'Smart.ux.app.Application', {
                         main = Ext.create({xtype:'app-main'}),
 						imageInfo = Ext.decode(rows.logoinfo),
 						photoInfo = Ext.decode(rows.fileinfo),
-                        imageLogo = Ext.String.format("data:{0};base64,{1}",imageInfo.fileType,rows.logodata),
-						photoData = Ext.String.format("data:{0};base64,{1}",photoInfo.fileType,rows.filedata);
+                        imageLogo = imageInfo ? Ext.String.format("data:{0};base64,{1}",imageInfo.fileType,rows.logodata) : null,
+						photoData = photoInfo ? Ext.String.format("data:{0};base64,{1}",photoInfo.fileType,rows.filedata) : null;
 
                     main.down('image[name=filedata]').setSrc(photoData);
                     main.down('image[name=filelogo]').setSrc(imageLogo);

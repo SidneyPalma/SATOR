@@ -151,6 +151,9 @@ class material extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+            declare
+                @id int = :id;
+
             SELECT
                 ib.name,
                 ib.description,
@@ -180,6 +183,7 @@ class material extends \Smart\Data\Cache {
                     inner join itembase ibt on ( ibt.id = mbi.materialid )
                 ),
                 m.*,
+                dbo.getEnum('armorylocal',m.armorylocal) as armorylocaldescription,
                 dbo.getEnum('materialstatus',m.materialstatus) as materialstatusdescription,
                 pk.name as packingname,
                 pt.name as proprietaryname,
@@ -190,7 +194,7 @@ class material extends \Smart\Data\Cache {
                 inner join packing pk on ( pk.id = m.packingid )
                 inner join proprietary pt on ( pt.id = ib.proprietaryid )
                 inner join manufacturer mf on ( mf.id = ib.manufacturerid )
-            WHERE ib.id = :id";
+            WHERE ib.id = @id";
 
         try {
             $pdo = $proxy->prepare($sql);
