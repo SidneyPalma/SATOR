@@ -11,6 +11,9 @@ class modulemenu extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+			declare
+				@query int = :query;
+				
             select
                 mm.id,
                 mm.parentid,
@@ -23,7 +26,7 @@ class modulemenu extends \Smart\Data\Cache {
             from
                 modulemenu mm
                 left join menu m on ( m.id = mm.menuid )
-            where mm.id = :query";
+            where mm.id = @query";
 
         try {
 
@@ -49,14 +52,18 @@ class modulemenu extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+			declare
+				@moduleid int = :moduleid,
+				@query varchar(60) = :query;
+				
             select
                 mm.id,
                 mm.name
             from
                 modulemenu mm
             where mm.menuid is null
-              and mm.name like :query
-              and mm.moduleid = :moduleid
+              and mm.name like @query
+              and mm.moduleid = @moduleid
             order by mm.orderby";
 
         try {
@@ -85,15 +92,20 @@ class modulemenu extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
+			declare
+				@moduleid int = :moduleid,
+				@query varchar(60) = :query,
+				@available varchar(60) = :available;
+						
             select
                 m.id,
                 m.name,
                 m.description
             from
                 menu m
-            where m.available like :available
-              and m.name like :query
-              and m.id not in ( select mm.menuid from modulemenu mm where mm.moduleid = :moduleid and mm.menuid is not null )";
+            where m.available like @available
+              and m.name like @query
+              and m.id not in ( select mm.menuid from modulemenu mm where mm.moduleid = @moduleid and mm.menuid is not null )";
 
         try {
 
@@ -126,6 +138,9 @@ class modulemenu extends \Smart\Data\Cache {
         }
 
         $sql = "
+			declare
+				@module varchar(60) = :module;
+		
             select
                 mm.id,
                 mn.router,
@@ -143,7 +158,7 @@ class modulemenu extends \Smart\Data\Cache {
                 module m
                 inner join modulemenu mm on ( mm.moduleid = m.id )
                 left join  menu mn on ( mn.id = mm.menuid )
-            where m.name = :module
+            where m.name = @module
             order by mm.orderby";
 
         try {
@@ -171,6 +186,9 @@ class modulemenu extends \Smart\Data\Cache {
         }
 
         $sql = "
+			declare
+				@module varchar(60) = :module;
+				
             select
                 mm.id,
                 mn.router,
@@ -188,7 +206,7 @@ class modulemenu extends \Smart\Data\Cache {
                 module m
                 inner join modulemenu mm on ( mm.moduleid = m.id )
                 left join  menu mn on ( mn.id = mm.menuid )
-            where m.name = :module
+            where m.name = @module
             order by mm.orderby";
 
         try {
@@ -214,10 +232,13 @@ class modulemenu extends \Smart\Data\Cache {
         $query = $data["query"];
         $module = $data["module"];
 
-
         $query = "%{$query}%";
 
         $sql = "
+			declare
+				@query varchar(60) = :query,
+				@module varchar(60) = :module;
+				
             select
                 mm.id,
                 mn.router,
@@ -228,9 +249,9 @@ class modulemenu extends \Smart\Data\Cache {
                 module m
                 inner join modulemenu mm on ( mm.moduleid = m.id )
                 inner join  menu mn on ( mn.id = mm.menuid )
-            where m.name = :module
+            where m.name = @module
+              and mn.name like @query
               and mn.menutype = 'tpDock'
-              and mn.name like :query
             order by mm.orderby";
 
         try {
