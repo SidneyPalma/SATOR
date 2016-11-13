@@ -3312,7 +3312,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onItemKeyDownMaterial: function (grid, record, item, index, e, eOpts) {
-        var me = this;
+        var me = this,
+            view = me.getView();
+
         if (e.ctrlKey == true) {
             switch(e.getKey()) {
                 case e.DELETE:
@@ -3335,8 +3337,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                             Smart.Msg.showToast('O processo não foi executado com sucesso!','error');
                                             return false;
                                         }
-                                        Smart.Msg.showToast(result.rows[0].err_text,'info');
                                         record.store.load();
+                                        Smart.Msg.showToast(result.rows[0].err_text,'info');
+                                        view.down('textfield[name=search]').focus(false,200);
                                     }
                                 });
                             }
