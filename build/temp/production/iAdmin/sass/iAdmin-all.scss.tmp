@@ -646,6 +646,7 @@ $include-ext-overrides-app-basecontroller: dynamic(true);;
 $include-ext-overrides-app-domain-component: dynamic(true);;
 $include-ext-overrides-button-button: dynamic(true);;
 $include-ext-overrides-container-container: dynamic(true);;
+$include-ext-overrides-data-connection: dynamic(true);;
 $include-ext-overrides-data-model: dynamic(true);;
 $include-ext-overrides-data-store: dynamic(true);;
 $include-ext-overrides-data-treestore: dynamic(true);;

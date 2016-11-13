@@ -149,8 +149,8 @@ class Session {
     }
 
     public function have() {
-		return $this->sessionState;
-//        return ( strlen(self::$instance->username) !== 0 );
+//		return self::$instance->sessionState;
+        return ( strlen(self::$instance->username) !== 0 );
     }
 
     public function hasProfile($menu, $action, $goback = false, $msgerror = null) {
@@ -159,6 +159,9 @@ class Session {
         $opened = self::$instance->have();
 
         if(!$opened) {
+//            $location = $_SERVER["HTTP_REFERER"];
+//            header("Location: $location");
+//            exit;
             throw new \PDOException('Não existe uma sessão ativa para esta operação!');
         }
 
@@ -253,6 +256,8 @@ class Session {
         $format = "Y-m-d";
         $date1  = \DateTime::createFromFormat($format, $expireto);
         $date2  = \DateTime::createFromFormat($format, date("Y-m-d"));
+
+//        print_r($_SERVER);
 
         if($date1 < $date2) {
             throw new \PDOException($msgerror || ($negation . '.<br/> <br/>A data para esta ação expirou!'));

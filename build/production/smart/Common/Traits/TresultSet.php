@@ -8,7 +8,7 @@ use Smart\Setup\Start;
 use Smart\Utils\Session;
 /**
  * TresultSet
- * 
+ *
  * Implementa a Serialização de uma Entity\Doctrine em um array.
  * Deve ser usado somente no EntityRepository.
  *
@@ -22,13 +22,14 @@ trait TresultSet {
      *
      * @var array
      */
-    private static $result = array( 
+    private static $result = array(
         'text'=>'Transação completada com sucesso!',
         'rows'=>array(),
         'crud'=>'select',
         'errors'=>array(),
         'success'=>true,
         'message'=>false,
+        'restart'=>false,
         'records'=>0 );
 
     /**
@@ -145,7 +146,7 @@ trait TresultSet {
 
     /**
      * Estrutura de Retorno self::$result
-     * 
+     *
      * @return json Contém a estrutura de retorno
      */
     public static function getResultToJson() {
@@ -154,24 +155,24 @@ trait TresultSet {
 
     /**
      * Estrutura de Retorno self::$result
-     * 
+     *
      * @return array Contém a estrutura de retorno
      */
     public static function getResult() {
         return self::$result;
     }
-    
+
     /**
      * Estrutura de Retorno self::$result
-     * 
+     *
      * @return array Contém a estrutura de retorno
      */
     public static function setResult(array $data) {
-        
+
         foreach ($data as $key => $value) {
             self::$result[$key] = $value;
         }
-        
+
         return self::getResult();
     }
 
@@ -228,7 +229,7 @@ trait TresultSet {
 
     /**
      * Analisa a string codificada JSON e converte-a em uma array associativo.
-     * 
+     *
      * @param string $param String codificada JSON
      * @return object
      */
@@ -239,7 +240,7 @@ trait TresultSet {
 
     /**
      * Foram registrados erros
-     * 
+     *
      * @return boolean Possui erros
      */
     public static function hasErrors() {
@@ -284,14 +285,14 @@ trait TresultSet {
 
     /**
      * Mensagem de retorno
-     * 
+     *
      * @param string $param Mensagem de retorno
      */
     public static function _setText($param) {
         self::$result['text'] = $param;
     }
 
-	/**
+    /**
      * Mensagem de retorno
      *
      * @param string $param operação de CRUD
@@ -308,10 +309,10 @@ trait TresultSet {
     public static function _setCrud($param) {
         self::$result['crud'] = $param;
     }
-	
+
     /**
      * Registros de retorno
-     * 
+     *
      * @param array $param Registros de retorno da Estrutura
      */
     public static function _setRows(array $param, $count = null) {
@@ -321,25 +322,29 @@ trait TresultSet {
 
     /**
      * Erros encontrados
-     * 
+     *
      * @param array $param Erros encontrados na validação Business
      */
     public static function _setErrors(array $param) {
         self::$result['errors'] = $param;
     }
-    
+
     /**
      * Retorna o status da operação
-     * 
+     *
      * @param boolean $param Retorno com/sem sucesso da Estrutura
      */
     public static function _setSuccess($param) {
         self::$result['success'] = (boolean)$param;
-    }    
+    }
+
+    public static function _setRestart($param) {
+        self::$result['restart'] = $param;
+    }
 
     /**
      * Total de Registros encontrados
-     * 
+     *
      * @param integer $param Total de Registros encontrados na Consulta
      */
     public static function _setRecords($param) {
@@ -347,10 +352,10 @@ trait TresultSet {
         self::_setSuccess( ((int)$param) ? (int)$param : self::$result['success'] );
         self::_setText( ((int)$param) ? self::$result['text'] : 'Nao ha registros a serem mostrados!' );
     }
-    
+
     /**
      * Método paginador. <br/>
-     * 
+     *
      * @param array $args Valores para a entidade
      */
     public static function _setPage($start,$limit) {
@@ -360,7 +365,7 @@ trait TresultSet {
         $start = !is_numeric($start) ? 0 : $start;
         $limit = !is_numeric($limit) ? 0 : $limit;
 
-        if( count($results) !== 0 ) {        
+        if( count($results) !== 0 ) {
             if((count($results) >= $start) && ($limit > 0)) {
                 do {
                     $result[$i] = $results[$start];
@@ -376,7 +381,7 @@ trait TresultSet {
 
     /**
      * Estrutura de Retorno self::$result paginado
-     * 
+     *
      * @return array Contém a estrutura de retorno
      */
     public static function getResultPage($start, $limit) {
