@@ -977,29 +977,29 @@ class heartflowprocessing extends \Smart\Data\Proxy {
 
         $sql = "
             declare
-                @hasitem int = 0,
+                @hasitem int = 1,
+                @materialboxid int,
                 @hastext varchar(90),
                 @flowprocessingid int,
                 @materialid int = :materialid,
-                @materialboxid int = :materialboxid,
                 @flowprocessingstepid int = :flowprocessingstepid;
 
             select 
                 @flowprocessingid = fp.id,
-                @materialboxid int = fp.materialboxid                
+                @materialboxid = fp.materialboxid                
             from 
                 flowprocessingstep fps
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid ) 
-            where id = @flowprocessingstepid;
+            where fps.id = @flowprocessingstepid;
 
             select
-                @hasitem = count(*)
+                @hasitem = count(id)
             from
                 materialboxitem
             where materialboxid = @materialboxid
               and materialid = @materialid;
             
-            set @hastext = 'O material <b>Não pode ser excluido</b> deste processamento!';
+            set @hastext = 'O material <b>não pode ser excluido</b> deste processamento!';
             
             if(@hasitem = 0)
             begin
