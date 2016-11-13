@@ -3312,6 +3312,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     },
 
     onItemKeyDownMaterial: function (grid, record, item, index, e, eOpts) {
+        var me = this,
         if (e.ctrlKey == true) {
             switch(e.getKey()) {
                 case e.DELETE:
