@@ -3337,9 +3337,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                             Smart.Msg.showToast('O processo não foi executado com sucesso!','error');
                                             return false;
                                         }
-                                        record.store.load();
                                         Smart.Msg.showToast(result.rows[0].err_text,'info');
                                         view.down('textfield[name=search]').focus(false,200);
+                                        if(result.rows[0].err_code == 0) record.store.load();
                                     }
                                 });
                             }
