@@ -2115,7 +2115,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             record = view.xdata,
             exceptionby = record.get('exceptionby'),
-            stepflaglist = record.get('stepflaglist');
+            stepflaglist = record.get('stepflaglist'),
+            stepsettings = record.get('stepsettings');
 
         /**
         * 011 - Exige uso de EPI na Leitura de Entrada
@@ -2146,6 +2147,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         }
 
         /**
+         * Solicita impressão de Etiqueta
+         */
+        if(stepsettings && ['001'].indexOf(stepsettings.tagprinter) != -1) {
+            me.callSATOR_ALLOW_DENY('IMPRIMIR_ETIQUETA');
+            return false;
+        }
+
+        /**
          * Encerrar Leitura
          *
          * Flags Diversos ...
@@ -2168,7 +2177,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView(),
             typeQuestion = {
                 'EPI': 'Relatar uso de  EPI',
-                'UNCONFORMITIES': 'Registrar inconformidades'
+                'UNCONFORMITIES': 'Registrar inconformidades',
+                'IMPRIMIR_ETIQUETA': 'Imprimir etiqueta'
             },
             doCallBack = function (dialog,field,scope) {
                 var me = scope,
@@ -2222,6 +2232,14 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             return false;
                         }
                         me.callSATOR_UNCONFORMITIES();
+                        break;
+                    case 'IMPRIMIR_ETIQUETA':
+                        if(value === 'SATOR_SIM') {
+                            me.callSATOR_IMPRIMIR_ETIQUETA();
+                        }
+                        me.encerrarEtapa();
+                        dialog.close();
+                        return false;
                         break;
                 }
 
