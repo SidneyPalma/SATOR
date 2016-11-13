@@ -1026,6 +1026,68 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+    public function insertItem(array $data) {
+        $flowprocessingstepid = $data['flowprocessingstepid'];
+
+        $sql = "
+            declare
+                @hasstep int = 0,
+                @hasitem int = 1,
+                @materialboxid int,
+                @hastext varchar(90),
+                @flowprocessingid int,
+                @flowprocessingstepid int = :flowprocessingstepid;
+
+            select 
+                @hasstep = count(fpsm.id),
+                @flowprocessingid = fp.id,
+                @materialboxid = fp.materialboxid
+            from 
+                flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
+                inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
+            where fps.id = @flowprocessingstepid
+			group by
+				fp.id,
+				fp.materialboxid;
+
+            select
+                @hasitem = count(id)
+            from
+                materialboxitem
+            where materialboxid = @materialboxid;
+            
+            if(@hasstep = @hasitem)
+            begin
+                set @hasitem = 1;
+                set @hastext = 'O kit <b>não possui atualizações</b> para este processamento!';            
+            end           
+
+            if(@hasstep < @hasitem)
+            begin
+                set @hasitem = 0;
+                set @hastext = 'O kit foi atualizado com sucesso!';
+                --delete from flowprocessingstepmaterial where flowprocessingstepid = @flowprocessingstepid and materialid = @materialid;
+            end
+            
+            select @hasitem as err_code, @hastext as err_text;";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     /**
      * Select
      */

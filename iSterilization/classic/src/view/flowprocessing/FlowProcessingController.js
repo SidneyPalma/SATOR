@@ -3316,39 +3316,35 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             view = me.getView();
 
         if (e.ctrlKey == true) {
-            switch(e.getKey()) {
-                case e.DELETE:
-                    var params = record.data;
 
-                    params.action = 'select';
-                    params.method = 'deleteItem';
+            if ([e.DELETE,e.INSERT].indexOf(e.getKey()) != -1) {
+                var params = record.data;
+                params.action = 'select';
 
-                    Ext.Msg.confirm('Excluir registro', 'Confirma a exclusão do registro selecionado?',
-                        function (choice) {
-                            if (choice === 'yes') {
-                                Ext.Ajax.request({
-                                    scope: me,
-                                    url: me.url,
-                                    params: params,
-                                    callback: function (options, success, response) {
-                                        var result = Ext.decode(response.responseText);
+                params.method = ( e.getKey() == e.DELETE ) ? 'deleteItem' : 'insertItem';
 
-                                        if (!success || !result.success) {
-                                            Smart.Msg.showToast('O processo não foi executado com sucesso!','error');
-                                            return false;
-                                        }
-                                        Smart.Msg.showToast(result.rows[0].err_text,'info');
-                                        view.down('textfield[name=search]').focus(false,200);
-                                        if(result.rows[0].err_code == 0) record.store.load();
+                Ext.Msg.confirm('Atualizar processo', 'Confirma a atualização do processo atual?',
+                    function (choice) {
+                        if (choice === 'yes') {
+                            Ext.Ajax.request({
+                                scope: me,
+                                url: me.url,
+                                params: params,
+                                callback: function (options, success, response) {
+                                    var result = Ext.decode(response.responseText);
+
+                                    if (!success || !result.success) {
+                                        Smart.Msg.showToast('O processo não foi executado com sucesso!','error');
+                                        return false;
                                     }
-                                });
-                            }
+                                    Smart.Msg.showToast(result.rows[0].err_text,'info');
+                                    view.down('textfield[name=search]').focus(false,200);
+                                    if(result.rows[0].err_code == 0) record.store.load();
+                                }
+                            });
                         }
-                    );
-                    break;
-                case e.INSERT:
-                    console.info('INSERT',record.data);
-                    break;
+                    }
+                );
             }
         }
     },
