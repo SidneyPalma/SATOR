@@ -3319,8 +3319,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
             if ([e.DELETE,e.INSERT].indexOf(e.getKey()) != -1) {
                 var params = record.data;
-                params.action = 'select';
 
+                params.action = 'select';
                 params.method = ( e.getKey() == e.DELETE ) ? 'deleteItem' : 'insertItem';
 
                 Ext.Msg.confirm('Atualizar processo', 'Confirma a atualização do processo atual?',
