@@ -967,10 +967,68 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
+
+    /**
+     * Corrige Material Kit
+     */
+    public function deleteItem(array $data) {
+        $materialid = $data['materialid'];
+        $flowprocessingstepid = $data['flowprocessingstepid'];
+
+        $sql = "
+            declare
+                @hasitem int = 0,
+                @hastext varchar(90),
+                @flowprocessingid int,
+                @materialid int = :materialid,
+                @materialboxid int = :materialboxid,
+                @flowprocessingstepid int = :flowprocessingstepid;
+
+            select 
+                @flowprocessingid = fp.id,
+                @materialboxid int = fp.materialboxid                
+            from 
+                flowprocessingstep fps
+                inner join flowprocessing fp on ( fp.id = fps.flowprocessingid ) 
+            where id = @flowprocessingstepid;
+
+            select
+                @hasitem = count(*)
+            from
+                materialboxitem
+            where materialboxid = @materialboxid
+              and materialid = @materialid;
+            
+            set @hastext = 'O material <b>Não pode ser excluido</b> deste processamento!';
+            
+            if(@hasitem = 0)
+            begin
+                set @hastext = 'O material foi excluido com sucesso!';
+                delete from flowprocessingstepmaterial where flowprocessingstepid = @flowprocessingstepid and materialid = @materialid;
+            end
+            
+            select @hasitem as err_code, @hastext as err_text;";
+
+        try {
+            $pdo = $this->prepare($sql);
+            $pdo->bindValue(":materialid", $materialid, \PDO::PARAM_INT);
+            $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     /**
      * Select
      */
-
     public function selectEquipment(array $data) {
         $areasid = $data['areasid'];
         $barcode = $data['barcode'];

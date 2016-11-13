@@ -17,6 +17,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingMaterial', {
     store: 'flowprocessingstepmaterial',
 
     listeners: {
+        // itemkeydown: function (grid , record , item , index , e , eOpts) {
+        //     console.info(e);
+        // },
+        itemkeydown: 'onItemKeyDownMaterial',
         beforeedit: 'onBeforeEditMaterialFlowStepAction',
         select: 'onSelectMaterialFlowStepAction',
         itemdblclick: 'onItemDblClickMaterial'
