@@ -2151,17 +2151,17 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             if($ph) {
                 $tpl = "
                     ^XA
-                    ^CF0,25
-                    ^FO70,050^FD$entityname^FS
+                    ^CF0,23
+                    ^FO50,050^FD$entityname^FS
                     ^FO420,050^FD$proprietaryname^FS
-                    ^FO70,080^FDPREPARADO EM: $dateof^FS
-                    ^FO70,110^FDOP: $username^FS
-                    ^FO70,140^FDPROCESSO: $sterilizationtypename^FS
-                    ^FO70,170^FDVALIDADE: $validity ($days)^FS
+                    ^FO50,080^FDPREPARADO EM: $dateof^FS
+                    ^FO50,110^FDOP: $username^FS
+                    ^FO50,140^FDPROCESSO: $sterilizationtypename^FS
+                    ^FO50,170^FDVALIDADE: $validity ($days)^FS
                     ^FO130,200^FDVIDE ETIQUETA DE LOTE^FS
-                    ^FO70,230^FDMATERIAL: $materialboxname ($quantity itens)^FS
+                    ^FO50,230^FDMATERIAL: $materialboxname ($quantity itens)^FS
                     ^FO260,260^BXN,3,200^FD$barcode^FS^
-                    ^FO70,290^FD$barcode^FS^
+                    ^FO50,290^FD$barcode^FS^
                     ^XZ";
 
                 printer_set_option($ph, PRINTER_MODE, "RAW");
@@ -2214,7 +2214,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $col = 1;
                 $pos = 00;
 
-                $tpl = "";
+                $tpl = "^XA~SD25";
 
                 foreach ($rows as $item) {
                     $barcode = $item['barcode'];
@@ -2223,36 +2223,36 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     $cyclefinaluser = $item['cyclefinaluser'];
                     $cyclename = $item['cyclename'];
 
-                    $pos += ( $col == 1 ) ? 0 : 280;
+                    $pos += ( $col == 1 ) ? 5 : 280;
                     $pos = str_pad($pos, 3, '0', STR_PAD_LEFT);
                     $col++;
 
                     $tpl .= "
-                        ^XA
-                        ~SD25
-                        ^CF0,23
+                        ^CF0,20
                         ^FO0$pos,050^FDLOTE: $barcode^FS
                         ^CF0,20
                         ^FO0$pos,080^FD$cyclefinal^FS
                         ^FO0$pos,100^FD$equipmentname ($cyclename)^FS
-                        ^FO0$pos,120^FD$cyclefinaluser^FS
-                        ^XZ";
+                        ^FO0$pos,120^FD$cyclefinaluser^FS";
 
                     if ($col > 3) {
+                        $tpl .= "^XZ";
                         printer_set_option($ph, PRINTER_MODE, "RAW");
                         printer_write($ph, $tpl);
-                        printer_close($ph);
-                        $tpl = "";
+                        //printer_close($ph);
+                        $tpl = "^XA~SD25";
                     }
                     $col = $col > 3 ? 1 : $col;
-                    $pos = ( $col == 1 ) ? 0 : $pos;
+                    $pos = ( $col == 1 ) ? 5 : $pos;
 
                 }
-                if ($tpl != "") {
+                if ($tpl != "^XA~SD25") {
+                    $tpl .= "^XZ";
                     printer_set_option($ph, PRINTER_MODE, "RAW");
                     printer_write($ph, $tpl);
-                    printer_close($ph);
                 }
+
+                printer_close($ph);
 
             }  else {
                 throw new \PDOException('A impressora não pode ser selecionada corretamente!');
@@ -2297,42 +2297,43 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 $col = 1;
                 $pos = 00;
 
-                $tpl = "";
+                $tpl = "^XA~SD25";
 
                 foreach ($rows as $item) {
                     $barcode = $item['barcode'];
                     $cyclefinal = $item['cyclefinal'];
                     $cyclefinaluser = $item['cyclefinaluser'];
 
-                    $pos += ( $col == 1 ) ? 0 : 280;
+                    $pos += ( $col == 1 ) ? 5 : 280;
                     $pos = str_pad($pos, 3, '0', STR_PAD_LEFT);
                     $col++;
 
                     $tpl .= "
-                        ^XA
-                        ~SD25
-                        ^CF0,23
+                        ^CF0,20
                         ^FO0$pos,050^FDLOTE: $barcode^FS
                         ^CF0,20
                         ^FO0$pos,080^FD$cyclefinal^FS
-                        ^FO0$pos,120^FD$cyclefinaluser^FS
-                        ^XZ";
+                        ^FO0$pos,120^FD$cyclefinaluser^FS";
 
                     if ($col > 3) {
+                        $tpl .= "^XZ";
                         printer_set_option($ph, PRINTER_MODE, "RAW");
                         printer_write($ph, $tpl);
-                        printer_close($ph);
-                        $tpl = "";
+                        //printer_close($ph);
+                        $tpl = "^XA~SD25";
                     }
                     $col = $col > 3 ? 1 : $col;
-                    $pos = ( $col == 1 ) ? 0 : $pos;
+                    $pos = ( $col == 1 ) ? 5 : $pos;
 
                 }
-                if ($tpl != "") {
+                if ($tpl != "^XA~SD25") {
+                    $tpl .= "^XZ";
                     printer_set_option($ph, PRINTER_MODE, "RAW");
                     printer_write($ph, $tpl);
-                    printer_close($ph);
+                    //printer_close($ph);
                 }
+
+                printer_close($ph);
 
             }  else {
                 throw new \PDOException('A impressora não pode ser selecionada corretamente!');

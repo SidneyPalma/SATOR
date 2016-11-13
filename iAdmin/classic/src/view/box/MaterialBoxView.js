@@ -108,6 +108,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxView', {
                         fieldCls: 'smart-field-style-action'
                     }, {
                         xtype: 'textareafield',
+                        allowBlank: true,
                         fieldLabel: 'Restrições',
                         name: 'restriction'
                     }, {

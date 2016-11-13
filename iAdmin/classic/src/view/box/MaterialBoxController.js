@@ -245,7 +245,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
             success: function () {
                 store.load({
                     callback: function(records, operation, success) {
-                        packingsearch.setReadColor(records.length > 1);
+                        //packingsearch.setReadColor(records.length > 1);
                         gd.getSelectionModel().select(context.rowIdx);
                     }
                 });
@@ -268,7 +268,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
         Ext.getStore('materialboxtarge').setParams({ query: xdata.get('id') }).load();
         Ext.getStore('materialboxitem').setParams({ query: xdata.get('id') }).load({
             callback: function(records, operation, success) {
-                packingsearch.setReadColor(records.length > 1);
+                //packingsearch.setReadColor(records.length > 1);
             }
         });
         // view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(xdata.get('statusbox')) == -1);
@@ -426,7 +426,7 @@ Ext.define( 'iAdmin.view.box.MaterialBoxController', {
                             Ext.getStore('materialboxtarge').load();
                             Ext.getStore('materialboxitem').setParams({ query: record.get('id') }).load({
                                 callback: function(records, operation, success) {
-                                    packingsearch.setReadColor(records.length > 1);
+                                    //packingsearch.setReadColor(records.length > 1);
                                 }
                             });
                             view.down('button[name=pendent]').setDisabled(['000','001'].indexOf(record.get('statusbox')) == -1 );

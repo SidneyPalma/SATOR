@@ -11,18 +11,23 @@ class flowprotocol extends Report {
     public function preConstruct() {
         parent::preConstruct();
 
-        $sql = "
-            select
-                et.name,
-                etl.code,
-                etl.description,
-                et.description as type
+        $sql = "select
+                et.name as name,
+                etl.code as code,
+                etl.description as description,
+                et.description as type,
+				etl.isactive as isactive,
+				etl.orderby as orderby
             from
                 enumtype et
-                inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-            where et.name in ('flowprotocol','unconformities')
-                and etl.isactive = 1
-            order by et.name, etl.orderby";
+                inner join enumtypelist etl on ( etl.enumtypeid = et.id and et.name in ('flowprotocol','unconformities')
+				and etl.isactive = 1 )
+			union
+
+			select 'cycle' as name,barcode as code,description,'Ciclos', isactive as type, id as orderby from cycle
+
+            where  isactive = 1
+            order by name,orderby";
 
         $this->rows = $this->getProxy()->query($sql)->fetchAll();
     }
@@ -62,16 +67,28 @@ class flowprotocol extends Report {
             extract($item);
 
             if($typeGroup == "" || $typeGroup != $type) {
+
+                if($line == 0) {
+                    $this->Cell($sw * 1,20,'',1,1,'C',0);
+                }
+
+                if ($typeGroup != '') {
+                    $i = 1;
+                    $this->AddPage();
+                }
+
                 $typeGroup = $type;
                 $this->configStyleHeader(16);
+                $this->Ln(5);
                 $this->Cell($this->squareWidth,6, $typeGroup,0,1,'C',false);
                 $this->Ln(5);
+                $line = 1;
             }
 
             $line = $line == 0 ? 1 : 0;
             $this->configStyleHeader(12);
             $this->SetFillColor(245, 242, 198);
-            $this->Cell($sw * 1.0,10,"$description",1,$line,'C',1);
+            $this->Cell($sw * 1.0,05,"$description",1,$line,'C',1);
 
             $code = ( $name == "unconformities" ) ? "SATOR-U$code" : $code;
 
@@ -79,20 +96,20 @@ class flowprotocol extends Report {
 
             $qrCode->setText($code)
                 ->setSize(50)
-                ->setPadding(0)
+                ->setPadding(2)
                 ->setErrorCorrection('high')
                 ->setImageType(QrCode::IMAGE_TYPE_PNG)
                 ->render($qrFile);
 
-            $this->Image($qrFile,$sw-$this->x+64,$this->y+($line == 0 ? 17 : 7));
+            $this->Image($qrFile,$sw-$this->x+64,$this->y+($line == 0 ? 7 : 2));
             unlink($qrFile);
 
             if($line == 1) {
-                $this->Cell($sw * 2,30,'',1,1,'C',0);
+                $this->Cell($sw * 2,20,'',1,1,'C',0);
             }
 
             $i++;
-            if($i == 13) {
+            if($i > 18) {
                 $i = 1;
                 $this->AddPage();
             }
