@@ -2063,21 +2063,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
 	},
 
-	//callSATOR_RELATAR_USA_EPI: function () {
-    //    var me = this,
-    //        view = me.getView();
-
-    //    Ext.widget('call_SATOR_RELATAR_USA_EPI').show(null,function () {
-    //        this.master = view;
-    //        this.down('textfield[name=userprotected]').focus(false,200);
-    //    });
-    //},
-
-    //callSATOR_INICIAR_LEITURA: function () {
-    //    var me = this;
-    //    me.setMessageText('MSG_PROTOCOL','SATOR_INICIAR_LEITURA');
-    //},
-
     /**
      * Encerrar Leitura
      * Todos os Lançamentos Ok?
@@ -2110,13 +2095,21 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
      *              Registrar NC
      *              Fluxo Segue
      */
-    callSATOR_ENCERRAR_LEITURA: function () {
+    callSATOR_ENCERRAR_LEITURA: function (jump) {
         var me = this,
             view = me.getView(),
             record = view.xdata,
             exceptionby = record.get('exceptionby'),
             stepflaglist = record.get('stepflaglist'),
             stepsettings = record.get('stepsettings');
+
+        /**
+         * Solicita impressão de Etiqueta
+         */
+        if((stepsettings && ['001'].indexOf(stepsettings.tagprinter) != -1)&&(jump != true)) {
+            me.callSATOR_ALLOW_DENY('IMPRIMIR_ETIQUETA');
+            return false;
+        }
 
         /**
         * 011 - Exige uso de EPI na Leitura de Entrada
@@ -2143,14 +2136,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          */
         if(exceptionby != null) {
             me.callSATOR_RELATAR_EXCEPTION(Ext.decode(exceptionby));
-            return false;
-        }
-
-        /**
-         * Solicita impressão de Etiqueta
-         */
-        if(stepsettings && ['001'].indexOf(stepsettings.tagprinter) != -1) {
-            me.callSATOR_ALLOW_DENY('IMPRIMIR_ETIQUETA');
             return false;
         }
 
@@ -2190,7 +2175,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 switch (dialogType) {
                     case 'EPI':
                         var store = Ext.getStore('flowprocessingstep'),
-                            model = store.getAt(0);
+                            model = store.getAt(0),
+                            jump = true;
 
                         model.set('useppe',(value.indexOf('SATOR_SIM') != -1 ? 1 : 0));
                         store.sync({async: false});
@@ -2198,7 +2184,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         Smart.ion.sound.play("button_tiny");
                         me.setMessageText('MSG_PROTOCOL','SATOR_RELATAR_USA_EPI');
                         if(dialog.dialogType === 'EPI_ENCERRAR') {
-                            me.callSATOR_ENCERRAR_LEITURA();
+                            me.callSATOR_ENCERRAR_LEITURA(jump);
                         }
                         break;
                     case 'UNCONFORMITIES':
@@ -2234,10 +2220,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         me.callSATOR_UNCONFORMITIES();
                         break;
                     case 'IMPRIMIR_ETIQUETA':
+                        var jump = true;
                         if(value === 'SATOR_SIM') {
                             me.callSATOR_IMPRIMIR_ETIQUETA();
                         }
-                        me.encerrarEtapa();
+                        me.callSATOR_ENCERRAR_LEITURA(jump);
+                        // me.encerrarEtapa();
                         dialog.close();
                         return false;
                         break;
