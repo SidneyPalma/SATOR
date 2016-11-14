@@ -36,8 +36,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             store = Ext.getStore('flowprocessingstep');
 
         store.setParams({
-            method: 'selectStep',
-            query: id
+            query: id,
+            method: 'selectStep'
         }).load({
             scope: me,
             callback: function(records, operation, success) {
@@ -3008,12 +3008,23 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * 019 - Leitura única, valida os itens do Kit
          */
         if(stepflaglist.indexOf('019') != -1) {
+            var list = [];
             store.getAt(0);
-            store.each(function (data) {
-                data.set('unconformities','010');
-                data.store.sync({async: false});
-                data.commit();
+            store.each(function(item) { list.push(item); });
+
+            Ext.each(list,function(item) {
+                item.set('unconformities','010');
+                item.store.sync({async: false});
+                item.commit();
             });
+
+            // store.getAt(0);
+            // store.each(function (data) {
+            //     data.set('unconformities','010');
+            //     data.store.sync({async: false});
+            //     data.commit();
+            // });
+
             Smart.ion.sound.play("button_tiny");
             me.setMessageText('MSG_PROTOCOL','Leitura única realizada!');
             return false;
@@ -3232,8 +3243,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             barcode = record.get('barcode'),
             donetype = record.get('donetype'),
             action = record.get('flowstepaction'),
-            stepid = record.get('flowprocessingstepid'),
             stepflaglist = record.get('stepflaglist'),
+            stepid = record.get('flowprocessingstepid'),
             doCallBack = function (rows) {
                 Ext.Ajax.request({
                     scope: me,
