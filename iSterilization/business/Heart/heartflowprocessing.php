@@ -967,7 +967,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
     }
 
-
     /**
      * Corrige Material Kit
      */
@@ -1037,7 +1036,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 @hastext varchar(90),
                 @flowprocessingid int,
                 @flowprocessingstepid int = :flowprocessingstepid;
-
+            
             select 
                 @hasstep = count(fpsm.id),
                 @flowprocessingid = fp.id,
@@ -1047,27 +1046,43 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 inner join flowprocessing fp on ( fp.id = fps.flowprocessingid )
                 inner join flowprocessingstepmaterial fpsm on ( fpsm.flowprocessingstepid = fps.id )
             where fps.id = @flowprocessingstepid
-			group by
-				fp.id,
-				fp.materialboxid;
-
+            group by
+                fp.id,
+                fp.materialboxid;
+            
             select
                 @hasitem = count(id)
             from
                 materialboxitem
             where materialboxid = @materialboxid;
-            
+                        
             if(@hasstep = @hasitem)
             begin
                 set @hasitem = 1;
                 set @hastext = 'O kit <b>não possui atualizações</b> para este processamento!';            
             end           
-
+            
             if(@hasstep < @hasitem)
             begin
                 set @hasitem = 0;
                 set @hastext = 'O kit foi atualizado com sucesso!';
-                --delete from flowprocessingstepmaterial where flowprocessingstepid = @flowprocessingstepid and materialid = @materialid;
+            
+                insert into flowprocessingstepmaterial (flowprocessingstepid, materialid, unconformities, dateof)
+                select
+                    @flowprocessingstepid as flowprocessingstepid,
+                    materialid,
+                    '001' as unconformities,
+                    getdate() as dateof
+                from
+                    materialboxitem
+                where materialboxid = @materialboxid
+                  and materialid not in (
+                    select
+                        fpsm.materialid
+                    from
+                        flowprocessingstepmaterial fpsm
+                    where fpsm.flowprocessingstepid = @flowprocessingstepid 
+                  );
             end
             
             select @hasitem as err_code, @hastext as err_text;";
@@ -1076,6 +1091,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
             $pdo->execute();
+            $pdo->nextRowset();
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
@@ -2288,7 +2304,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 printer_write($ph, $tpl);
                 printer_close($ph);
             }  else {
-                throw new \PDOException('A impressora não pode ser selecionada corretamente!');
+                throw new \PDOException('A impressora não pôde ser selecionada corretamente!');
             }
 
         } catch ( \PDOException $e ) {
@@ -2359,7 +2375,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         $tpl .= "^XZ";
                         printer_set_option($ph, PRINTER_MODE, "RAW");
                         printer_write($ph, $tpl);
-                        //printer_close($ph);
                         $tpl = "^XA~SD25";
                     }
                     $col = $col > 3 ? 1 : $col;
@@ -2375,7 +2390,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 printer_close($ph);
 
             }  else {
-                throw new \PDOException('A impressora não pode ser selecionada corretamente!');
+                throw new \PDOException('A impressora não pôde ser selecionada corretamente!');
             }
 
         } catch ( \PDOException $e ) {
@@ -2439,7 +2454,6 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                         $tpl .= "^XZ";
                         printer_set_option($ph, PRINTER_MODE, "RAW");
                         printer_write($ph, $tpl);
-                        //printer_close($ph);
                         $tpl = "^XA~SD25";
                     }
                     $col = $col > 3 ? 1 : $col;
@@ -2450,13 +2464,12 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                     $tpl .= "^XZ";
                     printer_set_option($ph, PRINTER_MODE, "RAW");
                     printer_write($ph, $tpl);
-                    //printer_close($ph);
                 }
 
                 printer_close($ph);
 
             }  else {
-                throw new \PDOException('A impressora não pode ser selecionada corretamente!');
+                throw new \PDOException('A impressora não pôde ser selecionada corretamente!');
             }
 
         } catch ( \PDOException $e ) {
@@ -2467,7 +2480,5 @@ class heartflowprocessing extends \Smart\Data\Proxy {
         return self::getResultToJson();
 
     }
-
-
 
 }
