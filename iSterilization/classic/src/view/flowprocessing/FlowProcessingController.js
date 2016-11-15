@@ -2977,15 +2977,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
           */
         var data = store.findRecord('barcode',value);
 
-		// Não foi encontrado no Kit || Não é  ?
+        /**
+         * Não foi encontrado no Kit || Não é  ?
+         */
 		if(data && !data && value.indexOf('P') == -1) {
 			me.setMessageText('MSG_UNKNOWN');
 			return false;
 		}
 
-		// Já foi lançado ?
-		// Sim -> Mensagem de duplicidade
-		if (data && data.get('unconformities') != '001') {
+        /**
+         * Já foi lançado ?
+         * Sim -> Mensagem de duplicidade
+         */
+        if (data && data.get('unconformities') != '001') {
             Smart.ion.sound.play("computer_error");
 			me.setMessageText('MSG_DUPLICATED');
             model.select(data);
@@ -2996,30 +3000,22 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
          * 019 - Leitura única, valida os itens do Kit
          */
         if(stepflaglist.indexOf('019') != -1) {
-            var list = [];
             store.getAt(0);
-            store.each(function(item) { list.push(item); });
-
-            Ext.each(list,function(item) {
-                item.set('unconformities','010');
-                item.store.sync({async: false});
-                item.commit();
+            store.each(function (data) {
+                data.set('unconformities','010');
+                data.store.sync({async: false});
+                data.commit();
             });
-
-            // store.getAt(0);
-            // store.each(function (data) {
-            //     data.set('unconformities','010');
-            //     data.store.sync({async: false});
-            //     data.commit();
-            // });
 
             Smart.ion.sound.play("button_tiny");
             me.setMessageText('MSG_PROTOCOL','Leitura única realizada!');
             return false;
         }
 
-        // Já foi lançado ?
-        // Não -> Update Status do Item na Lista
+        /**
+         * Já foi lançado ?
+         * Não -> Update Status do Item na Lista
+         */
         if(data) {
             data.set('unconformities','010');
             store.sync({
@@ -3035,13 +3031,17 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
     setIsntMaterialBox: function (value) {
         var me = this,
             view = me.getView(),
+            record = view.xdata,
+            stepflaglist = record.get('stepflaglist'),
             store = Ext.getStore('flowprocessingstepmaterial'),
             model = view.down('flowprocessingmaterial').getSelectionModel();
 
         var data = store.findRecord('barcode',value);
 
-        // Já foi lançado ?
-        // Sim -> Mensagem de duplicidade
+        /**
+         * Já foi lançado ?
+         * Sim -> Mensagem de duplicidade
+         */
         if (data && data.get('unconformities') == '010') {
             Smart.ion.sound.play("computer_error");
             me.setMessageText('MSG_DUPLICATED');
@@ -3049,8 +3049,26 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             return false;
         }
 
-        // Já foi lançado ?
-        // Não -> Pesquisa e Insert (Depende do Status do Material)
+        /**
+         * 019 - Leitura única, valida os itens do Kit
+         */
+        if(stepflaglist.indexOf('019') != -1) {
+            store.getAt(0);
+            store.each(function (data) {
+                data.set('unconformities','010');
+                data.store.sync({async: false});
+                data.commit();
+            });
+
+            Smart.ion.sound.play("button_tiny");
+            me.setMessageText('MSG_PROTOCOL','Leitura única realizada!');
+            return false;
+        }
+
+        /**
+         * Já foi lançado ?
+         * Não -> Pesquisa e Insert (Depende do Status do Material)
+         */
         Ext.Ajax.request({
             scope: me,
             url: store.getUrl(),
