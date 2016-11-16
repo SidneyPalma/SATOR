@@ -2103,10 +2103,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             stepflaglist = record.get('stepflaglist'),
             stepsettings = record.get('stepsettings');
 
+        stepsettings = stepsettings ? Ext.decode(stepsettings) : null;
+
         /**
          * Solicita impressão de Etiqueta
          */
-        if((stepsettings && ['001'].indexOf(stepsettings.tagprinter) != -1)&&(jump != true)) {
+        if((stepsettings && ['001'].indexOf(stepsettings.tagprinter) != -1)&&(jump == undefined)) {
             me.callSATOR_ALLOW_DENY('IMPRIMIR_ETIQUETA');
             return false;
         }
