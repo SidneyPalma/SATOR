@@ -415,8 +415,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				t.materialname,
 				t.originplace,
 				t.targetplace,
-				t.items			
-
+				t.items
 
 			union all
 
@@ -465,7 +464,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
 				fps.elementname,
 				ta.targetplace
 
-            order by 3 desc";
+            order by 2, 3 desc";
 
         try {
             $pdo = $proxy->prepare($sql);
@@ -474,6 +473,7 @@ class flowprocessingstepaction extends \Smart\Data\Cache {
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
+            self::_setPage(0,50);
             self::_setSuccess(count($rows) != 0);
 
         } catch ( \PDOException $e ) {
