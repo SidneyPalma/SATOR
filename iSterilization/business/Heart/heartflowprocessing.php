@@ -1006,6 +1006,8 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                 delete from flowprocessingstepmaterial where flowprocessingstepid = @flowprocessingstepid and materialid = @materialid;
             end
             
+            SET NOCOUNT ON
+            
             select @hasitem as err_code, @hastext as err_text;";
 
         try {
@@ -1085,13 +1087,14 @@ class heartflowprocessing extends \Smart\Data\Proxy {
                   );
             end
             
+            SET NOCOUNT ON
+            
             select @hasitem as err_code, @hastext as err_text;";
 
         try {
             $pdo = $this->prepare($sql);
             $pdo->bindValue(":flowprocessingstepid", $flowprocessingstepid, \PDO::PARAM_INT);
             $pdo->execute();
-            $pdo->nextRowset();
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
