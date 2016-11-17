@@ -211,6 +211,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingView', {
                                                         });
                                                         break;
                                                 }
+
+                                                field.up('flowprocessingview').down('textfield[name=search]').focus(false,200);
                                             }
                                         }
                                     }
