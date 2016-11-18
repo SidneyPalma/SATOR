@@ -4,7 +4,7 @@
         var json = {
 			areasid: "5",
 			areasname: "Recepção Lavagem",
-			printlocate: "server\\printer",
+			printlocate: "",
 			guid: "A5B2D5DE-83C9-4E53-922C-EAA66EE3EEBA"
 		};
 

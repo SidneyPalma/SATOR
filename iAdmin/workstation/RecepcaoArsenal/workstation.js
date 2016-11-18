@@ -4,7 +4,7 @@
         var json = {
 			areasid: "10",
 			areasname: "Recepção Arsenal",
-			printlocate: "server\\printer",
+			printlocate: "\\\\10.51.18.98\\ARSENAL",
 			guid: "A5B2D5DE-83C9-4E53-922C-EAA66EE3EEBA"
 		};
 

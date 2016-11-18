@@ -17,6 +17,19 @@ Ext.define( 'Ext.overrides.data.Store', {
         }
     },
 
+    constructor: function () {
+        var me = this;
+        me.callParent();
+        me.onAfter( 'load', me.fnLoad, me);
+    },
+
+    fnLoad: function ( store , records , successful , operation , eOpts ) {
+// console.info(operation);
+        // if((response.status == 200) && (result.text == 1)) {
+        //     window.location.reload();
+        // }
+    },
+
     getUrl: function() {
         var me = this;
         return me.urlRoute ? (me.urlRoute + me.url) : me.url;
