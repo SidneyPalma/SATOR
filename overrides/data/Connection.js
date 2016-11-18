@@ -9,7 +9,11 @@ Ext.define( 'Ext.overrides.data.Connection', {
     },
 
     fnRequestComplete: function ( conn , response , options , eOpts ) {
-        console.info(response);
+        var result = Ext.decode(response.responseText);
+
+        if((response.status == 200) && (result.restart == true)) {
+            window.location.reload();
+        }
     }
 
 });

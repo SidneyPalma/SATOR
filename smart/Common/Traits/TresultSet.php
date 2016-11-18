@@ -29,6 +29,7 @@ trait TresultSet {
         'errors'=>array(),
         'success'=>true,
         'message'=>false,
+        'restart'=>false,
         'records'=>0 );
 
     /**
@@ -335,7 +336,11 @@ trait TresultSet {
      */
     public static function _setSuccess($param) {
         self::$result['success'] = (boolean)$param;
-    }    
+    }
+
+    public static function _setRestart($param) {
+        self::$result['restart'] = (boolean)$param;
+    }
 
     /**
      * Total de Registros encontrados
