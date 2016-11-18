@@ -20,14 +20,51 @@ Ext.define( 'Ext.overrides.data.Store', {
     constructor: function () {
         var me = this;
         me.callParent();
-        me.onAfter( 'load', me.fnLoad, me);
+        // me.onAfter( 'load', me.fnLoad, me);
     },
 
-    fnLoad: function ( store , records , successful , operation , eOpts ) {
-// console.info(operation);
-        // if((response.status == 200) && (result.text == 1)) {
-        //     window.location.reload();
-        // }
+    // fnLoad: function ( store , records , successful , operation , eOpts ) {
+    //     // console.info(operation);
+    //     // if((response.status == 200) && (result.text == 1)) {
+    //     //     window.location.reload();
+    //     // }
+    // },
+
+    // http://stackoverflow.com/questions/11022616/store-do-something-after-sync-with-autosync-enabled
+    onCreateRecords: function(records, operation, success) {
+        var me = this,
+            response = operation.getResponse(),
+            result = Ext.decode(response.responseText);
+
+        if((response.status == 200) && (result.restart == true)) {
+            window.location.reload();
+        }
+
+        me.rejectChanges();
+    },
+
+    onUpdateRecords: function(records, operation, success) {
+        var me = this,
+            response = operation.getResponse(),
+            result = Ext.decode(response.responseText);
+
+        if((response.status == 200) && (result.restart == true)) {
+            window.location.reload();
+        }
+
+        me.rejectChanges();
+    },
+
+    onDestroyRecords: function(records, operation, success) {
+        var me = this,
+            response = operation.getResponse(),
+            result = Ext.decode(response.responseText);
+
+        if((response.status == 200) && (result.restart == true)) {
+            window.location.reload();
+        }
+
+        me.rejectChanges();
     },
 
     getUrl: function() {

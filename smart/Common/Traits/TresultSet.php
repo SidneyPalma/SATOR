@@ -339,7 +339,7 @@ trait TresultSet {
     }
 
     public static function _setRestart($param) {
-        self::$result['restart'] = (boolean)$param;
+        self::$result['restart'] = $param;
     }
 
     /**
