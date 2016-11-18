@@ -2108,7 +2108,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         /**
          * Solicita impressão de Etiqueta
          */
-        if((stepsettings && stepsettings.tagprinter.search(/001/i)) && (jump == undefined)) {
+        if((stepsettings && stepsettings.tagprinter.indexOf('001') != -1 ) && (jump == undefined)) {
             me.callSATOR_ALLOW_DENY('IMPRIMIR_ETIQUETA');
             return false;
         }
