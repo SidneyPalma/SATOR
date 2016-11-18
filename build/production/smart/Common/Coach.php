@@ -11,7 +11,6 @@ use Smart\Common\Traits as Traits;
  *
  * @methods: getStore, getProxy, selectCode, selectLike, selectSame, selectDown, selectLoad
  * @category Coach
- *
  */
 class Coach {
     use Traits\TresultSet,

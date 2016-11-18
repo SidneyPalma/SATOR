@@ -1,6 +1,6 @@
 {
     "name": "iAdmin",
-    "version": "1.0.0.423",
+    "version": "1.0.0.425",
     "indexHtmlPath": "index.html",
     "classpath": [
         "app",
@@ -196,6 +196,6 @@
     "buildby": {
         "application": "production",
         "logusername": "DSADES21",
-        "lastdateapp": "2016-11-17 21:03"
+        "lastdateapp": "2016-11-18 07:23"
     }
 }

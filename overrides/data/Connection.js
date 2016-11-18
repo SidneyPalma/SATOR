@@ -11,7 +11,7 @@ Ext.define( 'Ext.overrides.data.Connection', {
     fnRequestComplete: function ( conn , response , options , eOpts ) {
         var result = Ext.decode(response.responseText);
 
-        if((response.status == 200) && (result.restart == true)) {
+        if((response.status == 200) && (result.text == 1)) {
             window.location.reload();
         }
     }

@@ -2,10 +2,10 @@
 
 namespace Smart\Common\Traits;
 
-
 use Smart\Data\Proxy;
 use Smart\Setup\Start;
 use Smart\Utils\Session;
+
 /**
  * TresultSet
  * 
@@ -150,7 +150,7 @@ trait TresultSet {
      * @return json Contém a estrutura de retorno
      */
     public static function getResultToJson() {
-        return self::arrayToJson(self::$result);
+        return self::arrayToJson(self::getResult());
     }
 
     /**
@@ -336,7 +336,11 @@ trait TresultSet {
      */
     public static function _setSuccess($param) {
         self::$result['success'] = (boolean)$param;
-    }    
+    }
+
+    public static function _setRestart($param) {
+        self::$result['restart'] = (boolean)$param;
+    }
 
     /**
      * Total de Registros encontrados
