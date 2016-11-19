@@ -249,6 +249,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                     }
                                 }
                             }, {
+                                flex: 1,
                                 source: {},
                                 autoHeight: true,
                                 columnLines: false,
@@ -267,41 +268,43 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingStep', {
                                         }
                                     }
                                 }
+                            }, {
+                                height: 150,
+                                xtype: 'dataview',
+                                trackOver: true,
+                                autoScroll: true,
+                                multiSelect: false,
+                                name: 'flowprocessingsteptask',
+
+                                url: '../iSterilization/business/Calls/flowprocessingstepaction.php',
+
+                                params: {
+                                    action: 'select',
+                                    method: 'actionTask'
+                                },
+
+                                fields: [ 'taskcode', 'taskname', 'taskrows' ],
+
+                                itemSelector: 'div.thumb-wrap',
+
+                                tpl: [
+                                    '<tpl for=".">',
+                                    '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                                    '<div class="thumb-task-{taskcode}">',
+                                    '<a class="authorize">{taskrows}</a>',
+                                    '</div>',
+                                    '<span><a style="font-size: 14px;">{taskname}</a></span>',
+                                    '</div>',
+                                    '</tpl>'
+                                ],
+
+                                listeners: {
+                                    itemdblclick: 'onFlowTaskAction'
+                                }
                             }
                         ]
                     }
                 ]
-            }, {
-                height: 150,
-                xtype: 'dataview',
-                trackOver: true,
-                autoScroll: true,
-                multiSelect: false,
-                name: 'flowprocessingsteptask',
-                
-                url: '../iSterilization/business/Calls/flowprocessingstepaction.php',
-
-                params: {
-                    action: 'select',
-                    method: 'actionTask'
-                },
-
-                fields: [ 'taskcode', 'taskname', 'taskrows' ],
-
-                itemSelector: 'div.thumb-wrap',
-                tpl: [
-                    '<tpl for=".">',
-                        '<div style="margin-bottom: 10px;" class="thumb-wrap">',
-                            '<div class="thumb-task-{taskcode}">',
-                                '<a class="authorize">{taskrows}</a>',
-                            '</div>',
-                            '<span><a style="font-size: 14px;">{taskname}</a></span>',
-                        '</div>',
-                    '</tpl>'
-                ],
-                listeners: {
-                    itemdblclick: 'onFlowTaskAction'
-                }
             }
         ];
     }

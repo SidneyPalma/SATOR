@@ -178,7 +178,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                     selectrecord: 'onFlowHoldSelect',
                                     deleterecord: 'onFlowHoldDelete'
                                 }
-
                             }, {
                                 columns: 5,
                                 vertical: false,
