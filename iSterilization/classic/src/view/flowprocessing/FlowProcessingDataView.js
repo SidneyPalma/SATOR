@@ -44,7 +44,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingDataView', {
         var me = this;
 
         me.callParent();
-
         me.onAfter( 'afterrender', me.fnAfterRender, me);
     },
 
