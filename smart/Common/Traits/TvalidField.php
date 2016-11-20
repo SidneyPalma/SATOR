@@ -234,7 +234,7 @@ trait TvalidField
             } else {
                 return false;
             }
-        }else {
+        } else {
             return false;    // more or less 10 chars
         }
     }
