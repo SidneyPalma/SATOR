@@ -2049,7 +2049,7 @@ class heartflowprocessing extends \Smart\Data\Proxy {
             select
                 am.id,
                 am.areasid,
-                coalesce(o.lineone,('#' + convert(varchar, dbo.getLeftPad(8,'0',am.id)))) as lineone,
+                coalesce(o.lineone,(convert(varchar, dbo.getLeftPad(8,'0',am.id)))) as lineone,
                 a.name as areasname,
                 am.movementuser,
                 coalesce(o.patientname, convert(char(10), am.movementdate, 103)) as linetwo,

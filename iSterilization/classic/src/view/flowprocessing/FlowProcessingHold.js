@@ -158,7 +158,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                 },
                 items: [
                     {
-                        flex: 5,
+                        flex: 1,
                         xtype: 'container',
                         layout: {
                             type: 'vbox',
@@ -172,7 +172,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 name: 'labelareas'
                             }, {
                                 flex: 1,
-                                margin: '10 0 0 0',
                                 xtype: 'flowprocessingholdview',
                                 listeners: {
                                     selectrecord: 'onFlowHoldSelect',
@@ -207,7 +206,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                     }, {
                         xtype: 'splitter'
                     }, {
-                        width: 350,
+                        width: 400,
                         xtype: 'container',
                         layout: {
                             type: 'vbox',
