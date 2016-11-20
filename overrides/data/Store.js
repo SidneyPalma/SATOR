@@ -18,7 +18,7 @@ Ext.define( 'Ext.overrides.data.Store', {
     },
 
     // http://stackoverflow.com/questions/11022616/store-do-something-after-sync-with-autosync-enabled
-    onCreateRecords: function(records, operation, success) {
+    restartSession: function (operation) {
         var me = this,
             response = operation.getResponse(),
             result = Ext.decode(response.responseText),
@@ -35,44 +35,18 @@ Ext.define( 'Ext.overrides.data.Store', {
         }
 
         me.rejectChanges();
+    },
+
+    onCreateRecords: function(records, operation, success) {
+        this.restartSession(operation);
     },
 
     onUpdateRecords: function(records, operation, success) {
-        var me = this,
-            response = operation.getResponse(),
-            result = Ext.decode(response.responseText),
-            workstation = localStorage.getItem('workstation');
-
-        workstation = workstation ? Ext.decode(workstation) : null;
-
-        if((response.status == 200) && (result.restart == true)) {
-            if(workstation) {
-                workstation.session = 'A sua sessão expirou, a aplicação deverá ser autenticada novamente!';
-                localStorage.setItem('workstation', Ext.encode(workstation));
-            }
-            window.location.reload();
-        }
-
-        me.rejectChanges();
+        this.restartSession(operation);
     },
 
     onDestroyRecords: function(records, operation, success) {
-        var me = this,
-            response = operation.getResponse(),
-            result = Ext.decode(response.responseText),
-            workstation = localStorage.getItem('workstation');
-
-        workstation = workstation ? Ext.decode(workstation) : null;
-
-        if((response.status == 200) && (result.restart == true)) {
-            if(workstation) {
-                workstation.session = 'A sua sessão expirou, a aplicação deverá ser autenticada novamente!';
-                localStorage.setItem('workstation', Ext.encode(workstation));
-            }
-            window.location.reload();
-        }
-
-        me.rejectChanges();
+        this.restartSession(operation);
     },
 
     getUrl: function() {
