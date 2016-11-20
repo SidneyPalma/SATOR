@@ -558,9 +558,24 @@
     width: 25%;
     float: left;
     height: 100%;
-    padding: 20px 0 0 10px;
+    padding: 10px 0 0 10px;
     background: rgba(19, 20, 50, 1);
 }
+
+.hold .items {
+    color: white;
+    width: 56px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 22px;
+}
+
+.hold .items:hover {
+    color: black;
+    background: rgba(248, 202, 0, 1);
+}
+
 .hold .hold-btn {
     line-height: 48px;
     text-align: center;

@@ -8,6 +8,8 @@ class armorymovementitem extends \Smart\Data\Cache {
 
     public function selectItem(array $data) {
         $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
         $proxy = $this->getStore()->getProxy();
 
         $sql = "
@@ -75,6 +77,7 @@ class armorymovementitem extends \Smart\Data\Cache {
             $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
+            self::_setPage($start,$limit);
 
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);

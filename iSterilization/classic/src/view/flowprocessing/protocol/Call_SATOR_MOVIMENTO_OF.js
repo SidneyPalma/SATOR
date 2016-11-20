@@ -133,7 +133,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                             }
                         ]
                     }, {
-                        height: 350,
+                        height: 476,
                         margin: '10 0 0 0',
                         xtype: 'gridpanel',
                         cls: 'update-grid',
@@ -182,24 +182,42 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_OF
                                     }
                                 ]
                             }
+                        ],
+
+                        dockedItems: [
+                            {
+                                xtype: 'pagingtoolbar',
+                                store: 'armorymovementitem',
+                                dock: 'bottom',
+                                displayInfo: true,
+                                items: [
+                                    {
+                                        xtype: 'button',
+                                        iconCls: "fa fa-times",
+                                        handler: function (btn) {
+                                            btn.windowClose();
+                                        }
+                                    }
+                                ]
+                            }
                         ]
                     }
                 ]
             }
         ]
-    },
+    }
 
-    buttonAlign: 'center',
-
-    buttons: [
-        {
-            scale: 'medium',
-            text: 'Cancelar',
-            showSmartTheme: 'red',
-            handler: function (btn) {
-                btn.windowClose();
-            }
-        }
-    ]
+    // buttonAlign: 'center',
+    //
+    // buttons: [
+    //     {
+    //         scale: 'medium',
+    //         text: 'Cancelar',
+    //         showSmartTheme: 'red',
+    //         handler: function (btn) {
+    //             btn.windowClose();
+    //         }
+    //     }
+    // ]
 
 });

@@ -101,7 +101,7 @@ class serviceregistration extends \Smart\Data\Cache {
                 ) e
             WHERE ib.isactive = 1
               and ib.itembasetype = :itembasetype
-              and ( ib.name LIKE :name OR ib.barcode LIKE :barcode )";
+              and ( ib.name LIKE :name OR ib.barcode = :barcode )";
 
         try {
             $pdo = $proxy->prepare($sql);
