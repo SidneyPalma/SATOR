@@ -6,6 +6,44 @@ use iAdmin\Model\enumtype as Model;
 
 class enumtype extends \Smart\Data\Cache {
 
+    public function selectLike(array $data) {
+        $query = $data['query'];
+        $start = $data['start'];
+        $limit = $data['limit'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            declare
+                @name varchar(60) = :name,
+                @description varchar(60) = :description;
+
+            SELECT
+                et.*
+            FROM
+                enumtype et
+            WHERE et.name = @name
+               OR et.description COLLATE Latin1_General_CI_AI LIKE @description";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":name", $query, \PDO::PARAM_STR);
+            $pdo->bindValue(":description", "%$query%", \PDO::PARAM_STR);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+            self::_setPage($start,$limit);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectItem(array $data) {
         $type = $data['type'];
         $query = $data['query'];

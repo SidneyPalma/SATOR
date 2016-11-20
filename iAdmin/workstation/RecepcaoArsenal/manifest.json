@@ -1,7 +1,7 @@
 {  
    "name":"Config Workstation",
    "version":"1.0",
-   "description":"Armazenamento",
+   "description":"Recepção Arsenal",
    "background":{  
       "scripts":[  
          "background.js"

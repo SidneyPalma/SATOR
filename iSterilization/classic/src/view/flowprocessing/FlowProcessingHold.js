@@ -237,7 +237,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHold', {
                                 }
                             }, {
                                 flex: 1,
-                                rowLines: true,
+                                // rowLines: true,
                                 margin: '10 0 0 0',
                                 xtype: 'gridpanel',
                                 name: 'releasesHold',
