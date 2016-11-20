@@ -132,7 +132,7 @@ Ext.define( 'Smart.ux.login.LoginController', {
 
         if(result.modulebuild != Ext.manifest.version) {
             Smart.Msg.showToast('Você está executando uma versão diferente da atualmente homolagada!','warning');
-            return false;
+            window.location.reload();
         }
 
         localStorage.setItem(Ext.manifest.name + 'In', true);
@@ -155,7 +155,7 @@ Ext.define( 'Smart.ux.login.LoginController', {
             link.href = imageLogo;
             link.type = 'image/x-icon';
             link.rel = 'shortcut icon';
-            
+
             document.getElementsByTagName('head')[0].appendChild(link);
 
             if(result.isTest == true) {
