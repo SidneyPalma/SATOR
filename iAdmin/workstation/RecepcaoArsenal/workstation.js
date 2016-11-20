@@ -2,6 +2,7 @@
 	window.addEventListener('load', function(){
 		
         var json = {
+			session: null,
 			areasid: "10",
 			areasname: "Recepção Arsenal",
 			printlocate: "\\\\10.51.18.98\\ARSENAL",

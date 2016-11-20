@@ -3,6 +3,7 @@ Ext.define( 'Smart.ux.app.Application', {
     extend: 'Ext.app.Application',
 
     requires: [
+        'Smart.util.Message',
         'Ext.app.Application'
     ],
 
@@ -47,12 +48,7 @@ Ext.define( 'Smart.ux.app.Application', {
                 
                 if((result.success)&&(result.modulebuild != Ext.manifest.version)) {
                     success = false;
-                    Ext.Msg.show({
-                        icon: Ext.Msg.WARNING,
-                        buttons: Ext.Msg.CANCEL,
-                        title: 'Operação falhou!',
-                        msg: 'Você está executando uma versão diferente da atualmente homolagada!'
-                    });
+                    Smart.Msg.showToast('Você está executando uma versão diferente da atualmente homolagada!','warning');
                 }
 
                 if(loggedIn && success && result.success && (result.modulebuild == Ext.manifest.version)) {

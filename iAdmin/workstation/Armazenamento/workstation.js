@@ -2,6 +2,7 @@
 	window.addEventListener('load', function(){
 		
         var json = {
+			session: null,
 			areasid: "12",
 			areasname: "Armazenamento",
 			printlocate: "server\\printer",

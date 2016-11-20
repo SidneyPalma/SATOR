@@ -131,12 +131,7 @@ Ext.define( 'Smart.ux.login.LoginController', {
         Smart.workstation = workstation ? Ext.decode(workstation) : null;
 
         if(result.modulebuild != Ext.manifest.version) {
-            Ext.Msg.show({
-                title: 'Operação falhou!',
-                msg: 'Você está executando uma versão diferente da atualmente homolagada!',
-                buttons: Ext.Msg.CANCEL,
-                icon: Ext.Msg.WARNING
-            });
+            Smart.Msg.showToast('Você está executando uma versão diferente da atualmente homolagada!','warning');
             return false;
         }
 
