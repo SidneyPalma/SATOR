@@ -78,6 +78,11 @@ class Store {
     public function select() {
 
         try {
+            $have = !$this->session->have();
+
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
 
             $statement = $this->proxy->sqlSelect($this->model);
 
@@ -93,7 +98,6 @@ class Store {
             self::_setRows($rows);
 
         } catch ( \PDOException $e ) {
-            $have = !$this->session->have();
             self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
@@ -104,6 +108,11 @@ class Store {
     public function update() {
 
         try {
+            $have = !$this->session->have();
+
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
 
             $this->policy();
             self::_setCrud('update');
@@ -134,7 +143,6 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
-            $have = !$this->session->have();
             self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
@@ -145,6 +153,11 @@ class Store {
     public function insert() {
 
         try {
+            $have = !$this->session->have();
+
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
 
             $this->policy();
             self::_setCrud('insert');
@@ -185,7 +198,6 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
-            $have = !$this->session->have();
             self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
@@ -196,6 +208,11 @@ class Store {
     public function delete() {
 
         try {
+            $have = !$this->session->have();
+
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
 
             self::_setCrud('delete');
 
@@ -225,7 +242,6 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
-            $have = !$this->session->have();
             self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());

@@ -43,8 +43,11 @@ Ext.define( 'Smart.ux.app.Application', {
                 method: 'selectOpened'
             },
             callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText),
+                var workstation = localStorage.getItem('workstation'),
+                    result = Ext.decode(response.responseText),
                     rows = result.rows[0];
+
+                Smart.workstation = workstation ? Ext.decode(workstation) : null;
                 
                 if((result.success)&&(result.modulebuild != Ext.manifest.version)) {
                     success = false;
@@ -76,6 +79,11 @@ Ext.define( 'Smart.ux.app.Application', {
 
                 } else {
                     Ext.create({xtype:'login'});
+                    if(Smart.workstation.session) {
+                        Smart.Msg.showToast(Smart.workstation.session,'info');
+                        Smart.workstation.session = null;
+                        localStorage.setItem('workstation', Ext.encode(Smart.workstation));
+                    }
                 }
             }
         });

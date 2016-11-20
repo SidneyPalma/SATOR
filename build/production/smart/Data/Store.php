@@ -93,6 +93,8 @@ class Store {
             self::_setRows($rows);
 
         } catch ( \PDOException $e ) {
+            $have = !$this->session->have();
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
@@ -132,6 +134,8 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
+            $have = !$this->session->have();
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
@@ -181,6 +185,8 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
+            $have = !$this->session->have();
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
@@ -219,6 +225,8 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
+            $have = !$this->session->have();
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }

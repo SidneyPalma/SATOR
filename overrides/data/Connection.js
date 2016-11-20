@@ -9,9 +9,16 @@ Ext.define( 'Ext.overrides.data.Connection', {
     },
 
     fnRequestComplete: function ( conn , response , options , eOpts ) {
-        var result = Ext.decode(response.responseText);
+        var result = Ext.decode(response.responseText),
+            workstation = localStorage.getItem('workstation');
+
+        workstation = workstation ? Ext.decode(workstation) : null;
 
         if((response.status == 200) && (result.text == 1)) {
+            if(workstation) {
+                workstation.session = 'A sua sessão expirou, a aplicação deverá ser autenticada novamente!';
+                localStorage.setItem('workstation', Ext.encode(workstation));
+            }
             window.location.reload();
         }
     }

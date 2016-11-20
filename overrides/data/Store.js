@@ -21,9 +21,16 @@ Ext.define( 'Ext.overrides.data.Store', {
     onCreateRecords: function(records, operation, success) {
         var me = this,
             response = operation.getResponse(),
-            result = Ext.decode(response.responseText);
+            result = Ext.decode(response.responseText),
+            workstation = localStorage.getItem('workstation');
+
+        workstation = workstation ? Ext.decode(workstation) : null;
 
         if((response.status == 200) && (result.restart == true)) {
+            if(workstation) {
+                workstation.session = 'A sua sessão expirou, a aplicação deverá ser autenticada novamente!';
+                localStorage.setItem('workstation', Ext.encode(workstation));
+            }
             window.location.reload();
         }
 
@@ -33,9 +40,16 @@ Ext.define( 'Ext.overrides.data.Store', {
     onUpdateRecords: function(records, operation, success) {
         var me = this,
             response = operation.getResponse(),
-            result = Ext.decode(response.responseText);
+            result = Ext.decode(response.responseText),
+            workstation = localStorage.getItem('workstation');
+
+        workstation = workstation ? Ext.decode(workstation) : null;
 
         if((response.status == 200) && (result.restart == true)) {
+            if(workstation) {
+                workstation.session = 'A sua sessão expirou, a aplicação deverá ser autenticada novamente!';
+                localStorage.setItem('workstation', Ext.encode(workstation));
+            }
             window.location.reload();
         }
 
@@ -45,9 +59,16 @@ Ext.define( 'Ext.overrides.data.Store', {
     onDestroyRecords: function(records, operation, success) {
         var me = this,
             response = operation.getResponse(),
-            result = Ext.decode(response.responseText);
+            result = Ext.decode(response.responseText),
+            workstation = localStorage.getItem('workstation');
+
+        workstation = workstation ? Ext.decode(workstation) : null;
 
         if((response.status == 200) && (result.restart == true)) {
+            if(workstation) {
+                workstation.session = 'A sua sessão expirou, a aplicação deverá ser autenticada novamente!';
+                localStorage.setItem('workstation', Ext.encode(workstation));
+            }
             window.location.reload();
         }
 
