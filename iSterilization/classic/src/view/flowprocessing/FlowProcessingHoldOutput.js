@@ -253,17 +253,4 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
         ];
     }
 
-    // buttonAlign: 'center',
-    //
-    // buttons: [
-    //     {
-    //         scale: 'medium',
-    //         text: 'Cancelar',
-    //         showSmartTheme: 'red',
-    //         handler: function (btn) {
-    //             btn.windowClose();
-    //         }
-    //     }
-    // ]
-
 });
