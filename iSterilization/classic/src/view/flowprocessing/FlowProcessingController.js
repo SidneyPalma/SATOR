@@ -241,8 +241,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                     return false;
                 }
 
-                view.close();
-
                 Ext.widget('call_SATOR_ENCERRAR_MOVIMENTO', {
                     doCallBack: function () {
                         var value = this.down('form').getValues(),
@@ -259,8 +257,10 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                             callback: function(records, operation, success) {
 
                                 if(!success || records.length == 0) {
+                                    view.close();
                                     return false;
                                 }
+
                                 var record = records[0];
                                 record.set('boxsealone', value.boxsealone);
                                 record.set('boxsealtwo', value.boxsealtwo);
@@ -277,21 +277,19 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                                             return false;
                                         }
 
-                                        view.master.updateType();
                                         this.close();
+                                        view.master.updateType();
+                                        view.close();
                                     }
                                 });
                             }
                         });
                     }
                 }).show(null, function () {
-                    this.master = view.master;
                     this.down('textfield[name=transportedby]').focus(false, 200);
                     this.down('textfield[name=closedby]').setValue(rows.username);
                     this.down('fieldcontainer[name=boxseal]').setVisible(data.get('movementtype') == '002');
                 });
-
-                return true;
             };
 
         Ext.widget('flowprocessinguser', {

@@ -9,8 +9,7 @@ use Smart\Utils\Session;
 /**
  * TresultSet
  * 
- * Implementa a Serialização de uma Entity\Doctrine em um array.
- * Deve ser usado somente no EntityRepository.
+ * Implementa a Serialização de uma Entity em um array.
  *
  * @category traits
  */
@@ -292,10 +291,12 @@ trait TresultSet {
         self::$result['text'] = $param;
     }
 
-	/**
+    /**
      * Mensagem de retorno
      *
      * @param string $param operação de CRUD
+     * 
+     * @return string
      */
     public static function _getCrud() {
         return isset(self::$result['crud']) ? self::$result['crud'] : '';
