@@ -8,53 +8,142 @@ use Smart\Common\Traits as Traits;
 
 /**
  * Session
- * 
+ *
  * Realiza o controle de autenticação do Usuário no servidor
  *
  * Validar permissões de acesso - Profile
- * 
+ *
  * <code>
- * $session = Session::getInstance();
+ *      $session = Session::getInstance();
  * </code>
  */
 class Session {
     use Traits\TresultSet;
 
-    public static function have() {
-        $usercode = self::read('usercode');
-        return ( $usercode !== false );
+    const _SESSION_PATH = '/';
+    const _SESSION_NAME = 'smart';
+
+    const _SESSION_STARTED = true;
+    const _SESSION_NOT_STARTED = false;
+
+    // THE only instance of the class
+    private static $instance = null;
+
+    // The configs params
+    private static $name = self::_SESSION_NAME;
+    private static $path = self::_SESSION_PATH;
+
+    // The state of the session
+    private $sessionState = self::_SESSION_NOT_STARTED;
+
+    private function __construct() {}
+
+    /**
+     *    Returns THE instance of 'Session'.
+     *    The session is automatically initialized if it wasn't.
+     *
+     *    @return    object
+     */
+    public static function getInstance(array $data = null) {
+
+        if( isset($data['name']) ) {
+            self::$name = $data['name'];
+        }
+
+        if( isset($data['path']) ) {
+            self::$path = $data['path'];
+        }
+
+        if ( !isset(self::$instance) ) {
+            self::$instance = new self;
+        }
+
+        self::$instance->startSession();
+
+        return self::$instance;
     }
 
-    public static function read($id) {
-        @\session_start();
-        return isset($_SESSION[$id]) ? $_SESSION[$id]: false;
+    /**
+     *    (Re)starts the session.
+     *
+     *    @return    bool    TRUE if the session has been initialized, else FALSE.
+     */
+    public function startSession() {
+
+        if ( $this->sessionState == self::_SESSION_NOT_STARTED ) {
+            $expireto = 60*60*24*1; // 1 day
+            session_set_cookie_params($expireto,self::$path);
+            session_name(isset($_SERVER["HTTP_REFERER"]) ? basename($_SERVER["HTTP_REFERER"]) : self::$name);
+            $this->sessionState = session_start();
+        }
+
+        return $this->sessionState;
     }
 
-    public static function save($id, $data) {
-        @\session_start();
-        return $_SESSION[$id] = $data;
+    /**
+     *    Stores datas in the session.
+     *    Example: $instance->foo = 'bar';
+     *
+     *    @param    name    Name of the datas.
+     *    @param    value    Your datas.
+     *    @return   void
+     */
+    public function __set( $name, $value ) {
+        $_SESSION[$name] = $value;
     }
 
-    public static function kill() {
-        @\session_start();
-        @\session_unset();
-//        setcookie("PHPSESSID","",time()-3600,"/");
-        return @\session_destroy();
+    /**
+     *    Gets datas from the session.
+     *    Example: echo $instance->foo;
+     *
+     *    @param    name    Name of the datas to get.
+     *    @return   mixed    Datas stored in session.
+     */
+    public function __get( $name ) {
+        if (isset($_SESSION[$name])) {
+            return $_SESSION[$name];
+        }
     }
 
-    public static function slay() {
-        @\session_start();
-        unset($_SESSION['usercode']);
+    public function __isset( $name ) {
+        return isset($_SESSION[$name]);
     }
 
-    public static function setProfile($profile) {
-        $data = self::arrayToJson($profile);
-        return self::save('_profile', $data);
+    public function __unset( $name ) {
+        unset($_SESSION[$name]);
     }
 
-    public static function hasProfile($menu, $action, $goback = false) {
-        $module = self::read('module');
-        $username = self::read('username');
+    /**
+     *    Destroys the current session.
+     *
+     *    @return    bool    TRUE is session has been deleted, else FALSE.
+     */
+    public function destroy() {
+        if ( $this->sessionState == self::_SESSION_STARTED ) {
+            $this->sessionState = !session_destroy();
+
+            unset( $_SESSION );
+
+            return !$this->sessionState;
+        }
+
+        return false;
+    }
+
+    public function slay() {
+        unset(self::$instance->usercode);
+    }
+
+    public function have() {
+        return ( strlen(self::$instance->username) !== 0 );
+    }
+
+    public function hasProfile($menu, $action, $goback = false, $msgerror = null) {
+        $username = self::$instance->username;
+
+        if(strlen($menu) == 0 || strlen($action) == 0) {
+            return true;
+        }
 
         $dns = Start::getConnnect();
         $pwd = Start::getPassWord();
@@ -63,31 +152,55 @@ class Session {
         $proxy = new Proxy(array($dns, $usr, $pwd));
 
         $sql = "
-            select
-                u.isactive,
-                uma.expireto,
-                a.negation
+			declare
+				@mguid varchar(36) = :mguid,
+				@aguid varchar(36) = :aguid,
+				@uname varchar(20) = :uname;
+
+            select distinct
+			   0 as priority,
+               u.isactive,
+               a.negation,
+               uma.expireto
             from
-                action a
-                inner join menuaction ma on ( ma.actionid = a.id )
-                inner join modulemenu mm on ( mm.menuid = ma.menuid )
-                inner join menu m on ( m.id = mm.menuid )
-                inner join module md on ( md.id = mm.moduleid )
-                inner join usersmenu um on ( um.modulemenuid = mm.id )
-                inner join usersmenuaction uma on ( uma.menuactionid = ma.id and uma.usersmenuid = um.id )
-                inner join users u on ( u.id = um.usersid )
-            where m.guid = :menu
-              and a.guid = :action
-              and md.name = :module
-              and u.username = :username";
+               users u
+               inner join usersmenu um on ( um.usersid = u.id )
+               inner join menuaction ma on ( ma.menuid = um.menuid )
+               inner join action a on ( a.id = ma.actionid )
+               inner join menu m on ( m.id = ma.menuid )
+               inner join usersmenuaction uma on ( uma.usersmenuid = um.id and uma.menuactionid = ma.id )
+			where m.guid = @mguid
+			  and a.guid = @aguid
+              and u.username = @uname
+
+			union all
+
+			select
+                1 as priority,
+                u.isactive,
+                a.negation,
+                pma.expireto
+            from
+                users u
+                inner join usersprofile up on ( up.usersid = u.id )
+                inner join profile p on ( p.id = up.profileid )
+                inner join profilemenu pm on ( pm.profileid = p.id )
+                inner join menu m on ( m.id = pm.menuid )
+                inner join profilemenuaction pma on ( pma.profilemenuid = pm.id )
+                inner join menuaction ma on ( ma.menuid = m.id and ma.id = pma.menuactionid )
+                inner join action a on ( a.id = ma.actionid )			 
+			where m.guid = @mguid
+			  and a.guid = @aguid
+              and u.username = @uname
+
+			order by 1";
 
         try {
 
             $pdo = $proxy->prepare($sql);
-            $pdo->bindValue(":menu", $menu, \PDO::PARAM_STR);
-            $pdo->bindValue(":action", $action, \PDO::PARAM_STR);
-            $pdo->bindValue(":module", $module, \PDO::PARAM_STR);
-            $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+            $pdo->bindValue(":mguid", $menu, \PDO::PARAM_STR);
+            $pdo->bindValue(":aguid", $action, \PDO::PARAM_STR);
+            $pdo->bindValue(":uname", $username, \PDO::PARAM_STR);
             $pdo->execute();
             $rows = $pdo->fetchAll();
 
@@ -104,16 +217,16 @@ class Session {
             return $credential;
         }
 
-        if($credential->records == 0) {
-            throw new \PDOException('Não existe permissão habilitada para esta ação no seu perfil!');
+        if(count($rows) == 0) {
+            throw new \PDOException($msgerror || 'Não existe permissão habilitada para esta ação no seu perfil!');
         }
 
-        $expireto = $credential->rows[0]['expireto'];
-        $isactive = $credential->rows[0]['isactive'];
-        $negation = $credential->rows[0]['negation'];
+        $isactive = $rows[0]['isactive'];
+        $negation = $rows[0]['negation'];
+        $expireto = $rows[0]['expireto'];
 
         if($isactive != 1) {
-            throw new \PDOException($negation . '.<br/><br/> O seu login esta desabilitado!');
+            throw new \PDOException($msgerror || ($negation . '.<br/><br/> O seu usuário não é mais válido!'));
         }
 
         $format = "Y-m-d";
@@ -121,22 +234,9 @@ class Session {
         $date2  = \DateTime::createFromFormat($format, date("Y-m-d"));
 
         if($date1 < $date2) {
-            throw new \PDOException($negation . '.<br/> <br/>A data para esta ação expirou!');
+            throw new \PDOException($msgerror || ($negation . '.<br/> <br/>A data para esta ação expirou!'));
         }
 
     }
 
 }
-//http://stackoverflow.com/questions/3740845/php-session-without-cookies
-//ini_set('session.use_cookies', 0);
-//ini_set('session.use_only_cookies', 0);
-//ini_set('session.use_trans_sid', 1);
-//session_start();
-//// IP check
-//if($_SESSION['ip_check'] != $_SERVER['REMOTE_ADDR']){
-//    session_regenerate_id();
-//    session_destroy();
-//    session_start();
-//}
-//$_SESSION['ip_check'] = $_SERVER['REMOTE_ADDR'];
-//// session stuff

@@ -2,10 +2,10 @@
 
 namespace Smart\Common\Traits;
 
-
 use Smart\Data\Proxy;
 use Smart\Setup\Start;
 use Smart\Utils\Session;
+
 /**
  * TresultSet
  * 
@@ -29,6 +29,7 @@ trait TresultSet {
         'errors'=>array(),
         'success'=>true,
         'message'=>false,
+        'restart'=>false,
         'records'=>0 );
 
     /**
@@ -149,7 +150,7 @@ trait TresultSet {
      * @return json Contém a estrutura de retorno
      */
     public static function getResultToJson() {
-        return self::arrayToJson(self::$result);
+        return self::arrayToJson(self::getResult());
     }
 
     /**
@@ -277,7 +278,11 @@ trait TresultSet {
 
         return $convertedArray;
     }
-    
+
+    public static function _set($field,$value) {
+        self::$result[$field] = $value;
+    }
+
     /**
      * Mensagem de retorno
      * 
@@ -285,6 +290,15 @@ trait TresultSet {
      */
     public static function _setText($param) {
         self::$result['text'] = $param;
+    }
+
+	/**
+     * Mensagem de retorno
+     *
+     * @param string $param operação de CRUD
+     */
+    public static function _getCrud() {
+        return isset(self::$result['crud']) ? self::$result['crud'] : '';
     }
 
     /**
@@ -295,7 +309,7 @@ trait TresultSet {
     public static function _setCrud($param) {
         self::$result['crud'] = $param;
     }
-
+	
     /**
      * Registros de retorno
      * 
@@ -322,7 +336,11 @@ trait TresultSet {
      */
     public static function _setSuccess($param) {
         self::$result['success'] = (boolean)$param;
-    }    
+    }
+
+    public static function _setRestart($param) {
+        self::$result['restart'] = $param;
+    }
 
     /**
      * Total de Registros encontrados

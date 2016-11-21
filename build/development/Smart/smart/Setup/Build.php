@@ -7,6 +7,7 @@ use Smart\Utils\Version;
 $i = 0;
 $j = 0;
 $list = array();
+$version = new Version();
 
 foreach ($argv as $item) {
 
@@ -22,6 +23,4 @@ foreach ($argv as $item) {
 	$i++;
 }
 
-$version = new Version($appName,trim(implode('|', $list)));
-
-echo $version->setNextVersion();
+echo $version->setBuildVersion($appName,trim(implode('|', $list)));

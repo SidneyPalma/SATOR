@@ -3,6 +3,7 @@
 namespace Smart\Data;
 
 use Smart\Setup\Start;
+use Smart\Utils\Session;
 use Smart\Common\Traits as Traits;
 
 /**
@@ -24,7 +25,11 @@ class Proxy extends \PDO {
         DML_UPDATE = 2,
         DML_DELETE = 3;
 
-    public function __construct(array $link) {
+    public $session = null;
+
+    public function __construct(array $link, $data = null) {
+        $this->session = ($data) ? Session::getInstance($data) : Session::getInstance();
+
         list ($dns, $usr, $pwd) = $link;
 
         Start::setTimeZone();
@@ -34,10 +39,34 @@ class Proxy extends \PDO {
             $this->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
 			$this->setAttribute( \PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC );
 
+            /**
+             * Use Only SQLServer
+             * Char set UTF-8
+             * @author: https://www.drupal.org/node/1540686
+             */
+//            $this->setAttribute( \PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_UTF8);
+            $this->setAttribute( \PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_SYSTEM);
+
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
             self::_setText('Não foi possível acessar a base de dados!');
 			echo self::getResultToJson();
+        }
+    }
+
+    /**
+     * Upload de Arquivos
+     *
+     * @param object $entity
+     * @return array
+     */
+    public function setUpload(&$entity) {
+        $tempName = isset($_FILES["filedata"]) ? $_FILES["filedata"]["tmp_name"] : null;
+
+        if(is_uploaded_file($tempName)) {
+            $result = $this->saveFile($entity);
+            $entity->getSubmit()->setRowValue('filedata',$result->rows['filedata']);
+            $entity->getSubmit()->setRowValue('fileinfo',$result->rows['fileinfo']);
         }
     }
 
@@ -49,12 +78,13 @@ class Proxy extends \PDO {
      */
     public function sqlSelect(&$entity) {
         $fields = [];
+        $notate = $entity->getNotate();
         $exists = $entity->getNotate()->property;
         $extend = $entity->getNotate()->instance->Entity->name;
 
         // montando DML
         foreach ($exists as $field => $value) {
-            $fields[] = " $field";
+            $fields[] = $this->fieldType($notate,$field);
         }
 
         $sql = "SELECT " . trim(implode(', ', $fields)) . " FROM {$extend} WHERE id = :id";
@@ -78,8 +108,11 @@ class Proxy extends \PDO {
         // montando DML
         foreach ($submit['rows'] as $field => $value) {
             if(isset($exists[$field]) && $field !== "id") {
-                $modify++;
-                $fields[] = "$field = :$field";
+                $column = $exists[$field]['Column'];
+                if($column['type'] != 'formula') {
+                    $modify++;
+                    $fields[] = "$field = :$field";
+                }
             }
         }
 
@@ -107,7 +140,8 @@ class Proxy extends \PDO {
             if(isset($exists[$field])) {
                 $column = $exists[$field]["Column"];
                 $strategy = isset($column['strategy']) ? $column['strategy'] === "AUTO" : false;
-                if($strategy == false) {
+
+                if(($strategy == false)&&($column['type'] != 'formula')) {
                     $modify++;
                     $fields[] = " $field";
                     $values[] = " :$field";
@@ -135,6 +169,19 @@ class Proxy extends \PDO {
         return $this->bindField($entity,$sql,self::DML_DELETE);
     }
 
+    public function fieldType($notate,$field) {
+        $exists = $notate->property;
+        $column = $exists[$field]['Column'];
+
+        if($column['type'] == 'formula') {
+            $params = explode(',',$column['default']);
+            $method = $params[0];
+            $field = $this->$method($params);
+        }
+
+        return $field;
+    }
+
     /**
      * Prepara a Entity com os valores do submit
      * Monta a DML com os valores achados
@@ -156,7 +203,7 @@ class Proxy extends \PDO {
                 $strategy = isset($column['strategy']) ? $column['strategy'] === "AUTO" : false;
                 switch ($type) {
                     case self::DML_INSERT:
-                        if($strategy == false) {
+                        if(($strategy == false)&&($column['type'] != 'formula')) {
                             $method = "get" . strtoupper($field[0]) . substr($field, 1);
                             $commit->bindValue(":$field", $entity->$method(), $this->getParams($column["type"]));
                         }
@@ -167,9 +214,17 @@ class Proxy extends \PDO {
                             $commit->bindValue(":$field", $entity->$method(), $this->getParams($column["type"]));
                         }
                         break;
+                    case self::DML_SELECT:
+                        if($field == 'id') {
+                            $method = "get" . strtoupper($field[0]) . substr($field, 1);
+                            $commit->bindValue(":$field", $entity->$method(), $this->getParams($column["type"]));
+                        }
+                        break;
                     default:
-                        $method = "get" . strtoupper($field[0]) . substr($field, 1);
-                        $commit->bindValue(":$field", $entity->$method(), $this->getParams($column["type"]));
+                        if($column['type'] != 'formula') {
+                            $method = "get" . strtoupper($field[0]) . substr($field, 1);
+                            $commit->bindValue(":$field", $entity->$method(), $this->getParams($column["type"]));
+                        }
                         break;
                 }
             }
@@ -198,6 +253,48 @@ class Proxy extends \PDO {
             default:
                 return \PDO::PARAM_STR;
         }
+    }
+
+    private function getNameSearch(array $params) {
+        $field = $params[1];
+        $fieldname = substr_replace($field, '', -2);
+        $table = isset($params[2]) ? $params[2] : substr_replace($field, '', -2);
+
+        $result = "{$fieldname}name = ( SELECT name FROM {$table} WHERE id = {$field} )";
+
+        return $result;
+    }
+
+    private function getItemSearch(array $params) {
+        $field = $params[1];
+
+        $result = "materialname = ( SELECT name FROM itembase WHERE id = {$field} )";
+
+        return $result;
+    }
+
+    private function getUserSearch(array $params) {
+        $field = $params[1];
+
+        $result = "username = ( SELECT username FROM users WHERE id = {$field} )";
+
+        return $result;
+    }
+
+    private function getEnumSearch(array $params) {
+        $field = $params[1];
+
+        $result = "dbo.getEnum('{$field}',{$field}) as {$field}description";
+
+        return $result;
+    }
+
+    private function binary2base64(array $params) {
+        $field = $params[1];
+
+        $result = "dbo.binary2base64({$field}) as {$field}";
+
+        return $result;
     }
 
     /**

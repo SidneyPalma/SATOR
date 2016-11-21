@@ -2,7 +2,7 @@
 
 namespace Smart\Data;
 
-use Smart\Utils\Submit;
+use Smart\Utils\Session;
 
 /**
  * Um Model para a representação da tabela no Banco
@@ -26,13 +26,22 @@ class Model {
      */
     private $_notate = null;
 
+    private $session = null;
+
+    public function __construct() {
+        $this->session = Session::getInstance();
+    }
+
     public function set ($field,$value) {
+		$result = "Método inexistente na Classe!";
 		$method = "set" . strtoupper($field[0]) . substr($field, 1);
-	
-		$this->$method($value);
-        $this->_submit->setRowValue($field,$value);
-		$this->_submit->setRawValue($field,$value);
-		
+
+		if(method_exists($this, $method)) {
+			$this->$method($value);
+			$this->_submit->setRowValue($field,$value);
+			$this->_submit->setRawValue($field,$value);			
+		}
+
         return $this;
     }
 
@@ -42,11 +51,11 @@ class Model {
 	
 		if(method_exists($this, $method)) {
 			$result = $this->$method();
-		}		
+		}
 		
         return $result;
     }
-	
+
     public function getSubmit() {
         return $this->_submit;
     }
@@ -55,14 +64,18 @@ class Model {
         return $this->_notate;
     }
 
-    public function setSubmit( Submit $submit ) {
+    /**
+     * @param \Smart\Utils\Submit $submit
+     */
+    public function setSubmit( \Smart\Utils\Submit $submit ) {
         $this->_submit = $submit;
-		return $this;
     }
 
+    /**
+     * @param \stdClass $notate
+     */
     public function setNotate( \stdClass $notate ) {
         $this->_notate = $notate;
-		return $this;
     }
 
     public function getRecord() {
@@ -70,8 +83,11 @@ class Model {
         $fields = $this->getNotate()->property;
 
         foreach ($fields as $field => $value) {
-            $method = "get" . strtoupper($field[0]) . substr($field, 1);
-            $record[$field] = $this->$method();
+            $column = $fields[$field]["Column"];
+            if($column['type'] != 'formula') {
+                $method = "get" . strtoupper($field[0]) . substr($field, 1);
+                $record[$field] = $this->$method();
+            }
         }
 
         return $record;

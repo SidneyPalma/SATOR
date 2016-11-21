@@ -2,6 +2,7 @@
 
 namespace Smart\Data;
 
+use Smart\Utils\Session;
 use Smart\Common\Traits as Traits;
 
 /**
@@ -23,10 +24,13 @@ class Event {
      */
     private $proxy = null;
 
+    public $session = null;
+
     /**
      * @param \Smart\Data\Proxy $proxy
      */
     public function __construct( \Smart\Data\Proxy &$proxy ) {
+        $this->session = Session::getInstance();
         $this->proxy = $proxy;
     }
 
@@ -43,7 +47,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function preUpdate(&$entity) {
@@ -59,7 +62,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function posUpdate(&$entity) {
@@ -75,7 +77,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function preInsert(&$entity) {
@@ -91,7 +92,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function posInsert(&$entity) {
@@ -107,7 +107,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function preDelete(&$entity) {
@@ -123,7 +122,6 @@ class Event {
      * Example:<br/>
      * throw new \PDOException('this error');<br/>
      * 
-     * @author Samuel Oliveira <samuca95@hotmail.com>
      * @category listeners
      */
     public function posDelete(&$entity) {

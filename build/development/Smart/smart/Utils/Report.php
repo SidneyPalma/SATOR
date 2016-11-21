@@ -3,17 +3,23 @@
 namespace Smart\Utils;
 
 use \fpdf\FPDF;
+use Smart\Data\Proxy;
+use Smart\Setup\Start;
 use Smart\Utils\Session;
-use Smart\Common\Traits as Traits;
+use Smart\Common\Traits;
 
 class Report extends FPDF {
     use Traits\TresultSet;
+
+    protected $proxy;
+    protected $entity = [];
+    protected $margin = 12;
 
     protected $translate = array(
         'monthly'=>array(
             'jan'=>'Janeiro',
             'feb'=>'Fevereiro',
-            'mar'=>'Março',
+            'mar'=>'MarÃ§o',
             'apr'=>'Abril',
             'may'=>'Maio',
             'jun'=>'Junho',
@@ -27,11 +33,11 @@ class Report extends FPDF {
         'dayweek'=>array(
             'sun'=>'Domingo',
             'mon'=>'Segunda-Feira',
-            'tue'=>'Terça-Feira',
+            'tue'=>'TerÃ§a-Feira',
             'wed'=>'Quarta-Feira',
             'thu'=>'Quinta-Feira',
             'fri'=>'Sexta-Feira',
-            'sat'=>'Sábado'
+            'sat'=>'SÃ¡bado'
         )
     );
 
@@ -53,11 +59,73 @@ class Report extends FPDF {
     }
 
     public function preConstruct() {
+        $pwd = Start::getPassWord();
+        $usr = Start::getUserName();
+        $dns = Start::getConnnect();
 
+        $link = array($dns, $usr, $pwd);
+        $this->proxy = new Proxy($link);
+
+        $sql = "
+            select top 1
+                name,
+                legalname,
+                cnpjnumber,
+                cnesnumber,
+                fileinfo,
+                dbo.binary2base64(filedata) as filedata
+            from entity";
+
+        $rows = $this->proxy->query($sql)->fetchAll();
+        $this->entity = (object) $rows[0];
+    }
+
+    public function getProxy () {
+        return $this->proxy;
+    }
+    public function getEntity () {
+        return $this->entity;
+    }
+
+    public function setLogoMark($posX = 20, $posY = 20, $sizeW = 20, $sizeH = 20) {
+
+        $data = $this->entity->filedata;
+        $info = json_decode($this->entity->fileinfo);
+        $name = $info->fileName;
+
+        $file = base64_decode($data);
+
+        if( file_put_contents($name,$file) !== false ) {
+            $this->Image($name,$posX,$posY,$sizeW,$sizeH);
+            unlink($name);
+        }
+    }
+
+    public function setLogoTipo($module, $posX = 20, $posY = 20, $sizeW = 20, $sizeH = 20) {
+        $sql = "select dbo.binary2base64(filedata) as filedata, fileinfo from module where name = '{$module}'";
+
+        $rows = $this->proxy->query($sql)->fetchAll();
+
+        $data = $rows[0]["filedata"];
+        $info = json_decode($rows[0]["fileinfo"]);
+        $name = $info->fileName;
+
+        $file = base64_decode($data);
+
+        if( file_put_contents($name,$file) !== false ) {
+            $this->Image($name,$posX,$posY,$sizeW,$sizeH);
+            unlink($name);
+        }
     }
 
     public function posConstruct() {
-
+        $this->setAllMarginPage($this->margin);
+        $this->AddFont('LucidaSans-Typewriter','','LTYPE.php');
+        $this->AliasNbPages();
+        $this->AddPage();
+        $this->Detail();
+        $this->Output(basename(__FILE__), "I");
+        ob_clean();
     }
 
     public function __construct($orientation='P', $unit='mm', $size='A4') {
@@ -66,6 +134,11 @@ class Report extends FPDF {
         parent::__construct($orientation,$unit,$size);
 
         $this->posConstruct();
+    }
+
+    public function setAllMarginPage($margin) {
+        $this->SetMargins($margin,$margin + 2);
+        $this->SetAutoPageBreak(false,$margin);
     }
 
     function SetDash($black=false, $white=false)
@@ -111,7 +184,7 @@ class Report extends FPDF {
     public function configStyleDetail($sizeFont = 6){
         $this->SetDrawColor(23,45,58);
         $this->SetLineWidth(0.1);
-        $this->SetTextColor(36,62,62); 
+        $this->SetTextColor(36,62,62);
         $this->SetFillColor(252, 248, 232);
         $this->SetFont('Arial','',$sizeFont);
     }
@@ -120,17 +193,17 @@ class Report extends FPDF {
         $this->SetY(-15);
         $this->SetDrawColor(200,200,200);
         $this->SetTextColor(128);
-        $this->SetFont('Arial','',$sizeFont);		
+        $this->SetFont('Arial','',$sizeFont);
     }
 
     public function configStyleTitleHeaderGroup($sizeFont = 9){
         $this->SetTextColor(23,45,58);
-        $this->SetFont('Arial','B',$sizeFont);		
+        $this->SetFont('Arial','B',$sizeFont);
     }
 
     public function configStyleDescriptionHeaderGroup($sizeFont = 9){
         $this->SetTextColor(0,0,128);
-        $this->SetFont('Arial','B',$sizeFont);		
+        $this->SetFont('Arial','B',$sizeFont);
     }
 
     public function configStyleFooterGroup($sizeFont = 9){
@@ -147,7 +220,7 @@ class Report extends FPDF {
 
         foreach($columns as $c){
             $l = $this->_countLine($c[1], $c[0])+1;
-            if($l > $ln) { 
+            if($l > $ln) {
                 $ln = $l;
             }
         }
@@ -183,7 +256,7 @@ class Report extends FPDF {
         $this->ln(2);
 
         foreach($param as $p){
-            if(empty($p[3])){	
+            if(empty($p[3])){
                 $this->SetX(35);
                 $o = 'L';
             } else {
@@ -197,24 +270,24 @@ class Report extends FPDF {
         }
 
         $this->ln(1);
-        $this->Cell($buttonLineSize,3, '','T',1,'C');		
-        $this->ln(5);		
+        $this->Cell($buttonLineSize,3, '','T',1,'C');
+        $this->ln(5);
     }
 
-    public function loadFooter($buttonLineSize = 1000){
+    public function loadFooter($internalW = 1000, $bottonLine = true) {
+        $session = Session::getInstance();
 
-        date_default_timezone_set("America/Manaus");
-
-        $passport   = Session::read("username");
-        $issuedOn   = "impresso em ";
+        $passport   = $session->username;
         $date       = date("d/m/Y H:i");
-        $by         = ", por ";
-        $page       = "pagina ";
-        $of         = " de ";
+        $pageNo     = $this->PageNo();
 
-        $this->Cell($buttonLineSize,3, '','B',1,'C');
-        $this->Cell(0,4, $issuedOn . $date . $by . $passport,0,0,'L');
-        $this->Cell(0,4, $page . $this->PageNo() . $of . '{nb}',0,0,'R');		
+        if($bottonLine) $this->SetY(-15);
+        $this->SetTextColor(7,23,35);
+        $this->SetFont('Arial','',6);
+        $this->SetLineWidth(.2);
+        $this->Cell($internalW,3, '','B',1,'C');
+        $this->Cell(0,4, "impresso em $date, $passport",0,0,'L');
+        $this->Cell(0,4, utf8_decode("pÃ¡gina $pageNo de {nb}"),0,0,'R');
     }
 
     public static function scaleCalc($w1, $w2, $arrValues){
@@ -225,7 +298,7 @@ class Report extends FPDF {
         return $arrValues;
     }
 
-    public function _countLine($s, $w){	
+    public function _countLine($s, $w){
         $s=explode(' ',$s);
         $l = 0;
         $a = 0;
@@ -233,22 +306,26 @@ class Report extends FPDF {
             $b = count($s)-1==$i ? '': ' ';
             $c = $this->GetStringWidth($s[$i].$b);
             if($c > $w){
-                $n=ceil($c/$w);				
+                $n=ceil($c/$w);
                 $l+=$n;
                 $r=ceil( ($c+$n*2)-$n*$w );
                 $a+=$r;
                 $c=$r+$this->GetStringWidth(' ');
-                if( count($s) == 1 ) { 
+                if( count($s) == 1 ) {
                     $l--;
                 }
-            }	
+            }
             $a += $c;
             if($a + 2 > $w){
                 $l++;
                 $a=$c;
             }
-        }		
-        return $l;		
+        }
+        return $l;
+    }
+
+    public function Footer() {
+        $this->loadFooter($this->getInternalW(),true);
     }
 
 }

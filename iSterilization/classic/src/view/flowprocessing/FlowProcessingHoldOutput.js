@@ -169,7 +169,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                             }
                         ]
                     }, {
-                        height: 350,
+                        height: 476,
                         xtype: 'gridpanel',
                         cls: 'update-grid',
                         hideHeaders: false,
@@ -228,24 +228,42 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                     }
                                 ]
                             }
+                        ],
+
+                        dockedItems: [
+                            {
+                                xtype: 'pagingtoolbar',
+                                store: 'armorymovementitem',
+                                dock: 'bottom',
+                                displayInfo: true,
+                                items: [
+                                    {
+                                        xtype: 'button',
+                                        iconCls: "fa fa-times",
+                                        handler: function (btn) {
+                                            btn.windowClose();
+                                        }
+                                    }
+                                ]
+                            }
                         ]
                     }
                 ]
             }
         ];
-    },
+    }
 
-    buttonAlign: 'center',
-
-    buttons: [
-        {
-            scale: 'medium',
-            text: 'Cancelar',
-            showSmartTheme: 'red',
-            handler: function (btn) {
-                btn.windowClose();
-            }
-        }
-    ]
+    // buttonAlign: 'center',
+    //
+    // buttons: [
+    //     {
+    //         scale: 'medium',
+    //         text: 'Cancelar',
+    //         showSmartTheme: 'red',
+    //         handler: function (btn) {
+    //             btn.windowClose();
+    //         }
+    //     }
+    // ]
 
 });

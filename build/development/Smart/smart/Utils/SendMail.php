@@ -16,14 +16,22 @@ class SendMail extends PHPMailer {
                                                                     //  - 2 = messages only
 
         //== Set Config Server
-        $this->SMTPAuth   = true;									// enable SMTP authentication
-//        $this->SMTPSecure = "tls";
-        $this->Host       = "smtp1.dsa.org.br";						// sets the SMTP server
-        $this->Port       = 2525;                    				// set the SMTP port for the GMAIL server
-        $this->From       = "webmaster@armseguros.com.br"; 			// SMTP account username@domain
-        $this->FromName   = "AppAnest - NoReplay";
-        $this->Username   = "webmaster@armseguros.com.br";			// SMTP account username@domain
-        $this->Password   = "mRAst5817$";							// SMTP account password
+        $this->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
+
+        $this->Host = 'mail.palindrome.com.br';                 // Specify main and backup SMTP servers
+        $this->SMTPAuth = true;                                 // Enable SMTP authentication
+        $this->Username = 'noreply@palindrome.com.br';          // SMTP username
+        $this->Password = 'c6c36KYye3';                         // SMTP password
+        $this->SMTPSecure = 'tls';                              // Enable TLS encryption, `ssl` also accepted
+        $this->Port = 587;                                      // TCP port to connect to
+
+        $this->setFrom('noreply@palindrome.com.br', 'Palindrome Projetos (No Reply)');
 
         $this->IsHTML(true);
     }

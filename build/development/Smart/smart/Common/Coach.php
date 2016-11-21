@@ -11,7 +11,6 @@ use Smart\Common\Traits as Traits;
  *
  * @methods: getStore, getProxy, selectCode, selectLike, selectSame, selectDown, selectLoad
  * @category Coach
- *
  */
 class Coach {
     use Traits\TresultSet,
@@ -69,7 +68,7 @@ class Coach {
             $results = $this->store->insert();
         }
 
-        return $results;
+        return self::jsonToObject($results)->success ? $this->store->select() : $results;
     }
 
     public function upload() {
@@ -83,7 +82,7 @@ class Coach {
 
             $record = array(
                 "id"=>$submit->getRawValue('id'),
-                "tableName"=>$submit->getRawValue('tableName')
+                "tablename"=>$submit->getRawValue('tablename')
             );
 
             $method = $submit->getRawValue('method');
@@ -94,14 +93,6 @@ class Coach {
 
         return self::getResultToJson();
 
-    }
-
-    public function getfile() {
-        $model = $this->store->getModel();
-        $proxy = $this->store->getProxy();
-        $method = $model->getSubmit()->getRawValue('method');
-
-        $proxy->$method();
     }
 
     public function delete() {
@@ -121,6 +112,14 @@ class Coach {
         $results = $cache->$method($data);
 
         return $results;
+    }
+
+    public function getfile() {
+        $model = $this->store->getModel();
+        $proxy = $this->store->getProxy();
+        $method = $model->getSubmit()->getRawValue('method');
+
+        $proxy->$method();
     }
 
     /**

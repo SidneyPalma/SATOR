@@ -2,12 +2,13 @@
 
 namespace Smart\Data;
 
+use Smart\Utils\Session;
 use Smart\Common\Traits as Traits;
 
 /**
- * Ancestral para as classes do tipo Warehouse
+ * Ancestral para as classes do tipo Cache
  * 
- * @methods: getStore, getProxy, selectCode, selectLike, selectSame, selectDown, selectLoad
+ * @methods: getStore, selectCode, selectLike, selectSame, selectDown, selectLoad
  * @category Cache
  * 
  */
@@ -24,10 +25,13 @@ class Cache {
      */
     private $store = null;
 
+    public $session = null;
+
     /**
      * @param Store $store
      */
     public function __construct( \Smart\Data\Store &$store ) {
+        $this->session = Session::getInstance();
         $this->store = $store;
     }
 
@@ -38,21 +42,21 @@ class Cache {
     public function selectCode(array $data) {
         return $this->store->select();
     }
-    
+
     public function selectLike(array $data) {
         $p = $f = array();
         $query = $data['query'];
         $start = $data['start'];
         $limit = $data['limit'];
-        $params = json_decode($data['params']);
         $proxy = $this->getStore()->getProxy();
+        $params = json_decode($data['params']);
         $notate = $this->getStore()->getModel()->getNotate();
         $extend = $notate->instance->Entity->name;
         $fields = (isset($data['fields']) && count(json_decode($data['fields'])) !== 0) ? json_decode($data['fields']) : self::objectToArray($notate->property);
-        
+
         // get fields
         foreach ($fields as $key => $value) {
-            $f[] = $key;
+            $f[] = $proxy->fieldType($notate,$key);
         }
 
         // get params
@@ -64,7 +68,7 @@ class Cache {
 
         try {
 
-            $query = '%' . $query . '%';
+            $query = "%{$query}%";
 
             $pdo = $proxy->prepare($sql);
             
@@ -100,7 +104,7 @@ class Cache {
 
         // get fields
         foreach ($fields as $key => $value) {
-            $f[] = $key;
+            $f[] = $proxy->getFormula($notate,$key);
         }
 
         // get params
@@ -119,7 +123,7 @@ class Cache {
                 $pdo->bindValue(":$value", "$query", \PDO::PARAM_STR);
             }
             
-            $pdo->execute();            
+            $pdo->execute();
             $rows = $pdo->fetchAll();
             
             self::_setRows($rows);

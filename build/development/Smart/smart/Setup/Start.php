@@ -9,10 +9,10 @@ class Start {
     private static $usr = "sa";
     private static $sch = "dbo";
     private static $pwd = "1844";
-    private static $dtb = "CME";
+    private static $dtb = "CMENEW";
     private static $log = "CME_LOG";
     private static $tmz = "America/Sao_Paulo";
-    private static $dns = "sqlsrv:server=(local);database=dtb";
+	private static $dns = "sqlsrv:server=(local);database=dtb";
 
     public static function tableSchema() {
         return self::$sch;
@@ -28,6 +28,9 @@ class Start {
     }
     public static function getDataBase() {
         return self::$dtb;
+    }
+    public static function areTestBase() {
+        return is_numeric(strripos(self::getDataBase(), 'test'));
     }
     public static function setTimeZone() {
         date_default_timezone_set(self::$tmz);

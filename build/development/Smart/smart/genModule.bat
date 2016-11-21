@@ -20,12 +20,8 @@ IF "%appName%"=="" GOTO :exit
 	copy .\build\composer.json .\%appName%\composer.json
 	copy .\build\autoloadDump.bat .\%appName%\autoloadDump.bat
 
-	mkdir .\%appName%\smart
-	mkdir .\%appName%\vendor
+	mkdir .\%appName%\business
 
-    xcopy /y .\smart\*.* .\%appName%\smart /e
-    xcopy /y .\vendor\*.* .\%appName%\vendor /e
-	
 	DEL .\%appName%\smart\genModule.bat
 	
 	cd ./%appName%

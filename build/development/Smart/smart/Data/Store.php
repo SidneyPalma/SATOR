@@ -4,6 +4,7 @@ namespace Smart\Data;
 
 use Smart\Data\Proxy;
 use Smart\Utils\Submit;
+use Smart\Utils\Session;
 use Smart\Utils\Logbook;
 use Smart\Common\Traits as Traits;
 
@@ -37,6 +38,8 @@ class Store {
      */
     private $proxy = null;
 
+    public $session = null;
+
     /**
      * Model de uma Tabela do Banco de Dados
      *
@@ -45,6 +48,7 @@ class Store {
     private $model = null;
 
     public function __construct(array $link, $model) {
+        $this->session = Session::getInstance();
         $this->model = new $model();
         $this->proxy = new Proxy($link);
 
@@ -74,6 +78,11 @@ class Store {
     public function select() {
 
         try {
+            $have = !$this->session->have();
+
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
 
             $statement = $this->proxy->sqlSelect($this->model);
 
@@ -89,6 +98,7 @@ class Store {
             self::_setRows($rows);
 
         } catch ( \PDOException $e ) {
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
@@ -98,13 +108,20 @@ class Store {
     public function update() {
 
         try {
+            $have = !$this->session->have();
 
-            //$this->policy();
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
+
+            $this->policy();
             self::_setCrud('update');
 
             $this->proxy->beginTransaction();
 
             $this->fireEvent('PreUpdate');
+
+            $this->model->getSubmit()->setRawValue('action',self::_getCrud());
 
             $statement = $this->proxy->sqlUpdate($this->model);
 
@@ -114,8 +131,6 @@ class Store {
             }
 
             $statement->execute();
-
-            $this->upload();
 
             new Logbook($this->model);
             $this->fireEvent('PosUpdate');
@@ -128,6 +143,7 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
@@ -137,13 +153,20 @@ class Store {
     public function insert() {
 
         try {
+            $have = !$this->session->have();
 
-            //$this->policy();
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
+
+            $this->policy();
             self::_setCrud('insert');
 
             $this->proxy->beginTransaction();
 
             $this->fireEvent('PreInsert');
+
+            $this->model->getSubmit()->setRawValue('action',self::_getCrud());
 
             $statement = $this->proxy->sqlInsert($this->model);
 
@@ -156,9 +179,13 @@ class Store {
 
             $id = $this->proxy->lastInsertId();
 
-            $this->model->setId($id);
+            if($id == 0) {
+                $id = $this->model->getId();
+            }
 
-            $this->upload($this->model);
+            $this->model->setId($id);
+            $this->model->getSubmit()->setRowValue('id',$id);
+            $this->model->getSubmit()->setRawValue('id',$id);
 
             new Logbook($this->model);
             $this->fireEvent('PosInsert');
@@ -171,6 +198,7 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
@@ -180,12 +208,19 @@ class Store {
     public function delete() {
 
         try {
+            $have = !$this->session->have();
+
+            if($have == true) {
+                throw new \PDOException("A sua sessão expirou!");
+            }
 
             self::_setCrud('delete');
 
             $this->proxy->beginTransaction();
 
             $this->fireEvent('PreDelete');
+
+            $this->model->getSubmit()->setRawValue('action',self::_getCrud());
 
             $statement = $this->proxy->sqlDelete($this->model);
 
@@ -207,6 +242,7 @@ class Store {
             if ($this->proxy->inTransaction()) {
                 $this->proxy->rollBack();
             }
+            self::_setRestart($have);
             self::_setSuccess(false);
             self::_setText($e->getMessage());
         }
@@ -215,24 +251,9 @@ class Store {
     }
     // CRUD
 
-    public function upload() {
-        $model = $this->model;
-
-        $tempName = isset($_FILES["filedata"]) ? $_FILES["filedata"]["tmp_name"] : null;
-
-        if(is_uploaded_file($tempName)) {
-            $record = $this->getRecord();
-            $submit = $model->getSubmit()->getToArray();
-            $record = array_merge($submit,$record);
-
-            $this->proxy->saveFile($record);
-            $_FILES = array();
-        }
-    }
-
     public function policy() {
-        $submit = $this->model->getSubmit()->getToArray();
         $notate = $this->model->getNotate();
+        $submit = $this->model->getSubmit()->getToArray();
 
         $fields = self::arrayToOject($notate->property);
 
@@ -245,7 +266,7 @@ class Store {
                     $method = $key . "Policy";
                     $result = $this->$method($policy,$value);
                     if ( $result->passed === false ) {
-                        throw new \PDOException("<b>{$column->Column->description}</b> <br/> {$result->message}");
+                        throw new \PDOException("<b>{$column->Column->description}</b> <br/>{$result->message}");
                     }
                 }
             }
@@ -280,19 +301,6 @@ class Store {
         return new $event($this->proxy);
     }
 
-//    public function getRecord () {
-//        $record = array();
-//        $entity = $this->model;
-//        $fields = $entity->getNotate()->property;
-//
-//        foreach ($fields as $field => $value) {
-//            $method = "get" . strtoupper($field[0]) . substr($field, 1);
-//            $record[$field] = $entity->$method();
-//        }
-//
-//        return $record;
-//    }
-
     public function getRecord () {
         return $this->model->getRecord();
     }
@@ -300,25 +308,6 @@ class Store {
     public function setRecord () {
         return $this->model->setRecord();
     }
-
-//    public function setRecord () {
-//        $entity = $this->model;
-//        $submit = $entity->getSubmit();
-//        $notate = $entity->getNotate();
-//
-//        $exists = $notate->property;
-//
-//        foreach ($submit['rows'] as $field => $value) {
-//            if(isset($exists[$field]) && strlen($value) !== 0 ) {
-//                $method = "set" . strtoupper($field[0]) . substr($field, 1);
-//                if(method_exists($entity, $method)) {
-//                    $entity->$method($value);
-//                }
-//            }
-//        }
-//
-//        return $this->model = $entity;
-//    }
 
     private function fireEvent($eventName) {
         $model = $this->model;
