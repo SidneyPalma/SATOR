@@ -13,7 +13,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
         'iSterilization.view.flowprocessing.FlowProcessingController'
     ],
 
-    width: 350,
+    width: 450,
     modal: true,
     layout: 'fit',
     header: false,
@@ -100,11 +100,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_VALIDA_CARGA
                             specialkey: 'onReaderMaterialBoxName'
                         }
                     }, {
-                        height: 200,
+                        height: 350,
                         xtype: 'gridpanel',
                         cls: 'update-grid',
-
-                        // url: '../iSterilization/business/Calls/flowprocessing.php',
+                        
                         url: '../iSterilization/business/Calls/Heart/HeartFlowProcessing.php',
 
                         params: {
