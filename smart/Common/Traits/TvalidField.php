@@ -166,9 +166,10 @@ trait TvalidField
         return is_int($param);
     }
 
-
     /**
      * Valida Xmlversion to Json
+     * @param string $xmlversion
+     *
      * @throws Exception
      */
     public function tryXMLversion($xmlversion) {
@@ -186,9 +187,10 @@ trait TvalidField
     }
 
     /**
-     * Valida E-mail
+     * Valida Nulo
      *
-     * @param string $email
+     * @param string $param
+     *
      * @return boolean
      */
     public function useNull($param) {
@@ -199,6 +201,7 @@ trait TvalidField
      * Valida se tipo de dado é uma data válida
      *
      * @param string $date
+     *
      * @return boolean
      */
     public function tryDate($date) {
