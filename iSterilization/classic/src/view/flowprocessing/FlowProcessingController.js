@@ -898,9 +898,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         var opr = batch.getOperations()[0],
                             rec = opr.getRecords()[0];
 
-                        Ext.widget('call_SATOR_MOVIMENTO_IN').show(null,function () {
+                        Ext.widget('call_SATOR_MOVIMENTO_IN', {
+                            editable: true
+                        }).show(null,function () {
                             this.master = me.getView();
                             this.down('form').loadRecord(rec);
+                            this.down('textfield[name=search]').setReadColor(false);
                             this.down('textfield[name=search]').focus(false,200);
                         });
                     },

@@ -27,7 +27,7 @@ Ext.define( 'Ext.overrides.form.field.Base', {
         me.setMondaFont(me.useMondaFont);
         me.setReadColor(me.useReadColor);
 
-        me.onBefore( 'specialkey', me.fnSecialKey, me);
+        // me.onBefore( 'specialkey', me.fnSecialKey, me);
         me.onAfter( 'afterrender', me.fnAfterRender, me);
     },
 
