@@ -45,21 +45,29 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
     onSelectClient: function (combo,record,eOpts) {
         var me = combo.up('window'),
+            dateof = me.down('datefield'),
+            timeof = me.down('timefield'),
             clienttype = record.get('clienttype'),
-            surgicalroom = me.down('textfield[name=surgicalroom]');
+            searchpatient = me.down('searchpatient');
+console.info(record.data);
+        dateof.reset();
+        timeof.reset();
 
         me.showSurgical(false);
 
         me.down('fieldcontainer[name=group_01]').hide();
         me.down('fieldcontainer[name=group_02]').hide();
         me.down('fieldcontainer[name=group_03]').hide();
-        me.down('fieldcontainer[name=group_04]').hide();
 
         if (clienttype == '004') {
-            me.showSurgical(true);
             me.down('fieldcontainer[name=group_01]').show();
             me.down('fieldcontainer[name=group_02]').show();
-            me.down('fieldcontainer[name=group_04]').show();
+            me.showSurgical(true);
+            searchpatient.focus(false,200);
+        }
+
+        if (clienttype != '004') {
+            dateof.focus(false,200);
         }
 
         me.updPosition();
@@ -67,8 +75,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
     showSurgical: function (value) {
         var me = this,
-            dateof = me.down('datefield'),
-            timeof = me.down('timefield'),
             searchpatient = me.down('searchpatient'),
             flowing = me.down('textfield[name=flowing]'),
             surgical = me.down('textfield[name=surgical]'),
@@ -79,9 +85,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
 
         surgicaltype.reset();
         surgicalstatus.reset();
-
-        dateof.reset();
-        timeof.reset();
 
         flowing.reset();
         flowing.setReadColor(!value);
@@ -120,9 +123,10 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
         surgicalstatus.reset();
         instrumentator.reset();
 
+        me.showSurgical(false);
+
         me.down('fieldcontainer[name=group_01]').hide();
         me.down('fieldcontainer[name=group_02]').hide();
-        me.down('fieldcontainer[name=group_04]').hide();
 
         me.updPosition();
     },
@@ -157,7 +161,7 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                 bodyPadding: 10,
                 margin: '10 0 0 0',
                 layout: 'anchor',
-                plugins:'formenter',
+                // plugins:'formenter',
                 defaults: {
                     anchor: '100%',
                     allowBlank: false,
@@ -243,14 +247,14 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                         items: [
                             {
                                 pageSize: 0,
+                                focusable: true,
                                 fieldLabel: 'Cliente',
                                 xtype: 'clientsearch',
                                 name: 'clientname',
                                 hiddenNameId: 'clientid',
                                 listeners: {
                                     select: me.onSelectClient,
-                                    showclear: me.showClearClient,
-                                    beforedeselect: 'showClearClient'
+                                    showclear: me.showClearClient
                                 }
                             }
                         ]
@@ -263,12 +267,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                         defaults: {
                             flex: 1,
                             hideTrigger: true,
+                            useReadColor: true,
                             fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
                                 pageSize: 0,
-                                useReadColor: true,
                                 fieldLabel: 'Aviso Cirurgia',
                                 name: 'surgicalwarningpatient',
                                 xtype: 'searchpatient',
@@ -295,14 +299,20 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            flex: 1,
+                            useReadColor: true,
                             fieldCls: 'smart-field-style-action'
                         },
                         items: [
                             {
-                                useReadColor: true,
+                                flex: 1,
+                                margin: '0 5 0 0',
                                 fieldLabel: 'Procedimento',
                                 name: 'surgical'
+                            }, {
+                                width: 201,
+                                margin: '0 0 0 5',
+                                fieldLabel: 'Sala',
+                                name: 'surgicalroom'
                             }
                         ]
                     }, {
@@ -329,13 +339,12 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                             }
                         ]
                     }, {
-                        hidden: true,
                         name: 'group_04',
                         xtype: 'fieldcontainer',
                         layout: 'hbox',
                         defaultType: 'textfield',
                         defaults: {
-                            // allowBlank: false,
+                            allowBlank: false,
                             fieldCls: 'smart-field-style-action'
                         },
                         items: [
@@ -345,19 +354,20 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_MOVIMENTO_TO
                                 xtype: 'datefield',
                                 fieldLabel: 'Data',
                                 plugins: 'textmask',
-                                name: 'dateof'
+                                name: 'dateof',
+                                value: new Date()
                             }, {
                                 flex: 1,
+                                allowBlank: true,
                                 margin: '0 5 0 5',
                                 xtype: 'timefield',
                                 fieldLabel: 'Hora',
                                 plugins: 'textmask',
                                 name: 'timeof'
                             }, {
-                                flex: 1,
+                                width: 201,
                                 margin: '0 0 0 5',
-                                fieldLabel: 'Sala',
-                                name: 'surgicalroom'
+                                xtype: 'container'
                             }
                         ]
                     }

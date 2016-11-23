@@ -139,7 +139,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                 ]
                             }, {
                                 margin: '10 0 0 10',
-                                flex: 2,
+                                flex: 3,
                                 xtype: 'container',
                                 layout: 'anchor',
                                 defaults: {
@@ -159,8 +159,8 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingHoldOutput', {
                                                 '<div class="movement-title">{clientname}</div>',
                                                 '<div><b>{releasestypedescription}</b></div>',
                                                 '<div class="movement-title">Procedimento</div>',
-                                                '<div><b>{surgical}</b></div>',
-                                                '<div><b>{surgicalwarning} {patientname}</b></div>',
+                                                '<div class="movement"><b>{surgical}</b></div>',
+                                                '<div class="movement"><b>{surgicalwarning} {patientname}</b></div>',
                                                 '<div>{dateof} {timeof} {surgicalroom}</div>',
                                             '</div>'
                                         ]

@@ -26,11 +26,24 @@ Ext.define( 'Smart.plugins.FormEnter', {
         if (e.getKey() === e.ENTER) {
             var nField = null,
                 fields = this.form.getForm().getFields(),
-                index  = fields.findIndex('id', el.getAttribute('data-componentid'));
+                // index  = fields.findIndex('id', el.getAttribute('data-componentid'));
+                index = fields.findIndex('name', el.getAttribute('name'));
+
+            // do {
+            //     if (e.hasModifier())
+            //         index = index - 1;
+            //     else
+            //         index = index + 1;
+            //
+            //     nField = fields.getAt(index);
+            // } while (nField.xtype == 'hidden')
+            //
+            // if (nField)
+            //     nField.focus(true, true);
 
             do {
                 nField = fields.getAt(e.hasModifier() ? --index : ++index);
-            } while (!this.focusIf(nField, true, true) && index < fields.length && index >= 0)
+            } while (!this.focusIf(nField, false, 200) && index < fields.length && index >= 0)
         }
     },
 
@@ -38,7 +51,6 @@ Ext.define( 'Smart.plugins.FormEnter', {
         if(!(Ext.isEmpty(field) || field.isHidden() || field.isDisabled() || field.isXType('hiddenfield'))) {
             return field.focus(select, delay);
         }
-
         return false;
     }
 

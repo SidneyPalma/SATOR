@@ -48,7 +48,7 @@ class armorymovement extends \Smart\Data\Event {
         $rows = $pdo->fetchAll();
         $releasesitem = $rows[0]['releasesitem'];
 
-        if( intval($releasesitem) >= 3 ) {
+        if( intval($releasesitem) >= 11 ) {
             throw new \PDOException("Este movimento não pode ser criado pois existem {$releasesitem} abertos!");
         }
     }

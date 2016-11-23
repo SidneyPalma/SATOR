@@ -844,9 +844,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                         var opr = batch.getOperations()[0],
                             rec = opr.getRecords()[0];
 
-                        Ext.widget('call_SATOR_MOVIMENTO_OF').show(null,function () {
+                        Ext.widget('call_SATOR_MOVIMENTO_OF', {
+                            editable: true
+                        }).show(null,function () {
                             this.master = me.getView();
                             this.down('form').loadRecord(rec);
+                            this.down('textfield[name=search]').setReadColor(false);
                             this.down('textfield[name=search]').focus(false,200);
                         });
                     },
@@ -980,9 +983,12 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
         me.setModuleData('armorymovementoutput');
         me.setModuleForm(view.down('form'));
 
-        me._success = function (frm, action) {
+        me._success = function (batch, options) {
+            var opr = batch.getOperations()[0],
+                rec = opr.getRecords()[0];
             view.master.updateType();
             view.close();
+            me.showMovementType002(rec.get('id'));
         }
 
         me.updateRecord();
@@ -1618,7 +1624,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             searchpatient = view.down('searchpatient');
 
         searchpatient.reset();
-        searchpatient.setReadColor(true);        
+        searchpatient.setReadColor(true);
     },
 
     onSelectPatient: function (combo,record,eOpts) {

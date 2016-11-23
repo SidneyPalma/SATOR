@@ -27,7 +27,18 @@ Ext.define( 'Ext.overrides.form.field.Base', {
         me.setMondaFont(me.useMondaFont);
         me.setReadColor(me.useReadColor);
 
+        me.onBefore( 'specialkey', me.fnSecialKey, me);
         me.onAfter( 'afterrender', me.fnAfterRender, me);
+    },
+
+    fnSecialKey: function (field, e, eOpts) {
+        if (e.getKey() == e.ENTER) {
+            e.browserEvent.keyCode = e.TAB;
+        }
+        // if (events.getKey() == events.ENTER) {
+        //     var nextfield = field.nextSibling();
+        //     nextfield .focus(false,200);
+        // }
     },
 
     fnAfterRender: function (field, eOpts) {
