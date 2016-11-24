@@ -159,8 +159,8 @@ class flowprocessingstepmaterial extends \Smart\Data\Cache {
             declare
                 @materialid int = :materialid;
                 
-            select distinct
-                fp.id, 
+            select top 1
+                fps.id, 
                 fp.barcode,
                 fp.flowstatus,
                 fp.dateof,
