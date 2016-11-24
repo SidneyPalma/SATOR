@@ -161,7 +161,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                                 params = {
                                                     query: record.get('id')
                                                 };
-                                            console.info(record.data);
                                             newCard.down('gridpanel').getStore().removeAll();
                                             newCard.down('gridpanel').getStore().load({params: params});
                                         }
@@ -285,24 +284,39 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                                     }, {
                                                         name: 'dateof',
                                                         type: 'auto'
+                                                    }, {
+                                                        name: 'flowstatus',
+                                                        type: 'auto'
+                                                    }, {
+                                                        name: 'flowstatusdescription',
+                                                        type: 'auto'
                                                     }
                                                 ],
 
                                                 columns: [
                                                     {
-                                                        xtype: 'rownumberer'
-                                                    }, {
+                                                    //     xtype: 'rownumberer'
+                                                    // }, {
                                                         flex: 1,
                                                         sortable: false,
                                                         dataIndex: 'barcode',
                                                         text: 'Código'
                                                     }, {
-                                                        width: 140,
+                                                        width: 120,
                                                         sortable: false,
                                                         dataIndex: 'dateof',
-                                                        text: 'Data'
+                                                        text: 'Data',
+                                                        renderer: function (value) {
+                                                            var readValue = Ext.util.Format.date(Ext.Date.parse(value.substring(0, 10),'Y-m-d'),'d/m/Y');
+                                                            return (readValue.length != 0) ? readValue: value;
+                                                        }
                                                     }, {
-                                                        width: 90,
+                                                        width: 120,
+                                                        sortable: false,
+                                                        dataIndex: 'flowstatusdescription',
+                                                        text: 'Status'
+                                                    }, {
+                                                        width: 80,
                                                         align: 'center',
                                                         xtype: 'actioncolumn',
                                                         items: [
