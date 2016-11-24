@@ -285,10 +285,6 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                                     }, {
                                                         name: 'dateof',
                                                         type: 'auto'
-                                                        // serializeType: 'date'
-                                                        // convert: function (value, record) {
-                                                        //     return ( !value || value.length == 0) ? null : Ext.util.Format.date(Ext.Date.parse(value,'Y-m-d'),'d/m/Y');
-                                                        // }
                                                     }
                                                 ],
 
@@ -301,10 +297,30 @@ Ext.define( 'iSterilization.view.flowprocessing.protocol.Call_SATOR_CONSULTAR_MA
                                                         dataIndex: 'barcode',
                                                         text: 'Código'
                                                     }, {
-                                                        width: 160,
+                                                        width: 140,
                                                         sortable: false,
                                                         dataIndex: 'dateof',
                                                         text: 'Data'
+                                                    }, {
+                                                        width: 90,
+                                                        align: 'center',
+                                                        xtype: 'actioncolumn',
+                                                        items: [
+                                                            {
+                                                                stepsettings: '001',
+                                                                handler: 'printerTagItem',
+                                                                iconCls: "fa fa-print action-delete-color-font",
+                                                                tooltip: 'Imprimir etiqueta pequena!'
+                                                            }, {
+                                                                disabled: true,
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                stepsettings: '001',
+                                                                handler: 'printerTagItem',
+                                                                iconCls: "fa fa-print action-delete-color-font",
+                                                                tooltip: 'Imprimir etiqueta grande!'
+                                                            }
+                                                        ]
                                                     }
                                                 ]
                                             }
