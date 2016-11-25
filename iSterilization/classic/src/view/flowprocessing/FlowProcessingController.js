@@ -2873,7 +2873,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             params: {
                 action: 'select',
                 method: 'imprimeEtiqueta',
-                id: record.get('id'),
+                id: record.get('flowprocessingstepid'),
                 printlocate: Smart.workstation.printlocate,
                 stepsettings: Ext.encode(tagprinter)
             }
