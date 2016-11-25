@@ -2876,15 +2876,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 id: record.get('id'),
                 printlocate: Smart.workstation.printlocate,
                 stepsettings: Ext.encode(tagprinter)
-            },
-            callback: function (options, success, response) {
-                var result = Ext.decode(response.responseText);
-
-                if(!success || !result.success) {
-                    Smart.ion.sound.play("computer_error");
-                    Smart.Msg.showToast('Não foi possivel completar a sua solicitação!');
-                    return false;
-                }
             }
         });
     },
