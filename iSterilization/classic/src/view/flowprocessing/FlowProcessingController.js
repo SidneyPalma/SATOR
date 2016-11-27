@@ -2852,15 +2852,6 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
             stepsettings = record.get('stepsettings'),
             tagprinter = (stepsettings) ? Ext.decode(stepsettings).tagprinter : "{}";
 
-        switch (colIndex) {
-            case 3:
-                tagprinter = { tagprinter: '001' };
-                break;
-            case 4:
-                tagprinter = { tagprinter: '002' };
-                break;
-        }
-
         if(!Smart.workstation.printlocate) {
             Smart.ion.sound.play("computer_error");
             Smart.Msg.showToast('Não foi possivel completar a sua solicitação, não existe uma impressora consfigurada!');
@@ -2875,7 +2866,7 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
                 method: 'imprimeEtiqueta',
                 id: record.get('flowprocessingstepid'),
                 printlocate: Smart.workstation.printlocate,
-                stepsettings: Ext.encode(tagprinter)
+                stepsettings: Ext.encode(stepsettings)
             }
         });
     },
