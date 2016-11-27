@@ -2846,11 +2846,9 @@ Ext.define( 'iSterilization.view.flowprocessing.FlowProcessingController', {
 
     printerTagItem: function(grid, rowIndex, colIndex) {
         var me = this,
-            tagprinter = {},
             store = grid.getStore(),
             record = store.getAt(rowIndex),
-            stepsettings = record.get('stepsettings'),
-            tagprinter = (stepsettings) ? Ext.decode(stepsettings).tagprinter : "{}";
+            stepsettings = record.get('stepsettings');
 
         if(!Smart.workstation.printlocate) {
             Smart.ion.sound.play("computer_error");
